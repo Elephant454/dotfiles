@@ -36,22 +36,38 @@ mod = "mod4"
 keys = [
     # Switch between windows in current stack pane
     Key(
+        [mod], "j",
+        lazy.layout.up()
+    ),
+    Key(
         [mod], "k",
         lazy.layout.down()
     ),
     Key(
-        [mod], "j",
-        lazy.layout.up()
+        [mod], "h",
+        lazy.layout.left()
+    ),
+    Key(
+        [mod], "l",
+        lazy.layout.right()
     ),
 
     # Move windows up or down in current stack
     Key(
-        [mod, "control"], "k",
+        [mod, "shift"], "j",
+        lazy.layout.shuffle_up()
+    ),
+    Key(
+        [mod, "shift"], "k",
         lazy.layout.shuffle_down()
     ),
     Key(
-        [mod, "control"], "j",
-        lazy.layout.shuffle_up()
+        [mod, "shift"], "h",
+        lazy.layout.swap_left()
+    ),
+    Key(
+        [mod, "shift"], "l",
+        lazy.layout.swap_right()
     ),
 
     # Switch window focus to other pane(s) of stack
@@ -99,6 +115,7 @@ for i in groups:
     )
 
 layouts = [
+    layout.tile.Tile(),
     layout.Max(),
     layout.Stack(num_stacks=2)
 ]
@@ -171,4 +188,5 @@ wmname = "LG3D"
 def autostart():
     subprocess.Popen(['redshift'])
     subprocess.Popen(['compton', '--config', '/home/matthew/.comptonrc', '--backend', 'glx', '--paint-on-overlay', '--vsync', 'opengl-swc'])
+    subprocess.Popen(['skype'])
 hook.subscribe.startup_once(autostart)
