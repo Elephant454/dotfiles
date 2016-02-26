@@ -20,6 +20,8 @@ Plugin 'NLKNguyen/papercolor-theme'
 "Plugin 'Valloric/YouCompleteMe'
 Plugin 'Shougo/deoplete.nvim'
 Plugin 'davidhalter/jedi-vim'
+Plugin 'artur-shaik/vim-javacomplete2'
+Plugin 'airblade/vim-rooter'
 
 call vundle#end()
 filetype plugin indent on
