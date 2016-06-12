@@ -13,6 +13,7 @@ Plug 'Shougo/deoplete.nvim'
 Plug 'davidhalter/jedi-vim'
 Plug 'artur-shaik/vim-javacomplete2'
 Plug 'airblade/vim-rooter'
+Plug 'luochen1990/rainbow'
 call plug#end()
 
 "user configuration
