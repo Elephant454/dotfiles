@@ -1,4 +1,5 @@
 URxvt.scrollBar: false
+URxvt.depth: 32
 URxvt.font: xft:Inconsolata:size=14
 URxvt.cursorBlink: true
 
