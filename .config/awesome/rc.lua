@@ -66,7 +66,7 @@ local layouts =
     awful.layout.suit.spiral,
     awful.layout.suit.spiral.dwindle,
     awful.layout.suit.max,
-    awful.layout.suit.max.fullscreen,
+    -- awful.layout.suit.max.fullscreen,
     awful.layout.suit.magnifier
 }
 -- }}}
@@ -123,8 +123,10 @@ mytaglist.buttons = awful.util.table.join(
                     awful.button({ modkey }, 1, awful.client.movetotag),
                     awful.button({ }, 3, awful.tag.viewtoggle),
                     awful.button({ modkey }, 3, awful.client.toggletag),
-                    awful.button({ }, 4, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
-                    awful.button({ }, 5, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
+                    --awful.button({ }, 4, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
+                    --awful.button({ }, 5, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
+                    awful.button({ }, 4, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end),
+                    awful.button({ }, 5, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end)
                     )
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
@@ -155,11 +157,13 @@ mytasklist.buttons = awful.util.table.join(
                                               end
                                           end),
                      awful.button({ }, 4, function ()
-                                              awful.client.focus.byidx(1)
+                                              --awful.client.focus.byidx(1)
+                                              awful.client.focus.byidx(-1)
                                               if client.focus then client.focus:raise() end
                                           end),
                      awful.button({ }, 5, function ()
-                                              awful.client.focus.byidx(-1)
+                                              --awful.client.focus.byidx(-1)
+                                              awful.client.focus.byidx(1)
                                               if client.focus then client.focus:raise() end
                                           end))
 
@@ -282,7 +286,8 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "q",      function (c) c:kill()                         end),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
+    awful.key({ modkey,           }, "o",      function() awful.screen.focus_relative(1)     end),
+    awful.key({ modkey, "Shift"   }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
     awful.key({ modkey,           }, "n",
         function (c)
@@ -449,15 +454,6 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- }}}
 
 -- auto starting things
-awful.util.spawn("xrdb /home/matthew/.Xresources")
-awful.util.spawn("xset m 0 0")
-awful.util.spawn("compton --config /home/matthew/.comptonrc --backend glx --paint-on-overlay --vsync opengl-swc")
-awful.util.spawn("redshift")
-awful.util.spawn("/home/matthew/.fehbg")
-awful.util.spawn("setxkbmap -option grp:shifts_toggle")
-awful.util.spawn("setxkbmap us,gr")
-awful.util.spawn("numlockx")
-awful.util.spawn("export DESKTOP_SESSION=kde")
 
 function run_once(prg,arg_string,pname,screen)
   if not prg then
@@ -475,7 +471,17 @@ function run_once(prg,arg_string,pname,screen)
   end
 end
 
-run_once("firefox", nil, 2)
-run_once("skype", nil, 2)
-run_once("steam", nil, 2)
-run_once("spotify", nil, 2)
+--run_once("xrdb /home/matthew/.Xresources", nil, nil)
+--run_once("xset m 0 0", nil, nil)
+--run_once("compton --config /home/matthew/.comptonrc --backend glx --paint-on-overlay --vsync opengl-swc", nil, nil)
+--run_once("redshift", nil, nil)
+--run_once("/home/matthew/.fehbg", nil, nil)
+--run_once("setxkbmap -option grp:shifts_toggle", nil, nil)
+--run_once("setxkbmap us,gr", nil, nil)
+--run_once("numlockx", nil, nil)
+--run_once("export DESKTOP_SESSION=kde", nil, nil)
+
+--run_once("firefox", nil, 2)
+--run_once("skype", nil, 2)
+--run_once("steam", nil, 2)
+--run_once("spotify", nil, 2)
