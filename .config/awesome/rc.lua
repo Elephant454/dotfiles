@@ -54,9 +54,24 @@ editor_cmd = editor
 modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
+--local layouts =
+--{
+    --awful.layout.suit.floating,
+    --awful.layout.suit.tile,
+    --awful.layout.suit.tile.left,
+    --awful.layout.suit.tile.bottom,
+    --awful.layout.suit.tile.top,
+    --awful.layout.suit.fair,
+    --awful.layout.suit.fair.horizontal,
+    --awful.layout.suit.spiral,
+    --awful.layout.suit.spiral.dwindle,
+    --awful.layout.suit.max,
+    -- awful.layout.suit.max.fullscreen,
+    --awful.layout.suit.magnifier
+--}
 local layouts =
-{
-    awful.layout.suit.floating,
+  {
+    awful.layout.suit.max,
     awful.layout.suit.tile,
     awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
@@ -65,10 +80,9 @@ local layouts =
     awful.layout.suit.fair.horizontal,
     awful.layout.suit.spiral,
     awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.max,
-    -- awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier
-}
+    --awful.layout.suit.magnifier
+    awful.layout.suit.floating,
+  }
 -- }}}
 
 -- {{{ Wallpaper
@@ -221,7 +235,11 @@ root.buttons(awful.util.table.join(
 globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
-    awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
+    --awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
+    awful.key({ modkey,           }, "Escape", function ()
+        awful.tag.viewonly(tags[1][1])
+        awful.tag.viewonly(tags[2][1])
+    end),
 
     awful.key({ modkey,           }, "j",
         function ()
@@ -266,6 +284,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
+    awful.key({            }, "Print", function() awful.util.spawn("gnome-screenshot") end),
+
 
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
@@ -374,6 +394,7 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
+    --{ rule = {}, properties = {}, callback = awful.client.setslave}
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
