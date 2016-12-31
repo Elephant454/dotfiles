@@ -23,7 +23,6 @@
  ;;  not sure.
  scroll-error-top-bottom t
  
-
  ;; ensures that all packages are always installed (and installs ones
  ;; that are listed but not present)
  use-package-always-ensure t
@@ -32,9 +31,7 @@
  ;; to see them. This is used for "M-a" and "M-e" for jumping forward
  ;; and back sentences. Look up the info page on "Sentences".
  sentence-end-double-space nil
-
- ;; change all "yes or no" dialogs to "y or n" dialogs
- (fset 'yes-or-no-p 'y-or-n-p))
+ )
 
 ;; buffer local variables
 (setq-default
@@ -47,10 +44,13 @@
 ;; indent automatically
 (electric-indent-mode 1) ; indent automatically
 (show-paren-mode 1)      ; highlight paired parentheses
-(show-paren-delay 0)
+(setq show-paren-delay 0)
 
 ;; don't suspend emacs with "C-z"
 (global-unset-key (kbd "C-z"))
+
+;; change all "yes or no" dialogs to "y or n" dialogs
+(fset 'yes-or-no-p 'y-or-n-p)
 
 ;; the package manager
 ;;(require 'package)
@@ -67,9 +67,6 @@
   (package-install 'use-package))
 (require 'use-package)
 
-
-;; EVERYTHING BEFORE THIS POINT NEEDS TO BE DOUBLE CHECKED
-;; EVERYTHING AFTER THIS POINT IS CHECKED
 (use-package soft-morning-theme
   :defer)
 (use-package omtose-phellack-theme
@@ -131,9 +128,18 @@
                          "s" 'shell ; open a shell
                          
                          ;; open this configuration file (why is the
-                         ;; lambda and interactive necessary?)
+                         ;;  lambda and interactive necessary?)
+                         ;; Maybe it's because it's expecting a single
+                         ;;  function, and lambda is defining an
+                         ;;  anonymous one here.
+                         ;; Interactive I'm not really sure about.
+                         ;;  Check the info page?
+                         ;; file-truename is so that we get the real
+                         ;;  name of the file after following symbolic
+                         ;;  links.
                          "i" '(lambda() (interactive) (find-file
-                                                       "~/.emacs.d/init.el"))
+                                                       (file-truename
+                                                        "~/.emacs.d/init.el")))
 
                          "t" '(:ignore t :which-key "Toggles/Settings")
                          "ta" '(auto-fill-mode 1)
