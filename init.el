@@ -156,9 +156,6 @@
                          "tt" '(load-theme))))
 
 ;; Set elephant454initel-use-helm to t to use helm. Set it to nil to use Ivy.
-;; TODO: Setting M-x here is redundant, right? If anything, it's
-;;  pretty strange that <menu> doesn't default to
-;;  execute-extended-command.
 (setq elephant454initel-use-helm nil)
 (if elephant454initel-use-helm
     ;; This helm section was written by Sacha Chua. I should read over it
@@ -179,17 +176,13 @@
                      helm-quick-update t
                      helm-M-x-requires-pattern nil
                      helm-ff-skip-boring-files t)
-               (helm-mode 0))  ;; temporarily set to 0
-             :bind (("M-x" . helm-M-x)
-                    ("<menu>" . helm-M-x)))
+               (helm-mode 1)))
            (use-package helm-descbinds
              :config
              (helm-descbinds-mode 1)))
   
   (progn (use-package ivy :config (ivy-mode 1))
-         (use-package counsel
-           :bind (("M-x" . counsel-M-x)
-                  ("<menu>" . counsel-M-x)))
+         (use-package counsel)
          (use-package swiper)))
 
 ;; this shows possible key combinations in a pop-up (like when I do C-x, C-c, 
