@@ -100,10 +100,15 @@
      (setq general-default-keymaps 'evil-normal-state-map)
      (general-define-key :prefix "SPC"
                          :global-prefix "C-SPC"
-                         ;; double tab Space for M-x
-                         "<SPC>" '(helm-M-x :which-key "M-x")
+                         ;; double tap Space for M-x
+                         ;; it makes more sense to have this defined
+                         ;;  where we actually get our function for M-x 
+                         ;;"<SPC>" '(helm-M-x :which-key "M-x")
+                         "<SPC>" '(execute-extended-command :which-key "M-x")
 
                          ;; org commands
+                         ;; again, these should be moved to their own
+                         ;;  "org" section
                          "o" '(:ignore t :which-key "Org")
                          "oa" 'org-agenda
                          ;; add some way for the semester and year to
@@ -125,7 +130,7 @@
                          
                          ;; file commands
                          "f" '(:ignore t :which-key "File") ; label
-                         "ff" 'helm-find-files ; open a dialog to open
+                         "ff" 'find-file       ; open a dialog to open
                                                ;  a file
                          "fj" 'dired-jump      ; open the directory of
                                                ;  the current file
@@ -150,29 +155,42 @@
                          "ta" '(auto-fill-mode 1)
                          "tt" '(load-theme))))
 
-
-;; This helm section was written by Sacha Chua. I should read over it
-;;  to see what it actually does.
-(use-package helm
-  :init
-  (progn
-    (require 'helm-config)
-    (setq helm-candidate-number-limit 100)
-    ;; From https://gist.github.com/antifuchs/9238468
-    (setq helm-idle-delay 0.0 ; update fast sources immediately (doesn't).
-          helm-input-idle-delay 0.01  ; this actually updates things
-                                        ; reeeelatively quickly.
-          helm-yas-display-key-on-candidate t
-          helm-quick-update t
-          helm-M-x-requires-pattern nil
-          helm-ff-skip-boring-files t)
-    (helm-mode))
-  :bind (("M-x" . helm-M-x)
-         ("<menu>" . helm-M-x)))
-(use-package helm-descbinds
-  :config
-  (helm-descbinds-mode 1))
-;; helm apropose?
+;; Set elephant454initel-use-helm to t to use helm. Set it to nil to use Ivy.
+;; TODO: Setting M-x here is redundant, right? If anything, it's
+;;  pretty strange that <menu> doesn't default to
+;;  execute-extended-command.
+(setq elephant454initel-use-helm nil)
+(if elephant454initel-use-helm
+    ;; This helm section was written by Sacha Chua. I should read over it
+    ;;  to see what it actually does.
+    (progn (use-package helm
+             :init
+             (progn
+               (require 'helm-config)
+               (setq helm-candidate-number-limit 100)
+               ;; From https://gist.github.com/antifuchs/9238468
+               (setq helm-idle-delay 0.0 ; update fast sources
+                                         ;  immediately (doesn't).
+                     helm-input-idle-delay 0.01  ; this actually
+                                                 ;  updates things
+                                                 ;  reeeelatively
+                                                 ;  quickly.
+                     helm-yas-display-key-on-candidate t
+                     helm-quick-update t
+                     helm-M-x-requires-pattern nil
+                     helm-ff-skip-boring-files t)
+               (helm-mode 0))  ;; temporarily set to 0
+             :bind (("M-x" . helm-M-x)
+                    ("<menu>" . helm-M-x)))
+           (use-package helm-descbinds
+             :config
+             (helm-descbinds-mode 1)))
+  
+  (progn (use-package ivy :config (ivy-mode 1))
+         (use-package counsel
+           :bind (("M-x" . counsel-M-x)
+                  ("<menu>" . counsel-M-x)))
+         (use-package swiper)))
 
 ;; this shows possible key combinations in a pop-up (like when I do C-x, C-c, 
 ;;  etc.)
@@ -194,6 +212,7 @@
             (global-company-mode 1)))
 
 ;; define yasnippet more formally here
+(use-package yasnippet)
 
 ;; This does what it says on the tin. It provides a function for
 ;;  restarting emacs.
@@ -203,7 +222,14 @@
 
 (use-package sudo-edit)
 
+;; This allows for switching between windows so we can 
+(use-package window-numbering
+  :config (window-numbering-mode))
+
+(use-package window-purpose)
+
 ;; for installing packages other than ones in repos
+;; quelpa-use-package doesn't seem to work for whatever reason
 (use-package quelpa
   :config (use-package quelpa-use-package))
 
@@ -214,7 +240,12 @@
                     :repo "death/reddit-mode")))
 
 ;; I might want to look into other spotify clients
-(quelpa '(spotify :fetcher github :repo "danielfm/spotify.el"))
+;;(quelpa '(spotify :fetcher github :repo "danielfm/spotify.el"))
+(use-package spotify)
+
+;; just for the heck of it 
+(use-package exwm)
+
 
 
 ;; DO NOT WRITE BELOW THIS LINE. THIS IS AUTO GENERATED BY CUSTOMIZE
@@ -230,9 +261,10 @@
     ("abe5ee8858cd1fbe36304a8c3b2315d3e0a4ef7c8588fcc45d1c23eafb725bb6" default)))
  '(package-selected-packages
    (quote
-    (spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
+    (counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
  '(pos-tip-background-color "#3D4E54")
  '(pos-tip-foreground-color "#C1CADE")
+ '(window-numbering-mode t)
  '(xterm-color-names
    ["#404B5C" "#B26BB8" "#76A8A0" "#C79474" "#6886A6" "#515275" "#7D8AA8" "#8C92A1"])
  '(xterm-color-names-bright
