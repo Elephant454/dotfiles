@@ -41,7 +41,6 @@
  c-default-style "linux")  ; don't indent brackets
 
 ;; modes
-;; indent automatically
 (electric-indent-mode 1) ; indent automatically
 (electric-pair-mode 1)   ; automatically match closing parentheses,
                          ;  braces, quotes, etc.
@@ -57,7 +56,7 @@
 ;; set default font
 (set-default-font (font-spec :name "Inconsolatazi4" :size 14))
                   
-;; the package manager
+;; set the repositories and install use-package
 (require 'package)
 (setq
  package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
@@ -116,18 +115,16 @@
   (progn 
      (setq general-default-keymaps 'evil-normal-state-map)
      (general-define-key :prefix "SPC"
-                         :global-prefix "C-SPC"
+                         :global-prefix "/C-SPC"
                          :keymaps (list 'evil-normal-state-map 'dired-mode-map)
                          ;;:keymaps (list 'evil-normal-state-map)
                          ;; double tap Space for M-x
                          ;; it makes more sense to have this defined
                          ;;  where we actually get our function for M-x 
                          ;;"<SPC>" '(helm-M-x :which-key "M-x")
+                         "" '(nil :which-key "Main Leader")
                          "<SPC>" '(execute-extended-command :which-key
                                                             "M-x")
-
-                         "," '(nil :ignore t :which-key "Major Mode Commands")
-
                          ;; org commands
                          ;; again, these should be moved to their own
                          ;;  "org" section
@@ -155,7 +152,8 @@
                          "ff" 'find-file       ; open a dialog to open
                                                ;  a file
                          "fj" 'dired-jump      ; open the directory of
-                                        ;  the current file
+                                               ;  the current file
+                         "fe" 'ediff
                          "fb" '(:ignore t :which-key "Bookmark")
                          "fbs" 'bookmark-set
                          "fbj" 'bookmark-jump
@@ -282,18 +280,18 @@
   :config (progn
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode
                                                 1))))
-  ;;:general (:prefix (kbd ",")
-                    ;;:global-prefix (kbd "C-,")
-                    ;;:keymaps 'org-mode-map
-                    ;;"A" 'org-archive-subtree))
   :general (:keymaps 'org-mode-map
                      :prefix (kbd ",")
                      :global-prefix "/C-,"
                      :states 'normal
                      "" '(nil :which-key "Org Mode Commands")
-                     "A" 'org-archive-subtree))
+                     "a" 'org-agenda
+                     "A" 'org-archive-subtree
+                     "h" 'org-toggle-heading
+                     "e" 'org-edit-special))
 
-(use-package open-junk-file)
+(use-package open-junk-file
+  :config (setq open-junk-file-format "~/junk/%Y/%m/%d/%H%M%S/"))
 
 (use-package pdf-tools)
 
