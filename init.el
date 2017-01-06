@@ -108,7 +108,10 @@
                ; package called dired from the repos.
   :init (use-package dired-x
           :ensure nil)
-  :config (define-key dired-mode-map [? ] nil))
+  :config (define-key dired-mode-map [? ] nil)) ; unbind space for
+                                                ;  dired-mode so that we can
+                                                ;  map it as our leader key
+                                                ;  later
 
 
 ;; in order to figure out how binding keys works, I'm going to need
@@ -118,73 +121,75 @@
 ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Named-ASCII-Chars.html
 (use-package general
   :config
-  (progn 
-     (setq general-default-keymaps 'evil-normal-state-map)
-     (general-define-key :prefix "SPC"
-                         :global-prefix "C-<SPC>"
-                         :keymaps (list 'evil-normal-state-map 'dired-mode-map)
-                         ;;:keymaps (list 'evil-normal-state-map)
-                         ;; double tap Space for M-x
-                         ;; it makes more sense to have this defined
-                         ;;  where we actually get our function for M-x 
-                         ;;"<SPC>" '(helm-M-x :which-key "M-x")
-                         "" '(nil :states 'evil-emacs-state :which-key "Main Leader")
-                         "<SPC>" '(execute-extended-command :which-key
-                                                            "M-x")
-                         ;; org commands
-                         ;; again, these should be moved to their own
-                         ;;  "org" section
-                         "o" '(:ignore t :which-key "Org")
-                         "oa" 'org-agenda
-                         ;; add some way for the semester and year to
-                         ;;  be figured out automatically
-                         "ot" (lambda() (interactive) (find-file
-                                                       "~/Documents/2016-2017/Semester2/todo.org"))
-                         "oe" (lambda() (interactive) (find-file
-                                                       "~/Documents/2016-2017/Semester2/events.org"))
-                         "od" (lambda() (interactive) (find-file
-                                                       "~/org/derp.org"))
-                         
-                         ;; modify windows using vim-like keybindings
-                         "w" '(evil-window-map :which-key "Window")
-                         
-                         ;; buffer commands
-                         "b" '(:ignore t :which-key "Buffer") ; label
-                         "bb" 'switch-to-buffer   ; switch buffers
-                         "bd" 'evil-delete-buffer ; delete current buffer
-                         
-                         ;; file commands
-                         "f" '(:ignore t :which-key "File") ; label
-                         "ff" 'find-file       ; open a dialog to open
-                                               ;  a file
-                         "fj" 'dired-jump      ; open the directory of
-                                               ;  the current file
-                         "fe" 'ediff
-                         "fb" '(:ignore t :which-key "Bookmark")
-                         "fbs" 'bookmark-set
-                         "fbj" 'bookmark-jump
-                         "fbl" 'bookmark-bmenu-list
-                         "fy" 'kill-buffer-file-name
-                         
-                         "s" 'shell ; open a shell
-                         
-                         ;; open this configuration file (why is the
-                         ;;  lambda and interactive necessary?)
-                         ;; Maybe it's because it's expecting a single
-                         ;;  function, and lambda is defining an
-                         ;;  anonymous one here.
-                         ;; Interactive I'm not really sure about.
-                         ;;  Check the info page?
-                         ;; file-truename is so that we get the real
-                         ;;  name of the file after following symbolic
-                         ;;  links.
-                         "i" '(lambda() (interactive) (find-file
-                                                       (file-truename
-                                                        "~/.emacs.d/init.el")))
-
-                         "t" '(:ignore t :which-key "Toggles/Settings")
-                         "ta" '(auto-fill-mode 1)
-                         "tt" '(load-theme))))
+  (progn
+    ;;(global-unset-key (kbd "C-<SPC>"))
+     ;;(setq general-default-keymaps 'evil-normal-state-map)
+    (general-define-key :states '(normal emacs)
+                        :prefix "SPC"
+                        :global-prefix "C-SPC"
+                        ;;:keymaps (list 'evil-normal-state-map 'dired-mode-map)
+                        ;;:keymaps 'dired-mode-map
+                        ;; double tap Space for M-x
+                        ;; it makes more sense to have this defined
+                        ;;  where we actually get our function for M-x 
+                        ;;"<SPC>" '(helm-M-x :which-key "M-x")
+                        ;;"" '(nil :states '(evil-emacs-state evil-normal-state) :which-key "Main Leader")
+                        "<SPC>" '(execute-extended-command :which-key
+                                                           "M-x")
+                        ;; org commands
+                        ;; again, these should be moved to their own
+                        ;;  "org" section
+                        "o" '(:ignore t :which-key "Org")
+                        "oa" 'org-agenda
+                        ;; add some way for the semester and year to
+                        ;;  be figured out automatically
+                        "ot" (lambda() (interactive) (find-file
+                                                      "~/Documents/2016-2017/Semester2/todo.org"))
+                        "oe" (lambda() (interactive) (find-file
+                                                      "~/Documents/2016-2017/Semester2/events.org"))
+                        "od" (lambda() (interactive) (find-file
+                                                      "~/org/derp.org"))
+                        
+                        ;; modify windows using vim-like keybindings
+                        "w" '(evil-window-map :which-key "Window")
+                        
+                        ;; buffer commands
+                        "b" '(:ignore t :which-key "Buffer") ; label
+                        "bb" 'switch-to-buffer   ; switch buffers
+                        "bd" 'evil-delete-buffer ; delete current buffer
+                        
+                        ;; file commands
+                        "f" '(:ignore t :which-key "File") ; label
+                        "ff" 'find-file       ; open a dialog to open
+                                        ;  a file
+                        "fj" 'dired-jump      ; open the directory of
+                                        ;  the current file
+                        "fe" 'ediff
+                        "fb" '(:ignore t :which-key "Bookmark")
+                        "fbs" 'bookmark-set
+                        "fbj" 'bookmark-jump
+                        "fbl" 'bookmark-bmenu-list
+                        "fy" 'kill-buffer-file-name
+                        
+                        "s" 'shell ; open a shell
+                        
+                        ;; open this configuration file (why is the
+                        ;;  lambda and interactive necessary?)
+                        ;; Maybe it's because it's expecting a single
+                        ;;  function, and lambda is defining an
+                        ;;  anonymous one here.
+                        ;; Interactive I'm not really sure about.
+                        ;;  Check the info page?
+                        ;; file-truename is so that we get the real
+                        ;;  name of the file after following symbolic
+                        ;;  links.
+                        "i" '(lambda() (interactive) (find-file
+                                                      (file-truename
+                                                       "~/.emacs.d/init.el")))
+                        
+                        "t" '(:ignore t :which-key "Toggles/Settings")
+                        "ta" '(auto-fill-mode 1)
+                        "tt" '(load-theme))))
 
 
 ;; Set elephant454initel-use-helm to t to use helm. Set it to nil to use Ivy.
@@ -217,7 +222,8 @@
   (progn (use-package ivy :config (ivy-mode 1))
          (use-package counsel)
          (use-package swiper
-           :general ("\C-s" '(swiper :states '(evil-normal-state evil-emacs-state))
+           :general ("\C-s" '(swiper
+                              :states '(evil-normal-state evil-emacs-state))
                      "/" '(swiper :states 'evil-normal-state)))))
 
 ;; this shows possible key combinations in a pop-up (like when I do C-x, C-c, 
