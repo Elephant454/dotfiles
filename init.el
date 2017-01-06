@@ -217,8 +217,8 @@
   (progn (use-package ivy :config (ivy-mode 1))
          (use-package counsel)
          (use-package swiper
-           :config (global-unset-key "\C-s")
-           :bind ("\C-s" . swiper))))
+           :general ("\C-s" '(swiper :states '(evil-normal-state evil-emacs-state))
+                     "/" '(swiper :states 'evil-normal-state)))))
 
 ;; this shows possible key combinations in a pop-up (like when I do C-x, C-c, 
 ;;  etc.)
