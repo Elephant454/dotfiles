@@ -222,9 +222,10 @@
   (progn (use-package ivy :config (ivy-mode 1))
          (use-package counsel)
          (use-package swiper
-           :general ("\C-s" '(swiper
-                              :states '(evil-normal-state evil-emacs-state))
-                     "/" '(swiper :states 'evil-normal-state)))))
+           :general (:states '(normal insert emacs visual)
+                             :prefix "/"
+                             :global-prefix "\C-s"
+                     "" 'swiper))))
 
 ;; this shows possible key combinations in a pop-up (like when I do C-x, C-c, 
 ;;  etc.)
