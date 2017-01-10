@@ -79,6 +79,8 @@
   :defer)
 (use-package color-theme-sanityinc-tomorrow
   :defer)
+(use-package silkworm-theme
+  :defer)
 (use-package theme-changer
   :config
   (setq calendar-location-name "Los Angeles, California"
@@ -316,13 +318,30 @@
 
 ;; this needs keybindings in order to work well. Copy them from the
 ;; Spacemacs layer.
-(use-package pdf-tools)
+(use-package pdf-tools
+  ;; this automatically reloads the pdf when it changes (if I'm
+  ;;  compiling latex for example)
+  :config (add-hook 'doc-view-mode-hook 'auto-revert-mode))
 
+;; I might want to add more from the latex spacemacs layer. Folding in
+;; particular sounds interesting.
 (use-package tex
   :defer t
   :ensure auctex
-  :config (use-package company-auctex
-            :config (company-auctex-init)))
+  :config (progn
+            ;; autocompletion for latex related commands
+            (use-package company-auctex
+              :config (company-auctex-init))
+            ;; auctex-latexmk decides how many times "pdflatex" has to
+            ;;  be run in order for the document to compile properly
+            ;;  (including bibliography, etc.)
+            ;; In order for it to work, a file called ~/.latexmkrc
+            ;;  needs to be created, and it needs to contain:
+            ;; # .latexmkrc starts
+            ;; $pdf_mode = 1;
+            ;; # .latexmkrc ends
+            (use-package auctex-latexmk
+              :config (auctex-latexmk-setup))))
 
 ;; The fact that this is strewn haphazardly here goes to show that
 ;; this needs some sort of categorical organization.
@@ -340,10 +359,14 @@
   :config (progn
             (setq tea-time-sound "/usr/share/sounds/KDE-Sys-App-Positive.ogg"
                   tea-time-sound-command "mplayer")
-            (add-hook 'tea-time-notification-hook (lambda() notifications-notify
-                                                   :title "Tea is ready!"
-                                                   :body "Your tea has finished steeping."
-                                                   :sound-name "dialog-information"))))
+            ;;(add-hook 'tea-time-notification-hook (lambda() notifications-notify
+            ;;                                       :title "Tea is ready!"
+            ;;                                       :body "Your tea has finished steeping."
+            ;;                                       :sound-name "dialog-information"
+            ;;                                       :image-path
+            ;;                                       "dialog-information"
+            ;;                                       :category "transfer.complete"))))
+            ))
 
 (use-package buffer-flip
   :config (progn (key-chord-mode 1)
@@ -386,14 +409,14 @@
    ["#404B5C" "#B26BB8" "#76A8A0" "#C79474" "#6886A6" "#515275" "#7D8AA8" "#8C92A1"])
  '(custom-safe-themes
    (quote
-    ("628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "abe5ee8858cd1fbe36304a8c3b2315d3e0a4ef7c8588fcc45d1c23eafb725bb6" default)))
+    ("b747fb36e99bc7f497248eafd6e32b45613ee086da74d1d92a8da59d37b9a829" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "abe5ee8858cd1fbe36304a8c3b2315d3e0a4ef7c8588fcc45d1c23eafb725bb6" default)))
  '(minimap-mode t)
  '(org-agenda-files
    (quote
     ("~/org/derp.org" "~/org/birthdays.org" "~/Documents/2016-2017/Semester2/schedule.org" "~/Documents/2016-2017/Semester2/todo.org" "~/Documents/2016-2017/Semester2/events.org")))
  '(package-selected-packages
    (quote
-    (buffer-flip cycbuf company-auctex tex auctex evil-matchit sml-modeline dired-x dired color-theme-sanityinc-tomorrow color-theme tea-time pdf-tools open-junk-file org-journal org-bullets org-pomodoro evil-org counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
+    (auctex-latexmk silkworm-theme buffer-flip cycbuf company-auctex tex auctex evil-matchit sml-modeline dired-x dired color-theme-sanityinc-tomorrow color-theme tea-time pdf-tools open-junk-file org-journal org-bullets org-pomodoro evil-org counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
  '(pos-tip-background-color "#3D4E54")
  '(pos-tip-foreground-color "#C1CADE")
  '(window-numbering-mode t)
