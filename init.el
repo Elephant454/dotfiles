@@ -295,7 +295,9 @@
             (use-package evil-org)
             (use-package org-pomodoro)
             (use-package org-bullets)
-            (use-package org-journal))
+            (use-package org-journal)
+            (use-package org-clock-today
+              :config (org-clock-today-mode)))
   :config (progn
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode
                                                 1))))
@@ -368,6 +370,12 @@
             ;;                                       :category "transfer.complete"))))
             ))
 
+(use-package seethru
+  :general (:prefix "SPC"
+                     :global-prefix "C-SPC"
+                     :states '(normal emacs visual insert)
+                     "tT" 'seethru))
+
 (use-package buffer-flip
   :config (progn (key-chord-mode 1)
                  (buffer-flip-mode 1))
@@ -409,14 +417,16 @@
    ["#404B5C" "#B26BB8" "#76A8A0" "#C79474" "#6886A6" "#515275" "#7D8AA8" "#8C92A1"])
  '(custom-safe-themes
    (quote
-    ("b747fb36e99bc7f497248eafd6e32b45613ee086da74d1d92a8da59d37b9a829" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "abe5ee8858cd1fbe36304a8c3b2315d3e0a4ef7c8588fcc45d1c23eafb725bb6" default)))
+    ("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "b747fb36e99bc7f497248eafd6e32b45613ee086da74d1d92a8da59d37b9a829" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "abe5ee8858cd1fbe36304a8c3b2315d3e0a4ef7c8588fcc45d1c23eafb725bb6" default)))
+ '(midnight-mode t)
  '(minimap-mode t)
  '(org-agenda-files
    (quote
     ("~/org/derp.org" "~/org/birthdays.org" "~/Documents/2016-2017/Semester2/schedule.org" "~/Documents/2016-2017/Semester2/todo.org" "~/Documents/2016-2017/Semester2/events.org")))
+ '(org-clock-today-mode t)
  '(package-selected-packages
    (quote
-    (auctex-latexmk silkworm-theme buffer-flip cycbuf company-auctex tex auctex evil-matchit sml-modeline dired-x dired color-theme-sanityinc-tomorrow color-theme tea-time pdf-tools open-junk-file org-journal org-bullets org-pomodoro evil-org counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
+    (seethru org-clock-today auctex-latexmk silkworm-theme buffer-flip cycbuf company-auctex tex auctex evil-matchit sml-modeline dired-x dired color-theme-sanityinc-tomorrow color-theme tea-time pdf-tools open-junk-file org-journal org-bullets org-pomodoro evil-org counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
  '(pos-tip-background-color "#3D4E54")
  '(pos-tip-foreground-color "#C1CADE")
  '(window-numbering-mode t)
