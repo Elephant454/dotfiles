@@ -165,6 +165,8 @@
                         "fj" 'dired-jump      ; open the directory of
                                         ;  the current file
                         "fe" 'ediff
+                        
+                        ;; file bookmark commands
                         "fb" '(:ignore t :which-key "Bookmark")
                         "fbs" 'bookmark-set
                         "fbj" 'bookmark-jump
@@ -244,7 +246,13 @@
 
 ;; for all of your Java/Scala needs
 (use-package ensime
-  :pin melpa-stable)
+  :pin melpa-stable
+  :general (:keymaps 'ensime-mode-map
+                     :prefix ","
+                     :global-prefix "C-,"
+                     :states 'normal
+                     "" '(nil :which-key "Ensime Mode Commands")
+                     "i" 'ensime-import-type-at-point))
 
 ;; auto completion (needs tweaking)
 (use-package company
@@ -253,7 +261,8 @@
             (global-company-mode 1)))
 
 ;; define yasnippet more formally here
-(use-package yasnippet)
+(use-package yasnippet
+  :config (use-package java-snippets))
 
 ;; This does what it says on the tin. It provides a function for
 ;;  restarting emacs.
@@ -283,9 +292,11 @@
 ;; I might want to look into other spotify clients
 ;;(quelpa '(spotify :fetcher github :repo "danielfm/spotify.el"))
 (use-package spotify)
+(use-package lyrics)
 
 ;; just for the heck of it 
-(use-package exwm)
+(use-package exwm
+  :config (setq exwm-randr-workspace-output-plist '(0 "HDMI-0" 1 "DVI-D-0" 2 "HDMI-0" 3 "HDMI-0" 4 "HDMI-0" 5 "DVI-D-0")))
 
 ;; org things
 ;; TODO: look into org-dotemacs for organizing this file using org
@@ -316,7 +327,11 @@
                      "." 'org-time-stamp))
 
 (use-package open-junk-file
-  :config (setq open-junk-file-format "~/junk/%Y/%m/%d/%H%M%S/"))
+  :config (setq open-junk-file-format "~/junk/%Y/%m/%d/%H%M%S/")
+  :general (:prefix "SPC"
+                     :global-prefix "C-SPC"
+                     :states '(normal emacs visual insert)
+                     "fJ" 'open-junk-file))
 
 ;; this needs keybindings in order to work well. Copy them from the
 ;; Spacemacs layer.
@@ -422,11 +437,11 @@
  '(minimap-mode t)
  '(org-agenda-files
    (quote
-    ("~/org/derp.org" "~/org/birthdays.org" "~/Documents/2016-2017/Semester2/schedule.org" "~/Documents/2016-2017/Semester2/todo.org" "~/Documents/2016-2017/Semester2/events.org")))
+    ("~/org/birthdays.org" "~/org/derp.org" "~/Documents/2016-2017/Semester2/schedule.org" "~/Documents/2016-2017/Semester2/todo.org" "~/Documents/2016-2017/Semester2/events.org")))
  '(org-clock-today-mode t)
  '(package-selected-packages
    (quote
-    (seethru org-clock-today auctex-latexmk silkworm-theme buffer-flip cycbuf company-auctex tex auctex evil-matchit sml-modeline dired-x dired color-theme-sanityinc-tomorrow color-theme tea-time pdf-tools open-junk-file org-journal org-bullets org-pomodoro evil-org counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
+    (lyrics java-snippets yasnippet-java-mode seethru org-clock-today auctex-latexmk silkworm-theme buffer-flip cycbuf company-auctex tex auctex evil-matchit sml-modeline dired-x dired color-theme-sanityinc-tomorrow color-theme tea-time pdf-tools open-junk-file org-journal org-bullets org-pomodoro evil-org counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
  '(pos-tip-background-color "#3D4E54")
  '(pos-tip-foreground-color "#C1CADE")
  '(window-numbering-mode t)
