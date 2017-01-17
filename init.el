@@ -53,8 +53,6 @@
 ;; change all "yes or no" dialogs to "y or n" dialogs
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; set default font
-(set-default-font (font-spec :name "Inconsolatazi4" :size 14))
                   
 ;; set the repositories and install use-package
 (require 'package)
@@ -72,6 +70,18 @@
 (require 'use-package)
 
 ;; themes
+
+;; disable the current Emacs 24 theme before enabling a new one. This
+;; is from
+;; http://stackoverflow.com/questions/9900232/changing-color-themes-emacs-24-order-matters/15595000#15595000
+;; http://emacs.stackexchange.com/questions/3112/how-to-reset-color-theme
+(defadvice load-theme 
+  (before theme-dont-propagate activate)
+  (mapc #'disable-theme custom-enabled-themes))
+
+;; I should set up pairs of night themes and day themes. One
+;; keybinding cycles between pairs and another keybinding switches
+;; between day and night.
 (use-package color-theme)
 (use-package soft-morning-theme
   :defer)
@@ -81,14 +91,35 @@
   :defer)
 (use-package silkworm-theme
   :defer)
+
+;; pairs of themes, with the car being the day variant and the cdr
+;; being the night variant
+(setq elephant454initel-theme-pairs (list
+                                     (cons 'soft-morning 'omtose-softer)
+                                     (cons 'silkworm
+                                           'sanityinc-tomorrow-eighties)))
+;;(setq elephant454initel-current-theme-pair (car elephant454initel-themes))
+
+;; changes theme automatically at sunset
 (use-package theme-changer
   :config
   (setq calendar-location-name "Los Angeles, California"
         calendar-latitude 34.0522
         calendar-longitude -118.244)
-  (change-theme 'soft-morning 'omtose-softer))
-;;(load-theme soft-morning)
-;;(load-theme omtose-softer)
+  ;;(change-theme 'soft-morning 'omtose-softer))
+  (change-theme (car (car elephant454initel-theme-pairs)) (cdr (car elephant454initel-theme-pairs))))
+
+
+
+
+(defun elephant454initel-cycle-theme-pairs ()
+  (add-to-list 'elephant454initel-theme-pairs (pop elephant454initel-theme-pairs) t)
+  (change-theme (car (car elephant454initel-theme-pairs)) (cdr (car elephant454initel-theme-pairs))))
+
+;; fonts
+;;(setq elephant454initel-fonts
+;;)
+(set-default-font (font-spec :name "Inconsolatazi4" :size 14))
 
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
@@ -444,11 +475,17 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
    ["#404B5C" "#B26BB8" "#76A8A0" "#C79474" "#6886A6" "#515275" "#7D8AA8" "#8C92A1"])
+ '(custom-enabled-themes (quote (sanityinc-tomorrow-eighties)))
  '(custom-safe-themes
    (quote
-    ("bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "b747fb36e99bc7f497248eafd6e32b45613ee086da74d1d92a8da59d37b9a829" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "abe5ee8858cd1fbe36304a8c3b2315d3e0a4ef7c8588fcc45d1c23eafb725bb6" default)))
+    ("d600c677f1777c1e4bfb066529b5b73c0179d0499dd4ffa3f599a0fb0cfbd501" "7e376fb329a0e46a04e8285b0e45199a083f98c69b0e1039ec1cb1d366e66e9c" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "b747fb36e99bc7f497248eafd6e32b45613ee086da74d1d92a8da59d37b9a829" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "abe5ee8858cd1fbe36304a8c3b2315d3e0a4ef7c8588fcc45d1c23eafb725bb6" default)))
+ '(debug-on-error t)
+ '(erc-autojoin-mode t)
+ '(fci-rule-color "#515151")
  '(midnight-mode t)
  '(minimap-mode t)
  '(org-agenda-files
@@ -460,6 +497,28 @@
     (lyrics java-snippets yasnippet-java-mode seethru org-clock-today auctex-latexmk silkworm-theme buffer-flip cycbuf company-auctex tex auctex evil-matchit sml-modeline dired-x dired color-theme-sanityinc-tomorrow color-theme tea-time pdf-tools open-junk-file org-journal org-bullets org-pomodoro evil-org counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
  '(pos-tip-background-color "#3D4E54")
  '(pos-tip-foreground-color "#C1CADE")
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#f2777a")
+     (40 . "#f99157")
+     (60 . "#ffcc66")
+     (80 . "#99cc99")
+     (100 . "#66cccc")
+     (120 . "#6699cc")
+     (140 . "#cc99cc")
+     (160 . "#f2777a")
+     (180 . "#f99157")
+     (200 . "#ffcc66")
+     (220 . "#99cc99")
+     (240 . "#66cccc")
+     (260 . "#6699cc")
+     (280 . "#cc99cc")
+     (300 . "#f2777a")
+     (320 . "#f99157")
+     (340 . "#ffcc66")
+     (360 . "#99cc99"))))
+ '(vc-annotate-very-old-color nil)
  '(window-numbering-mode t)
  '(xterm-color-names
    ["#404B5C" "#B26BB8" "#76A8A0" "#C79474" "#6886A6" "#515275" "#7D8AA8" "#8C92A1"])
