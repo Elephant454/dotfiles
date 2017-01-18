@@ -78,6 +78,7 @@
 ;; is from
 ;; http://stackoverflow.com/questions/9900232/changing-color-themes-emacs-24-order-matters/15595000#15595000
 ;; http://emacs.stackexchange.com/questions/3112/how-to-reset-color-theme
+;;
 ;; look more into mapping functions (mapcar, mapc, dolist, etc.)
 (defadvice load-theme 
   (before theme-dont-propagate activate)
@@ -102,22 +103,41 @@
                                      (cons 'soft-morning 'omtose-softer)
                                      (cons 'silkworm
                                            'sanityinc-tomorrow-eighties)))
-;;(setq elephant454initel-current-theme-pair (car elephant454initel-themes))
+(setq elephant454initel-current-theme-pair (pop elephant454initel-theme-pairs))
+(setq elephant454initel-use-day-theme t)
+
+;; switch between using the day theme and the night theme
+(defun elephant454initel-toggle-use-day-theme()
+  (setq elephant454initel-use-day-theme (not elephant454initel-use-day-theme))
+  (elephant454initel-load-theme))
+
+;; cycle pairs of themes
+(defun elephant454initel-cycle-theme-pairs ()
+  (add-to-list 'elephant454initel-theme-pairs elephant454initel-current-theme t)
+  (setq elephant454initel-current-theme (pop elephant454initel-theme-pairs))
+  (elephant454initel-load-theme))
+
+;; load either the day or the night variant of the current theme pair
+;; warning: this function loads themes with NO-CONFIRM. Make sure that
+;; themes aren't malicious before adding them to the theme-pairs 
+(defun elephant454initel-load-theme ()
+  (if elephant454initel-use-day-theme
+      (load-theme (car elephant454initel-current-theme-pair) t)
+    (load-theme (cdr elephant454initel-current-theme-pair) t)))
+
+(elephant454initel-load-theme)
 
 ;; changes theme automatically at sunset
-(use-package theme-changer
-  :config
-  (setq calendar-location-name "Los Angeles, California"
-        calendar-latitude 34.0522
-        calendar-longitude -118.244)
-  (change-theme (car (car elephant454initel-theme-pairs)) (cdr (car elephant454initel-theme-pairs))))
+;;(use-package theme-changer
+;;  :config
+;;  (setq calendar-location-name "Los Angeles, California"
+;;        calendar-latitude 34.0522
+;;        calendar-longitude -118.244)
+;;  (change-theme (car (car elephant454initel-theme-pairs)) (cdr (car elephant454initel-theme-pairs))))
 
 
 
 
-(defun elephant454initel-cycle-theme-pairs ()
-  (add-to-list 'elephant454initel-theme-pairs (pop elephant454initel-theme-pairs) t)
-  (change-theme (car (car elephant454initel-theme-pairs)) (cdr (car elephant454initel-theme-pairs))))
 
 ;; fonts
 ;;(setq elephant454initel-fonts
@@ -500,7 +520,6 @@
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
    ["#404B5C" "#B26BB8" "#76A8A0" "#C79474" "#6886A6" "#515275" "#7D8AA8" "#8C92A1"])
- '(custom-enabled-themes (quote (sanityinc-tomorrow-eighties)))
  '(custom-safe-themes
    (quote
     ("d600c677f1777c1e4bfb066529b5b73c0179d0499dd4ffa3f599a0fb0cfbd501" "7e376fb329a0e46a04e8285b0e45199a083f98c69b0e1039ec1cb1d366e66e9c" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "b747fb36e99bc7f497248eafd6e32b45613ee086da74d1d92a8da59d37b9a829" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "abe5ee8858cd1fbe36304a8c3b2315d3e0a4ef7c8588fcc45d1c23eafb725bb6" default)))
