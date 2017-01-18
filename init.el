@@ -161,7 +161,7 @@
   :config
   (progn
     (global-unset-key (kbd "C-<SPC>"))
-    (general-define-key :states '(normal emacs)
+    (general-define-key :states '(normal emacs insert visual motion)
                         :prefix "SPC"
                         :global-prefix "C-SPC"
                         ;; double tap Space for M-x
@@ -362,7 +362,8 @@
                      "a" 'org-agenda
                      "A" 'org-archive-subtree
                      "h" 'org-toggle-heading
-                     "e" 'org-edit-special
+                     "e" 'org-export-dispatch
+                     "E" 'org-edit-special
                      "." 'org-time-stamp
                      "d" 'org-deadline))
 
