@@ -536,11 +536,8 @@ Lisp function does not specify a special indentation."
 ;; also, this should really be using a general key definer in order to add it to
 ;;  our applications menu
 (use-package tea-time
-  :general (:prefix "SPC"
-                     :global-prefix "C-SPC"
-                     :states '(normal emacs visual insert)
-                     "at" '(tea-time))
   :config (progn
+            (elephant454initel-main-menu "at" 'tea-time)
             (setq tea-time-sound "/usr/share/sounds/KDE-Sys-App-Positive.ogg"
                   tea-time-sound-command "mplayer")
             ;;(add-hook 'tea-time-notification-hook (lambda() notifications-notify
@@ -553,18 +550,13 @@ Lisp function does not specify a special indentation."
             ))
 
 (use-package seethru
-  :general (:prefix "SPC"
-                     :global-prefix "C-SPC"
-                     :states '(normal emacs visual insert)
-                     "tT" 'seethru))
+  :config (elephant454initel-main-menu "tT" 'seethru))
 
 (use-package buffer-flip
-  :config (progn (key-chord-mode 1)
-                 (buffer-flip-mode 1))
-  :general (:states '(normal emacs visual input)
-                    :prefix "SPC"
-                    :non-normal-prefix "C-SPC"
-                    "TAB" 'buffer-flip))
+  :config (progn
+            (elephant454initel-main-menu "TAB" 'buffer-flip)
+            (key-chord-mode 1)
+            (buffer-flip-mode 1)))
 
 ;; My first elisp function. It works when evaluated with M-:, but it
 ;;  needs an interactive part in order to be callable from a
@@ -593,16 +585,14 @@ Lisp function does not specify a special indentation."
 
 (use-package erc
   :ensure nil
-  :config (setq erc-autojoin-channels-alist '((".*\\.freenode.net" "#archlinux")))
-  :general (:prefix "SPC"
-                     :global-prefix "C-SPC"
-                     :states '(normal emacs visual insert)
-                     "aE" '(lambda() (interactive)
+  :config (progn
+            (elephant454initel-main-menu "aE" '(lambda() (interactive)
                              (progn()
                                    (erc-autojoin-mode 1)
                                    (erc :server "irc.freenode.net"
                                         :nick "Elephant454" :password
-                                        "charlie"))) :which-key "ERC with Default Servers"))
+                                        "charlie"))) :which-key "ERC with Default Servers")
+            (setq erc-autojoin-channels-alist '((".*\\.freenode.net" "#archlinux")))))
 
 (use-package bubbles
   :ensure nil
