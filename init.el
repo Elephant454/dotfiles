@@ -17,19 +17,18 @@
  ;;  equivalent "line-number-mode" is enabled by default
  column-number-mode t
 
- ;; This command makes it so that C-v and M-v (which act like PageUp
- ;;  and PageDown) move to the very top of the buffer and very bottom 
- ;;  of the buffer when no more scrolling can happen, I think... I'm
- ;;  not sure.
+ ;; This command makes it so that C-v and M-v (which act like PageUp and
+ ;;  PageDown) move to the very top of the buffer and very bottom of the buffer
+ ;;  when no more scrolling can happen, I think... I'm not sure.
  scroll-error-top-bottom t
  
- ;; ensures that all packages are always installed (and installs ones
- ;; that are listed but not present)
+ ;; ensures that all packages are always installed (and installs ones that are
+ ;; listed but not present)
  use-package-always-ensure t
 
- ;; I don't end sentences with two spaces, so Emacs shouldn't expect
- ;; to see them. This is used for "M-a" and "M-e" for jumping forward
- ;; and back sentences. Look up the info page on "Sentences".
+ ;; I don't end sentences with two spaces, so Emacs shouldn't expect to see
+ ;; them. This is used for "M-a" and "M-e" for jumping forward and back
+ ;; sentences. Look up the info page on "Sentences".
  sentence-end-double-space nil
  )
 
@@ -42,14 +41,18 @@
 
 ;; modes
 (electric-indent-mode 1)   ; indent automatically
-(electric-pair-mode 1)     ; automatically match closing parentheses,
-                           ;  braces, quotes, etc.
+(electric-pair-mode 1)     ; automatically match closing parentheses, braces,
+                           ; quotes, etc.
 (show-paren-mode 1)        ; highlight paired parentheses
 (setq show-paren-delay 0)  ; no delay for highlighting parentheses
 (scroll-bar-mode 0)        ; remove the scroll bar
 (menu-bar-mode 0)          ; remove the menu bar (File, Edit, etc.)
 (tool-bar-mode 0)          ; remove the tool bar (New, Open, etc.)
-(setq quelpa-update-melpa-p nil)
+(setq quelpa-update-melpa-p nil)  ; Removes the annoying quelpa trying to update
+                                  ; at startup. When this is set to nil, start
+                                  ; times become sane.
+(setq-default fill-column 80)     ; sets auto-fill-mode to break lines at 80
+                                  ;  characters
 
 ;; don't suspend emacs with "C-z"
 (global-unset-key (kbd "C-z"))
@@ -85,9 +88,8 @@
   (before theme-dont-propagate activate)
   (mapc #'disable-theme custom-enabled-themes))
 
-;; I should set up pairs of night themes and day themes. One
-;; keybinding cycles between pairs and another keybinding switches
-;; between day and night.
+;; I should set up pairs of night themes and day themes. One keybinding cycles
+;; between pairs and another keybinding switches between day and night.
 (use-package color-theme)
 (use-package soft-morning-theme
   :defer)
@@ -118,9 +120,9 @@
   (setq elephant454initel-current-theme-pair (pop elephant454initel-theme-pairs))
   (elephant454initel-load-theme))
 
-;; load either the day or the night variant of the current theme pair
-;; warning: this function loads themes with NO-CONFIRM. Make sure that
-;; themes aren't malicious before adding them to the theme-pairs 
+;; load either the day or the night variant of the current theme pair warning:
+;; this function loads themes with NO-CONFIRM. Make sure that themes aren't
+;; malicious before adding them to the theme-pairs
 (defun elephant454initel-load-theme ()
   (if elephant454initel-use-day-theme
       (progn
@@ -180,10 +182,9 @@
                ; package called dired from the repos.
   :init (use-package dired-x
           :ensure nil)
-  :config (define-key dired-mode-map [? ] nil)) ; unbind space for
-                                                ;  dired-mode so that we can
-                                                ;  map it as our leader key
-                                                ;  later
+  :config (define-key dired-mode-map [? ] nil)) ; unbind space for dired-mode so
+                                                ;  that we can map it as our
+                                                ; leader key later
 
 
 ;; in order to figure out how binding keys works, I'm going to need
