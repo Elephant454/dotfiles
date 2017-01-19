@@ -193,11 +193,13 @@ Lisp function does not specify a special indentation."
 
 ;; switch between using the day theme and the night theme
 (defun elephant454initel-toggle-use-day-theme()
+  (interactive)
   (setq elephant454initel-use-day-theme (not elephant454initel-use-day-theme))
   (elephant454initel-load-theme))
 
 ;; cycle pairs of themes
 (defun elephant454initel-cycle-theme-pairs ()
+  (interactive)
   (add-to-list 'elephant454initel-theme-pairs elephant454initel-current-theme-pair t)
   (setq elephant454initel-current-theme-pair (pop elephant454initel-theme-pairs))
   (elephant454initel-load-theme))
@@ -234,6 +236,7 @@ Lisp function does not specify a special indentation."
 (setq elephant454initel-current-font (pop elephant454initel-fonts))
 
 (defun elephant454initel-cycle-fonts ()
+  (interactive)
   (add-to-list 'elephant454initel-fonts elephant454initel-current-font t)
   (setq elephant454initel-current-font (pop elephant454initel-fonts))
   (elephant454initel-load-font))
@@ -341,10 +344,18 @@ Lisp function does not specify a special indentation."
      "i" '(lambda() (interactive) (find-file
                                    (file-truename
                                     "~/.emacs.d/init.el")))
-     
+
+     ;; settings/toggles
      "t" '(:ignore t :which-key "Toggles/Settings")
+     ;; themes
+     "tt" '(:ignore t :which-key "Themes")
+     "tts" 'load-theme
+     "ttn" 'elephant454initel-cycle-theme-pairs
+     "ttt" 'elephant454initel-toggle-use-day-theme
+     ;; fonts
+     "tf" '(:ignore t :which-key "Fonts")
+     "tfn" 'elephant454initel-cycle-fonts
      "ta" '(auto-fill-mode 1)
-     "tt" '(load-theme)
      "tr" '(lambda() (interactive) (if (y-or-n-p "Really restart emacs?") 'restart-emacs))
      
      "a" '(:ignore t :which-key "Applications")
@@ -560,7 +571,9 @@ Lisp function does not specify a special indentation."
 ;;  keybinding.
 ;; It kills the name of the current file to the clipboard so it can be
 ;;  pasted elsewhere.
-(defun kill-buffer-file-name () (kill-new (buffer-file-name)))
+(defun kill-buffer-file-name ()
+  (interactive)
+  (kill-new (buffer-file-name)))
 
 (use-package ediff
   :ensure nil
