@@ -3,5 +3,7 @@ URxvt.depth: 32
 URxvt.font: xft:Inconsolata:size=14
 URxvt.cursorBlink: true
 
+URxvt.foreground: [100]#adebd6
+URxvt.background: [80]#471f2c
 *background: #ffffff
 *foreground: #336666
