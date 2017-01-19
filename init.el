@@ -60,7 +60,89 @@
 ;; change all "yes or no" dialogs to "y or n" dialogs
 (fset 'yes-or-no-p 'y-or-n-p)
 
-                  
+;; Here we redefine the lisp-indent-function in order to indent lists starting
+;; with keywords properly. This was suggested by general.el.
+;; https://github.com/Fuco1/.emacs.d/blob/af82072196564fa57726bdbabf97f1d35c43b7f7/site-lisp/redef.el#L20-L94
+(defun Fuco1/lisp-indent-function (indent-point state)
+  "This function is the normal value of the variable `lisp-indent-function'.
+The function `calculate-lisp-indent' calls this to determine
+if the arguments of a Lisp function call should be indented specially.
+
+INDENT-POINT is the position at which the line being indented begins.
+Point is located at the point to indent under (for default indentation);
+STATE is the `parse-partial-sexp' state for that position.
+
+If the current line is in a call to a Lisp function that has a non-nil
+property `lisp-indent-function' (or the deprecated `lisp-indent-hook'),
+it specifies how to indent.  The property value can be:
+
+* `defun', meaning indent `defun'-style
+  \(this is also the case if there is no property and the function
+  has a name that begins with \"def\", and three or more arguments);
+
+* an integer N, meaning indent the first N arguments specially
+  (like ordinary function arguments), and then indent any further
+  arguments like a body;
+
+* a function to call that returns the indentation (or nil).
+  `lisp-indent-function' calls this function with the same two arguments
+  that it itself received.
+
+This function returns either the indentation to use, or nil if the
+Lisp function does not specify a special indentation."
+  (let ((normal-indent (current-column))
+        (orig-point (point)))
+    (goto-char (1+ (elt state 1)))
+    (parse-partial-sexp (point) calculate-lisp-indent-last-sexp 0 t)
+    (cond
+     ;; car of form doesn't seem to be a symbol, or is a keyword
+     ((and (elt state 2)
+           (or (not (looking-at "\\sw\\|\\s_"))
+               (looking-at ":")))
+      (if (not (> (save-excursion (forward-line 1) (point))
+                  calculate-lisp-indent-last-sexp))
+          (progn (goto-char calculate-lisp-indent-last-sexp)
+                 (beginning-of-line)
+                 (parse-partial-sexp (point)
+                                     calculate-lisp-indent-last-sexp 0 t)))
+      ;; Indent under the list or under the first sexp on the same
+      ;; line as calculate-lisp-indent-last-sexp.  Note that first
+      ;; thing on that line has to be complete sexp since we are
+      ;; inside the innermost containing sexp.
+      (backward-prefix-chars)
+      (current-column))
+     ((and (save-excursion
+             (goto-char indent-point)
+             (skip-syntax-forward " ")
+             (not (looking-at ":")))
+           (save-excursion
+             (goto-char orig-point)
+             (looking-at ":")))
+      (save-excursion
+        (goto-char (+ 2 (elt state 1)))
+        (current-column)))
+     (t
+      (let ((function (buffer-substring (point)
+                                        (progn (forward-sexp 1) (point))))
+            method)
+        (setq method (or (function-get (intern-soft function)
+                                       'lisp-indent-function)
+                         (get (intern-soft function) 'lisp-indent-hook)))
+        (cond ((or (eq method 'defun)
+                   (and (null method)
+                        (> (length function) 3)
+                        (string-match "\\`def" function)))
+               (lisp-indent-defform state indent-point))
+              ((integerp method)
+               (lisp-indent-specform method state
+                                     indent-point normal-indent))
+              (method
+               (funcall method indent-point state))))))))
+
+(add-hook 'emacs-lisp-mode-hook
+          (lambda () (setq-local lisp-indent-function #'Fuco1/lisp-indent-function)))
+
+
 ;; set the repositories and install use-package
 (require 'package)
 (setq
@@ -201,75 +283,75 @@
                             :prefix "SPC"
                             :global-prefix "C-SPC")
     (elephant454initel-main-menu
-                        ;; double tap Space for M-x
-                        "<SPC>" '(execute-extended-command :which-key "Main Menu")
-
-                        ;; evaluate a snippet of emacs lisp
-                        ":" 'eval-expression
-                        
-                        ;; org commands
-                        ;; again, these should be moved to their own
-                        ;;  "org" section
-                        "o" '(:ignore t :which-key "Org")
-                        "oa" 'org-agenda
-                        ;; add some way for the semester and year to
-                        ;;  be figured out automatically
-                        "ot" (lambda() (interactive) (find-file
-                                                      "~/Documents/2016-2017/Semester2/todo.org"))
-                        "oe" (lambda() (interactive) (find-file
-                                                      "~/Documents/2016-2017/Semester2/events.org"))
-                        "od" (lambda() (interactive) (find-file
-                                                      "~/org/derp.org"))
-                        
-                        ;; modify windows using vim-like keybindings
-                        "w" '(evil-window-map :which-key "Window")
-                        
-                        ;; buffer commands
-                        "b" '(:ignore t :which-key "Buffer") ; label
-                        "bb" 'switch-to-buffer   ; switch buffers
-                        "bd" 'evil-delete-buffer ; delete current buffer
-                        
-                        ;; file commands
-                        "f" '(:ignore t :which-key "File") ; label
-                        "ff" 'find-file       ; open a dialog to open
+     ;; double tap Space for M-x
+     "<SPC>" '(execute-extended-command :which-key "Main Menu")
+     
+     ;; evaluate a snippet of emacs lisp
+     ":" 'eval-expression
+     
+     ;; org commands
+     ;; again, these should be moved to their own
+     ;;  "org" section
+     "o" '(:ignore t :which-key "Org")
+     "oa" 'org-agenda
+     ;; add some way for the semester and year to
+     ;;  be figured out automatically
+     "ot" (lambda() (interactive) (find-file
+                                   "~/Documents/2016-2017/Semester2/todo.org"))
+     "oe" (lambda() (interactive) (find-file
+                                   "~/Documents/2016-2017/Semester2/events.org"))
+     "od" (lambda() (interactive) (find-file
+                                   "~/org/derp.org"))
+     
+     ;; modify windows using vim-like keybindings
+     "w" '(evil-window-map :which-key "Window")
+     
+     ;; buffer commands
+     "b" '(:ignore t :which-key "Buffer") ; label
+     "bb" 'switch-to-buffer   ; switch buffers
+     "bd" 'evil-delete-buffer ; delete current buffer
+     
+     ;; file commands
+     "f" '(:ignore t :which-key "File") ; label
+     "ff" 'find-file       ; open a dialog to open
                                         ;  a file
-                        "fj" 'dired-jump      ; open the directory of
+     "fj" 'dired-jump      ; open the directory of
                                         ;  the current file
-                        "fe" 'ediff
-                        
-                        ;; file bookmark commands
-                        "fb" '(:ignore t :which-key "Bookmark")
-                        "fbs" 'bookmark-set
-                        "fbj" 'bookmark-jump
-                        "fbl" 'bookmark-bmenu-list
-                        "fy" 'kill-buffer-file-name
-                        
-                        "s" 'shell ; open a shell
-                        
-                        ;; open this configuration file (why is the
-                        ;;  lambda and interactive necessary?)
-                        ;; Maybe it's because it's expecting a single
-                        ;;  function, and lambda is defining an
-                        ;;  anonymous one here.
-                        ;; Interactive I'm not really sure about.
-                        ;;  Check the info page?
-                        ;; file-truename is so that we get the real
-                        ;;  name of the file after following symbolic
-                        ;;  links.
-                        "i" '(lambda() (interactive) (find-file
-                                                      (file-truename
-                                                       "~/.emacs.d/init.el")))
-                        
-                        "t" '(:ignore t :which-key "Toggles/Settings")
-                        "ta" '(auto-fill-mode 1)
-                        "tt" '(load-theme)
-                        "tr" '(lambda() (interactive) (if (y-or-n-p "Really restart emacs?") 'restart-emacs))
-
-                        "a" '(:ignore t :which-key "Applications")
-                        "ap" '(list-packages)
-                        "ag" '(:ignore t :which-key "Games")
-
-                        "h" '(help-command :which-key "Help"))))
+     "fe" 'ediff
+     
+     ;; file bookmark commands
+     "fb" '(:ignore t :which-key "Bookmark")
+     "fbs" 'bookmark-set
+     "fbj" 'bookmark-jump
+     "fbl" 'bookmark-bmenu-list
+     "fy" 'kill-buffer-file-name
+     
+     "s" 'shell ; open a shell
+     
+     ;; open this configuration file (why is the
+     ;;  lambda and interactive necessary?)
+     ;; Maybe it's because it's expecting a single
+     ;;  function, and lambda is defining an
+     ;;  anonymous one here.
+     ;; Interactive I'm not really sure about.
+     ;;  Check the info page?
+     ;; file-truename is so that we get the real
+     ;;  name of the file after following symbolic
+     ;;  links.
+     "i" '(lambda() (interactive) (find-file
+                                   (file-truename
+                                    "~/.emacs.d/init.el")))
+     
+     "t" '(:ignore t :which-key "Toggles/Settings")
+     "ta" '(auto-fill-mode 1)
+     "tt" '(load-theme)
+     "tr" '(lambda() (interactive) (if (y-or-n-p "Really restart emacs?") 'restart-emacs))
+     
+     "a" '(:ignore t :which-key "Applications")
+     "ap" '(list-packages)
+     "ag" '(:ignore t :which-key "Games")
+     
+     "h" '(help-command :which-key "Help"))))
 
 
 ;; Set elephant454initel-use-helm to t to use helm. Set it to nil to use Ivy.
