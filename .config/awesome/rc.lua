@@ -38,7 +38,8 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+--beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+beautiful.init("/home/matthew/.dotfiles/.config/awesome/themes/myown/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
@@ -111,7 +112,12 @@ myawesomemenu = {
    { "quit", awesome.quit }
 }
 
+myutilitiesmenu = {
+  {"Roccat Nyth Configuration", "gksudo roccatnythconfig"}
+}
+
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+                                    { "utilities", myutilitiesmenu },
                                     { "open terminal", terminal }
                                   }
                         })
@@ -125,7 +131,8 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 -- {{{ Wibox
 -- Create a textclock widget
-mytextclock = awful.widget.textclock("%A %m/%d/%Y %r", 60)
+--mytextclock = awful.widget.textclock("%A %m/%d/%Y %r", 60)
+mytextclock = awful.widget.textclock("%A %m/%d/%Y %r", 1)
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -285,7 +292,6 @@ globalkeys = awful.util.table.join(
 
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
     awful.key({            }, "Print", function() awful.util.spawn("gnome-screenshot") end),
-
 
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
