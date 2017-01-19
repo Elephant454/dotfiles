@@ -49,6 +49,7 @@
 (scroll-bar-mode 0)        ; remove the scroll bar
 (menu-bar-mode 0)          ; remove the menu bar (File, Edit, etc.)
 (tool-bar-mode 0)          ; remove the tool bar (New, Open, etc.)
+(setq quelpa-update-melpa-p nil)
 
 ;; don't suspend emacs with "C-z"
 (global-unset-key (kbd "C-z"))
@@ -113,8 +114,8 @@
 
 ;; cycle pairs of themes
 (defun elephant454initel-cycle-theme-pairs ()
-  (add-to-list 'elephant454initel-theme-pairs elephant454initel-current-theme t)
-  (setq elephant454initel-current-theme (pop elephant454initel-theme-pairs))
+  (add-to-list 'elephant454initel-theme-pairs elephant454initel-current-theme-pair t)
+  (setq elephant454initel-current-theme-pair (pop elephant454initel-theme-pairs))
   (elephant454initel-load-theme))
 
 ;; load either the day or the night variant of the current theme pair
@@ -122,8 +123,12 @@
 ;; themes aren't malicious before adding them to the theme-pairs 
 (defun elephant454initel-load-theme ()
   (if elephant454initel-use-day-theme
-      (load-theme (car elephant454initel-current-theme-pair) t)
-    (load-theme (cdr elephant454initel-current-theme-pair) t)))
+      (progn
+        (load-theme (car elephant454initel-current-theme-pair) t)  ; load the night theme
+        (car elephant454initel-current-theme-pair))  ; to print out the theme name
+    (progn
+      (load-theme (cdr elephant454initel-current-theme-pair) t)  ; load the night theme
+      (cdr elephant454initel-current-theme-pair))))  ; to print out the theme name
 
 (elephant454initel-load-theme)
 
@@ -136,13 +141,22 @@
 ;;  (change-theme (car (car elephant454initel-theme-pairs)) (cdr (car elephant454initel-theme-pairs))))
 
 
-
-
-
 ;; fonts
-;;(setq elephant454initel-fonts
-;;)
-(set-default-font (font-spec :name "Inconsolatazi4" :size 14))
+(setq elephant454initel-fonts (list
+                               (font-spec :name "Inconsolatazi4"
+                                           :size 14)
+                               (font-spec :name "Dina"
+                                           :size 12)))
+(setq elephant454initel-current-font (pop elephant454initel-fonts))
+
+(defun elephant454initel-cycle-fonts ()
+  (add-to-list 'elephant454initel-fonts elephant454initel-current-font t)
+  (setq elephant454initel-current-font (pop elephant454initel-fonts))
+  (elephant454initel-load-font))
+
+(defun elephant454initel-load-font ()
+  (set-default-font elephant454initel-current-font)
+  (car (split-string (elt (font-info (find-font elephant454initel-current-font)) 1) ":")))
 
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
