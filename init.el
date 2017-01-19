@@ -196,15 +196,13 @@
   :config
   (progn
     (global-unset-key (kbd "C-<SPC>"))
-    (general-define-key :states '(normal emacs insert visual motion)
-                        :prefix "SPC"
-                        :global-prefix "C-SPC"
+    (general-create-definer elephant454initel-main-menu
+                            :states '(normal emacs insert visual motion)
+                            :prefix "SPC"
+                            :global-prefix "C-SPC")
+    (elephant454initel-main-menu
                         ;; double tap Space for M-x
-                        ;; it makes more sense to have this defined
-                        ;;  where we actually get our function for M-x 
-                        ;;"" '(nil :states '(evil-emacs-state evil-normal-state) :which-key "Main Leader")
-                        "<SPC>" '(execute-extended-command :which-key
-                                                           "M-x")
+                        "<SPC>" '(execute-extended-command :which-key "Main Menu")
 
                         ;; evaluate a snippet of emacs lisp
                         ":" 'eval-expression
@@ -338,8 +336,8 @@
 (use-package yasnippet
   :config (use-package java-snippets))
 
-;; This does what it says on the tin. It provides a function for
-;;  restarting emacs.
+;; This does what it says on the tin. It provides a function for restarting
+;;  emacs.
 ;; TODO: Make a confirm dialog for restarting. Maybe there should be a
 ;;  shortcut for it, too?
 (use-package restart-emacs)
