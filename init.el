@@ -285,6 +285,10 @@ Lisp function does not specify a special indentation."
                             :states '(normal emacs insert visual motion)
                             :prefix "SPC"
                             :global-prefix "C-SPC")
+    (general-create-definer elephant454initel-major-mode-menu
+                            :states '(normal emacs insert visual motion)
+                            :prefix ","
+                            :global-prefix "C-,")
     (elephant454initel-main-menu
      ;; double tap Space for M-x
      "<SPC>" '(execute-extended-command :which-key "Main Menu")
@@ -412,12 +416,10 @@ Lisp function does not specify a special indentation."
 ;; for all of your Java/Scala needs
 (use-package ensime
   :pin melpa-stable
-  :general (:keymaps 'ensime-mode-map
-                     :prefix ","
-                     :global-prefix "C-,"
-                     :states 'normal
-                     "" '(nil :which-key "Ensime Mode Commands")
-                     "i" 'ensime-import-type-at-point))
+  :general (elephant454initel-major-mode-menu
+            :keymaps 'ensime-mode-map
+            "" '(nil :which-key "Ensime Mode Commands")
+            "i" 'ensime-import-type-at-point))
 
 ;; auto completion (needs tweaking)
 (use-package company
@@ -468,30 +470,28 @@ Lisp function does not specify a special indentation."
 (use-package org
   :pin gnu  ; use the version from the gnu repo
   :init (progn
-            (use-package evil-org)
-            (use-package org-pomodoro)
-            (use-package org-bullets)
-            (use-package org-journal)
-            (use-package org-clock-today
-              :config (org-clock-today-mode)))
+          (use-package evil-org)
+          (use-package org-pomodoro)
+          (use-package org-bullets)
+          (use-package org-journal)
+          (use-package org-clock-today
+            :config (org-clock-today-mode)))
   :config (progn
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode
                                                 1))))
   :general (:keymaps 'org-mode-map
-                     :states 'normal
-                     "RET" 'org-open-at-point)
-  :general (:keymaps 'org-mode-map
-                     :prefix ","
-                     :global-prefix "C-,"
-                     :states 'normal
-                     "" '(nil :which-key "Org Mode Commands")
-                     "a" 'org-agenda
-                     "A" 'org-archive-subtree
-                     "h" 'org-toggle-heading
-                     "e" 'org-export-dispatch
-                     "E" 'org-edit-special
-                     "." 'org-time-stamp
-                     "d" 'org-deadline))
+            :states 'normal
+            "RET" 'org-open-at-point)
+  :general (elephant454initel-major-mode-menu
+            :keymaps 'org-mode-map
+             "" '(nil :which-key "Org Mode Commands")
+             "a" 'org-agenda
+             "A" 'org-archive-subtree
+             "h" 'org-toggle-heading
+             "e" 'org-export-dispatch
+             "E" 'org-edit-special
+             "." 'org-time-stamp
+             "d" 'org-deadline))
 
 (use-package open-junk-file
   :config (setq open-junk-file-format "~/junk/%Y/%m/%d/%H%M%S/")
@@ -502,7 +502,45 @@ Lisp function does not specify a special indentation."
 (use-package pdf-tools
   ;; this automatically reloads the pdf when it changes (if I'm
   ;;  compiling latex for example)
-  :config (add-hook 'doc-view-mode-hook 'auto-revert-mode))
+  :config (progn
+            (pdf-tools-install)
+            (add-hook 'doc-view-mode-hook 'auto-revert-mode))
+  :defer t
+  :mode (("\\.pdf\\'" . pdf-view-mode))
+  :general (:keymaps 'pdf-view-mode-map
+            :states '(normal emacs)
+            "j"  'pdf-view-next-line-or-next-page
+            "k"  'pdf-view-previous-line-or-previous-page
+            "l"  'image-forward-hscroll
+            "h"  'image-backward-hscroll
+            "J"  'pdf-view-next-page
+            "K"  'pdf-view-previous-page
+            "u"  'pdf-view-scroll-down-or-previous-page
+            "d"  'pdf-view-scroll-up-or-next-page
+            "0"  'image-bol
+            "$"  'image-eol
+            ;; Scale/Fit
+            "W"  'pdf-view-fit-width-to-window
+            "H"  'pdf-view-fit-height-to-window
+            "P"  'pdf-view-fit-page-to-window
+            "m"  'pdf-view-set-slice-using-mouse
+            "b"  'pdf-view-set-slice-from-bounding-box
+            "R"  'pdf-view-reset-slice
+            "zr" 'pdf-view-scale-reset
+            ;; Annotations
+            "aD" 'pdf-annot-delete
+            "at" 'pdf-annot-attachment-dired
+            "al" 'pdf-annot-list-annotations
+            "am" 'pdf-annot-add-markup-annotation
+            ;; Actions
+            "s" 'pdf-occur
+            "O" 'pdf-outline
+            "p" 'pdf-misc-print-document
+            "o" 'pdf-links-action-perform
+            "r" 'pdf-view-revert-buffer
+            "t" 'pdf-annot-attachment-dired
+            "n" 'pdf-view-midnight-minor-mode
+            ))
 
 ;; I might want to add more from the latex spacemacs layer. Folding in
 ;; particular sounds interesting.
@@ -573,41 +611,45 @@ Lisp function does not specify a special indentation."
 
 (use-package emacs-lisp-mode
   :ensure nil
-  :general (:keymaps 'emacs-lisp-mode-map
-                     :prefix ","
-                     :global-prefix "C-,"
-                     :states 'normal
-                     "" '(nil :which-key "Emacs Lisp Mode Commands")
-                     "b" 'eval-buffer))
+  :general (elephant454initel-major-mode-menu
+            :keymaps 'emacs-lisp-mode-map
+             "" '(nil :which-key "Emacs Lisp Mode Commands")
+             "b" 'eval-buffer))
 
 (use-package erc
   :ensure nil
-  :config (progn
-            (elephant454initel-main-menu "aE" '(lambda() (interactive)
-                             (progn()
-                                   (erc-autojoin-mode 1)
-                                   (erc :server "irc.freenode.net"
-                                        :nick "Elephant454" :password
-                                        "charlie"))) :which-key "ERC with Default Servers")
-            (setq erc-autojoin-channels-alist '((".*\\.freenode.net" "#archlinux")))))
+  :config (setq erc-autojoin-channels-alist '((".*\\.freenode.net" "#archlinux")))
+  :general (elephant454initel-main-menu "aE" '(lambda() (interactive)
+                                                (progn() (erc-autojoin-mode 1)
+                                                      (erc :server "irc.freenode.net"
+                                                           :nick "Elephant454"
+                                                           :password "charlie")))
+                                        :which-key "ERC with Default Servers"))
 
 (use-package bubbles
   :ensure nil
-  :general (:prefix "SPC"
-                     :global-prefix "C-SPC"
-                     :states '(normal emacs visual insert)
-                     "agb" 'bubbles)
+  :general (elephant454initel-main-menu "agb" 'bubbles)
   :general (:keymaps 'bubbles-mode-map
-                     :states '(normal emacs)
-                     "RET" 'bubbles-plop
-                     "u"   'bubbles-undo
-                     ;; for starting a new game
-                     "r"   'bubbles)
+            :states '(normal emacs)
+            "RET" 'bubbles-plop
+            "u"   'bubbles-undo
+            ;; for starting a new game
+            "r"   'bubbles
+            "q"   'bubbles-quit)
   :config (setq bubbles-game-theme 'medium))
 
 (use-package magit
   :config (progn
-            (use-package evil-magit)))
+            (use-package evil-magit))
+  :general (elephant454initel-main-menu
+            "g" 'magit-status
+            "G" 'magit-dispatch-popup))
+
+(use-package mu4e
+  :ensure nil
+  :config (progn
+            (use-package evil-mu4e)
+            (setq mu4e-msg2pdf "/usr/bin/msg2pdf")))
 
 ;; DO NOT WRITE BELOW THIS LINE. THIS IS AUTO GENERATED BY CUSTOMIZE
 (custom-set-variables
