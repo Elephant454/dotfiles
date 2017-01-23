@@ -70,9 +70,9 @@
   (0 t   nil :class "XTerm")
   (1 nil t   :class "aMule"))
 
-(define-frame-preference "Emacs"
-  (1 t t :restore "emacs-editing-dump" :title "...xdvi")
-  (0 t t :create "emacs-dump" :class "Emacs"))
+;;(define-frame-preference "Emacs"
+;;  (1 t t :restore "emacs-editing-dump" :title "...xdvi")
+;;  (0 t t :create "emacs-dump" :class "Emacs"))
 
 
 ;; This is where things I define will go until I have a better feel for StumpWM.
@@ -81,8 +81,44 @@
 
 ;;(which-key-mode)
 
+;; allows us to connect to the wm using SLIME
 (require :swank)
 (echo (swank-loader:init))
 (echo (swank:create-server :port 4004
                      :style swank:*communication-style*
                      :dont-close t))
+
+;; adds the date to the modeline
+;;(setq stumpwm:*mode-line-timeout* 1)
+;;(setf stumpwm:*screen-mode-line-format* (list "[^B%n^b] %W" '(:eval (stumpwm:run-shell-command "date" t))))
+;;(stumpwm:mode-line)
+
+;; add the time to the modeline and display it (is there a better program for the time?)
+(setq *mode-line-timeout* 1)
+(setf *screen-mode-line-format* (list "[^B%n^b] %W" '(:eval (run-shell-command "date" t))))
+(mode-line)
+
+;; switch groups with s-[N]
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-1") "gselect 1")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-2") "gselect 2")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-3") "gselect 3")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-4") "gselect 4")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-5") "gselect 5")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-6") "gselect 6")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-7") "gselect 7")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-8") "gselect 8")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-9") "gselect 9")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-0") "gselect 0")
+
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-ESC") "gselect 1")
+
+;; move focus with s-[direction]
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-Left") "move-focus left")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-Right") "move-focus right")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-Up") "move-focus up")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-Down") "move-focus Down")
+
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-SPC") "pull-hidden-next")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-S-SPC") "pull-hidden-previous")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "C-s-Right") "pull-hidden-next")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "C-s-Left") "pull-hidden-previous")
