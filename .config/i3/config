@@ -214,7 +214,7 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 1 toggle
 # redshift, Xresources, mouse sensitivity, compton, dunst, and feh
 exec redshift -l 34.172423:-118.982702 &
 exec xrdb /home/matthew/.Xresources
-exec xset m 1/2 4
+#exec xset m 1/2 4
 exec compton --config /home/matthew/.comptonrc --backend glx --paint-on-overlay --vsync opengl-swc &
 exec /home/matthew/.fehbg
 exec dunst &
