@@ -1,32 +1,9 @@
-XTerm*foreground: rgb:77/A0/D2
-XTerm*background: rgb:00/00/00
-XTerm*colorMode: on
-XTerm*dynamicColors: on
-Xterm*termName: xterm-256color
-XTerm*locale: true
-
-!URxvt*.transparent: true
-! URxvt*.shading: 0 to 99 darkens, 101 to 200 lightens
-!URxvt*.shading: 15
-URxvt.depth: 32
-!URxvt.foreground: rgb:77/A0/D2
-!URxvt.foreground: rgb:64/84/90
-!URxvt.foreground: rgb:9E/9F/A7
-!URxvt.background: rgba:0000/0000/0000/dddd
-!URxvt.background: [85]#616058
-
-!URxvt.foreground: rgb:77/95/A2
-!URxvt.foreground: rgb:33/66/66
-!URxvt.background: [85]#ffffff
 URxvt.scrollBar: false
-!URxvt.font: -xos4-terminus-medium-r-normal--14-140-75-75-c-0-*-*
-URxvt.font: xft: Inconsolata for Powerline:size=12
-!URxvt.font: xft: Inconsolata:size=12
-!URxvt.font: xft:DejaVu\ Sans\ Mono:size=12
-!URxvt.font: 9x15
+URxvt.depth: 32
+URxvt.font: xft:Inconsolata:size=14
+URxvt.cursorBlink: true
 
+URxvt.foreground: [100]#adebd6
+URxvt.background: [80]#471f2c
 *background: #ffffff
 *foreground: #336666
-
-!URxvt.foreground: *foreground
-!URxvt.background: [85]background

@@ -1,30 +1,20 @@
-"Vundle configuration
-set nocompatible
-filetype off
-
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-Plugin 'gmarik/Vundle.vim'
-
-Plugin 'chriskempson/base16-vim'
-Plugin 'ervandew/supertab'
-Plugin 'Raimondi/delimitMate'
-Plugin 'Yggdroot/indentLine'
-Plugin 'scrooloose/nerdtree'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
-Plugin 'tpope/vim-fugitive'
-Plugin 'NLKNguyen/papercolor-theme'
-"Plugin 'Valloric/YouCompleteMe'
-Plugin 'Shougo/deoplete.nvim'
-Plugin 'davidhalter/jedi-vim'
-Plugin 'artur-shaik/vim-javacomplete2'
-Plugin 'airblade/vim-rooter'
-
-call vundle#end()
-filetype plugin indent on
+call plug#begin('~/.vim/plugged')
+Plug 'chriskempson/base16-vim'
+Plug 'ervandew/supertab'
+Plug 'Raimondi/delimitMate'
+Plug 'Yggdroot/indentLine'
+Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'tpope/vim-fugitive'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'Shougo/deoplete.nvim'
+Plug 'davidhalter/jedi-vim'
+Plug 'artur-shaik/vim-javacomplete2'
+Plug 'airblade/vim-rooter'
+Plug 'luochen1990/rainbow'
+call plug#end()
 
 "user configuration
 syntax on
@@ -48,7 +38,6 @@ autocmd BufRead set makeprg=ant\ -find\ build.xml
 "Maps
 map <F7> :tabp<Return>
 map <F8> :tabn<Return>
-"map <F9> :make<Return>
 map <F9> :make<Return>
 map <F10> :cprevious<Return>
 map <F11> :cnext<Return>
