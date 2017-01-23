@@ -625,7 +625,7 @@ Lisp function does not specify a special indentation."
                                                 (progn() (erc-autojoin-mode 1)
                                                       (erc :server "irc.freenode.net"
                                                            :nick "Elephant454"
-                                                           :password "charlie")))
+                                                           :password 'freenodeircpassword)))
                                         :which-key "ERC with Default Servers"))
 
 (use-package bubbles
