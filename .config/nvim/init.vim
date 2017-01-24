@@ -19,7 +19,7 @@ call plug#end()
 "user configuration
 syntax on
 colorscheme PaperColor 
-set background=dark
+set background=light
 hi Normal ctermbg=none
 set laststatus=2 ruler
 set smartindent expandtab tabstop=4 shiftwidth=4
