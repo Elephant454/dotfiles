@@ -6,11 +6,7 @@
 
 ;; change the prefix key to something else
 ;;(set-prefix-key (kbd "C-z"))
-<<<<<<< HEAD
 (set-prefix-key (kbd "M-Tab"))
-=======
-(set-prefix-key (kbd "M-TAB"))
->>>>>>> 2152743c47903b76df3065ecaa161cc8a7e5c941
 
 ;; prompt the user for an interactive command. The first arg is an
 ;; optional initial contents.
