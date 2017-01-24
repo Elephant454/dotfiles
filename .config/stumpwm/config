@@ -78,7 +78,7 @@
 
 ;; This is where things I define will go until I have a better feel for StumpWM.
 ;;  At that point, things will be moved to places that seem more appropriate.
-(define-key *root-map* (kbd "e") "exec emacsclient -c")
+(define-key *root-map* (kbd "e") "exec emacs")
 
 ;;(which-key-mode)
 
