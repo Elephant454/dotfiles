@@ -12,6 +12,7 @@
 ;; optional initial contents.
 (defcommand colon1 (&optional (initial "")) (:rest)
   (let ((cmd (read-one-line (current-screen) ": " :initial-input initial)))
+
     (when cmd
       (eval-command cmd t))))
 
@@ -98,7 +99,7 @@
 
 ;; add the time to the modeline and display it (is there a better program for the time?)
 (setq *mode-line-timeout* 1)
-(setf *screen-mode-line-format* (list "[^B%n^b] %W" '(:eval (run-shell-command "date" t))))
+(setf *screen-mode-line-format* (list "[^B%n^b] %W" '(:eval (run-shell-command "date +%a\ %F\ %H:%M:%S" t))))
 (mode-line)
 
 ;; switch groups with s-[N]
@@ -133,10 +134,10 @@
 (stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "M-s-Left") "pull-hidden-previous")
 
 ;; bindings for commonly used apps
-(defvar *application-keymap* (make-sparse-keymap))
-(define-key *root-map* (kbd "a") '*application-keymap*)
-(define-key *application-keymap* (kbd "f") "exec firefox")
-(define-key *application-keymap* (kbd "u") "exec urxvt")
+(defvar *application-map* (make-sparse-keymap))
+(define-key *root-map* (kbd "a") '*application-map*)
+(define-key *application-map* (kbd "f") "exec firefox")
+(define-key *application-map* (kbd "u") "exec urxvt")
 
 ;; sets the focus policy so that the focus follows the mouse
 (setf *mouse-focus-policy* :sloppy)
