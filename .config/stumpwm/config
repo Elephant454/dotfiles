@@ -5,7 +5,8 @@
 (in-package :stumpwm)
 
 ;; change the prefix key to something else
-(set-prefix-key (kbd "C-z"))
+;;(set-prefix-key (kbd "C-z"))
+(set-prefix-key (kbd "M-TAB"))
 
 ;; prompt the user for an interactive command. The first arg is an
 ;; optional initial contents.
@@ -117,8 +118,23 @@
 (stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-Right") "move-focus right")
 (stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-Up") "move-focus up")
 (stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-Down") "move-focus Down")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-S-Left") "exchange-direction left")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-S-Right") "exchange-direction right")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-S-Up") "exchange-direction up")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-S-Down") "exchange-direction Down")
 
 (stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-SPC") "pull-hidden-next")
 (stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-S-SPC") "pull-hidden-previous")
 (stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "C-s-Right") "pull-hidden-next")
 (stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "C-s-Left") "pull-hidden-previous")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "M-s-Right") "pull-hidden-next")
+(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "M-s-Left") "pull-hidden-previous")
+
+;; bindings for commonly used apps
+(defvar *application-keymap* (make-sparse-keymap))
+(define-key *root-map* (kbd "a") '*application-keymap*)
+(define-key *application-keymap* (kbd "f") "exec firefox")
+(define-key *application-keymap* (kbd "u") "exec urxvt")
+
+;; sets the focus policy so that the focus follows the mouse
+(setf *mouse-focus-policy* :sloppy)
