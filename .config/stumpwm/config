@@ -5,7 +5,8 @@
 (in-package :stumpwm)
 
 ;; change the prefix key to something else
-(set-prefix-key (kbd "C-z"))
+;;(set-prefix-key (kbd "C-z"))
+(set-prefix-key (kbd "M-Tab"))
 
 ;; prompt the user for an interactive command. The first arg is an
 ;; optional initial contents.
@@ -79,6 +80,8 @@
 ;;  At that point, things will be moved to places that seem more appropriate.
 (define-key *root-map* (kbd "e") "exec emacsclient -c")
 
+;; this works in the latest git version, and it behaves just like the emacs
+;;  version of which-key
 ;;(which-key-mode)
 
 ;; allows us to connect to the wm using SLIME
