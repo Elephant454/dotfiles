@@ -179,6 +179,8 @@ Lisp function does not specify a special indentation."
 (use-package silkworm-theme)
 (use-package foggy-night-theme)
 (use-package apropospriate-theme)
+(use-package gotham-theme)
+(use-package purple-haze-theme)
 
 ;; pairs of themes, with the car being the day variant and the cdr
 ;; being the night variant
@@ -186,7 +188,9 @@ Lisp function does not specify a special indentation."
                                      (cons 'soft-morning 'omtose-softer)
                                      (cons 'silkworm 'foggy-night)
                                      (cons 'sanityinc-tomorrow-day 'sanityinc-tomorrow-eighties)
-                                     (cons 'apropospriate-light 'apropospriate-dark)))
+                                     (cons 'apropospriate-light 'apropospriate-dark)
+                                     (cons 'gotham 'gotham)
+                                     (cons 'purple-haze 'purple-haze)))
 (setq elephant454initel-current-theme-pair (pop elephant454initel-theme-pairs))
 (setq elephant454initel-use-day-theme t)
 
@@ -716,7 +720,7 @@ Lisp function does not specify a special indentation."
  '(org-clock-today-mode t)
  '(package-selected-packages
    (quote
-    (apropospriate-theme foggy-night-theme pandoc-mode pandoc rg pocket-api stumpwm-mode slime-company slime image-dired+ evil-magit lyrics java-snippets yasnippet-java-mode seethru org-clock-today auctex-latexmk silkworm-theme buffer-flip cycbuf company-auctex tex auctex evil-matchit sml-modeline dired-x dired color-theme-sanityinc-tomorrow color-theme tea-time pdf-tools open-junk-file org-journal org-bullets org-pomodoro evil-org counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
+    (purple-haze-theme gotham-theme zweilight-theme apropospriate-theme foggy-night-theme pandoc-mode pandoc rg pocket-api stumpwm-mode slime-company slime image-dired+ evil-magit lyrics java-snippets yasnippet-java-mode seethru org-clock-today auctex-latexmk silkworm-theme buffer-flip cycbuf company-auctex tex auctex evil-matchit sml-modeline dired-x dired color-theme-sanityinc-tomorrow color-theme tea-time pdf-tools open-junk-file org-journal org-bullets org-pomodoro evil-org counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
  '(pos-tip-background-color "#3D4E54")
  '(pos-tip-foreground-color "#C1CADE")
  '(tabbar-background-color "#ffffff")
