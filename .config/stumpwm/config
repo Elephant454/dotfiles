@@ -99,7 +99,7 @@
 
 ;; add the time to the modeline and display it (is there a better program for the time?)
 (setq *mode-line-timeout* 1)
-(setf *screen-mode-line-format* (list "[^B%n^b] %W" '(:eval (run-shell-command "date +%a\ %F\ %H:%M:%S" t))))
+(setf *screen-mode-line-format* (list "[^B%n^b] %W" '(:eval (run-shell-command "date +%a_%F_%H:%M:%S" t))))
 (mode-line)
 
 ;; switch groups with s-[N]
