@@ -173,21 +173,20 @@ Lisp function does not specify a special indentation."
 ;; I should set up pairs of night themes and day themes. One keybinding cycles
 ;; between pairs and another keybinding switches between day and night.
 (use-package color-theme)
-(use-package soft-morning-theme
-  :defer)
-(use-package omtose-phellack-theme
-  :defer)
-(use-package color-theme-sanityinc-tomorrow
-  :defer)
-(use-package silkworm-theme
-  :defer)
+(use-package soft-morning-theme)
+(use-package omtose-phellack-theme)
+(use-package color-theme-sanityinc-tomorrow)
+(use-package silkworm-theme)
+(use-package foggy-night-theme)
+(use-package apropospriate-theme)
 
 ;; pairs of themes, with the car being the day variant and the cdr
 ;; being the night variant
 (setq elephant454initel-theme-pairs (list
                                      (cons 'soft-morning 'omtose-softer)
-                                     (cons 'silkworm
-                                           'sanityinc-tomorrow-eighties)))
+                                     (cons 'silkworm 'foggy-night)
+                                     (cons 'sanityinc-tomorrow-day 'sanityinc-tomorrow-eighties)
+                                     (cons 'apropospriate-light 'apropospriate-dark)))
 (setq elephant454initel-current-theme-pair (pop elephant454initel-theme-pairs))
 (setq elephant454initel-use-day-theme t)
 
@@ -684,12 +683,23 @@ Lisp function does not specify a special indentation."
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
    ["#404B5C" "#B26BB8" "#76A8A0" "#C79474" "#6886A6" "#515275" "#7D8AA8" "#8C92A1"])
+ '(beacon-color "#F8BBD0")
  '(custom-safe-themes
    (quote
-    ("d600c677f1777c1e4bfb066529b5b73c0179d0499dd4ffa3f599a0fb0cfbd501" "7e376fb329a0e46a04e8285b0e45199a083f98c69b0e1039ec1cb1d366e66e9c" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "b747fb36e99bc7f497248eafd6e32b45613ee086da74d1d92a8da59d37b9a829" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "abe5ee8858cd1fbe36304a8c3b2315d3e0a4ef7c8588fcc45d1c23eafb725bb6" default)))
+    ("5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" "c3e6b52caa77cb09c049d3c973798bc64b5c43cc437d449eacf35b3e776bf85c" "70f5a47eb08fe7a4ccb88e2550d377ce085fedce81cf30c56e3077f95a2909f2" "d600c677f1777c1e4bfb066529b5b73c0179d0499dd4ffa3f599a0fb0cfbd501" "7e376fb329a0e46a04e8285b0e45199a083f98c69b0e1039ec1cb1d366e66e9c" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "b747fb36e99bc7f497248eafd6e32b45613ee086da74d1d92a8da59d37b9a829" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "abe5ee8858cd1fbe36304a8c3b2315d3e0a4ef7c8588fcc45d1c23eafb725bb6" default)))
  '(debug-on-error t)
  '(erc-autojoin-mode t)
+ '(evil-emacs-state-cursor (quote ("#D50000" hbar)) t)
+ '(evil-insert-state-cursor (quote ("#D50000" bar)) t)
+ '(evil-normal-state-cursor (quote ("#F57F17" box)) t)
+ '(evil-visual-state-cursor (quote ("#66BB6A" box)) t)
  '(fci-rule-color "#515151")
+ '(highlight-indent-guides-auto-enabled nil)
+ '(highlight-symbol-colors
+   (quote
+    ("#F57F17" "#66BB6A" "#0097A7" "#42A5F5" "#7E57C2" "#D84315")))
+ '(highlight-symbol-foreground-color "#546E7A")
+ '(highlight-tail-colors (quote (("#F8BBD0" . 0) ("#FAFAFA" . 100))))
  '(midnight-mode t)
  '(minimap-mode t)
  '(org-agenda-files
@@ -698,9 +708,10 @@ Lisp function does not specify a special indentation."
  '(org-clock-today-mode t)
  '(package-selected-packages
    (quote
-    (pandoc-mode pandoc rg pocket-api stumpwm-mode slime-company slime image-dired+ evil-magit lyrics java-snippets yasnippet-java-mode seethru org-clock-today auctex-latexmk silkworm-theme buffer-flip cycbuf company-auctex tex auctex evil-matchit sml-modeline dired-x dired color-theme-sanityinc-tomorrow color-theme tea-time pdf-tools open-junk-file org-journal org-bullets org-pomodoro evil-org counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
+    (apropospriate-theme foggy-night-theme pandoc-mode pandoc rg pocket-api stumpwm-mode slime-company slime image-dired+ evil-magit lyrics java-snippets yasnippet-java-mode seethru org-clock-today auctex-latexmk silkworm-theme buffer-flip cycbuf company-auctex tex auctex evil-matchit sml-modeline dired-x dired color-theme-sanityinc-tomorrow color-theme tea-time pdf-tools open-junk-file org-journal org-bullets org-pomodoro evil-org counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
  '(pos-tip-background-color "#3D4E54")
  '(pos-tip-foreground-color "#C1CADE")
+ '(tabbar-background-color "#ffffff")
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
    (quote
