@@ -705,7 +705,7 @@ Lisp function does not specify a special indentation."
  '(minimap-mode t)
  '(org-agenda-files
    (quote
-    ("~/Documents/2016-2017/Semester2/Probability/todo.org" "~/Documents/2016-2017/Semester2/Econ/todo.org" "~/Documents/2016-2017/Semester2/Architecture/todo.org" "~/Documents/2016-2017/Semester2/Discrete/todo.org" "~/Documents/2016-2017/Semester2/schedule.org" "~/org/birthdays.org" "~/org/derp.org" "~/Documents/2016-2017/Semester2/todo.org" "~/Documents/2016-2017/Semester2/events.org")))
+    ("~/Documents/2016-2017/Semester2/Organization/todo.org" "~/Documents/2016-2017/Semester2/Probability/todo.org" "~/Documents/2016-2017/Semester2/Econ/todo.org" "~/Documents/2016-2017/Semester2/Discrete/todo.org" "~/Documents/2016-2017/Semester2/schedule.org" "~/org/birthdays.org" "~/org/derp.org" "~/Documents/2016-2017/Semester2/todo.org" "~/Documents/2016-2017/Semester2/events.org")))
  '(org-clock-today-mode t)
  '(package-selected-packages
    (quote
