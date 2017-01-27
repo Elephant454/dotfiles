@@ -274,6 +274,8 @@ Lisp function does not specify a special indentation."
                                                 ;  that we can map it as our
                                                 ; leader key later
 
+;; do some calculations to figure out where directories should be
+(setq elephant454initel-current-year (format-time-string "%Y"))
 
 ;; in order to figure out how binding keys works, I'm going to need
 ;; this page:
