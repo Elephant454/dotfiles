@@ -235,7 +235,9 @@ Lisp function does not specify a special indentation."
                                (font-spec :name "Inconsolatazi4"
                                            :size 14)
                                (font-spec :name "Dina"
-                                           :size 12)))
+                                          :size 12)
+                               (font-spec :name "Fantasque"
+                                          :size 12)))
 (setq elephant454initel-current-font (pop elephant454initel-fonts))
 
 (defun elephant454initel-cycle-fonts ()
@@ -274,6 +276,10 @@ Lisp function does not specify a special indentation."
                                                 ;  that we can map it as our
                                                 ; leader key later
 
+;; do some calculations to figure out where directories should be
+(setq elephant454initel-current-year (nth 5 (decode-time)))
+(setq elephant454initel-current-month (nth 4 (decode-time)))
+(setq elephant454initel-is-second-semester (< elephant454initel-current-month 8))
 
 ;; in order to figure out how binding keys works, I'm going to need
 ;; this page:
@@ -511,7 +517,10 @@ Lisp function does not specify a special indentation."
   ;;  compiling latex for example)
   :config (progn
             (pdf-tools-install)
-            (add-hook 'doc-view-mode-hook 'auto-revert-mode))
+            (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+            ;;(setq pdf-view-midnight-colors (cons (foreground-color-at-point) (background-color-at-point)))
+            ;;(add-hook 'midnight-mode-hook (lambda() (setq pdf-view-midnight-colors (cons (foreground-color-at-point) (background-color-at-point))))))
+            (add-hook 'midnight-mode-hook (lambda() (setq pdf-view-midnight-colors (cons (face-foreground 'default) (face-background 'default))))))
   :defer t
   :mode (("\\.pdf\\'" . pdf-view-mode))
   :general (:keymaps 'pdf-view-mode-map
@@ -699,8 +708,6 @@ Lisp function does not specify a special indentation."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default bold shadow italic underline bold bold-italic bold])
  '(custom-safe-themes
    (quote
     ("5a0eee1070a4fc64268f008a4c7abfda32d912118e080e18c3c865ef864d1bea" "c3e6b52caa77cb09c049d3c973798bc64b5c43cc437d449eacf35b3e776bf85c" "70f5a47eb08fe7a4ccb88e2550d377ce085fedce81cf30c56e3077f95a2909f2" "d600c677f1777c1e4bfb066529b5b73c0179d0499dd4ffa3f599a0fb0cfbd501" "7e376fb329a0e46a04e8285b0e45199a083f98c69b0e1039ec1cb1d366e66e9c" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "b747fb36e99bc7f497248eafd6e32b45613ee086da74d1d92a8da59d37b9a829" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "abe5ee8858cd1fbe36304a8c3b2315d3e0a4ef7c8588fcc45d1c23eafb725bb6" default)))

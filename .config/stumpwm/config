@@ -79,7 +79,15 @@
 
 ;; This is where things I define will go until I have a better feel for StumpWM.
 ;;  At that point, things will be moved to places that seem more appropriate.
-(define-key *root-map* (kbd "e") "exec emacsclient -c")
+
+;; open either an emacsclient or emacs, depending upon whether we are using my
+;;  laptop or desktop
+;;(define-key *root-map* (kbd "e") "exec emacsclient -c")
+(define-key *root-map* (kbd "e") 
+  (concat "exec emacs"
+          (if (string-equal "7752.Arch.Matthew" (machine-instance))
+              "client -c" ; if we are on is my desktop, run emacsclient
+              nil)))      ; otherwise, run emacs
 
 ;; this works in the latest git version, and it behaves just like the emacs
 ;;  version of which-key
@@ -100,6 +108,7 @@
 ;; add the time to the modeline and display it (is there a better program for the time?)
 (setq *mode-line-timeout* 1)
 (setf *screen-mode-line-format* (list "[^B%n^b] %W" '(:eval (run-shell-command "date +%a_%F_%H:%M:%S" t))))
+;;(setf *screen-mode-line-format* (list "[^B%n^b] %W" '(:eval (run-shell-command "date +%a_%F_%H:%M:%S" t)) '(:eval (run-shell-command "acpi" t))))
 (mode-line)
 
 ;; switch groups with s-[N]
@@ -138,6 +147,11 @@
 (define-key *root-map* (kbd "a") '*application-map*)
 (define-key *application-map* (kbd "f") "exec firefox")
 (define-key *application-map* (kbd "u") "exec urxvt")
+(define-key *application-map* (kbd "c") "exec google-chrome-stable")
+(define-key *application-map* (kbd "r") "exec rofi -show run")
 
 ;; sets the focus policy so that the focus follows the mouse
 (setf *mouse-focus-policy* :sloppy)
+
+;;(define-key *top-map* (kbd "XF86MonBrightnessUp") "exec brightup")
+;;(define-key *top-map* (kbd "XF86MonBrightnessDown") "exec brightdown")
