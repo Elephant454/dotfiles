@@ -703,7 +703,7 @@ Lisp function does not specify a special indentation."
             ;;(add-hook 'eww-after-render-hook (lambda()
             ;;(rename-buffer
             ;;(concat "*eww " (eww-current-url) "*")))))
-            )
+            ))
 
   
   
