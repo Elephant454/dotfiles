@@ -521,7 +521,7 @@ Lisp function does not specify a special indentation."
             ;;(setq pdf-view-midnight-colors (cons (foreground-color-at-point) (background-color-at-point)))
             ;;(add-hook 'midnight-mode-hook (lambda() (setq pdf-view-midnight-colors (cons (foreground-color-at-point) (background-color-at-point))))))
             ;;(add-hook 'midnight-mode-hook (lambda() (setq pdf-view-midnight-colors (cons (face-foreground 'default) (face-background 'default))))))
-            (add-hook 'pdf-view-midnight-minor-mode-hook (lambda() (setq pdf-view-midnight-colors (cons (face-foreground 'default) (face-background 'default)))))))
+            (add-hook 'pdf-view-midnight-minor-mode-hook (lambda() (setq pdf-view-midnight-colors (cons (face-foreground 'default) (face-background 'default))))))
   :defer t
   :mode (("\\.pdf\\'" . pdf-view-mode))
   :general (:keymaps 'pdf-view-mode-map
