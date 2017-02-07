@@ -157,3 +157,8 @@
 ;;(define-key *top-map* (kbd "XF86MonBrightnessDown") "exec brightdown")
 
 (define-key *top-map* (kbd "Print") "exec gnome-screenshot")
+
+;; This line is gross, but it will enable us to do some pretty neat things. This
+;; will be cleaned up. This will received a proper description when I'm less
+;; tired. It grabs a foreground from Emacs.
+(setq emacs-foreground-color (car (split-string (run-shell-command "emacsclient --eval \"(print (face-foreground 'default))\"" t) "\\\"")))
