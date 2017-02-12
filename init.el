@@ -162,6 +162,10 @@ Lisp function does not specify a special indentation."
   (package-install 'use-package))
 (require 'use-package)
 
+;; load secret settings (location, passwords, etc)
+(add-to-list 'load-path (concat user-emacs-directory "config/"))
+(load "secret.el" t)
+
 ;; themes
 
 ;; disable the current Emacs 24 theme before enabling a new one. This
