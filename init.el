@@ -670,12 +670,16 @@ Lisp function does not specify a special indentation."
             "g" 'magit-status
             "G" 'magit-dispatch-popup))
 
+;; Email!
 (use-package mu4e
   :ensure nil
   :config (progn
             (use-package evil-mu4e)
             (setq mu4e-msg2pdf "/usr/bin/msg2pdf")))
 
+;; Slime provides a mode and tools for working with lisp. Of particular interest
+;;  is the abililty to connect to an instance of SBCL and control it. I learned
+;;  about this from stumpwm.
 (use-package slime
   :config (progn
             (setq inferior-lisp-program "sbcl")
@@ -684,10 +688,12 @@ Lisp function does not specify a special indentation."
             (use-package slime-company
               :config (slime-setup '(slime-company)))))
 
+;;
 (use-package stumpwm-mode)
 
 (use-package pocket-api)
 
+;; interface for ripgrep
 (use-package rg)
 
 (use-package smooth-scrolling
@@ -696,6 +702,7 @@ Lisp function does not specify a special indentation."
 ;; I might want to look into using this.
 ;;(use-package pandoc-mode)
 
+;; spell check
 (use-package flyspell
   :ensure nil
   :init (progn
@@ -703,6 +710,8 @@ Lisp function does not specify a special indentation."
           (add-hook 'text-mode-hook 'flyspell-mode)
           (add-hook 'prog-mode-hook 'flyspell-prog-mode)))
 
+;; resizes and centers the text so you can focus on the content. Admittedly,
+;;  it's behavior is a little strange. It doesn't respect the 80 column rule.
 (use-package darkroom)
 
 (use-package eww
