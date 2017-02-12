@@ -30,6 +30,10 @@
  ;; them. This is used for "M-a" and "M-e" for jumping forward and back
  ;; sentences. Look up the info page on "Sentences".
  sentence-end-double-space nil
+
+ ;; set the default web browser to google-chrome
+ browse-url-browser-function 'browse-url-generic
+ browse-url-generic-program "google-chrome-stable"
  )
 
 ;; buffer local variables
