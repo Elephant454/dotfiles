@@ -168,3 +168,6 @@
 ;;(setq *colors* (append (cons (car (split-string (run-shell-command "emacsclient --eval \"(print (face-background 'default))\"" t) "\\\"")) nil) *colors*))
 (set-fg-color emacs-foreground-color)
 (set-fg-color emacs-background-color)
+(setq *mode-line-foreground-color* emacs-foreground-color)
+(setq *mode-line-background-color* emacs-background-color)
+(set-focus-color emacs-foreground-color)
