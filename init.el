@@ -476,7 +476,9 @@ Lisp function does not specify a special indentation."
 ;; I might want to look into other spotify clients
 ;;(quelpa '(spotify :fetcher github :repo "danielfm/spotify.el"))
 (use-package spotify)
-(use-package lyrics)
+
+(use-package lyrics
+  :general (elephant454initel-main-menu "al" 'lyrics))
 
 ;; just for the heck of it 
 (use-package exwm
