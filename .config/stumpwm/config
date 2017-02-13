@@ -166,3 +166,6 @@
 (setq *colors* (append *colors* (cons (car (split-string (run-shell-command "emacsclient --eval \"(print (face-background 'default))\"" t) "\\\"")) nil)))
 (set-fg-color (nth 8 *colors*))
 (set-bg-color (nth 9 *colors*))
+
+;; Look into *time-modeline-string* and other modeline variables in the stumpwm
+;;  manual. They have the potential to make things a lot more sane.
