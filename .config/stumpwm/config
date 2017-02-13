@@ -153,8 +153,8 @@
 ;; sets the focus policy so that the focus follows the mouse
 (setf *mouse-focus-policy* :sloppy)
 
-;;(define-key *top-map* (kbd "XF86MonBrightnessUp") "exec brightup")
-;;(define-key *top-map* (kbd "XF86MonBrightnessDown") "exec brightdown")
+(define-key *top-map* (kbd "XF86MonBrightnessUp") "exec brightup")
+(define-key *top-map* (kbd "XF86MonBrightnessDown") "exec brightdown")
 
 (define-key *top-map* (kbd "Print") "exec gnome-screenshot")
 
