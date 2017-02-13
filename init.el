@@ -244,8 +244,8 @@ Lisp function does not specify a special indentation."
                                            :size 14)
                                (font-spec :name "Dina"
                                           :size 12)
-                               (font-spec :name "Fantasque"
-                                          :size 12)))
+                               (font-spec :name "Fantasque Sans Mono"
+                                          :size 14)))
 (setq elephant454initel-current-font (pop elephant454initel-fonts))
 
 (defun elephant454initel-cycle-fonts ()
