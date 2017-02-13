@@ -495,7 +495,7 @@ Lisp function does not specify a special indentation."
           (use-package org-bullets)
           (use-package org-journal)
           (use-package org-clock-today
-            :config (org-clock-today-mode)))
+            :config (org-clock-today-mode 1)))
   :config (progn
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode
                                                 1))))
