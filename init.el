@@ -488,7 +488,8 @@ Lisp function does not specify a special indentation."
             :config (org-clock-today-mode)))
   :config (progn
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode
-                                                1))))
+                                                1)))
+            (setq org-src-fontify-natively t))
   :general (:keymaps 'org-mode-map
             :states 'normal
             "RET" 'org-open-at-point)
