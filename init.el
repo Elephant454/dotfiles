@@ -30,6 +30,10 @@
  ;; them. This is used for "M-a" and "M-e" for jumping forward and back
  ;; sentences. Look up the info page on "Sentences".
  sentence-end-double-space nil
+
+ ;; set the default web browser to google-chrome
+ browse-url-browser-function 'browse-url-generic
+ browse-url-generic-program "google-chrome-stable"
  )
 
 ;; buffer local variables
@@ -158,6 +162,10 @@ Lisp function does not specify a special indentation."
   (package-install 'use-package))
 (require 'use-package)
 
+;; load secret settings (location, passwords, etc)
+(add-to-list 'load-path (concat user-emacs-directory "config/"))
+(load "secret.el" t)
+
 ;; themes
 
 ;; disable the current Emacs 24 theme before enabling a new one. This
@@ -236,8 +244,8 @@ Lisp function does not specify a special indentation."
                                            :size 14)
                                (font-spec :name "Dina"
                                           :size 12)
-                               (font-spec :name "Fantasque"
-                                          :size 12)))
+                               (font-spec :name "Fantasque Sans Mono"
+                                          :size 14)))
 (setq elephant454initel-current-font (pop elephant454initel-fonts))
 
 (defun elephant454initel-cycle-fonts ()
@@ -372,7 +380,7 @@ Lisp function does not specify a special indentation."
      "tr" '(lambda() (interactive) (if (y-or-n-p "Really restart emacs?") 'restart-emacs))
      
      "a" '(:ignore t :which-key "Applications")
-     "ap" '(list-packages)
+     "ap" '(paradox-list-packages)
      "ag" '(:ignore t :which-key "Games")
      
      "h" '(help-command :which-key "Help"))))
@@ -468,7 +476,9 @@ Lisp function does not specify a special indentation."
 ;; I might want to look into other spotify clients
 ;;(quelpa '(spotify :fetcher github :repo "danielfm/spotify.el"))
 (use-package spotify)
-(use-package lyrics)
+
+(use-package lyrics
+  :general (elephant454initel-main-menu "al" 'lyrics))
 
 ;; just for the heck of it 
 (use-package exwm
@@ -485,7 +495,7 @@ Lisp function does not specify a special indentation."
           (use-package org-bullets)
           (use-package org-journal)
           (use-package org-clock-today
-            :config (org-clock-today-mode)))
+            :config (org-clock-today-mode 1)))
   :config (progn
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode
                                                 1)))
@@ -663,12 +673,16 @@ Lisp function does not specify a special indentation."
             "g" 'magit-status
             "G" 'magit-dispatch-popup))
 
+;; Email!
 (use-package mu4e
   :ensure nil
   :config (progn
             (use-package evil-mu4e)
             (setq mu4e-msg2pdf "/usr/bin/msg2pdf")))
 
+;; Slime provides a mode and tools for working with lisp. Of particular interest
+;;  is the abililty to connect to an instance of SBCL and control it. I learned
+;;  about this from stumpwm.
 (use-package slime
   :config (progn
             (setq inferior-lisp-program "sbcl")
@@ -677,10 +691,12 @@ Lisp function does not specify a special indentation."
             (use-package slime-company
               :config (slime-setup '(slime-company)))))
 
+;;
 (use-package stumpwm-mode)
 
 (use-package pocket-api)
 
+;; interface for ripgrep
 (use-package rg)
 
 (use-package smooth-scrolling
@@ -689,6 +705,7 @@ Lisp function does not specify a special indentation."
 ;; I might want to look into using this.
 ;;(use-package pandoc-mode)
 
+;; spell check
 (use-package flyspell
   :ensure nil
   :init (progn
@@ -696,6 +713,8 @@ Lisp function does not specify a special indentation."
           (add-hook 'text-mode-hook 'flyspell-mode)
           (add-hook 'prog-mode-hook 'flyspell-prog-mode)))
 
+;; resizes and centers the text so you can focus on the content. Admittedly,
+;;  it's behavior is a little strange. It doesn't respect the 80 column rule.
 (use-package darkroom)
 
 (use-package eww
@@ -712,11 +731,34 @@ Lisp function does not specify a special indentation."
   :config (progn (imagex-auto-adjust-mode)
                  (imagex-global-sticky-mode)))
 
+;; delightful little window popups
 (use-package popwin
   :config (popwin-mode 1))
 
+;; workspaces
 (use-package eyebrowse
   :config (eyebrowse-mode 1))
+
+;; improved list-packages manager
+(use-package paradox)
+
+;; improved mode line
+(use-package telephone-line
+  :config (progn
+            (setq telephone-line-lhs
+                  '((evil   . (telephone-line-evil-tag-segment))
+                    (accent . (telephone-line-vc-segment
+                               telephone-line-erc-modified-channels-segment
+                               telephone-line-process-segment))
+                    (nil    . (telephone-line-buffer-segment
+                               telephone-line-minor-mode-segment))))
+            (setq telephone-line-rhs
+                  '((nil    . (telephone-line-misc-info-segment))
+                    (accent . (telephone-line-major-mode-segment))
+                    (evil   . (telephone-line-airline-position-segment))))
+            (telephone-line-mode t)))
+
+(use-package diminish)
 
 ;; DO NOT WRITE BELOW THIS LINE. THIS IS AUTO GENERATED BY CUSTOMIZE
 (custom-set-variables
@@ -738,7 +780,7 @@ Lisp function does not specify a special indentation."
  '(org-clock-today-mode t)
  '(package-selected-packages
    (quote
-    (darkroom purple-haze-theme gotham-theme zweilight-theme apropospriate-theme foggy-night-theme pandoc-mode pandoc rg pocket-api stumpwm-mode slime-company slime image-dired+ evil-magit lyrics java-snippets yasnippet-java-mode seethru org-clock-today auctex-latexmk silkworm-theme buffer-flip cycbuf company-auctex tex auctex evil-matchit sml-modeline dired-x dired color-theme-sanityinc-tomorrow color-theme tea-time pdf-tools open-junk-file org-journal org-bullets org-pomodoro evil-org counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
+    (telephone-line peep-dired dired+ kdeconnect darkroom purple-haze-theme gotham-theme zweilight-theme apropospriate-theme foggy-night-theme pandoc-mode pandoc rg pocket-api stumpwm-mode slime-company slime image-dired+ evil-magit lyrics java-snippets yasnippet-java-mode seethru org-clock-today auctex-latexmk silkworm-theme buffer-flip cycbuf company-auctex tex auctex evil-matchit sml-modeline dired-x dired color-theme-sanityinc-tomorrow color-theme tea-time pdf-tools open-junk-file org-journal org-bullets org-pomodoro evil-org counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
  '(vc-annotate-very-old-color nil)
  '(window-numbering-mode t))
 (custom-set-faces
