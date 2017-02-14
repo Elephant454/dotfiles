@@ -499,7 +499,8 @@ Lisp function does not specify a special indentation."
   :config (progn
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode
                                                 1)))
-            (setq org-src-fontify-natively t))
+            (setq org-src-fontify-natively t
+                  org-list-allow-alphabetical t))
   :general (:keymaps 'org-mode-map
             :states 'normal
             "RET" 'org-open-at-point)
