@@ -715,12 +715,17 @@ Lisp function does not specify a special indentation."
 ;;(use-package pandoc-mode)
 
 ;; spell check
+;; is it possible to have something besides M-o to save a word to the dictionary?
 (use-package flyspell
   :ensure nil
   :init (progn
           (setq ispell-program-name "hunspell")
           (add-hook 'text-mode-hook 'flyspell-mode)
-          (add-hook 'prog-mode-hook 'flyspell-prog-mode)))
+          (add-hook 'prog-mode-hook 'flyspell-prog-mode))
+  :config (use-package flyspell-correct
+            :config (use-package flyspell-correct-ivy)
+            :general (elephant454initel-main-menu
+                                "ms" 'flyspell-correct-word-generic)))
 
 ;; resizes and centers the text so you can focus on the content. Admittedly,
 ;;  it's behavior is a little strange. It doesn't respect the 80 column rule.
