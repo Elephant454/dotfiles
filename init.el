@@ -521,7 +521,8 @@ Lisp function does not specify a special indentation."
              "E" 'org-edit-special
              "." 'org-time-stamp
              "d" 'org-deadline
-             "s" 'org-schedule))
+             "s" 'org-schedule
+             "p" 'org-preview-latex-fragment))
 
 (use-package open-junk-file
   :config (setq open-junk-file-format "~/junk/%Y/%m/%d/%H%M%S/")
