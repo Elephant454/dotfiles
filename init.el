@@ -692,13 +692,19 @@ Lisp function does not specify a special indentation."
 ;; Slime provides a mode and tools for working with lisp. Of particular interest
 ;;  is the abililty to connect to an instance of SBCL and control it. I learned
 ;;  about this from stumpwm.
+;;
+;; Is there any way to do a "run-or-raise" sort of thing for this? Open a
+;;  connection if we aren't connected to 127.0.0.1:4004, but otherwise open the
+;;  buffer?
 (use-package slime
   :config (progn
             (setq inferior-lisp-program "sbcl")
             ;; I'm certain that there is a better way to do this.
             (load (expand-file-name "~/quicklisp/slime-helper.el"))
             (use-package slime-company
-              :config (slime-setup '(slime-company)))))
+              :config (slime-setup '(slime-company))))
+  :general (elephant454initel-main-menu
+            "as" '(lambda() (interactive) (slime-connect "127.0.0.1" 4004))))
 
 ;;
 (use-package stumpwm-mode)
