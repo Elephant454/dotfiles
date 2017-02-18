@@ -241,6 +241,8 @@ Lisp function does not specify a special indentation."
 ;; fonts
 ;; there should really be a way to set the font size independently, or perhaps a
 ;;  way to increase font size only if I'm on my laptop
+;;
+;; (x-list-fonts "inconsolata:size=12") will without a doubt come in handy
 (setq elephant454initel-fonts (list
                                (font-spec :name "Inconsolata"
                                            :size 12)
