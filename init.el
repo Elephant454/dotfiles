@@ -241,6 +241,8 @@ Lisp function does not specify a special indentation."
 ;; fonts
 ;; there should really be a way to set the font size independently, or perhaps a
 ;;  way to increase font size only if I'm on my laptop
+;;
+;; (x-list-fonts "inconsolata:size=12") will without a doubt come in handy
 (setq elephant454initel-fonts (list
                                (font-spec :name "Inconsolata"
                                            :size 12)
@@ -778,6 +780,9 @@ Lisp function does not specify a special indentation."
                     (evil   . (telephone-line-airline-position-segment))))
             (telephone-line-mode t)))
 
+;; used to hide minor modes or give them alternative names for the modeline
+;;
+;; these should probably be moved to their respective use-package entries
 (use-package diminish
   :config (progn
             (diminish 'company-mode)
