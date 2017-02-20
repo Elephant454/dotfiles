@@ -162,18 +162,17 @@
 ;; This line is gross, but it will enable us to do some pretty neat things. This
 ;; will be cleaned up. This will received a proper description when I'm less
 ;; tired. It grabs a foreground from Emacs.
-;;(defvar emacs-foreground-color (car (split-string (run-shell-command "emacsclient --eval \"(print (face-foreground 'default))\"" t) "\\\"")))
-;;(defvar emacs-background-color (car (split-string (run-shell-command "emacsclient --eval \"(print (face-background 'default))\"" t) "\\\"")))
+(defvar emacs-foreground-color (car (split-string (run-shell-command "emacsclient --eval \"(print (face-foreground 'default))\"" t) "\\\"")))
+(defvar emacs-background-color (car (split-string (run-shell-command "emacsclient --eval \"(print (face-background 'default))\"" t) "\\\"")))
 ;;(setq *colors* (append (cons (car (split-string (run-shell-command "emacsclient --eval \"(print (face-foreground 'default))\"" t) "\\\"")) nil) *colors*))
 ;;(setq *colors* (append (cons (car (split-string (run-shell-command "emacsclient --eval \"(print (face-background 'default))\"" t) "\\\"")) nil) *colors*))
-;;(set-fg-color emacs-foreground-color)
-;;(set-fg-color emacs-background-color)
-;;(setq *mode-line-foreground-color* emacs-foreground-color)
-;;(setq *mode-line-background-color* emacs-background-color)
-;;(set-focus-color emacs-foreground-color)
+(set-fg-color emacs-foreground-color)
+(set-fg-color emacs-background-color)
+(setq *mode-line-foreground-color* emacs-foreground-color)
+(setq *mode-line-background-color* emacs-background-color)
+(set-focus-color emacs-foreground-color)
 
 (load-module "battery-portable")
 
 (setq *time-modeline-string* "%a %F %H:%M:%S")
-;;(setq *screen-mode-line-format* '("[^B%n^b] %W ^>%d" (:EVAL (RUN-SHELL-COMMAND "acpi" T))))
 (setq *screen-mode-line-format* '("[^B%n^b] %W ^> %B %d"))

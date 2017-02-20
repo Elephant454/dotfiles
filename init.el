@@ -780,6 +780,9 @@ Lisp function does not specify a special indentation."
                     (evil   . (telephone-line-airline-position-segment))))
             (telephone-line-mode t)))
 
+;; used to hide minor modes or give them alternative names for the modeline
+;;
+;; these should probably be moved to their respective use-package entries
 (use-package diminish
   :config (progn
             (diminish 'company-mode)
