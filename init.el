@@ -53,8 +53,8 @@
 (menu-bar-mode 0)          ; remove the menu bar (File, Edit, etc.)
 (tool-bar-mode 0)          ; remove the tool bar (New, Open, etc.)
 (setq quelpa-update-melpa-p nil)  ; Removes the annoying quelpa trying to update
-                                  ; at startup. When this is set to nil, start
-                                  ; times become sane.
+                                  ;  at startup. When this is set to nil, start
+                                  ;  times become sane.
 (setq-default fill-column 80)     ; sets auto-fill-mode to break lines at 80
                                   ;  characters
 
