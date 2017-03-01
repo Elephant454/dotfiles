@@ -39,7 +39,9 @@
 (define-key *root-map* (kbd "i") "imdb")
 
 ;; Message window font
-(set-font "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-15")
+;;(set-font "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-15")
+;;(set-font "-*-inconsolata-medium-*-*-*-12-*-*-*-*-*-*-*")
+(set-font "-windows-dina-medium-r-normal--12-*-96-96-c-70-iso8859-1")
 
 ;;; Define window placement policy...
 
@@ -162,15 +164,29 @@
 ;; This line is gross, but it will enable us to do some pretty neat things. This
 ;; will be cleaned up. This will received a proper description when I'm less
 ;; tired. It grabs a foreground from Emacs.
-(defvar emacs-foreground-color (car (split-string (run-shell-command "emacsclient --eval \"(print (face-foreground 'default))\"" t) "\\\"")))
-(defvar emacs-background-color (car (split-string (run-shell-command "emacsclient --eval \"(print (face-background 'default))\"" t) "\\\"")))
+(defvar emacs-foreground-color)
+(defvar emacs-background-color)
+
+(defun apply-emacs-colors()
+  (setq emacs-foreground-color (car (split-string (run-shell-command "emacsclient --eval \"(print (face-foreground 'default))\"" t) "\\\""))
+        emacs-background-color (car (split-string (run-shell-command "emacsclient --eval \"(print (face-background 'default))\"" t) "\\\"")))
+  (set-fg-color emacs-foreground-color)
+  (set-fg-color emacs-background-color)
+  (set-focus-color emacs-foreground-color)
+  (setq *mode-line-foreground-color* emacs-foreground-color)
+  (setq *mode-line-background-color* emacs-background-color)
+  (mode-line)
+  (mode-line))
+;;(defvar emacs-foreground-color (car (split-string (run-shell-command "emacsclient --eval \"(print (face-foreground 'default))\"" t) "\\\"")))
+;;(defvar emacs-background-color (car (split-string (run-shell-command "emacsclient --eval \"(print (face-background 'default))\"" t) "\\\"")))
 ;;(setq *colors* (append (cons (car (split-string (run-shell-command "emacsclient --eval \"(print (face-foreground 'default))\"" t) "\\\"")) nil) *colors*))
 ;;(setq *colors* (append (cons (car (split-string (run-shell-command "emacsclient --eval \"(print (face-background 'default))\"" t) "\\\"")) nil) *colors*))
-(set-fg-color emacs-foreground-color)
-(set-fg-color emacs-background-color)
-(setq *mode-line-foreground-color* emacs-foreground-color)
-(setq *mode-line-background-color* emacs-background-color)
-(set-focus-color emacs-foreground-color)
+;;(set-fg-color emacs-foreground-color)
+;;(set-fg-color emacs-background-color)
+;;(setq *mode-line-foreground-color* emacs-foreground-color)
+;;(setq *mode-line-background-color* emacs-background-color)
+;;(set-focus-color emacs-foreground-color)
+(apply-emacs-colors)
 
 (load-module "battery-portable")
 
