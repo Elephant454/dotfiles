@@ -80,14 +80,14 @@
 ;; This is where things I define will go until I have a better feel for StumpWM.
 ;;  At that point, things will be moved to places that seem more appropriate.
 
+(define-key *root-map* (kbd "e") "exec emacsclient -c")
 ;; open either an emacsclient or emacs, depending upon whether we are using my
 ;;  laptop or desktop
-;;(define-key *root-map* (kbd "e") "exec emacsclient -c")
-(define-key *root-map* (kbd "e") 
-  (concat "exec emacs"
-          (if (string-equal "7752.Arch.Matthew" (machine-instance))
-              "client -c" ; if we are on is my desktop, run emacsclient
-              nil)))      ; otherwise, run emacs
+;;(define-key *root-map* (kbd "e") 
+;;  (concat "exec emacs"
+;;          (if (string-equal "7752.Arch.Matthew" (machine-instance))
+;;              "client -c" ; if we are on is my desktop, run emacsclient
+;;              nil)))      ; otherwise, run emacs
 
 ;; this works in the latest git version, and it behaves just like the emacs
 ;;  version of which-key
