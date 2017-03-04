@@ -65,7 +65,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; Here we redefine the lisp-indent-function in order to indent lists starting
-;; with keywords properly. This was suggested by general.el.
+;;  with keywords properly. This was suggested by general.el.
 ;; https://github.com/Fuco1/.emacs.d/blob/af82072196564fa57726bdbabf97f1d35c43b7f7/site-lisp/redef.el#L20-L94
 (defun Fuco1/lisp-indent-function (indent-point state)
   "This function is the normal value of the variable `lisp-indent-function'.
@@ -723,7 +723,9 @@ Lisp function does not specify a special indentation."
 ;;(use-package pandoc-mode)
 
 ;; spell check
-;; is it possible to have something besides M-o to save a word to the dictionary?
+;; Is it possible to have something besides M-o to save a word to the
+;;  dictionary? 
+
 (use-package flyspell
   :ensure nil
   :init (progn
