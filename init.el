@@ -559,11 +559,14 @@ Lisp function does not specify a special indentation."
   :defer t
   :mode (("\\.pdf\\'" . pdf-view-mode))
   :general (:keymaps 'pdf-view-mode-map
-            :states '(normal emacs)
+            :states '(normal emacs insert visual motion)
             "j"  'pdf-view-next-line-or-next-page
-            "k"  'pdf-view-previous-line-or-previous-page
+            "Up"  'pdf-view-next-line-or-next-page
+            "Down"  'pdf-view-previous-line-or-previous-page
             "l"  'image-forward-hscroll
+            "Left"  'image-forward-hscroll
             "h"  'image-backward-hscroll
+            "Right"  'image-backward-hscroll
             "J"  'pdf-view-next-page
             "K"  'pdf-view-previous-page
             "u"  'pdf-view-scroll-down-or-previous-page
@@ -574,6 +577,8 @@ Lisp function does not specify a special indentation."
             "W"  'pdf-view-fit-width-to-window
             "H"  'pdf-view-fit-height-to-window
             "P"  'pdf-view-fit-page-to-window
+            "+"  'pdf-view-enlarge
+            "-"  'pdf-view-shrink
             "m"  'pdf-view-set-slice-using-mouse
             "b"  'pdf-view-set-slice-from-bounding-box
             "R"  'pdf-view-reset-slice
