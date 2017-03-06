@@ -308,11 +308,11 @@ Lisp function does not specify a special indentation."
   (progn
     (global-unset-key (kbd "C-<SPC>"))
     (general-create-definer elephant454initel-main-menu
-                            :states '(normal emacs insert visual motion)
+                            :states '(normal insert visual replace operator motion emacs)
                             :prefix "SPC"
                             :global-prefix "C-SPC")
     (general-create-definer elephant454initel-major-mode-menu
-                            :states '(normal emacs insert visual motion)
+                            :states '(normal insert visual replace operator motion emacs)
                             :prefix ","
                             :global-prefix "C-,")
     (elephant454initel-main-menu
@@ -425,9 +425,9 @@ Lisp function does not specify a special indentation."
   (progn (use-package ivy :config (ivy-mode 1))
          (use-package counsel)
          (use-package swiper
-           :general (:states '(normal insert emacs visual)
-                             :prefix "/"
-                             :global-prefix "\C-s"
+           :general (:states '(normal insert visual replace operator motion emacs)
+                     :prefix "/"
+                     :global-prefix "\C-s"
                      "" 'swiper))))
 
 ;; this shows possible key combinations in a pop-up (like when I do C-x, C-c, 
