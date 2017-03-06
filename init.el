@@ -184,21 +184,22 @@ Lisp function does not specify a special indentation."
 (use-package soft-morning-theme)
 (use-package omtose-phellack-theme)
 (use-package color-theme-sanityinc-tomorrow)
+(use-package light-soap-theme)
 (use-package silkworm-theme)
 (use-package foggy-night-theme)
 (use-package apropospriate-theme)
 (use-package gotham-theme)
 (use-package purple-haze-theme)
 
-;; pairs of themes, with the car being the day variant and the cdr
-;; being the night variant
-(setq elephant454initel-theme-pairs (list
-                                     (cons 'soft-morning 'omtose-softer)
-                                     (cons 'silkworm 'foggy-night)
-                                     (cons 'sanityinc-tomorrow-day 'sanityinc-tomorrow-eighties)
-                                     (cons 'apropospriate-light 'apropospriate-dark)
-                                     (cons 'gotham 'gotham)
-                                     (cons 'purple-haze 'purple-haze)))
+;; cons pairs of themes, with the car being the day variant and the cdr being
+;;  the night variant
+(setq elephant454initel-theme-pairs '((soft-morning . omtose-softer)
+                                      (silkworm . foggy-night)
+                                      (light-soap . light-soap)
+                                      (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
+                                      (apropospriate-light . apropospriate-dark)
+                                      (gotham . gotham)
+                                      (purple-haze . purple-haze)))
 (setq elephant454initel-current-theme-pair (pop elephant454initel-theme-pairs))
 (setq elephant454initel-use-day-theme t)
 
