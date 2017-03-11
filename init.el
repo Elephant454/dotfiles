@@ -62,7 +62,7 @@
 (global-unset-key (kbd "C-z"))
 
 ;; change all "yes or no" dialogs to "y or n" dialogs
-(fset 'yes-or-no-p 'y-or-n-p)
+;;(fset 'yes-or-no-p 'y-or-n-p)
 
 ;; Here we redefine the lisp-indent-function in order to indent lists starting
 ;;  with keywords properly. This was suggested by general.el.
