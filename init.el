@@ -488,7 +488,12 @@ Lisp function does not specify a special indentation."
 
 ;; This allows for switching between windows so we can 
 (use-package window-numbering
-  :config (window-numbering-mode 1)
+  :config (progn
+            ;; This is really silly. There is certainly a better way to not have
+            ;;  it add numbers to the modeline.
+            (add-hook 'window-numbering-mode-hook 'window-numbering-clear-mode-line)
+            (window-numbering-mode 1))
+            
   :general (:keymaps 'evil-window-map
             "0" 'select-window-0
             "1" 'select-window-1
@@ -811,7 +816,9 @@ Lisp function does not specify a special indentation."
 
 ;; workspaces
 (use-package eyebrowse
-  :config (eyebrowse-mode 1)
+  :config (progn
+            (setq eyebrowse-mode-line-style 'hide)
+            (eyebrowse-mode 1))
   :general (:keymaps 'evil-window-map
             "g" '(nil :which-key "Groups")
             "g0" 'eyebrowse-switch-to-window-config-0
@@ -831,8 +838,11 @@ Lisp function does not specify a special indentation."
 ;; improved mode line
 (use-package telephone-line
   :config (progn
+            (telephone-line-defsegment telephone-line-window-numbering (list (number-to-string (eyebrowse--get 'current-slot)) "|" (window-numbering-get-number-string)))
             (setq telephone-line-lhs
-                  '((evil   . (telephone-line-evil-tag-segment))
+                  '(
+                    ;;(evil   . (telephone-line-evil-tag-segment))
+                    (evil   . (telephone-line-window-numbering))
                     (accent . (telephone-line-vc-segment
                                telephone-line-erc-modified-channels-segment
                                telephone-line-process-segment))
