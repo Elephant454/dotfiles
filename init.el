@@ -586,19 +586,20 @@ Lisp function does not specify a special indentation."
   :mode (("\\.pdf\\'" . pdf-view-mode))
   :general (:keymaps 'pdf-view-mode-map
             :states '(normal emacs insert visual motion)
-            "j"  'pdf-view-next-line-or-next-page
-            "Up"  'pdf-view-next-line-or-next-page
-            "Down"  'pdf-view-previous-line-or-previous-page
-            "l"  'image-forward-hscroll
-            "Left"  'image-forward-hscroll
-            "h"  'image-backward-hscroll
-            "Right"  'image-backward-hscroll
-            "J"  'pdf-view-next-page
-            "K"  'pdf-view-previous-page
-            "u"  'pdf-view-scroll-down-or-previous-page
-            "d"  'pdf-view-scroll-up-or-next-page
-            "0"  'image-bol
-            "$"  'image-eol
+            "j"        'pdf-view-next-line-or-next-page
+            "<down>"   'pdf-view-next-line-or-next-page
+            "k"        'pdf-view-previous-line-or-previous-page
+            "<up>"     'pdf-view-previous-line-or-previous-page
+            "l"        'image-forward-hscroll
+            "<left>"   'image-forward-hscroll
+            "h"        'image-backward-hscroll
+            "<right>"  'image-backward-hscroll
+            "J"        'pdf-view-next-page
+            "K"        'pdf-view-previous-page
+            "u"        'pdf-view-scroll-down-or-previous-page
+            "d"        'pdf-view-scroll-up-or-next-page
+            "0"        'image-bol
+            "$"        'image-eol
             ;; Scale/Fit
             "W"  'pdf-view-fit-width-to-window
             "H"  'pdf-view-fit-height-to-window
@@ -621,8 +622,7 @@ Lisp function does not specify a special indentation."
             "o" 'pdf-links-action-perform
             "r" 'pdf-view-revert-buffer
             "t" 'pdf-annot-attachment-dired
-            "n" 'pdf-view-midnight-minor-mode
-            ))
+            "n" 'pdf-view-midnight-minor-mode))
 
 ;; I might want to add more from the latex spacemacs layer. Folding in
 ;; particular sounds interesting.
