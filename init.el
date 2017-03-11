@@ -222,11 +222,15 @@ Lisp function does not specify a special indentation."
 (defun elephant454initel-load-theme ()
   (if elephant454initel-use-day-theme
       (progn
-        (load-theme (car elephant454initel-current-theme-pair) t)  ; load the night theme
-        (car elephant454initel-current-theme-pair))  ; to print out the theme name
+        (load-theme (car elephant454initel-current-theme-pair) t)  ; load the
+                                                                   ;  night theme
+        (print (car elephant454initel-current-theme-pair)))  ; to print out the theme
+                                                     ;  name
     (progn
-      (load-theme (cdr elephant454initel-current-theme-pair) t)  ; load the night theme
-      (cdr elephant454initel-current-theme-pair))))  ; to print out the theme name
+      (load-theme (cdr elephant454initel-current-theme-pair) t)  ; load the
+                                                                 ;  night theme
+      (print (cdr elephant454initel-current-theme-pair)))))  ; to print out the theme
+                                                     ;  name
 
 (elephant454initel-load-theme)
 
