@@ -914,8 +914,9 @@ Lisp function does not specify a special indentation."
  '(org-clock-today-mode t)
  '(package-selected-packages
    (quote
-    (avy light-soap-theme immortal-scratch flyspell-correct-ivy flyspell-correct telephone-line peep-dired dired+ kdeconnect darkroom purple-haze-theme gotham-theme zweilight-theme apropospriate-theme foggy-night-theme pandoc-mode pandoc rg pocket-api stumpwm-mode slime-company slime image-dired+ evil-magit lyrics java-snippets yasnippet-java-mode seethru org-clock-today auctex-latexmk silkworm-theme buffer-flip cycbuf company-auctex tex auctex evil-matchit sml-modeline dired-x dired color-theme-sanityinc-tomorrow color-theme tea-time pdf-tools open-junk-file org-journal org-bullets org-pomodoro evil-org counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
+    (doremi-frm hexrgb avy light-soap-theme immortal-scratch flyspell-correct-ivy flyspell-correct telephone-line peep-dired dired+ kdeconnect darkroom purple-haze-theme gotham-theme zweilight-theme apropospriate-theme foggy-night-theme pandoc-mode pandoc rg pocket-api stumpwm-mode slime-company slime image-dired+ evil-magit lyrics java-snippets yasnippet-java-mode seethru org-clock-today auctex-latexmk silkworm-theme buffer-flip cycbuf company-auctex tex auctex evil-matchit sml-modeline dired-x dired color-theme-sanityinc-tomorrow color-theme tea-time pdf-tools open-junk-file org-journal org-bullets org-pomodoro evil-org counsel exwm window-purpose window-numbering spotify tree-mode reddit quelpa-use-package quelpa sudo-edit restart-emacs ensime evil-escape which-key use-package theme-changer soft-morning-theme rainbow-delimiters omtose-phellack-theme helm-descbinds general evil-leader)))
  '(paradox-automatically-star nil)
+ '(paradox-github-token t)
  '(vc-annotate-very-old-color nil)
  '(window-numbering-mode t))
 (custom-set-faces
