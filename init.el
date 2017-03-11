@@ -247,18 +247,31 @@ Lisp function does not specify a special indentation."
 ;; there should really be a way to set the font size independently, or perhaps a
 ;;  way to increase font size only if I'm on my laptop
 ;;
-;; (x-list-fonts "inconsolata:size=12") will without a doubt come in handy
-(setq elephant454initel-fonts (list
-                               (font-spec :name "Inconsolata"
-                                           :size 12)
-                               (font-spec :name "Inconsolata"
-                                           :size 16)
-                               (font-spec :name "Inconsolata"
-                                           :size 21)
-                               (font-spec :name "Dina"
-                                          :size 14)
-                               (font-spec :name "Fantasque Sans Mono"
-                                          :size 15)))
+;; (x-list-fonts "inconsolata:size=12") allows me to get
+;;  x-logical-font-discriptors
+;;
+;; should I be using (set-frame-font "Inconsolata-16" nil t) to set the font
+;;  instead?
+
+;;(setq elephant454initel-fonts (list
+                               ;;(font-spec :name "Inconsolata"
+                                          ;;:size 12)
+                               ;;(font-spec :name "Inconsolata"
+                                          ;;:size 16)
+                               ;;(font-spec :name "Inconsolata"
+                                          ;;:size 21)
+                               ;;(font-spec :name "Dina"
+                                          ;;:size 14)
+                               ;;(font-spec :name "Fantasque Sans Mono"
+                                          ;;:size 15)
+                               ;;(font-spec :name "Monofur"
+;;:size 16)))
+
+(setq elephant454initel-fonts '("Inconsolata-14"
+                                "Inconsolata-16"
+                                "Dina-14"
+                                "Monofur-16"))
+      
 (setq elephant454initel-current-font (pop elephant454initel-fonts))
 
 (defun elephant454initel-cycle-fonts ()
@@ -267,9 +280,13 @@ Lisp function does not specify a special indentation."
   (setq elephant454initel-current-font (pop elephant454initel-fonts))
   (elephant454initel-load-font))
 
+;;(defun elephant454initel-load-font ()
+  ;;(set-default-font elephant454initel-current-font)
+  ;;(car (split-string (elt (font-info (find-font elephant454initel-current-font)) 1) ":")))
+
 (defun elephant454initel-load-font ()
-  (set-default-font elephant454initel-current-font)
-  (car (split-string (elt (font-info (find-font elephant454initel-current-font)) 1) ":")))
+  (set-frame-font elephant454initel-current-font)
+  (print elephant454initel-current-font))
 
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
