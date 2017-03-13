@@ -313,7 +313,8 @@ Lisp function does not specify a special indentation."
                                                        ;  that we can map it as our
                                                        ;  leader key later
                  (add-hook 'dired-mode-hook 'auto-revert-mode)
-                 (add-hook 'dired-mode-hook 'turn-on-stripe-buffer-mode)))
+                 ;;(add-hook 'dired-mode-hook 'turn-on-stripe-buffer-mode)
+                 ))
 
 ;; do some calculations to figure out where directories should be
 (setq elephant454initel-current-year (nth 5 (decode-time)))
