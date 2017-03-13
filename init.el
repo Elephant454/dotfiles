@@ -468,7 +468,8 @@ Lisp function does not specify a special indentation."
   :general (elephant454initel-major-mode-menu
             :keymaps 'ensime-mode-map
             "" '(nil :which-key "Ensime Mode Commands")
-            "i" 'ensime-import-type-at-point))
+            "i" 'ensime-import-type-at-point
+            "s" 'ensime-sbt))
 
 ;; auto completion (needs tweaking)
 (use-package company
