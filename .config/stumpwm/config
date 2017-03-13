@@ -151,8 +151,10 @@
 
 (define-key *top-map* (kbd "C-s-S-Left") "renumber-left")
 (define-key *top-map* (kbd "M-s-S-Left") "renumber-left")
+(define-key *top-map* (kbd "C-M-s-Left") "renumber-left")
 (define-key *top-map* (kbd "C-s-S-Right") "renumber-right")
 (define-key *top-map* (kbd "M-s-S-Right") "renumber-right")
+(define-key *top-map* (kbd "C-M-s-Right") "renumber-right")
 
 ;; bindings for commonly used apps
 (defvar *application-map* (make-sparse-keymap))
