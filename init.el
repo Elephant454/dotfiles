@@ -870,6 +870,8 @@ Lisp function does not specify a special indentation."
 
 (use-package immortal-scratch)
 
+(use-package hexrgb)
+
 (use-package stripe-buffer
   :config
   ;;(defface my-stripe-highlight-face
@@ -887,8 +889,8 @@ Lisp function does not specify a special indentation."
                          ;;(hexrgb-increment-value (face-background 'default) -1) -1)))))
   
   (setq stripe-highlight-face 
-        `((:foreground ,(hexrgb-increment-value (face-foreground 'default) 5)
-           :background ,(hexrgb-increment-value (face-background 'default) 5)))))
+        `((:foreground ,(hexrgb-increment-saturation (face-foreground 'default) -1)
+           :background ,(hexrgb-increment-saturation (face-background 'default) -1)))))
 
   
 
