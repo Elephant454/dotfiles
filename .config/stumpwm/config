@@ -151,6 +151,7 @@
 (define-key *application-map* (kbd "u") "exec urxvt")
 (define-key *application-map* (kbd "c") "exec google-chrome-stable")
 (define-key *application-map* (kbd "r") "exec rofi -show run")
+(define-key *application-map* (kbd "s") "exec skypeforlinux")
 
 ;; sets the focus policy so that the focus follows the mouse
 (setf *mouse-focus-policy* :sloppy)
