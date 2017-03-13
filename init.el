@@ -365,7 +365,7 @@ Lisp function does not specify a special indentation."
      ;; buffer commands
      "b" '(:ignore t :which-key "Buffer") ; label
      "bb" 'switch-to-buffer   ; switch buffers
-     "bd" 'evil-delete-buffer ; delete current buffer
+     "bd" 'kill-this-buffer ; delete current buffer
      
      ;; file commands
      "f" '(:ignore t :which-key "File") ; label
