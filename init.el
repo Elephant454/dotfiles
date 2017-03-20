@@ -808,12 +808,42 @@ Lisp function does not specify a special indentation."
 
 (use-package eww
   :ensure nil
+  :init (progn
+          (defun eww-open-in-new-buffer (url)
+            ;;this interactive part was taken from the eww function in eww.el
+            (interactive
+             (let* ((uris (eww-suggested-uris))
+                    (prompt (concat "Enter URL or keywords"
+                                    (if uris (format " (default %s)" (car uris)) "")
+                                    ": ")))
+               (list (read-string prompt nil nil uris))))
+            (eww-browse-url url t)))
   :config (progn
             (setq eww-search-prefix "https://www.google.com/search?q=")
-            ;;(add-hook 'eww-after-render-hook (lambda()
-            ;;(rename-buffer
-            ;;(concat "*eww " (eww-current-url) "*")))))
-            ))
+            (add-hook 'eww-after-render-hook
+                      (lambda()
+                        (rename-buffer
+                         (concat "*eww " (eww-current-url) "*")))))
+  :general (:keymaps 'eww-mode-map
+            :states 'normal
+            ;; there are probably more interesting binds worth going back for,
+            ;;  but these are the essentials, I think.
+            "H" 'eww-back-url
+            "L" 'eww-forward-url
+            ;; do I need to do anything special for insert mode?
+            ;;"i" 
+            "o" 'eww
+            "B" 'eww-list-buffers
+            "Y" 'eww-copy-page-url
+            "&" 'eww-browse-with-external-browser
+            "d" 'eww-download
+            "r" 'eww-readable)
+  :general (:keymaps 'eww-buffers-mode-map
+            :states 'normal
+            "RET" 'eww-buffer-select
+            "q" 'quit-window
+            "n" 'eww-buffer-show-next
+            "p" 'eww-buffer-show-previous))
 
 ;; Automatically resizes images to fit the window, because why not?
 (use-package image+
