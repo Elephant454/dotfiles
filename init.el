@@ -446,7 +446,10 @@ Lisp function does not specify a special indentation."
 
   ;; TODO: look into some other ivy packages that exist
   (progn (use-package ivy :config (ivy-mode 1))
-         (use-package counsel)
+         (use-package counsel
+           :general (:keymaps 'help-command
+                     :states '(normal insert visual replace operator motion emacs)
+                     "b" 'counsel-descbinds))
          (use-package swiper
            :general (:states '(normal insert visual replace operator motion emacs)
                      :prefix "/"
