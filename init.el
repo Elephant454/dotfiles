@@ -519,9 +519,13 @@ Lisp function does not specify a special indentation."
 
 ;; reddit is pretty broken, for the most part, I think
 (use-package tree-mode
-  :config (quelpa '(reddit
-                    :fetcher github
-                    :repo "death/reddit-mode")))
+  :config (use-package markdown-mode
+            :config (progn
+                      (quelpa '(reddit
+                                :fetcher github
+                                :repo "death/reddit-mode"))
+                      (use-package reddit
+                        :ensure nil))))
 
 ;; I might want to look into other spotify clients
 ;;(quelpa '(spotify :fetcher github :repo "danielfm/spotify.el"))
