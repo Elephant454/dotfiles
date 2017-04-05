@@ -208,4 +208,5 @@
 (setq *screen-mode-line-format* '("[^B%n^b] %W ^> %B %d"))
 
 (load-module "power")
-(power:start-laptop-lid-watcher)
+(setq power:*lid-state-path* "/proc/acpi/button/lid/LID0/state")
+;;(power:start-laptop-lid-watcher)
