@@ -857,6 +857,7 @@ Lisp function does not specify a special indentation."
             ;; do I need to do anything special for insert mode?
             ;;"i" 
             "o" 'eww
+            "O" 'eww-open-in-new-buffer
             "B" 'eww-list-buffers
             "Y" 'eww-copy-page-url
             "&" 'eww-browse-with-external-browser
@@ -867,7 +868,9 @@ Lisp function does not specify a special indentation."
             "RET" 'eww-buffer-select
             "q" 'quit-window
             "n" 'eww-buffer-show-next
-            "p" 'eww-buffer-show-previous))
+            "p" 'eww-buffer-show-previous)
+  :general (elephant454initel-main-menu
+            "ai" 'eww))
 
 ;; Automatically resizes images to fit the window, because why not?
 (use-package image+
