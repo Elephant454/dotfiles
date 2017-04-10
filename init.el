@@ -32,7 +32,8 @@
  sentence-end-double-space nil
 
  ;; set the default web browser to google-chrome
- browse-url-browser-function 'browse-url-generic
+ ;;browse-url-browser-function 'browse-url-generic
+ browse-url-browser-function 'eww-browse-url
  browse-url-generic-program "google-chrome-stable"
  )
 
