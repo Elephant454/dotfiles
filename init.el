@@ -584,6 +584,7 @@ Lisp function does not specify a special indentation."
             (add-hook 'org-mode-hoook 'turn-on-stripe-table-mode)
             (setq org-src-fontify-natively t
                   org-list-allow-alphabetical t
+                  org-image-actual-width nil
                   org-format-latex-options (plist-put org-format-latex-options :scale 2.0)))
   :general (:keymaps 'org-mode-map
             :states 'normal
