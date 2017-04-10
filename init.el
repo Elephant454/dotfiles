@@ -532,7 +532,22 @@ Lisp function does not specify a special indentation."
                                 :fetcher github
                                 :repo "death/reddit-mode"))
                       (use-package reddit
-                        :ensure nil))))
+                        :ensure nil
+                        :general (:keymaps 'reddit-mode-map
+                                  :states '(normal emacs insert visual motion)
+                                  "q" 'quit-window
+                                  "g" 'reddit-refresh
+                                  "c" 'reddit-comments
+                                  "L" 'reddit-login
+                                  "S" 'reddit-search
+                                  "n" 'reddit-next
+                                  "p" 'reddit-prev
+                                  
+                                  "j" 'widget-forward
+                                  ;;"\t" 'widget-forward
+                                  "k" 'widget-backward
+                                  ;;"\e\t" 'widget-backward
+                                  )))))
 
 ;; I might want to look into other spotify clients
 ;;(quelpa '(spotify :fetcher github :repo "danielfm/spotify.el"))
