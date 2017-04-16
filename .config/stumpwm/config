@@ -164,6 +164,8 @@
 (define-key *application-map* (kbd "c") "exec google-chrome-stable")
 (define-key *application-map* (kbd "r") "exec rofi -show run")
 (define-key *application-map* (kbd "s") "exec skypeforlinux")
+(define-key *application-map* (kbd "p") "exec pavucontrol")
+(define-key *application-map* (kbd "v") "exec vivaldi-stable")
 
 ;; sets the focus policy so that the focus follows the mouse
 (setf *mouse-focus-policy* :sloppy)
@@ -205,3 +207,7 @@
 
 (setq *time-modeline-string* "%a %F %H:%M:%S")
 (setq *screen-mode-line-format* '("[^B%n^b] %W ^> %B %d"))
+
+(load-module "power")
+(setq power:*lid-state-path* "/proc/acpi/button/lid/LID0/state")
+;;(power:start-laptop-lid-watcher)

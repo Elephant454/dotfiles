@@ -32,7 +32,8 @@
  sentence-end-double-space nil
 
  ;; set the default web browser to google-chrome
- browse-url-browser-function 'browse-url-generic
+ ;;browse-url-browser-function 'browse-url-generic
+ browse-url-browser-function 'eww-browse-url
  browse-url-generic-program "google-chrome-stable"
  )
 
@@ -198,6 +199,7 @@ Lisp function does not specify a special indentation."
                                       (light-soap . light-soap)
                                       (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
                                       (apropospriate-light . apropospriate-dark)
+                                      ;;(nord . nord)
                                       (gotham . gotham)
                                       (purple-haze . purple-haze)))
 (setq elephant454initel-current-theme-pair (pop elephant454initel-theme-pairs))
@@ -267,12 +269,18 @@ Lisp function does not specify a special indentation."
                                ;;(font-spec :name "Monofur"
 ;;:size 16)))
 
-(setq elephant454initel-fonts '("Inconsolata-14"
-                                "Inconsolata-16"
-                                "Dina-14"
-                                "Monofur-16"))
+;;(setq elephant454initel-fonts '("Inconsolata-14"
+                                ;;"Inconsolata-16"
+                                ;;"Dina-14"
+;;"Monofur-16"))
+
+(setq elephant454initel-fonts '(("Inconsolata" . 14)
+                                ("Dina" . 14)
+                                ("Monofur" . 16)))
       
+;;(setq elephant454initel-current-font (pop elephant454initel-fonts))
 (setq elephant454initel-current-font (pop elephant454initel-fonts))
+(setq elephant454initel-font-scale 0)
 
 (defun elephant454initel-cycle-fonts ()
   (interactive)
@@ -280,13 +288,30 @@ Lisp function does not specify a special indentation."
   (setq elephant454initel-current-font (pop elephant454initel-fonts))
   (elephant454initel-load-font))
 
+(defun elephant454initel-increase-font-size ()
+  (interactive)
+  (setq elephant454initel-font-scale (+ 1 elephant454initel-font-scale))
+  (elephant454initel-load-font))
+
+(defun elephant454initel-decrease-font-size ()
+  (interactive)
+  (setq elephant454initel-font-scale (+ -1 elephant454initel-font-scale))
+  (elephant454initel-load-font))
+
 ;;(defun elephant454initel-load-font ()
   ;;(set-default-font elephant454initel-current-font)
   ;;(car (split-string (elt (font-info (find-font elephant454initel-current-font)) 1) ":")))
 
 (defun elephant454initel-load-font ()
-  (set-frame-font elephant454initel-current-font)
-  (print elephant454initel-current-font))
+  (let ((font-to-set
+        (concat
+         (car elephant454initel-current-font)
+         "-"
+         (number-to-string
+          (+ elephant454initel-font-scale
+             (cdr elephant454initel-current-font))))))
+    (set-frame-font font-to-set nil t)
+    (print font-to-set)))
 
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
@@ -330,6 +355,9 @@ Lisp function does not specify a special indentation."
   :config
   (progn
     (global-unset-key (kbd "C-<SPC>"))
+    ;; I have no idea what problem arose, or why this is necessary, but this
+    ;;  fixes the problem
+    (fset 'evil-define-key* 'evil-define-key)
     (general-create-definer elephant454initel-main-menu
                             :states '(normal insert visual replace operator motion emacs)
                             :prefix "SPC"
@@ -408,6 +436,9 @@ Lisp function does not specify a special indentation."
      ;; fonts
      "tf" '(:ignore t :which-key "Fonts")
      "tfn" 'elephant454initel-cycle-fonts
+     "tfi" 'elephant454initel-increase-font-size
+     "tfd" 'elephant454initel-decrease-font-size
+     ;; misc toggles
      "ta" '(auto-fill-mode 1)
      "tr" '(lambda() (interactive) (if (y-or-n-p "Really restart emacs?") 'restart-emacs))
      
@@ -528,7 +559,22 @@ Lisp function does not specify a special indentation."
                                 :fetcher github
                                 :repo "death/reddit-mode"))
                       (use-package reddit
-                        :ensure nil))))
+                        :ensure nil
+                        :general (:keymaps 'reddit-mode-map
+                                  :states '(normal emacs insert visual motion)
+                                  "q" 'quit-window
+                                  "g" 'reddit-refresh
+                                  "c" 'reddit-comments
+                                  "L" 'reddit-login
+                                  "S" 'reddit-search
+                                  "n" 'reddit-next
+                                  "p" 'reddit-prev
+                                  
+                                  "j" 'widget-forward
+                                  ;;"\t" 'widget-forward
+                                  "k" 'widget-backward
+                                  ;;"\e\t" 'widget-backward
+                                  )))))
 
 ;; I might want to look into other spotify clients
 ;;(quelpa '(spotify :fetcher github :repo "danielfm/spotify.el"))
@@ -564,6 +610,7 @@ Lisp function does not specify a special indentation."
             (add-hook 'org-mode-hoook 'turn-on-stripe-table-mode)
             (setq org-src-fontify-natively t
                   org-list-allow-alphabetical t
+                  org-image-actual-width nil
                   org-format-latex-options (plist-put org-format-latex-options :scale 2.0)))
   :general (:keymaps 'org-mode-map
             :states 'normal
@@ -819,7 +866,9 @@ Lisp function does not specify a special indentation."
                     (prompt (concat "Enter URL or keywords"
                                     (if uris (format " (default %s)" (car uris)) "")
                                     ": ")))
-               (list (read-string prompt nil nil uris))))
+               (list (read-string prompt nil nil uris)))
+
+             (use-package eww-lnum))
             (eww-browse-url url t)))
   :config (progn
             (setq eww-search-prefix "https://www.google.com/search?q=")
@@ -836,17 +885,22 @@ Lisp function does not specify a special indentation."
             ;; do I need to do anything special for insert mode?
             ;;"i" 
             "o" 'eww
+            "O" 'eww-open-in-new-buffer
             "B" 'eww-list-buffers
             "Y" 'eww-copy-page-url
             "&" 'eww-browse-with-external-browser
             "d" 'eww-download
-            "r" 'eww-readable)
+            "r" 'eww-readable
+            "f" 'eww-lnum-follow
+            "F" '(lambda() (interactive) (eww-lnum-follow -1)))
   :general (:keymaps 'eww-buffers-mode-map
             :states 'normal
             "RET" 'eww-buffer-select
             "q" 'quit-window
             "n" 'eww-buffer-show-next
-            "p" 'eww-buffer-show-previous))
+            "p" 'eww-buffer-show-previous)
+  :general (elephant454initel-main-menu
+            "ai" 'eww))
 
 ;; Automatically resizes images to fit the window, because why not?
 (use-package image+
@@ -960,6 +1014,19 @@ Lisp function does not specify a special indentation."
 ;; I think this is what I am looking for in terms of centering the text when I
 ;; only want to focus on a single window. Use this to replace darkroom.
 (use-package writeroom-mode)
+
+;; this still needs to be configured, particularly for the keybindings
+(use-package pocket-mode)
+
+;; this is where C-c to save and C-k to cancel come from. Rebind these.
+(use-package with-editor
+  :ensure nil
+  :general (elephant454initel-major-mode-menu
+            "c" 'with-editor-finish
+            "k" 'with-editor-cancel))
+
+;; consider ivy-todo, ivy-historian, thinks, monokai-alt-theme, org-brain,
+;;  arch-packer, bitbucket, html2org, playerctl
 
 ;; DO NOT WRITE BELOW THIS LINE. THIS IS AUTO GENERATED BY CUSTOMIZE
 (custom-set-variables
