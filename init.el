@@ -269,12 +269,18 @@ Lisp function does not specify a special indentation."
                                ;;(font-spec :name "Monofur"
 ;;:size 16)))
 
-(setq elephant454initel-fonts '("Inconsolata-14"
-                                "Inconsolata-16"
-                                "Dina-14"
-                                "Monofur-16"))
+;;(setq elephant454initel-fonts '("Inconsolata-14"
+                                ;;"Inconsolata-16"
+                                ;;"Dina-14"
+;;"Monofur-16"))
+
+(setq elephant454initel-fonts '(("Inconsolata" . 14)
+                                ("Dina" . 14)
+                                ("Monofur" . 16)))
       
+;;(setq elephant454initel-current-font (pop elephant454initel-fonts))
 (setq elephant454initel-current-font (pop elephant454initel-fonts))
+(setq elephant454initel-font-scale 0)
 
 (defun elephant454initel-cycle-fonts ()
   (interactive)
@@ -282,13 +288,30 @@ Lisp function does not specify a special indentation."
   (setq elephant454initel-current-font (pop elephant454initel-fonts))
   (elephant454initel-load-font))
 
+(defun elephant454initel-increase-font-size ()
+  (interactive)
+  (setq elephant454initel-font-scale (+ 1 elephant454initel-font-scale))
+  (elephant454initel-load-font))
+
+(defun elephant454initel-decrease-font-size ()
+  (interactive)
+  (setq elephant454initel-font-scale (+ -1 elephant454initel-font-scale))
+  (elephant454initel-load-font))
+
 ;;(defun elephant454initel-load-font ()
   ;;(set-default-font elephant454initel-current-font)
   ;;(car (split-string (elt (font-info (find-font elephant454initel-current-font)) 1) ":")))
 
 (defun elephant454initel-load-font ()
-  (set-frame-font elephant454initel-current-font)
-  (print elephant454initel-current-font))
+  (let ((font-to-set
+        (concat
+         (car elephant454initel-current-font)
+         "-"
+         (number-to-string
+          (+ elephant454initel-font-scale
+             (cdr elephant454initel-current-font))))))
+    (set-frame-font font-to-set nil t)
+    (print font-to-set)))
 
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
@@ -413,6 +436,9 @@ Lisp function does not specify a special indentation."
      ;; fonts
      "tf" '(:ignore t :which-key "Fonts")
      "tfn" 'elephant454initel-cycle-fonts
+     "tfi" 'elephant454initel-increase-font-size
+     "tfd" 'elephant454initel-decrease-font-size
+     ;; misc toggles
      "ta" '(auto-fill-mode 1)
      "tr" '(lambda() (interactive) (if (y-or-n-p "Really restart emacs?") 'restart-emacs))
      
