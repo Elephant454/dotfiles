@@ -866,7 +866,9 @@ Lisp function does not specify a special indentation."
                     (prompt (concat "Enter URL or keywords"
                                     (if uris (format " (default %s)" (car uris)) "")
                                     ": ")))
-               (list (read-string prompt nil nil uris))))
+               (list (read-string prompt nil nil uris)))
+
+             (use-package eww-lnum))
             (eww-browse-url url t)))
   :config (progn
             (setq eww-search-prefix "https://www.google.com/search?q=")
@@ -888,7 +890,9 @@ Lisp function does not specify a special indentation."
             "Y" 'eww-copy-page-url
             "&" 'eww-browse-with-external-browser
             "d" 'eww-download
-            "r" 'eww-readable)
+            "r" 'eww-readable
+            "f" 'eww-lnum-follow
+            "F" '(lambda() (interactive) (eww-lnum-follow -1)))
   :general (:keymaps 'eww-buffers-mode-map
             :states 'normal
             "RET" 'eww-buffer-select
