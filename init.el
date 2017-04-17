@@ -236,15 +236,6 @@ Lisp function does not specify a special indentation."
 
 (elephant454initel-load-theme)
 
-;; changes theme automatically at sunset
-;;(use-package theme-changer
-;;  :config
-;;  (setq calendar-location-name "Los Angeles, California"
-;;        calendar-latitude 34.0522
-;;        calendar-longitude -118.244)
-;;  (change-theme (car (car elephant454initel-theme-pairs)) (cdr (car elephant454initel-theme-pairs))))
-
-
 ;; fonts
 ;; there should really be a way to set the font size independently, or perhaps a
 ;;  way to increase font size only if I'm on my laptop
@@ -254,26 +245,6 @@ Lisp function does not specify a special indentation."
 ;;
 ;; should I be using (set-frame-font "Inconsolata-16" nil t) to set the font
 ;;  instead?
-
-;;(setq elephant454initel-fonts (list
-                               ;;(font-spec :name "Inconsolata"
-                                          ;;:size 12)
-                               ;;(font-spec :name "Inconsolata"
-                                          ;;:size 16)
-                               ;;(font-spec :name "Inconsolata"
-                                          ;;:size 21)
-                               ;;(font-spec :name "Dina"
-                                          ;;:size 14)
-                               ;;(font-spec :name "Fantasque Sans Mono"
-                                          ;;:size 15)
-                               ;;(font-spec :name "Monofur"
-;;:size 16)))
-
-;;(setq elephant454initel-fonts '("Inconsolata-14"
-                                ;;"Inconsolata-16"
-                                ;;"Dina-14"
-;;"Monofur-16"))
-
 (setq elephant454initel-fonts '(("Inconsolata" . 14)
                                 ("Dina" . 14)
                                 ("Monofur" . 16)))
