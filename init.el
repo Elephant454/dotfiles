@@ -40,7 +40,7 @@
  debug-on-error t
  )
 
-;; buffer local variables
+;; defaults for buffer local variables
 (setq-default
  indent-tabs-mode nil      ; use spaces, not tabs
  tab-width 4               ; use four spaces
