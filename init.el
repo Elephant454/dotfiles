@@ -1007,7 +1007,7 @@ Lisp function does not specify a special indentation."
             "k" 'with-editor-cancel))
 
 ;; consider ivy-todo, ivy-historian, thinks, monokai-alt-theme, org-brain,
-;;  arch-packer, bitbucket, html2org, playerctl
+;;  arch-packer, bitbucket, html2org, playerctl, flatui-dark-theme
 
 ;; I don't know what this is for entirely, but customize turned it on and it
 ;;  looks interesting
