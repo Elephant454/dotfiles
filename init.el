@@ -42,10 +42,11 @@
 
 ;; defaults for buffer local variables
 (setq-default
- indent-tabs-mode nil      ; use spaces, not tabs
- tab-width 4               ; use four spaces
- c-basic-offset 4          ; yes, also for c
- c-default-style "linux")  ; don't indent brackets
+ indent-tabs-mode nil       ; use spaces, not tabs
+ tab-width 4                ; use four spaces
+ c-basic-offset 4           ; yes, also for c
+ c-default-style "linux"    ; don't indent brackets
+ rainbow-delimiters-mode 1) ; rainbow parentheses!
 
 ;; modes
 (electric-indent-mode 1)   ; indent automatically
