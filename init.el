@@ -561,13 +561,14 @@ Lisp function does not specify a special indentation."
 (use-package spotify)
 
 (use-package lyrics
-  :general (elephant454initel-main-menu "al" 'lyrics)
-  :config (progn
-            (defun lookup-current-spotify-lyrics ()
-              "Lookup lyrics for the currently playing Spotify song."
-              (let ((spotify-current-list (split-string (spotify-current) " / ")))
-                (lyrics (car spotify-current-list)
-                        (nth 1 (split-string (nth 2 spotify-current-list) ": ")))))))
+  :init (defun lookup-current-spotify-lyrics ()
+          "Lookup lyrics for the currently playing Spotify song."
+          (interactive)
+          (let ((spotify-current-list (split-string (spotify-current) " / ")))
+            (lyrics (car spotify-current-list)
+                    (nth 1 (split-string (nth 2 spotify-current-list) ": ")))))
+  :general (elephant454initel-main-menu "al" 'lookup-current-spotify-lyrics
+                                        "aL" 'lyrics))
 
 ;; just for the heck of it 
 (use-package exwm
