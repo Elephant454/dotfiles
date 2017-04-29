@@ -1006,7 +1006,7 @@ Lisp function does not specify a special indentation."
 (use-package with-editor
   :ensure nil
   :general (elephant454initel-major-mode-menu
-            :keymaps with-editor-mode-map
+            :keymaps 'with-editor-mode-map
             "c" 'with-editor-finish
             "k" 'with-editor-cancel))
 
