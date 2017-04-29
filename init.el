@@ -812,7 +812,6 @@ Lisp function does not specify a special indentation."
 ;;
 (use-package stumpwm-mode)
 
-(use-package pocket-api)
 
 ;; interface for ripgrep
 (use-package rg)
@@ -1000,17 +999,19 @@ Lisp function does not specify a special indentation."
 (use-package writeroom-mode)
 
 ;; this still needs to be configured, particularly for the keybindings
+;;(use-package pocket-api)
 (use-package pocket-mode)
 
 ;; this is where C-c to save and C-k to cancel come from. Rebind these.
 (use-package with-editor
   :ensure nil
   :general (elephant454initel-major-mode-menu
+            :keymaps with-editor-mode-map
             "c" 'with-editor-finish
             "k" 'with-editor-cancel))
 
 ;; consider ivy-todo, ivy-historian, thinks, monokai-alt-theme, org-brain,
-;;  arch-packer, bitbucket, html2org, playerctl, flatui-dark-theme
+;;  arch-packer, bitbucket, html2org, playerctl, flatui-dark-theme, hook-helpers
 
 ;; I don't know what this is for entirely, but customize turned it on and it
 ;;  looks interesting
