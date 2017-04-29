@@ -166,6 +166,7 @@
 (define-key *application-map* (kbd "s") "exec skypeforlinux")
 (define-key *application-map* (kbd "p") "exec pavucontrol")
 (define-key *application-map* (kbd "v") "exec vivaldi-stable")
+(define-key *application-map* (kbd "g") "exec gajim")
 
 ;; sets the focus policy so that the focus follows the mouse
 (setf *mouse-focus-policy* :sloppy)
