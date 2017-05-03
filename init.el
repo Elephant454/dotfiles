@@ -1006,7 +1006,7 @@ Lisp function does not specify a special indentation."
 (use-package with-editor
   :ensure nil
   :general (elephant454initel-major-mode-menu
-            :keymaps with-editor-mode-map
+            :keymaps 'with-editor-mode-map
             "c" 'with-editor-finish
             "k" 'with-editor-cancel))
 
@@ -1019,3 +1019,24 @@ Lisp function does not specify a special indentation."
   :ensure nil
   :demand
   :config (midnight-mode t))
+
+;; Look more into this later. Does using fset like this break anything? On top
+;;  of that, is this even necessary?
+(use-package projectile
+  :config (progn
+            (projectile-global-mode t)
+            (setq projectile-enable-caching t)
+            (use-package counsel-projectile
+              :config (progn
+                        (counsel-projectile-on)
+                        ;;(fset 'projectile-find-file
+                              ;;'counsel-projectile-find-file)
+                        ;;(fset 'projectile-find-dir
+                              ;;'counsel-projectile-find-dir)
+                        ;;(fset 'projectile-switch-project
+                              ;;'counsel-projectile-switch-project)
+                        ;;(fset 'projectile-ag
+                              ;;'counsel-projectile-ag)
+                        ;;(fset 'projectile-switch-to-buffer
+                        ;;'counsel-projectile-switch-to-buffer)))))
+                        ))))
