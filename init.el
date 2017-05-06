@@ -1012,6 +1012,8 @@ Lisp function does not specify a special indentation."
 
 ;; consider ivy-todo, ivy-historian, thinks, monokai-alt-theme, org-brain,
 ;;  arch-packer, bitbucket, html2org, playerctl, flatui-dark-theme, hook-helpers
+;;
+;; Replace window-numbering with winum?
 
 ;; I don't know what this is for entirely, but customize turned it on and it
 ;;  looks interesting
