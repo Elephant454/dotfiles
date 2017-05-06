@@ -372,8 +372,9 @@ Lisp function does not specify a special indentation."
      
      ;; buffer commands
      "b" '(:ignore t :which-key "Buffer") ; label
-     "bb" 'switch-to-buffer   ; switch buffers
-     "bd" 'kill-this-buffer ; delete current buffer
+     "bb" 'switch-to-buffer               ; switch buffers
+     "bd" 'kill-this-buffer               ; delete current buffer
+     "bp" 'popwin:display-buffer          ; display a buffer using popwin
      
      ;; file commands
      "f" '(:ignore t :which-key "File") ; label
@@ -428,44 +429,18 @@ Lisp function does not specify a special indentation."
      
      "h" '(help-command :which-key "Help"))))
 
-
-;; Set elephant454initel-use-helm to t to use helm. Set it to nil to use Ivy.
-(setq elephant454initel-use-helm nil)
-(if elephant454initel-use-helm
-    ;; This helm section was written by Sacha Chua. I should read over it
-    ;;  to see what it actually does.
-    (progn (use-package helm
-             :init
-             (progn
-               (require 'helm-config)
-               (setq helm-candidate-number-limit 100)
-               ;; From https://gist.github.com/antifuchs/9238468
-               (setq helm-idle-delay 0.0 ; update fast sources
-                                         ;  immediately (doesn't).
-                     helm-input-idle-delay 0.01  ; this actually
-                                                 ;  updates things
-                                                 ;  reeeelatively
-                                                 ;  quickly.
-                     helm-yas-display-key-on-candidate t
-                     helm-quick-update t
-                     helm-M-x-requires-pattern nil
-                     helm-ff-skip-boring-files t)
-               (helm-mode 1)))
-           (use-package helm-descbinds
-             :config
-             (helm-descbinds-mode 1)))
-
-  ;; TODO: look into some other ivy packages that exist
-  (progn (use-package ivy :config (ivy-mode 1))
-         (use-package counsel
-           :general (:keymaps 'help-command
-                     ;;:states '(normal insert visual replace operator motion emacs)
-                     "b" 'counsel-descbinds))
-         (use-package swiper
-           :general (:states '(normal insert visual replace operator motion emacs)
-                     :prefix "/"
-                     :global-prefix "\C-s"
-                     "" 'swiper))))
+(use-package ivy
+  :config (progn
+            (ivy-mode 1)
+            (use-package counsel
+              :general (:keymaps 'help-command
+                        ;;:states '(normal insert visual replace operator motion emacs)
+                        "b" 'counsel-descbinds))
+            (use-package swiper
+              :general (:states '(normal insert visual replace operator motion emacs)
+                        :prefix "/"
+                        :global-prefix "\C-s"
+                        "" 'swiper))))
 
 ;; this shows possible key combinations in a pop-up (like when I do C-x, C-c, 
 ;;  etc.)
@@ -668,7 +643,8 @@ Lisp function does not specify a special indentation."
             "o" 'pdf-links-action-perform
             "r" 'pdf-view-revert-buffer
             "t" 'pdf-annot-attachment-dired
-            "n" 'pdf-view-midnight-minor-mode))
+            "n" 'pdf-view-midnight-minor-mode
+            "/" 'pdf-isearch))
 
 ;; I might want to add more from the latex spacemacs layer. Folding in
 ;; particular sounds interesting.
@@ -974,8 +950,6 @@ Lisp function does not specify a special indentation."
         `((:foreground ,(hexrgb-increment-saturation (face-foreground 'default) -1)
            :background ,(hexrgb-increment-saturation (face-background 'default) -1)))))
 
-  
-
 (use-package hexrgb)
 (use-package doremi-frm)
 
@@ -1021,3 +995,31 @@ Lisp function does not specify a special indentation."
   :ensure nil
   :demand
   :config (midnight-mode t))
+
+;; Look more into this later. Does using fset like this break anything? On top
+;;  of that, is this even necessary?
+(use-package projectile
+  :config (progn
+            (projectile-global-mode t)
+            (setq projectile-enable-caching t)
+            (use-package counsel-projectile
+              :config (progn
+                        (counsel-projectile-on)
+                        ;;(fset 'projectile-find-file
+                              ;;'counsel-projectile-find-file)
+                        ;;(fset 'projectile-find-dir
+                              ;;'counsel-projectile-find-dir)
+                        ;;(fset 'projectile-switch-project
+                              ;;'counsel-projectile-switch-project)
+                        ;;(fset 'projectile-ag
+                              ;;'counsel-projectile-ag)
+                        ;;(fset 'projectile-switch-to-buffer
+                        ;;'counsel-projectile-switch-to-buffer)))))
+                        ))))
+
+;; try to get this working somehow
+(use-package comint
+  :ensure nil
+  :general (:state 'insert
+            "<Up>" 'comint-previous-input
+            "<Down>" 'comint-next-input))
