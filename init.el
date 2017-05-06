@@ -234,8 +234,9 @@ Lisp function does not specify a special indentation."
       (progn
         (load-theme (car elephant454initel-current-theme-pair) t)  ; load the
                                                                    ;  night theme
-        (print (car elephant454initel-current-theme-pair)))  ; to print out the theme
-                                                     ;  name
+        (print (car elephant454initel-current-theme-pair)))        ; print out
+                                                                   ;  the theme
+                                                                   ;  name
     (progn
       (load-theme (cdr elephant454initel-current-theme-pair) t)  ; load the
                                                                  ;  night theme
@@ -377,11 +378,10 @@ Lisp function does not specify a special indentation."
      "bp" 'popwin:display-buffer          ; display a buffer using popwin
      
      ;; file commands
-     "f" '(:ignore t :which-key "File") ; label
-     "ff" 'find-file       ; open a dialog to open
-                                        ;  a file
-     "fj" 'dired-jump      ; open the directory of
-                                        ;  the current file
+     "f" '(:ignore t :which-key "File")   ; label
+     "ff" 'find-file                      ; open a dialog to open a file
+     "fj" 'dired-jump                     ; open the directory of the current
+                                          ;  file
      "fe" 'ediff
      
      ;; file bookmark commands
@@ -391,7 +391,7 @@ Lisp function does not specify a special indentation."
      "fbl" 'bookmark-bmenu-list
      "fy" 'kill-buffer-file-name
      
-     "s" 'shell ; open a shell
+     "s" 'shell                           ; open a shell
      
      ;; open this configuration file (why is the
      ;;  lambda and interactive necessary?)
