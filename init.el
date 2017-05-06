@@ -1014,3 +1014,10 @@ Lisp function does not specify a special indentation."
                         ;;(fset 'projectile-switch-to-buffer
                         ;;'counsel-projectile-switch-to-buffer)))))
                         ))))
+
+;; try to get this working somehow
+(use-package comint
+  :ensure nil
+  :general (:state 'insert
+            "<Up>" 'comint-previous-input
+            "<Down>" 'comint-next-input))
