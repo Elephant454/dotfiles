@@ -428,44 +428,18 @@ Lisp function does not specify a special indentation."
      
      "h" '(help-command :which-key "Help"))))
 
-
-;; Set elephant454initel-use-helm to t to use helm. Set it to nil to use Ivy.
-(setq elephant454initel-use-helm nil)
-(if elephant454initel-use-helm
-    ;; This helm section was written by Sacha Chua. I should read over it
-    ;;  to see what it actually does.
-    (progn (use-package helm
-             :init
-             (progn
-               (require 'helm-config)
-               (setq helm-candidate-number-limit 100)
-               ;; From https://gist.github.com/antifuchs/9238468
-               (setq helm-idle-delay 0.0 ; update fast sources
-                                         ;  immediately (doesn't).
-                     helm-input-idle-delay 0.01  ; this actually
-                                                 ;  updates things
-                                                 ;  reeeelatively
-                                                 ;  quickly.
-                     helm-yas-display-key-on-candidate t
-                     helm-quick-update t
-                     helm-M-x-requires-pattern nil
-                     helm-ff-skip-boring-files t)
-               (helm-mode 1)))
-           (use-package helm-descbinds
-             :config
-             (helm-descbinds-mode 1)))
-
-  ;; TODO: look into some other ivy packages that exist
-  (progn (use-package ivy :config (ivy-mode 1))
-         (use-package counsel
-           :general (:keymaps 'help-command
-                     ;;:states '(normal insert visual replace operator motion emacs)
-                     "b" 'counsel-descbinds))
-         (use-package swiper
-           :general (:states '(normal insert visual replace operator motion emacs)
-                     :prefix "/"
-                     :global-prefix "\C-s"
-                     "" 'swiper))))
+(use-package ivy
+  :config (progn
+            (ivy-mode 1)
+            (use-package counsel
+              :general (:keymaps 'help-command
+                        ;;:states '(normal insert visual replace operator motion emacs)
+                        "b" 'counsel-descbinds))
+            (use-package swiper
+              :general (:states '(normal insert visual replace operator motion emacs)
+                        :prefix "/"
+                        :global-prefix "\C-s"
+                        "" 'swiper))))
 
 ;; this shows possible key combinations in a pop-up (like when I do C-x, C-c, 
 ;;  etc.)
