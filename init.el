@@ -372,8 +372,9 @@ Lisp function does not specify a special indentation."
      
      ;; buffer commands
      "b" '(:ignore t :which-key "Buffer") ; label
-     "bb" 'switch-to-buffer   ; switch buffers
-     "bd" 'kill-this-buffer ; delete current buffer
+     "bb" 'switch-to-buffer               ; switch buffers
+     "bd" 'kill-this-buffer               ; delete current buffer
+     "bp" 'popwin:display-buffer          ; display a buffer using popwin
      
      ;; file commands
      "f" '(:ignore t :which-key "File") ; label
