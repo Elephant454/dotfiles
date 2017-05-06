@@ -643,7 +643,8 @@ Lisp function does not specify a special indentation."
             "o" 'pdf-links-action-perform
             "r" 'pdf-view-revert-buffer
             "t" 'pdf-annot-attachment-dired
-            "n" 'pdf-view-midnight-minor-mode))
+            "n" 'pdf-view-midnight-minor-mode
+            "/" 'pdf-isearch))
 
 ;; I might want to add more from the latex spacemacs layer. Folding in
 ;; particular sounds interesting.
@@ -948,8 +949,6 @@ Lisp function does not specify a special indentation."
   (setq stripe-highlight-face 
         `((:foreground ,(hexrgb-increment-saturation (face-foreground 'default) -1)
            :background ,(hexrgb-increment-saturation (face-background 'default) -1)))))
-
-  
 
 (use-package hexrgb)
 (use-package doremi-frm)
