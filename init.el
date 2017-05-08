@@ -984,11 +984,6 @@ Lisp function does not specify a special indentation."
             "c" 'with-editor-finish
             "k" 'with-editor-cancel))
 
-;; consider ivy-todo, ivy-historian, thinks, monokai-alt-theme, org-brain,
-;;  arch-packer, bitbucket, html2org, playerctl, flatui-dark-theme, hook-helpers
-;;
-;; Replace window-numbering with winum?
-
 ;; I don't know what this is for entirely, but customize turned it on and it
 ;;  looks interesting
 (use-package midnight
@@ -1023,3 +1018,9 @@ Lisp function does not specify a special indentation."
   :general (:state 'insert
             "<Up>" 'comint-previous-input
             "<Down>" 'comint-next-input))
+
+;; consider ivy-todo, ivy-historian, thinks, monokai-alt-theme, org-brain,
+;;  arch-packer, bitbucket, html2org, playerctl, flatui-dark-theme,
+;;  hook-helpers, dakrone-light-theme, turing-machine (this sounds awesome!)
+;;
+;; Replace window-numbering with winum?
