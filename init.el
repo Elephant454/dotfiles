@@ -212,6 +212,8 @@ Lisp function does not specify a special indentation."
                                       (purple-haze . purple-haze)))
 (setq elephant454initel-current-theme-pair (pop elephant454initel-theme-pairs))
 (setq elephant454initel-use-day-theme t)
+;;(setq elephant454initel-apply-to-stumpwm t)
+(setq elephant454initel-apply-to-stumpwm nil)
 
 ;; switch between using the day theme and the night theme
 (defun elephant454initel-toggle-use-day-theme()
@@ -230,18 +232,22 @@ Lisp function does not specify a special indentation."
 ;; this function loads themes with NO-CONFIRM. Make sure that themes aren't
 ;; malicious before adding them to the theme-pairs
 (defun elephant454initel-load-theme ()
-  (if elephant454initel-use-day-theme
-      (progn
-        (load-theme (car elephant454initel-current-theme-pair) t)  ; load the
-                                                                   ;  night theme
-        (print (car elephant454initel-current-theme-pair)))        ; print out
-                                                                   ;  the theme
-                                                                   ;  name
-    (progn
-      (load-theme (cdr elephant454initel-current-theme-pair) t)  ; load the
-                                                                 ;  night theme
-      (print (cdr elephant454initel-current-theme-pair)))))  ; to print out the theme
-                                                     ;  name
+  (let ((theme-to-apply
+        (if elephant454initel-use-day-theme
+            (car elephant454initel-current-theme-pair)  ; the theme-to-apply is
+                                                        ;  the day theme
+          (cdr elephant454initel-current-theme-pair)))) ; the theme-to-apply is
+                                                        ;  the night theme
+    (load-theme theme-to-apply t)
+    
+    (if elephant454initel-apply-to-stumpwm
+        (progn 
+          (if (not (slime-connected-p))
+              (slime-connect "localhost" "4004"))
+          (slime-repl-send-string "(in-package stumpwm)")
+          (slime-repl-send-string "(apply-emacs-colors)")))
+    
+    (print theme-to-apply)))
 
 (elephant454initel-load-theme)
 
