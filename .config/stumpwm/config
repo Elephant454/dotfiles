@@ -289,6 +289,18 @@
 ;; look into (load-module "ttf-fonts"). This whole page is interesting:
 ;;  https://github.com/ivoarch/.dot-org-files/blob/master/stumpwm.org
 
+;; this prevents weird thick borders from forming around the top and bottom of
+;;  emacs
+(setq *ignore-wm-inc-hints* t)
+(setq *window-border-style* :THIN)
+
 ;; use ttf fonts! This works!
 (load-module "ttf-fonts")
 (set-font (make-instance 'xft:font :family "Inconsolata" :subfamily "Regular" :size 12))
+
+;; tried to do a remote thing? This should be run inside of Emacs.
+;;(slime-connect "localhost" "4004" "utf-8-unix" (slime-interactive-eval "(stumpwm:apply-emacs-colors)"))
+
+;; this successfully sends a command from emacs lisp to stumpwm
+;;(slime-connect "localhost" "4004")
+;;(slime-repl-send-string "(stumpwm:echo \"hi\")")
