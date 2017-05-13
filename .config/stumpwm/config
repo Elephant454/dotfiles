@@ -285,3 +285,10 @@
             ;;     (run-hook 'frame-gap-on)
             ;;     (run-hook 'frame-gap-off))
             (reset-all-windows))
+
+;; look into (load-module "ttf-fonts"). This whole page is interesting:
+;;  https://github.com/ivoarch/.dot-org-files/blob/master/stumpwm.org
+
+;; use ttf fonts! This works!
+(load-module "ttf-fonts")
+(set-font (make-instance 'xft:font :family "Inconsolata" :subfamily "Regular" :size 12))
