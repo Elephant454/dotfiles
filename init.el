@@ -787,12 +787,13 @@ Lisp function does not specify a special indentation."
 ;;  connection if we aren't connected to 127.0.0.1:4004, but otherwise open the
 ;;  buffer?
 (use-package slime
+  :init (progn
+          (use-package slime-company :demand)
+          (slime-setup '(slime-fancy slime-company)))
   :config (progn
             (setq inferior-lisp-program "sbcl")
             ;; I'm certain that there is a better way to do this.
-            (load (expand-file-name "~/quicklisp/slime-helper.el"))
-            (use-package slime-company
-              :config (slime-setup '(slime-company))))
+            (load (expand-file-name "~/quicklisp/slime-helper.el")))
   :general (elephant454initel-main-menu
             "as" '(lambda() (interactive) (slime-connect "127.0.0.1" 4004))))
 
