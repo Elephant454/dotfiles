@@ -171,34 +171,32 @@
 ;; take a screenshot
 (define-key *top-map* (kbd "Print") "exec gnome-screenshot")
 
-;; This line is gross, but it will enable us to do some pretty neat things. This
-;; will be cleaned up. This will received a proper description when I'm less
-;; tired. It grabs a foreground from Emacs.
-(defvar emacs-foreground-color)
-(defvar emacs-background-color)
-
-(defun apply-emacs-colors()
-  (setq emacs-foreground-color (car (split-string (run-shell-command "emacsclient --eval \"(print (face-foreground 'default))\"" t) "\\\""))
-        emacs-background-color (car (split-string (run-shell-command "emacsclient --eval \"(print (face-background 'default))\"" t) "\\\"")))
-  (set-fg-color emacs-foreground-color)
-  (set-fg-color emacs-background-color)
-  (set-focus-color emacs-foreground-color)
-  (setq *mode-line-foreground-color* emacs-foreground-color)
-  (setq *mode-line-background-color* emacs-background-color)
-  (set-win-bg-color emacs-foreground-color)
-  (set-focus-color emacs-foreground-color)
-  (set-unfocus-color emacs-background-color)
+;; apply a foreground and background color to various aspects of the UI
+(defun apply-foreground-background (foreground background)
+  (set-fg-color foreground)
+  (set-fg-color background)
+  (set-focus-color foreground)
+  (setq *mode-line-foreground-color* foreground)
+  (setq *mode-line-background-color* background)
+  (set-win-bg-color foreground)
+  (set-focus-color foreground)
+  (set-unfocus-color background)
   (mode-line)
   (mode-line))
-;;(defvar emacs-foreground-color (car (split-string (run-shell-command "emacsclient --eval \"(print (face-foreground 'default))\"" t) "\\\"")))
-;;(defvar emacs-background-color (car (split-string (run-shell-command "emacsclient --eval \"(print (face-background 'default))\"" t) "\\\"")))
-;;(setq *colors* (append (cons (car (split-string (run-shell-command "emacsclient --eval \"(print (face-foreground 'default))\"" t) "\\\"")) nil) *colors*))
-;;(setq *colors* (append (cons (car (split-string (run-shell-command "emacsclient --eval \"(print (face-background 'default))\"" t) "\\\"")) nil) *colors*))
-;;(set-fg-color emacs-foreground-color)
-;;(set-fg-color emacs-background-color)
-;;(setq *mode-line-foreground-color* emacs-foreground-color)
-;;(setq *mode-line-background-color* emacs-background-color)
-;;(set-focus-color emacs-foreground-color)
+
+(ql:quickload 'inferior-shell)
+
+(defun emacs-repl-send-string (string)
+  (string-left-trim "\\\""
+                    (string-right-trim (concat "\\\"" (string #\NewLine))
+                                       (inferior-shell:run/s `(emacsclient --eval ,string)))))
+;;(car (split-string (inferior-shell:run/s `(emacsclient --eval ,string)) "\\\""))
+
+(defun apply-emacs-colors ()
+(apply-foreground-background
+ (emacs-repl-send-string "(face-foreground 'default)")
+ (emacs-repl-send-string "(face-background 'default)")))
+
 (apply-emacs-colors)
 
 (load-module "battery-portable")
