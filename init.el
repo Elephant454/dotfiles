@@ -246,7 +246,11 @@ Lisp function does not specify a special indentation."
               (slime-connect "localhost" "4004"))
           (slime-repl-send-string "(in-package stumpwm)")
           (slime-repl-send-string "(apply-emacs-colors)")))
-    
+          ;;(slime-repl-send-string (concat "(apply-foreground-background "
+                                          ;;(face-foreground 'default)
+                                          ;;" "
+                                          ;;(face-background 'default)
+                                          ;;")"))
     (print theme-to-apply)))
 
 (elephant454initel-load-theme)
