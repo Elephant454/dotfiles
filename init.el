@@ -300,6 +300,8 @@ Lisp function does not specify a special indentation."
     (set-frame-font font-to-set nil t)
     (print font-to-set)))
 
+;;(elephant454initel-load-font)
+
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
   :demand
