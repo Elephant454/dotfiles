@@ -1033,6 +1033,7 @@ Lisp function does not specify a special indentation."
 
 ;; consider ivy-todo, ivy-historian, thinks, monokai-alt-theme, org-brain,
 ;;  arch-packer, bitbucket, html2org, playerctl, flatui-dark-theme,
-;;  hook-helpers, dakrone-light-theme, turing-machine (this sounds awesome!)
+;;  hook-helpers, dakrone-light-theme, turing-machine (this sounds awesome!),
+;;  slstats, flycheck-coverity
 ;;
 ;; Replace window-numbering with winum?
