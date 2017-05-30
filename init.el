@@ -674,7 +674,10 @@ Lisp function does not specify a special indentation."
             ;; $pdf_mode = 1;
             ;; # .latexmkrc ends
             (use-package auctex-latexmk
-              :config (auctex-latexmk-setup))))
+              :config (auctex-latexmk-setup)))
+  :general (elephant454initel-major-mode-menu
+            :keymaps 'LaTeX-mode-map
+             "c" 'TeX-command-master))
 
 ;; The fact that this is strewn haphazardly here goes to show that
 ;; this needs some sort of categorical organization.
