@@ -373,9 +373,9 @@ Lisp function does not specify a special indentation."
      ;; add some way for the semester and year to
      ;;  be figured out automatically
      "ot" (lambda() (interactive) (find-file
-                                   "~/Documents/2016-2017/Semester2/todo.org"))
+                                   "~/Documents/2017-2018/summer/todo.org"))
      "oe" (lambda() (interactive) (find-file
-                                   "~/Documents/2016-2017/Semester2/events.org"))
+                                   "~/Documents/2017-2018/summer/events.org"))
      "od" (lambda() (interactive) (find-file
                                    "~/org/derp.org"))
      
