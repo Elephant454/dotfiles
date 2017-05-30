@@ -207,7 +207,6 @@ Lisp function does not specify a special indentation."
                                       (light-soap . light-soap)
                                       (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
                                       (apropospriate-light . apropospriate-dark)
-                                      ;;(nord . nord)
                                       (gotham . gotham)
                                       (purple-haze . purple-haze)))
 (setq elephant454initel-current-theme-pair (pop elephant454initel-theme-pairs))
