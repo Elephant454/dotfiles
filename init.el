@@ -1030,6 +1030,11 @@ Lisp function does not specify a special indentation."
   :general (:state 'insert
             "<Up>" 'comint-previous-input
             "<Down>" 'comint-next-input))
+(use-package picpocket
+  :general (:states 'normal
+            :keymaps 'picpocket-mode-map
+            "<right>" 'picpocket-next
+            "<left>" 'picpocket-previous))
 
 ;; consider ivy-todo, ivy-historian, thinks, monokai-alt-theme, org-brain,
 ;;  arch-packer, bitbucket, html2org, playerctl, flatui-dark-theme,
