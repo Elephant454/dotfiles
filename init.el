@@ -1024,12 +1024,13 @@ Lisp function does not specify a special indentation."
                         ;;'counsel-projectile-switch-to-buffer)))))
                         ))))
 
-;; try to get this working somehow
 (use-package comint
   :ensure nil
-  :general (:state 'insert
-            "<Up>" 'comint-previous-input
-            "<Down>" 'comint-next-input))
+  :general (:states 'insert
+            :keymaps 'comint-mode-map
+            "<up>" 'comint-previous-input
+            "<down>" 'comint-next-input))
+
 (use-package picpocket
   :general (:states 'normal
             :keymaps 'picpocket-mode-map
