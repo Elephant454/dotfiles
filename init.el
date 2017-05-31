@@ -199,11 +199,13 @@ Lisp function does not specify a special indentation."
 (use-package apropospriate-theme)
 (use-package gotham-theme)
 (use-package purple-haze-theme)
+(use-package nubox)
 
 ;; cons pairs of themes, with the car being the day variant and the cdr being
 ;;  the night variant
 (setq elephant454initel-theme-pairs '((soft-morning . omtose-softer)
                                       (silkworm . foggy-night)
+                                      (nubox-light . nubox-dark)
                                       (light-soap . light-soap)
                                       (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
                                       (apropospriate-light . apropospriate-dark)
