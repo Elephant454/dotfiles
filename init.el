@@ -1047,3 +1047,6 @@ Lisp function does not specify a special indentation."
 ;;  slstats, flycheck-coverity, counsel-spotify, nubox (theme), shx
 ;;
 ;; Replace window-numbering with winum?
+
+;; how does this work?
+(use-package counsel-spotify)
