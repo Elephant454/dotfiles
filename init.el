@@ -200,6 +200,8 @@ Lisp function does not specify a special indentation."
 (use-package gotham-theme)
 (use-package purple-haze-theme)
 (use-package nubox)
+;; I might want this one, also
+;;(use-package gruvbox)
 
 ;; cons pairs of themes, with the car being the day variant and the cdr being
 ;;  the night variant
