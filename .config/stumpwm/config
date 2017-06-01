@@ -198,6 +198,15 @@
  (emacs-repl-send-string "(face-foreground 'default)")
  (emacs-repl-send-string "(face-background 'default)")))
 
+(defun apply-emacs-font ()
+  (set-font (make-instance 'xft:font
+                           :family (emacs-repl-send-string
+                                    "(car elephant454initel-current-font)")
+                           :subfamily "Regular"
+                           :size (parse-integer
+                                  (emacs-repl-send-string
+                                   "(+ elephant454initel-font-scale (cdr elephant454initel-current-font))")))))
+
 (apply-emacs-colors)
 
 (load-module "battery-portable")
