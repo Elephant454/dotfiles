@@ -790,6 +790,25 @@ Lisp function does not specify a special indentation."
 ;; Is there any way to do a "run-or-raise" sort of thing for this? Open a
 ;;  connection if we aren't connected to 127.0.0.1:4004, but otherwise open the
 ;;  buffer?
+
+;; This fails to make a connection if we have ANY Slime connection established.
+;; How can we get around this...?
+;; I think this is a start, but we need a way to iterate through all of the
+;;  connections and switch to the one with the right port. For the moment, it
+;;  starts a new connection if the /current/ connection doesn't have the right
+;;  port.
+(defun run-or-raise-stumpwm-repl ()
+  (interactive)
+  (if (and
+       (slime-connected-p)
+       (= 4004 (slime-connection-port (slime-current-connection))))
+
+      ;; then
+      (switch-to-buffer (slime-repl-buffer))
+    
+    ;; else
+    (slime-connect "127.0.0.1" 4004)))
+
 (use-package slime
   :init (progn
           (use-package slime-company :demand)
@@ -799,7 +818,7 @@ Lisp function does not specify a special indentation."
             ;; I'm certain that there is a better way to do this.
             (load (expand-file-name "~/quicklisp/slime-helper.el")))
   :general (elephant454initel-main-menu
-            "as" '(lambda() (interactive) (slime-connect "127.0.0.1" 4004))))
+            "as" 'run-or-raise-stumpwm-repl))
 
 ;;
 (use-package stumpwm-mode)
