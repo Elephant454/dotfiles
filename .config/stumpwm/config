@@ -38,10 +38,10 @@
 (define-key *root-map* (kbd "M-s") "google")
 (define-key *root-map* (kbd "i") "imdb")
 
-;; Message window font
-;;(set-font "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-15")
-;;(set-font "-*-inconsolata-medium-*-*-*-12-*-*-*-*-*-*-*")
+;; set the font
+(load-module "ttf-fonts")
 (set-font "-windows-dina-medium-r-normal--12-*-96-96-c-70-iso8859-1")
+(set-font (make-instance 'xft:font :family "Inconsolata" :subfamily "Regular" :size 12))
 
 ;;; Define window placement policy...
 
@@ -171,6 +171,7 @@
 ;; take a screenshot
 (define-key *top-map* (kbd "Print") "exec gnome-screenshot")
 
+
 ;; apply a foreground and background color to various aspects of the UI
 (defun apply-foreground-background (foreground background)
   (set-fg-color foreground)
@@ -285,9 +286,6 @@
 (setq *ignore-wm-inc-hints* t)
 (setq *window-border-style* :THIN)
 
-;; use ttf fonts! This works!
-(load-module "ttf-fonts")
-(set-font (make-instance 'xft:font :family "Inconsolata" :subfamily "Regular" :size 12))
 
 ;; tried to do a remote thing? This should be run inside of Emacs.
 ;;(slime-connect "localhost" "4004" "utf-8-unix" (slime-interactive-eval "(stumpwm:apply-emacs-colors)"))
