@@ -304,6 +304,13 @@ Lisp function does not specify a special indentation."
           (+ elephant454initel-font-scale
              (cdr elephant454initel-current-font))))))
     (set-frame-font font-to-set nil t)
+
+    (if elephant454initel-apply-to-stumpwm
+        (progn 
+          (if (not (slime-connected-p))
+              (slime-connect "localhost" "4004"))
+          (slime-repl-send-string "(in-package stumpwm)")
+          (slime-repl-send-string "(apply-emacs-font)")))
     (print font-to-set)))
 
 ;;(elephant454initel-load-font)
