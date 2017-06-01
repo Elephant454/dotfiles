@@ -766,18 +766,12 @@ Lisp function does not specify a special indentation."
 (use-package magit
   :config (progn
             (use-package evil-magit))
-  ;; unbind M-# so we can use it for window-numbering
-  ;; For whatever reason, the commented out part here breaks all sorts of
-  ;;  things. C-Backspace (backward-kill word) throws errors, jumping between
-  ;;  words in normal mode goes too far, dired-jump stops working, etc. Why is
-  ;;  this?
-  ;;:general (
-            ;;:states '(normal emacs insert visual motion)
-            ;;:keymaps 'magit-mode-map
-            ;;"M-1" 'nil
-            ;;"M-2" 'nil
-            ;;"M-3" 'nil
-            ;;"M-4" 'nil)
+  :general (:states '(normal emacs insert visual motion)
+            :keymaps 'magit-mode-map
+            "M-1" 'select-window-1
+            "M-2" 'select-window-2
+            "M-3" 'select-window-3
+            "M-4" 'select-window-4)
   :general (elephant454initel-main-menu
             "g" 'magit-status
             "G" 'magit-dispatch-popup))
