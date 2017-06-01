@@ -721,12 +721,9 @@ Lisp function does not specify a special indentation."
             (buffer-flip-mode 1))
   :general (elephant454initel-main-menu "TAB" 'buffer-flip))
 
-;; My first elisp function. It works when evaluated with M-:, but it
-;;  needs an interactive part in order to be callable from a
-;;  keybinding.
-;; It kills the name of the current file to the clipboard so it can be
-;;  pasted elsewhere.
+;; My first elisp function!
 (defun kill-buffer-file-name ()
+  "Kill the name of the current file to the clipboard"
   (interactive)
   (kill-new (buffer-file-name)))
 
