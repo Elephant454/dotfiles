@@ -199,13 +199,20 @@
  (emacs-repl-send-string "(face-background 'default)")))
 
 (defun apply-emacs-font ()
-  (set-font (make-instance 'xft:font
-                           :family (emacs-repl-send-string
-                                    "(car elephant454initel-current-font)")
-                           :subfamily "Regular"
-                           :size (parse-integer
-                                  (emacs-repl-send-string
-                                   "(+ elephant454initel-font-scale (cdr elephant454initel-current-font))")))))
+  (let ((font-to-apply (emacs-repl-send-string
+                        "(car elephant454initel-current-font)"))
+        (size-to-apply (emacs-repl-send-string
+                         "(+ elephant454initel-font-scale (cdr elephant454initel-current-font))")))
+
+    (handler-case
+         (set-font (make-instance 'xft:font
+                                  :family font-to-apply
+                                  :subfamily "Regular"
+                                  :size (parse-integer size-to-apply)))
+
+      (simple-error (se)
+        (set-font (concat "-*-" font-to-apply "-medium-r-*--"
+                          size-to-apply "-*-*-*-*-*-*-*"))))))
 
 (apply-emacs-colors)
 
