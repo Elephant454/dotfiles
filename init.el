@@ -365,8 +365,8 @@ Lisp function does not specify a special indentation."
     (general-define-key
      ;; Does it make sense for this to apply to insert/emacs states?
      :states '(normal insert emacs motion)
-     "<M-right>" 'next-buffer
-     "<M-left>" 'previous-buffer)
+     "<C-right>" 'next-buffer
+     "<C-left>" 'previous-buffer)
      
     (general-create-definer elephant454initel-main-menu
                             :states '(normal insert visual replace operator motion emacs)
