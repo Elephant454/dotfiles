@@ -789,7 +789,10 @@ Lisp function does not specify a special indentation."
   :ensure nil
   :config (progn
             (use-package evil-mu4e)
-            (setq mu4e-msg2pdf "/usr/bin/msg2pdf")))
+            (setq mu4e-msg2pdf "/usr/bin/msg2pdf"))
+  :general (:keymaps 'mu4e-view-mode-map
+            :states '(normal motion)
+            "p" '(lambda() (interactive) (mu4e-action-view-as-pdf (mu4e-message-at-point)))))
 
 ;; Slime provides a mode and tools for working with lisp. Of particular interest
 ;;  is the abililty to connect to an instance of SBCL and control it. I learned
