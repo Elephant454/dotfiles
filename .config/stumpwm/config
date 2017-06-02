@@ -107,6 +107,12 @@
 (setq *mode-line-position* :bottom)
 (mode-line)
 
+(defvar *window-map* (make-sparse-keymap))
+(define-key *root-map* (kbd "w") '*window-map*)
+(define-key *window-map* (kbd "c") "remove-split")
+(define-key *window-map* (kbd "v") "hsplit")
+(define-key *window-map* (kbd "s") "vsplit")
+
 ;; switch groups with s-[N]
 (stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-1") "gselect 1")
 (stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-2") "gselect 2")
