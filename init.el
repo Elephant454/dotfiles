@@ -343,6 +343,13 @@ Lisp function does not specify a special indentation."
                  ;;(add-hook 'dired-mode-hook 'turn-on-stripe-buffer-mode)
                  ))
 
+;; info is all the way up here so we can unbind space and use it for general
+;;  later
+(use-package info
+  :ensure nil
+  :config (progn
+            (evil-define-key 'motion Info-mode-map [? ] nil)))
+
 ;; do some calculations to figure out where directories should be
 (setq elephant454initel-current-year (nth 5 (decode-time)))
 (setq elephant454initel-current-month (nth 4 (decode-time)))
@@ -1008,13 +1015,6 @@ Lisp function does not specify a special indentation."
             (setq elephant454initel-holiday-symbol "π")
             (setq display-time-format (concat "%a %F %I:%M %p " elephant454initel-holiday-symbol))
             (display-time-mode 0)))
-
-(use-package info
-  :ensure nil
-  ;;:general (:keymaps 'Info-mode-map
-            ;;:states 'motion
-  ;;"<SPC>" 'nil))
-  )
 
 ;; I think this is what I am looking for in terms of centering the text when I
 ;; only want to focus on a single window. Use this to replace darkroom.
