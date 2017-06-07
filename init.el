@@ -363,7 +363,7 @@ Lisp function does not specify a special indentation."
 (use-package general
   :config
   (progn
-    (global-unset-key (kbd "C-<SPC>"))
+    (global-unset-key (kbd "<C-SPC>"))
     
     ;; I have no idea what problem arose, or why this is necessary, but this
     ;;  fixes the problem
