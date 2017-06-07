@@ -924,7 +924,11 @@ Lisp function does not specify a special indentation."
   :config (popwin-mode 1))
 
 ;; workspaces
+;; This is another thing that I'm demanding that I shouldn't need to demand.
+;;  It's better than having errors pop up about the mode-line, though. I still
+;;  want to make my own mode-line for fun, though.
 (use-package eyebrowse
+  :demand
   :config (progn
             (setq eyebrowse-mode-line-style 'hide)
             (eyebrowse-mode 1))
