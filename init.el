@@ -983,7 +983,10 @@ Lisp function does not specify a special indentation."
             (diminish 'undo-tree-mode)
             (diminish 'which-key-mode)
             (diminish 'evil-escape-mode)
-            (diminish 'evil-org-mode)))
+            (diminish 'evil-org-mode)
+            ;; Projectile mode did have a helpful indicator associated with it,
+            ;;  though. It should be re-added to the mode-line in a nicer way.
+            (diminish 'projectile-mode)))
 
 (use-package immortal-scratch)
 
