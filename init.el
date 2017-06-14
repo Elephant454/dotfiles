@@ -404,6 +404,7 @@ Lisp function does not specify a special indentation."
                                    "~/Documents/2017-2018/summer/events.org"))
      "od" (lambda() (interactive) (find-file
                                    "~/org/derp.org"))
+     "oj" 'org-journal-new-entry
      
      ;; modify windows using vim-like keybindings
      "w" '(evil-window-map :which-key "Window")
