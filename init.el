@@ -200,6 +200,7 @@ Lisp function does not specify a special indentation."
 (use-package gotham-theme)
 (use-package purple-haze-theme)
 (use-package nubox)
+(use-package doom-themes)
 ;; I might want this one, also
 ;;(use-package gruvbox)
 
@@ -208,6 +209,7 @@ Lisp function does not specify a special indentation."
 (setq elephant454initel-theme-pairs '((soft-morning . omtose-softer)
                                       (silkworm . foggy-night)
                                       (nubox-light . nubox-dark)
+                                      (doom-one . doom-one)
                                       (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
                                       (apropospriate-light . apropospriate-dark)
                                       (gotham . gotham)
