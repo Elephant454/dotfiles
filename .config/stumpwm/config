@@ -240,8 +240,8 @@
 (setq *time-modeline-string* "%a %F %H:%M:%S")
 (setq *screen-mode-line-format* '("[^B%n^b] %W ^> %B %d"))
 
-(load-module "power")
-(setq power:*lid-state-path* "/proc/acpi/button/lid/LID0/state")
+;;(load-module "power")
+;;(setq power:*lid-state-path* "/proc/acpi/button/lid/LID0/state")
 ;;(power:start-laptop-lid-watcher)
 
 
