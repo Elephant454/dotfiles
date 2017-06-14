@@ -208,7 +208,6 @@ Lisp function does not specify a special indentation."
 (setq elephant454initel-theme-pairs '((soft-morning . omtose-softer)
                                       (silkworm . foggy-night)
                                       (nubox-light . nubox-dark)
-                                      (light-soap . light-soap)
                                       (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
                                       (apropospriate-light . apropospriate-dark)
                                       (gotham . gotham)
