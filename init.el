@@ -1084,7 +1084,8 @@ Lisp function does not specify a special indentation."
 ;; consider ivy-todo, ivy-historian, thinks, monokai-alt-theme, org-brain,
 ;;  arch-packer, bitbucket, html2org, playerctl, flatui-dark-theme,
 ;;  hook-helpers, dakrone-light-theme, turing-machine (this sounds awesome!),
-;;  slstats, flycheck-coverity, counsel-spotify, nubox (theme), shx
+;;  slstats, flycheck-coverity, counsel-spotify, shx, solaire-mode, google,
+;;  google-contacts, google-maps, google-translate, gited
 ;;
 ;; Replace window-numbering with winum?
 
