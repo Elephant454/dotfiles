@@ -606,7 +606,8 @@ Lisp function does not specify a special indentation."
             (setq org-src-fontify-natively t
                   org-list-allow-alphabetical t
                   org-image-actual-width nil
-                  org-format-latex-options (plist-put org-format-latex-options :scale 2.0)))
+                  org-format-latex-options (plist-put org-format-latex-options :scale 2.0)
+                  org-ellipsis " ⤵ "))
   :general (:keymaps 'org-mode-map
             :states 'normal
             "RET" 'org-open-at-point)
