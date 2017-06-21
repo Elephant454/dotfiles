@@ -189,34 +189,22 @@ Lisp function does not specify a special indentation."
 
 ;; I should set up pairs of night themes and day themes. One keybinding cycles
 ;; between pairs and another keybinding switches between day and night.
-(use-package color-theme
-  :defer t)
-(use-package soft-morning-theme
-  :defer t)
-(use-package omtose-phellack-theme
-  :defer t)
-(use-package color-theme-sanityinc-tomorrow
-  :defer t)
-(use-package light-soap-theme
-  :defer t)
-(use-package silkworm-theme
-  :defer t)
-(use-package foggy-night-theme
-  :defer t)
-(use-package apropospriate-theme
-  :defer t)
-(use-package gotham-theme
-  :defer t)
-(use-package purple-haze-theme
-  :defer t)
-(use-package nubox
-  :defer t)
-(use-package doom-themes
-  :defer t)
-(use-package material-theme
-  :defer t)
-;; I might want this one, also
-;;(use-package gruvbox)
+(mapcar #'(lambda (package) (use-package package :defer t))
+        '(color-theme
+          soft-morning-theme
+          omtose-phellack-theme
+          color-theme-sanityinc-tomorrow
+          light-soap-theme
+          silkworm-theme
+          foggy-night-theme
+          apropospriate-theme
+          gotham-theme
+          purple-haze-theme
+          nubox
+          doom-themes
+          material-theme
+          ;; gruvbox
+          ))
 
 ;; cons pairs of themes, with the car being the day variant and the cdr being
 ;;  the night variant
