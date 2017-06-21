@@ -203,6 +203,7 @@ Lisp function does not specify a special indentation."
           nubox
           doom-themes
           material-theme
+          spacemacs-theme
           ;; gruvbox
           ))
 
@@ -215,6 +216,7 @@ Lisp function does not specify a special indentation."
                                       (material-light . material)
                                       (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
                                       (apropospriate-light . apropospriate-dark)
+                                      (spacemacs-light . spacemacs-dark)
                                       (gotham . gotham)
                                       (purple-haze . purple-haze)))
 (setq elephant454initel-current-theme-pair (pop elephant454initel-theme-pairs))
