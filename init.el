@@ -210,6 +210,7 @@ Lisp function does not specify a special indentation."
                                       (silkworm . foggy-night)
                                       (nubox-light . nubox-dark)
                                       (doom-one . doom-one)
+                                      (material-light . material)
                                       (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
                                       (apropospriate-light . apropospriate-dark)
                                       (gotham . gotham)
