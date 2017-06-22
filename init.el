@@ -1100,3 +1100,14 @@ Lisp function does not specify a special indentation."
 
 ;; how does this work?
 (use-package counsel-spotify)
+
+(use-package tramp-term)
+
+(use-package irony
+  :config (progn
+            (use-package company-irony)
+            (add-hook 'c++-mode-hook 'irony-mode)
+            (add-hook 'c-mode-hook 'irony-mode)
+            (add-hook 'objc-mode-hook 'irony-mode)
+
+            (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)))
