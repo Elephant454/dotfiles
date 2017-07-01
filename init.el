@@ -46,7 +46,7 @@
  tab-width 4                ; use four spaces
  c-basic-offset 4           ; yes, also for c
  c-default-style "linux"    ; don't indent brackets
- rainbow-delimiters-mode 1) ; rainbow parentheses!
+ rainbow-delimiters-mode t) ; rainbow parentheses!
 
 ;; modes
 (electric-indent-mode 1)   ; indent automatically
