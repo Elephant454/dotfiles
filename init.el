@@ -1112,3 +1112,10 @@ Lisp function does not specify a special indentation."
             (add-hook 'objc-mode-hook 'irony-mode)
 
             (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)))
+
+(use-package emms
+  :config (progn
+            (use-package emms-player-mpv)
+            (emms-all)
+            (emms-default-players)
+            (add-to-list 'emms-player-list 'emms-player-mpv)))
