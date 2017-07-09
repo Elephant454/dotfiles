@@ -1032,9 +1032,8 @@ Lisp function does not specify a special indentation."
             (setq display-time-format (concat "%a %F %I:%M %p " elephant454initel-holiday-symbol))
             (display-time-mode 0)))
 
-;; I think this is what I am looking for in terms of centering the text when I
-;; only want to focus on a single window. Use this to replace darkroom.
-(use-package writeroom-mode)
+;; used to center buffers in the middle of the screen
+(use-package centered-window-mode)
 
 ;; this still needs to be configured, particularly for the keybindings
 ;;(use-package pocket-api)
