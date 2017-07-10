@@ -952,12 +952,14 @@ Lisp function does not specify a special indentation."
             "g9" 'eyebrowse-switch-to-window-config-9))
 
 ;; improved list-packages manager
+;; what is paradox-execute-asynchronously?
 (use-package paradox
   :init (setq paradox-automatically-star nil
               paradox-github-token t)
   :general (:keymaps 'paradox-menu-mode-map
             :states 'normal
             "q" 'paradox-quit-and-close
+            "x" 'paradox-menu-execute
             ))
 
 ;; improved mode line
