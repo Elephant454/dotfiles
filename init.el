@@ -396,21 +396,6 @@ Lisp function does not specify a special indentation."
      ;; evaluate a snippet of emacs lisp
      ":" 'eval-expression
      
-     ;; org commands
-     ;; again, these should be moved to their own
-     ;;  "org" section
-     "o" '(:ignore t :which-key "Org")
-     "oa" 'org-agenda
-     ;; add some way for the semester and year to
-     ;;  be figured out automatically
-     "ot" (lambda() (interactive) (find-file
-                                   "~/Documents/2017-2018/summer/todo.org"))
-     "oe" (lambda() (interactive) (find-file
-                                   "~/Documents/2017-2018/summer/events.org"))
-     "od" (lambda() (interactive) (find-file
-                                   "~/org/derp.org"))
-     "oj" 'org-journal-new-entry
-     
      ;; modify windows using vim-like keybindings
      "w" '(evil-window-map :which-key "Window")
      
@@ -613,6 +598,19 @@ Lisp function does not specify a special indentation."
                   org-image-actual-width nil
                   org-format-latex-options (plist-put org-format-latex-options :scale 2.0)
                   org-ellipsis " ⤵ "))
+  :general (elephant454initel-main-menu
+            "o" '(:ignore t :which-key "Org")
+            "oa" 'org-agenda
+            ;; add some way for the semester and year to
+            ;;  be figured out automatically
+            "ot" (lambda() (interactive)
+                   (find-file "~/Documents/2017-2018/summer/todo.org"))
+            "oe" (lambda() (interactive)
+                   (find-file "~/Documents/2017-2018/summer/events.org"))
+            "od" (lambda() (interactive)
+                   (find-file "~/org/derp.org"))
+            "oj" 'org-journal-new-entry
+            "oc" 'org-capture)
   :general (:keymaps 'org-mode-map
             :states 'normal
             "RET" 'org-open-at-point)
