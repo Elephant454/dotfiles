@@ -597,7 +597,8 @@ Lisp function does not specify a special indentation."
                   org-list-allow-alphabetical t
                   org-image-actual-width nil
                   org-format-latex-options (plist-put org-format-latex-options :scale 2.0)
-                  org-ellipsis " ⤵ "))
+                  org-ellipsis " ⤵ "
+                  org-default-notes-file (concat org-directory "/notes.org")))
   :general (elephant454initel-main-menu
             "o" '(:ignore t :which-key "Org")
             "oa" 'org-agenda
