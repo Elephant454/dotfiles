@@ -617,8 +617,7 @@ Lisp function does not specify a special indentation."
   :general (elephant454initel-major-mode-menu
             :keymaps 'org-mode-map
              "" '(nil :which-key "Org Mode Commands")
-             "a" 'org-agenda
-             "A" 'org-archive-subtree
+             "a" 'org-archive-subtree
              "h" 'org-toggle-heading
              "e" 'org-export-dispatch
              "E" 'org-edit-special
