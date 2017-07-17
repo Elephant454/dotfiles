@@ -276,7 +276,8 @@ Lisp function does not specify a special indentation."
 (setq elephant454initel-fonts '(("Inconsolata" . 14)
                                 ("Dina" . 14)
                                 ("monofur" . 16)
-                                ("Fantasque Sans Mono" . 14)))
+                                ("Fantasque Sans Mono" . 14)
+                                ("Source Code Pro" . 14)))
       
 (setq elephant454initel-current-font (pop elephant454initel-fonts))
 (setq elephant454initel-font-scale 0)
