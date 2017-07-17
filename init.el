@@ -581,6 +581,9 @@ Lisp function does not specify a special indentation."
 
 ;; org things
 ;; TODO: look into org-dotemacs for organizing this file using org
+;; TODO: org mode confirm for capture is different than with-editor confirm for
+;;  some reason. I might want to submit a patch for that, depending upon what
+;;  the functions look like.
 (use-package org
   :pin gnu  ; use the version from the gnu repo
   :init (progn
