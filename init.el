@@ -1042,6 +1042,9 @@ Lisp function does not specify a special indentation."
 ;; this still needs to be configured, particularly for the keybindings
 ;;(use-package pocket-api)
 (use-package pocket-mode)
+;;(use-package pocket-mode
+  ;;:general (:keymaps 'pocket-mode
+            ;;""))
 
 ;; this is where C-c to save and C-k to cancel come from. Rebind these.
 (use-package with-editor
