@@ -1065,7 +1065,8 @@ Lisp function does not specify a special indentation."
 ;;  of that, is this even necessary?
 (use-package projectile
   :config (progn
-            (projectile-global-mode t)
+            ;; I've disabled it for now, as it seems to break TRAMP
+            ;;(projectile-global-mode t)
             (setq projectile-enable-caching t)
             (use-package counsel-projectile
               :config (progn
