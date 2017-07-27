@@ -205,11 +205,15 @@
   (mode-line))
 
 (ql:quickload 'inferior-shell)
+(defun emacs-repl-send-string (string-to-send)
+  (handler-case
+      (string-trim "\\\""
+                   (string-right-trim (string #\NewLine)
+                                      (inferior-shell:run/s
+                                       `(emacsclient --eval ,string-to-send))))
 
-(defun emacs-repl-send-string (string)
-  (string-left-trim "\\\""
-                    (string-right-trim (concat "\\\"" (string #\NewLine))
-                                       (inferior-shell:run/s `(emacsclient --eval ,string)))))
+    (UIOP/RUN-PROGRAM:subprocess-error (se)
+      (echo "Failed to connect to emacs-daemon. Is it started?"))))
 ;;(car (split-string (inferior-shell:run/s `(emacsclient --eval ,string)) "\\\""))
 
 (defun apply-emacs-colors ()
