@@ -749,7 +749,7 @@ Lisp function does not specify a special indentation."
 
 ;; My first elisp function!
 (defun kill-buffer-file-name ()
-  "Kill the name of the current file to the clipboard"
+  "Kill the name of the current file to the clipboard."
   (interactive)
   (kill-new (buffer-file-name)))
 
