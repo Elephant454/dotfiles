@@ -167,7 +167,7 @@
 (define-key *application-map* (kbd "f") "exec firefox")
 (define-key *application-map* (kbd "u") "exec urxvt")
 (define-key *application-map* (kbd "c") "exec google-chrome-stable")
-(define-key *application-map* (kbd "r") "exec rofi -show run")
+(define-key *application-map* (kbd "r") "exec riot-desktop")
 (define-key *application-map* (kbd "s") "exec spotify")
 (define-key *application-map* (kbd "S") "exec skypeforlinux")
 (define-key *application-map* (kbd "p") "exec pavucontrol")
