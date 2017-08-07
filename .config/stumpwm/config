@@ -335,3 +335,9 @@
 ;; this successfully sends a command from emacs lisp to stumpwm
 ;;(slime-connect "localhost" "4004")
 ;;(slime-repl-send-string "(stumpwm:echo \"hi\")")
+
+;; some external applications to start up
+(run-shell-command "redshift")
+(run-shell-command "compton --config /home/matthew/.comptonrc")
+(run-shell-command "ssh-agent /usr/local/bin/stumpwm")
+(run-shell-command "/home/matthew/.fehbg")
