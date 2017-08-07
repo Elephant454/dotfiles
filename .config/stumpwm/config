@@ -212,14 +212,17 @@
                                       (inferior-shell:run/s
                                        `(emacsclient --eval ,string-to-send))))
 
-    (UIOP/RUN-PROGRAM:subprocess-error (se)
-      (echo "Failed to connect to emacs-daemon. Is it started?"))))
+    (UIOP/RUN-PROGRAM:subprocess-error (spe)
+      ;;(echo "Failed to connect to emacs-daemon. Is it started?")
+      (cerror "Failed to connect to send ~s emacs-daemon. Is it running?" string-to-send))))
 ;;(car (split-string (inferior-shell:run/s `(emacsclient --eval ,string)) "\\\""))
 
 (defun apply-emacs-colors ()
+  (handler-case
   (apply-foreground-background
    (emacs-repl-send-string "(face-foreground 'default)")
-   (emacs-repl-send-string "(face-background 'default)")))
+   (emacs-repl-send-string "(face-background 'default)"))
+    (simple-error (se) (echo "Failed to apply emacs colors."))))
 
 (defun apply-emacs-font ()
   (let ((font-to-apply (emacs-repl-send-string
