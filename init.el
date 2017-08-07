@@ -1095,7 +1095,8 @@ Lisp function does not specify a special indentation."
 ;;  google-contacts, google-maps, google-translate, gited, treemacs (and
 ;;  treemacs-evil), coin-ticker, bifocal, dad-joke, github-modern-theme,
 ;;  ob-fsharp, ob-rust, org-static-blog, rainbow-identifiers, rainbow-blocks,
-;;  easy-escape, emacs-lsp, face-explorer, makefile-executor, numbers,
+;;  easy-escape, emacs-lsp, face-explorer, makefile-executor, numbers, bifocal,
+;;  coin-ticker, whatever that weather thing was from Spacemacs?
 ;;
 ;; Replace window-numbering with winum?
 
