@@ -968,23 +968,23 @@ Lisp function does not specify a special indentation."
             ))
 
 ;; improved mode line
-(use-package telephone-line
-  :config (progn
-            (telephone-line-defsegment telephone-line-window-numbering (list (number-to-string (eyebrowse--get 'current-slot)) "|" (window-numbering-get-number-string)))
-            (setq telephone-line-lhs
-                  '(
-                    ;;(evil   . (telephone-line-evil-tag-segment))
-                    (evil   . (telephone-line-window-numbering))
-                    (accent . (telephone-line-vc-segment
-                               telephone-line-erc-modified-channels-segment
-                               telephone-line-process-segment))
-                    (nil    . (telephone-line-buffer-segment
-                               telephone-line-minor-mode-segment))))
-            (setq telephone-line-rhs
-                  '((nil    . (telephone-line-misc-info-segment))
-                    (accent . (telephone-line-major-mode-segment))
-                    (evil   . (telephone-line-airline-position-segment))))
-            (telephone-line-mode t)))
+;;(use-package telephone-line
+  ;;:config (progn
+            ;;(telephone-line-defsegment telephone-line-window-numbering (list (number-to-string (eyebrowse--get 'current-slot)) "|" (window-numbering-get-number-string)))
+            ;;(setq telephone-line-lhs
+                  ;;'(
+                    ;;;;(evil   . (telephone-line-evil-tag-segment))
+                    ;;(evil   . (telephone-line-window-numbering))
+                    ;;(accent . (telephone-line-vc-segment
+                               ;;telephone-line-erc-modified-channels-segment
+                               ;;telephone-line-process-segment))
+                    ;;(nil    . (telephone-line-buffer-segment
+                               ;;telephone-line-minor-mode-segment))))
+            ;;(setq telephone-line-rhs
+                  ;;'((nil    . (telephone-line-misc-info-segment))
+                    ;;(accent . (telephone-line-major-mode-segment))
+                    ;;(evil   . (telephone-line-airline-position-segment))))
+            ;;(telephone-line-mode t)))
 
 ;; used to hide minor modes or give them alternative names for the modeline
 ;;
