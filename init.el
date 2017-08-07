@@ -1128,3 +1128,10 @@ Lisp function does not specify a special indentation."
             (emms-all)
             (emms-default-players)
             (add-to-list 'emms-player-list 'emms-player-mpv)))
+(use-package anaconda-mode
+  :config (progn
+            (use-package company-anaconda)
+            (add-hook 'python-mode-hook 'anaconda-mode)
+            (add-hook 'python-mode-hook 'anaconda-eldoc-mode)))
+(use-package yapfify
+  :config (add-hook 'python-mode-hook 'yapf-mode))
