@@ -166,6 +166,7 @@ Lisp function does not specify a special indentation."
   (package-refresh-contents)
   (package-install 'use-package))
 (require 'use-package)
+(use-package use-package)
 
 ;; load secret settings (location, passwords, etc)
 (add-to-list 'load-path (concat user-emacs-directory "config/"))
