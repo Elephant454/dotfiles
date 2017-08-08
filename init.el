@@ -166,6 +166,7 @@ Lisp function does not specify a special indentation."
   (package-refresh-contents)
   (package-install 'use-package))
 (require 'use-package)
+(use-package use-package)
 
 ;; load secret settings (location, passwords, etc)
 (add-to-list 'load-path (concat user-emacs-directory "config/"))
@@ -276,7 +277,8 @@ Lisp function does not specify a special indentation."
 (setq elephant454initel-fonts '(("Inconsolata" . 14)
                                 ("Dina" . 14)
                                 ("monofur" . 16)
-                                ("Fantasque Sans Mono" . 14)))
+                                ("Fantasque Sans Mono" . 14)
+                                ("Source Code Pro" . 14)))
       
 (setq elephant454initel-current-font (pop elephant454initel-fonts))
 (setq elephant454initel-font-scale 0)
@@ -580,6 +582,9 @@ Lisp function does not specify a special indentation."
 
 ;; org things
 ;; TODO: look into org-dotemacs for organizing this file using org
+;; TODO: org mode confirm for capture is different than with-editor confirm for
+;;  some reason. I might want to submit a patch for that, depending upon what
+;;  the functions look like.
 (use-package org
   :pin gnu  ; use the version from the gnu repo
   :init (progn
@@ -744,7 +749,7 @@ Lisp function does not specify a special indentation."
 
 ;; My first elisp function!
 (defun kill-buffer-file-name ()
-  "Kill the name of the current file to the clipboard"
+  "Kill the name of the current file to the clipboard."
   (interactive)
   (kill-new (buffer-file-name)))
 
@@ -963,23 +968,23 @@ Lisp function does not specify a special indentation."
             ))
 
 ;; improved mode line
-(use-package telephone-line
-  :config (progn
-            (telephone-line-defsegment telephone-line-window-numbering (list (number-to-string (eyebrowse--get 'current-slot)) "|" (window-numbering-get-number-string)))
-            (setq telephone-line-lhs
-                  '(
-                    ;;(evil   . (telephone-line-evil-tag-segment))
-                    (evil   . (telephone-line-window-numbering))
-                    (accent . (telephone-line-vc-segment
-                               telephone-line-erc-modified-channels-segment
-                               telephone-line-process-segment))
-                    (nil    . (telephone-line-buffer-segment
-                               telephone-line-minor-mode-segment))))
-            (setq telephone-line-rhs
-                  '((nil    . (telephone-line-misc-info-segment))
-                    (accent . (telephone-line-major-mode-segment))
-                    (evil   . (telephone-line-airline-position-segment))))
-            (telephone-line-mode t)))
+;;(use-package telephone-line
+  ;;:config (progn
+            ;;(telephone-line-defsegment telephone-line-window-numbering (list (number-to-string (eyebrowse--get 'current-slot)) "|" (window-numbering-get-number-string)))
+            ;;(setq telephone-line-lhs
+                  ;;'(
+                    ;;;;(evil   . (telephone-line-evil-tag-segment))
+                    ;;(evil   . (telephone-line-window-numbering))
+                    ;;(accent . (telephone-line-vc-segment
+                               ;;telephone-line-erc-modified-channels-segment
+                               ;;telephone-line-process-segment))
+                    ;;(nil    . (telephone-line-buffer-segment
+                               ;;telephone-line-minor-mode-segment))))
+            ;;(setq telephone-line-rhs
+                  ;;'((nil    . (telephone-line-misc-info-segment))
+                    ;;(accent . (telephone-line-major-mode-segment))
+                    ;;(evil   . (telephone-line-airline-position-segment))))
+            ;;(telephone-line-mode t)))
 
 ;; used to hide minor modes or give them alternative names for the modeline
 ;;
@@ -1038,6 +1043,9 @@ Lisp function does not specify a special indentation."
 ;; this still needs to be configured, particularly for the keybindings
 ;;(use-package pocket-api)
 (use-package pocket-mode)
+;;(use-package pocket-mode
+  ;;:general (:keymaps 'pocket-mode
+            ;;""))
 
 ;; this is where C-c to save and C-k to cancel come from. Rebind these.
 (use-package with-editor
@@ -1058,7 +1066,8 @@ Lisp function does not specify a special indentation."
 ;;  of that, is this even necessary?
 (use-package projectile
   :config (progn
-            (projectile-global-mode t)
+            ;; I've disabled it for now, as it seems to break TRAMP
+            ;;(projectile-global-mode t)
             (setq projectile-enable-caching t)
             (use-package counsel-projectile
               :config (progn
@@ -1120,3 +1129,17 @@ Lisp function does not specify a special indentation."
             (emms-all)
             (emms-default-players)
             (add-to-list 'emms-player-list 'emms-player-mpv)))
+
+(use-package anaconda-mode
+  :config (progn
+            (use-package company-anaconda)
+            (add-hook 'python-mode-hook 'anaconda-mode)
+            (add-hook 'python-mode-hook 'anaconda-eldoc-mode)))
+(use-package yapfify
+  :config (add-hook 'python-mode-hook 'yapf-mode))
+
+(use-package flycheck
+  :config (global-flycheck-mode t))
+
+(provide 'init)
+;;; init.el ends here

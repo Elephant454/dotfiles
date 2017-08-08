@@ -125,7 +125,7 @@
 (define-key *application-map* (kbd "f") "exec firefox")
 (define-key *application-map* (kbd "u") "exec urxvt")
 (define-key *application-map* (kbd "c") "exec google-chrome-stable")
-(define-key *application-map* (kbd "r") "exec rofi -show run")
+(define-key *application-map* (kbd "r") "exec riot-desktop")
 (define-key *application-map* (kbd "s") "exec spotify")
 (define-key *application-map* (kbd "S") "exec skypeforlinux")
 (define-key *application-map* (kbd "p") "exec pavucontrol")
@@ -163,17 +163,24 @@
   (mode-line))
 
 (ql:quickload 'inferior-shell)
+(defun emacs-repl-send-string (string-to-send)
+  (handler-case
+      (string-trim "\\\""
+                   (string-right-trim (string #\NewLine)
+                                      (inferior-shell:run/s
+                                       `(emacsclient --eval ,string-to-send))))
 
-(defun emacs-repl-send-string (string)
-  (string-left-trim "\\\""
-                    (string-right-trim (concat "\\\"" (string #\NewLine))
-                                       (inferior-shell:run/s `(emacsclient --eval ,string)))))
+    (UIOP/RUN-PROGRAM:subprocess-error (spe)
+      ;;(echo "Failed to connect to emacs-daemon. Is it started?")
+      (cerror "Failed to connect to send ~s emacs-daemon. Is it running?" string-to-send))))
 ;;(car (split-string (inferior-shell:run/s `(emacsclient --eval ,string)) "\\\""))
 
 (defun apply-emacs-colors ()
-(apply-foreground-background
- (emacs-repl-send-string "(face-foreground 'default)")
- (emacs-repl-send-string "(face-background 'default)")))
+  (handler-case
+  (apply-foreground-background
+   (emacs-repl-send-string "(face-foreground 'default)")
+   (emacs-repl-send-string "(face-background 'default)"))
+    (simple-error (se) (echo "Failed to apply emacs colors."))))
 
 (defun apply-emacs-font ()
   (let ((font-to-apply (emacs-repl-send-string
@@ -284,3 +291,9 @@
 ;; this successfully sends a command from emacs lisp to stumpwm
 ;;(slime-connect "localhost" "4004")
 ;;(slime-repl-send-string "(stumpwm:echo \"hi\")")
+
+;; some external applications to start up
+(run-shell-command "redshift")
+(run-shell-command "compton --config /home/matthew/.comptonrc")
+(run-shell-command "ssh-agent /usr/local/bin/stumpwm")
+(run-shell-command "/home/matthew/.fehbg")
