@@ -1143,5 +1143,9 @@ Lisp function does not specify a special indentation."
 (use-package flycheck
   :config (global-flycheck-mode t))
 
+(use-package langtool
+  :config (setq langtool-java-classpath
+                "/usr/share/languagetool:/usr/share/java/languagetool/*"))
+
 (provide 'init)
 ;;; init.el ends here
