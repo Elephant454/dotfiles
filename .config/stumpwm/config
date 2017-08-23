@@ -297,3 +297,8 @@
 (run-shell-command "compton --config /home/matthew/.comptonrc")
 (run-shell-command "ssh-agent /usr/local/bin/stumpwm")
 (run-shell-command "/home/matthew/.fehbg")
+
+(run-shell-command "setxkbmap -option compose:caps")
+(run-shell-command "setxkbmap -option grp:shifts_toggle")
+(run-shell-command "setxkbmap us,gr")
+(run-shell-command "numlockx")
