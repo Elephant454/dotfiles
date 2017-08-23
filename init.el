@@ -517,7 +517,7 @@ Lisp function does not specify a special indentation."
   :config (progn
             ;; This is really silly. There is certainly a better way to not have
             ;;  it add numbers to the modeline.
-            (add-hook 'window-numbering-mode-hook 'window-numbering-clear-mode-line)
+            ;;(add-hook 'window-numbering-mode-hook 'window-numbering-clear-mode-line)
             (window-numbering-mode 1))
             
   :general (:keymaps 'evil-window-map
@@ -943,7 +943,7 @@ Lisp function does not specify a special indentation."
 (use-package eyebrowse
   :demand
   :config (progn
-            (setq eyebrowse-mode-line-style 'hide)
+            (setq eyebrowse-mode-line-style 'smart)
             (eyebrowse-mode 1))
   :general (:keymaps 'evil-window-map
             "g" '(nil :which-key "Groups")
