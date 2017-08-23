@@ -1108,7 +1108,8 @@ Lisp function does not specify a special indentation."
 ;;  ob-fsharp, ob-rust, org-static-blog, rainbow-identifiers, rainbow-blocks,
 ;;  easy-escape, emacs-lsp, face-explorer, makefile-executor, numbers, bifocal,
 ;;  coin-ticker, whatever that weather thing was from Spacemacs?, outline-toc,
-;;  org2web, shrink-path
+;;  org2web, shrink-path, ebdb, company-ebdb, counsel-ebdb, org-mind-map,
+;;  outrespace, cask, smartparens
 ;;
 ;; Replace window-numbering with winum?
 
