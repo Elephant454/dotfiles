@@ -821,10 +821,10 @@ Lisp function does not specify a special indentation."
             (use-package evil-magit))
   :general (:states '(normal emacs insert visual motion)
             :keymaps 'magit-mode-map
-            "M-1" 'select-window-1
-            "M-2" 'select-window-2
-            "M-3" 'select-window-3
-            "M-4" 'select-window-4)
+            "M-1" 'winum-select-window-1
+            "M-2" 'winum-select-window-2
+            "M-3" 'winum-select-window-3
+            "M-4" 'winum-select-window-4)
   :general (elephant454initel-main-menu
             "g" 'magit-status
             "G" 'magit-dispatch-popup))
