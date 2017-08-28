@@ -981,7 +981,9 @@ Lisp function does not specify a special indentation."
             "g6" 'eyebrowse-switch-to-window-config-6
             "g7" 'eyebrowse-switch-to-window-config-7
             "g8" 'eyebrowse-switch-to-window-config-8
-            "g9" 'eyebrowse-switch-to-window-config-9))
+            "g9" 'eyebrowse-switch-to-window-config-9
+
+            "gc" 'eyebrowse-close-window-config-prompt))
 
 ;; improved list-packages manager
 ;; what is paradox-execute-asynchronously?
