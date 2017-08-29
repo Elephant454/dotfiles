@@ -512,25 +512,50 @@ Lisp function does not specify a special indentation."
 (use-package sudo-edit)
 
 ;; This allows for switching between windows so we can 
-(use-package window-numbering
-  :demand
-  :config (progn
+;;(use-package window-numbering
+  ;;:demand
+  ;;:config (progn
             ;; This is really silly. There is certainly a better way to not have
             ;;  it add numbers to the modeline.
             ;;(add-hook 'window-numbering-mode-hook 'window-numbering-clear-mode-line)
-            (window-numbering-mode 1))
-            
+;;(window-numbering-mode 1))
+(use-package winum
+  :demand
+  :config (winum-mode 1)
   :general (:keymaps 'evil-window-map
-            "0" 'select-window-0
-            "1" 'select-window-1
-            "2" 'select-window-2
-            "3" 'select-window-3
-            "4" 'select-window-4
-            "5" 'select-window-5
-            "6" 'select-window-6
-            "7" 'select-window-7
-            "8" 'select-window-8
-            "9" 'select-window-9))
+            "0" 'winum-select-window-0
+            "1" 'winum-select-window-1
+            "2" 'winum-select-window-2
+            "3" 'winum-select-window-3
+            "4" 'winum-select-window-4
+            "5" 'winum-select-window-5
+            "6" 'winum-select-window-6
+            "7" 'winum-select-window-7
+            "8" 'winum-select-window-8
+            "9" 'winum-select-window-9)
+  :general (elephant454initel-main-menu
+            "0" 'winum-select-window-0
+            "1" 'winum-select-window-1
+            "2" 'winum-select-window-2
+            "3" 'winum-select-window-3
+            "4" 'winum-select-window-4
+            "5" 'winum-select-window-5
+            "6" 'winum-select-window-6
+            "7" 'winum-select-window-7
+            "8" 'winum-select-window-8
+            "9" 'winum-select-window-9)
+  :general (:states '(normal insert visual replace operator motion emacs)
+            "M-0" 'winum-select-window-0
+            "M-1" 'winum-select-window-1
+            "M-2" 'winum-select-window-2
+            "M-3" 'winum-select-window-3
+            "M-4" 'winum-select-window-4
+            "M-5" 'winum-select-window-5
+            "M-6" 'winum-select-window-6
+            "M-7" 'winum-select-window-7
+            "M-8" 'winum-select-window-8
+            "M-9" 'winum-select-window-9))
+                            
 
 (use-package window-purpose)
 
@@ -804,10 +829,10 @@ Lisp function does not specify a special indentation."
             (use-package evil-magit))
   :general (:states '(normal emacs insert visual motion)
             :keymaps 'magit-mode-map
-            "M-1" 'select-window-1
-            "M-2" 'select-window-2
-            "M-3" 'select-window-3
-            "M-4" 'select-window-4)
+            "M-1" 'winum-select-window-1
+            "M-2" 'winum-select-window-2
+            "M-3" 'winum-select-window-3
+            "M-4" 'winum-select-window-4)
   :general (elephant454initel-main-menu
             "g" 'magit-status
             "G" 'magit-dispatch-popup))
@@ -964,7 +989,9 @@ Lisp function does not specify a special indentation."
             "g6" 'eyebrowse-switch-to-window-config-6
             "g7" 'eyebrowse-switch-to-window-config-7
             "g8" 'eyebrowse-switch-to-window-config-8
-            "g9" 'eyebrowse-switch-to-window-config-9))
+            "g9" 'eyebrowse-switch-to-window-config-9
+
+            "gc" 'eyebrowse-close-window-config-prompt))
 
 ;; improved list-packages manager
 ;; what is paradox-execute-asynchronously?
@@ -1117,8 +1144,8 @@ Lisp function does not specify a special indentation."
 ;;  easy-escape, emacs-lsp, face-explorer, makefile-executor, numbers, bifocal,
 ;;  coin-ticker, whatever that weather thing was from Spacemacs?, outline-toc,
 ;;  org2web, shrink-path, ebdb, company-ebdb, counsel-ebdb, org-mind-map,
-;;  outrespace, cask, smartparens, green-is-the-new-black, snazzy-theme
-;;
+;;  outrespace, cask, smartparens, company-math, green-is-the-new-black,
+;;  snazzy-theme
 ;; Replace window-numbering with winum?
 
 ;; how does this work?
