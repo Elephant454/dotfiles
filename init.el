@@ -596,7 +596,15 @@ Lisp function does not specify a special indentation."
           (use-package org-bullets)
           (use-package org-journal)
           (use-package org-clock-today
-            :config (org-clock-today-mode 1)))
+            :config (org-clock-today-mode 1))
+          (use-package org-alert
+            ;; org-alert checks for things scheduled or due the current day
+            ;;  every 300 seconds. It is not a replacement for alerts on your
+            ;;  phone (I don't think). It's disabled for now. Look into it more
+            ;;  later.
+            :config (progn
+                      (setq alert-default-style 'libnotify)
+                      (org-alert-disable))))
   :config (progn
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1)))
             (add-hook 'org-mode-hoook 'turn-on-stripe-table-mode)
