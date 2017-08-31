@@ -718,7 +718,10 @@ Lisp function does not specify a special indentation."
             "r" 'pdf-view-revert-buffer
             "t" 'pdf-annot-attachment-dired
             "n" 'pdf-view-midnight-minor-mode
-            "/" 'pdf-isearch))
+            "/" 'pdf-isearch
+            ;; selection
+            "<down-mouse-1>" 'pdf-view-mouse-set-region
+            "y" 'pdf-view-kill-ring-save))
 
 ;; I might want to add more from the latex spacemacs layer. Folding in
 ;; particular sounds interesting.
