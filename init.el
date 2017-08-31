@@ -632,7 +632,8 @@ Lisp function does not specify a special indentation."
                       (org-alert-disable))))
   :config (progn
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1)))
-            (add-hook 'org-mode-hoook 'turn-on-stripe-table-mode)
+            ;;(add-hook 'org-mode-hook 'turn-on-stripe-table-mode)
+            (add-hook 'org-mode-hook (lambda() (auto-fill-mode 1)))
             (setq org-src-fontify-natively t
                   org-list-allow-alphabetical t
                   org-image-actual-width nil
