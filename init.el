@@ -886,7 +886,7 @@ Lisp function does not specify a special indentation."
   :config (progn
             (setq inferior-lisp-program "sbcl")
             ;; I'm certain that there is a better way to do this.
-            (load (expand-file-name "~/quicklisp/slime-helper.el")))
+            (load (expand-file-name "~/quicklisp/slime-helper.el") t))
   :general (elephant454initel-main-menu
             "as" 'run-or-raise-stumpwm-repl))
 
