@@ -394,6 +394,8 @@ Lisp function does not specify a special indentation."
     (elephant454initel-main-menu
      ;; double tap Space for M-x
      "<SPC>" '(execute-extended-command :which-key "Main Menu")
+
+     "u" 'universal-argument
      
      ;; evaluate a snippet of emacs lisp
      ":" 'eval-expression
