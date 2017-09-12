@@ -1149,8 +1149,8 @@ Lisp function does not specify a special indentation."
 ;;  coin-ticker, whatever that weather thing was from Spacemacs?, outline-toc,
 ;;  org2web, shrink-path, ebdb, company-ebdb, counsel-ebdb, org-mind-map,
 ;;  outrespace, cask, smartparens, company-math, green-is-the-new-black,
-;;  snazzy-theme
-;; Replace window-numbering with winum?
+;;  snazzy-theme, auto-correct, dired-sidebar, treemacs-projectile,
+;;  ivy-lobsters, nov (nov.el)
 
 ;; how does this work?
 (use-package counsel-spotify)
