@@ -202,12 +202,6 @@
 
 (load-module "battery-portable")
 
-
-;;(load-module "power")
-;;(setq power:*lid-state-path* "/proc/acpi/button/lid/LID0/state")
-;;(power:start-laptop-lid-watcher)
-
-
 ;;;; This is where all the gaps stuff goes. This should really be its own file,
 ;;;;  and ideally it would be it's own module, but later.
 (defvar *useless-gaps-size* 10)
