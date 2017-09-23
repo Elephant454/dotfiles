@@ -909,6 +909,9 @@ Lisp function does not specify a special indentation."
 ;; Is it possible to have something besides M-o to save a word to the
 ;;  dictionary? 
 
+;; Maybe I should be using aspell instead, because I can set up spell checking
+;;  for Camel Case words?
+;;  http://blog.binchen.org/posts/what-s-the-best-spell-check-set-up-in-emacs.html
 (use-package flyspell
   :ensure nil
   :init (progn
