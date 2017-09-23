@@ -1157,7 +1157,8 @@ Lisp function does not specify a special indentation."
 ;;  org2web, shrink-path, ebdb, company-ebdb, counsel-ebdb, org-mind-map,
 ;;  outrespace, cask, smartparens, company-math, green-is-the-new-black,
 ;;  snazzy-theme, auto-correct, dired-sidebar, treemacs-projectile,
-;;  ivy-lobsters, nov (nov.el)
+;;  ivy-lobsters, nov (nov.el), achievements, comment-tags, flex-compile,
+;;  org-projectile, org-super-agenda
 
 ;; how does this work?
 (use-package counsel-spotify)
