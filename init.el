@@ -617,6 +617,8 @@ Lisp function does not specify a special indentation."
 (use-package org
   :pin gnu  ; use the version from the gnu repo
   :init (progn
+          (use-package ox-latex
+            :ensure nil)
           (use-package evil-org
             :init (use-package evil-leader))
           (use-package org-pomodoro)
