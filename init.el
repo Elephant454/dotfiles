@@ -45,8 +45,7 @@
  indent-tabs-mode nil       ; use spaces, not tabs
  tab-width 4                ; use four spaces
  c-basic-offset 4           ; yes, also for c
- c-default-style "linux"    ; don't indent brackets
- rainbow-delimiters-mode t) ; rainbow parentheses!
+ c-default-style "linux")   ; don't indent brackets
 
 ;; modes
 (electric-indent-mode 1)   ; indent automatically
@@ -483,7 +482,7 @@ Lisp function does not specify a special indentation."
 
 ;; give parenthesis matching colors based upon depth
 (use-package rainbow-delimiters
-  :config (rainbow-delimiters-mode 1))
+  :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 ;; for all of your Java/Scala needs
 (use-package ensime
