@@ -454,7 +454,8 @@ Lisp function does not specify a special indentation."
      "tfd" 'elephant454initel-decrease-font-size
      ;; misc toggles
      "ta" '(auto-fill-mode 1)
-     "tr" '(lambda() (interactive) (if (y-or-n-p "Really restart emacs?") 'restart-emacs))
+     "tr" '(lambda() (interactive)
+             (if (yes-or-no-p "Really restart Emacs? ") 'restart-emacs))
      
      "a" '(:ignore t :which-key "Applications")
      "ap" '(paradox-list-packages)
