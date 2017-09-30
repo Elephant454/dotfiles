@@ -832,6 +832,10 @@ Lisp function does not specify a special indentation."
             "q"   'bubbles-quit)
   :config (setq bubbles-game-theme 'medium))
 
+(use-package tetris
+  :ensure nil
+  :general (elephant454initel-main-menu "agt" 'tetris))
+
 (use-package magit
   :config (progn
             (use-package evil-magit))
