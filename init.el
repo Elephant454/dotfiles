@@ -455,7 +455,7 @@ Lisp function does not specify a special indentation."
      ;; misc toggles
      "ta" '(auto-fill-mode 1)
      "tr" '(lambda() (interactive)
-             (if (yes-or-no-p "Really restart Emacs? ") 'restart-emacs))
+             (if (yes-or-no-p "Really restart Emacs? ") (restart-emacs)))
      
      "a" '(:ignore t :which-key "Applications")
      "ap" '(paradox-list-packages)
