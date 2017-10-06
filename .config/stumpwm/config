@@ -172,6 +172,9 @@
           my-value)))))
 
 ;; apply a foreground and background color to various aspects of the UI
+;;
+;; Note: take what's here and create a function for nicely creating colored
+;;  strings
 (defun apply-foreground-background (foreground background)
   (set-fg-color foreground)
   (set-fg-color background)
@@ -181,6 +184,9 @@
   (set-win-bg-color foreground)
   (set-focus-color foreground)
   (set-unfocus-color background)
+  (setq *bar-med-color* (concat "^(:fg \"" (dim-hex-color foreground 10) "\")"))
+  (setq *bar-hi-color* (concat "^(:fg \"" (dim-hex-color foreground 5) "\")"))
+  (setq *bar-crit-color* (concat "^(:fg \"" foreground "\")"))
   (mode-line)
   (mode-line))
 
