@@ -205,6 +205,7 @@ Lisp function does not specify a special indentation."
           material-theme
           spacemacs-theme
           ;; gruvbox
+          dracula-theme
           ))
 
 ;; cons pairs of themes, with the car being the day variant and the cdr being
@@ -213,6 +214,7 @@ Lisp function does not specify a special indentation."
                                       (silkworm . foggy-night)
                                       (nubox-light . nubox-dark)
                                       (doom-one . doom-one)
+                                      (dracula . purple-haze)
                                       (material-light . material)
                                       (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
                                       (apropospriate-light . apropospriate-dark)
