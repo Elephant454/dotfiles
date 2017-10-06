@@ -151,7 +151,30 @@
 (define-key *top-map* (kbd "Print") "exec gnome-screenshot")
 
 
+(ql:quickload 'cl-colors)
+
+(defun dim-hex-color (hex-color-to-dim ammount)
+  (let* ((hsv-color-to-dim
+         (cl-colors:as-hsv
+          (cl-colors:parse-hex-rgb hex-color-to-dim :start 1)))
+         (my-hue (cl-colors:hsv-hue hsv-color-to-dim))
+         (my-saturation (cl-colors:hsv-saturation hsv-color-to-dim))
+         (my-value (cl-colors:hsv-value hsv-color-to-dim)))
+
+    (cl-colors:print-hex-rgb
+     (cl-colors:hsv
+      my-hue
+      (if (> (* my-saturation 239) (- ammount 1))
+          (- my-saturation (/ ammount 239))
+          my-saturation)
+      (if (> (* my-value 255) (- ammount 1))
+          (- my-value (/ ammount 255))
+          my-value)))))
+
 ;; apply a foreground and background color to various aspects of the UI
+;;
+;; Note: take what's here and create a function for nicely creating colored
+;;  strings
 (defun apply-foreground-background (foreground background)
   (set-fg-color foreground)
   (set-fg-color background)
@@ -161,6 +184,9 @@
   (set-win-bg-color foreground)
   (set-focus-color foreground)
   (set-unfocus-color background)
+  (setq *bar-med-color* (concat "^(:fg \"" (dim-hex-color foreground 10) "\")"))
+  (setq *bar-hi-color* (concat "^(:fg \"" (dim-hex-color foreground 5) "\")"))
+  (setq *bar-crit-color* (concat "^(:fg \"" foreground "\")"))
   (mode-line)
   (mode-line))
 
