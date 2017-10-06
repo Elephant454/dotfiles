@@ -1162,7 +1162,7 @@ Lisp function does not specify a special indentation."
 ;;  outrespace, cask, smartparens, company-math, green-is-the-new-black,
 ;;  snazzy-theme, auto-correct, dired-sidebar, treemacs-projectile,
 ;;  ivy-lobsters, nov (nov.el), achievements, comment-tags, flex-compile,
-;;  org-projectile, org-super-agenda
+;;  org-projectile, org-super-agenda, avk-emacs-themes
 
 ;; how does this work?
 (use-package counsel-spotify)
