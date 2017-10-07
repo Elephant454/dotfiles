@@ -264,6 +264,20 @@ Lisp function does not specify a special indentation."
                                           ;;")"))
     theme-to-apply))
 
+(defun elephant454initel-jump-to-theme (theme-to-jump-to)
+  "Jump to THEME-TO-JUMP-TO by cycling to it's place in the list and toggling `elephant454initel-use-day-theme'appropriately."
+  (let ((starting-theme-pair elephant454initel-current-theme-pair)
+        (starting-use-day-theme elephant454initel-use-day-theme))
+    (while
+        (not
+         (or (eq (elephant454initel-toggle-use-day-theme) theme-to-jump-to)
+             (eq (elephant454initel-cycle-theme-pairs) theme-to-jump-to)
+             (eq elephant454initel-current-theme-pair starting-theme-pair))))
+
+    (if (and (eq elephant454initel-current-theme-pair starting-theme-pair)
+             (not (eq elephant454initel-use-day-theme starting-use-day-theme)))
+        (elephant454initel-toggle-use-day-theme))))
+
 (elephant454initel-load-theme)
 
 ;; fonts
