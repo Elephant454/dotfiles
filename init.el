@@ -262,7 +262,7 @@ Lisp function does not specify a special indentation."
                                           ;;" "
                                           ;;(face-background 'default)
                                           ;;")"))
-    (print theme-to-apply)))
+    theme-to-apply))
 
 (elephant454initel-load-theme)
 
