@@ -334,7 +334,8 @@ Lisp function does not specify a special indentation."
               (slime-connect "localhost" "4004"))
           (slime-repl-send-string "(in-package stumpwm)")
           (slime-repl-send-string "(apply-emacs-font)")))
-    (print font-to-set)))
+    ;;(print font-to-set)))
+    font-to-set))
 
 ;;(elephant454initel-load-font)
 
