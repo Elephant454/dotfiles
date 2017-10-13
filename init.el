@@ -606,9 +606,11 @@ Lisp function does not specify a special indentation."
   :init (defun lookup-current-spotify-lyrics ()
           "Lookup lyrics for the currently playing Spotify song."
           (interactive)
-          (let ((spotify-current-list (split-string (spotify-current) " / ")))
-            (lyrics (car spotify-current-list)
-                    (nth 1 (split-string (nth 2 spotify-current-list) ": ")))))
+          (let ((metadata (spotify-dbus-get-property
+                           "org.mpris.MediaPlayer2.Player" "Metadata")))
+            (lyrics (caaadr (assoc "xesam:artist" metadata))
+                    (caadr (assoc "xesam:title" metadata)))))
+
   :general (elephant454initel-main-menu "al" 'lookup-current-spotify-lyrics
                                         "aL" 'lyrics))
 
