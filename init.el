@@ -280,6 +280,9 @@ Lisp function does not specify a special indentation."
 
 (elephant454initel-load-theme)
 
+;; load default theme
+;;(elephant454initel-jump-to-theme 'dracula)
+
 ;; fonts
 ;; there should really be a way to set the font size independently, or perhaps a
 ;;  way to increase font size only if I'm on my laptop
