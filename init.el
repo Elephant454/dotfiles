@@ -459,8 +459,7 @@ Lisp function does not specify a special indentation."
   :config (progn
             (ivy-mode 1)
             (use-package counsel
-              :general (:keymaps 'help-command
-                        ;;:states '(normal insert visual replace operator motion emacs)
+              :general (:keymaps 'help-map
                         "b" 'counsel-descbinds))
             (use-package swiper
               :general (:states '(normal insert visual replace operator motion emacs)
