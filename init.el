@@ -391,10 +391,6 @@ Lisp function does not specify a special indentation."
   :config
   (progn
     (global-unset-key (kbd "<C-SPC>"))
-    
-    ;; I have no idea what problem arose, or why this is necessary, but this
-    ;;  fixes the problem
-    (fset 'evil-define-key* 'evil-define-key)
 
     (general-define-key
      ;; Does it make sense for this to apply to insert/emacs states?
@@ -1182,7 +1178,8 @@ Lisp function does not specify a special indentation."
 ;;  outrespace, cask, smartparens, company-math, green-is-the-new-black,
 ;;  snazzy-theme, auto-correct, dired-sidebar, treemacs-projectile,
 ;;  ivy-lobsters, nov (nov.el), achievements, comment-tags, flex-compile,
-;;  org-projectile, org-super-agenda, avk-emacs-themes
+;;  org-projectile, org-super-agenda, avk-emacs-themes, lsp-javacomp,
+;;  pocket-reader
 
 ;; how does this work?
 (use-package counsel-spotify)
