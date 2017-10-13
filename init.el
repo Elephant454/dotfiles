@@ -373,10 +373,6 @@ Lisp function does not specify a special indentation."
   :config
   (progn
     (global-unset-key (kbd "<C-SPC>"))
-    
-    ;; I have no idea what problem arose, or why this is necessary, but this
-    ;;  fixes the problem
-    (fset 'evil-define-key* 'evil-define-key)
 
     (general-define-key
      ;; Does it make sense for this to apply to insert/emacs states?
