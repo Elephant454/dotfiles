@@ -401,7 +401,8 @@ Lisp function does not specify a special indentation."
     (general-create-definer elephant454initel-main-menu
                             :states '(normal insert visual replace operator motion emacs)
                             :prefix "SPC"
-                            :global-prefix "C-SPC")
+                            :global-prefix "C-SPC"
+                            :prefix-command 'elephant454initel-main-menu-prefix)
     (general-create-definer elephant454initel-major-mode-menu
                             :states '(normal insert visual replace operator motion emacs)
                             :prefix ","
