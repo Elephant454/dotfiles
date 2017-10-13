@@ -1221,5 +1221,7 @@ Lisp function does not specify a special indentation."
                 "/usr/share/languagetool:/usr/share/java/languagetool/*"
                 langtool-default-language "en-US"))
 
+(use-package wc-mode)
+
 (provide 'init)
 ;;; init.el ends here
