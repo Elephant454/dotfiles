@@ -1214,7 +1214,8 @@ Lisp function does not specify a special indentation."
 
 (use-package langtool
   :config (setq langtool-java-classpath
-                "/usr/share/languagetool:/usr/share/java/languagetool/*"))
+                "/usr/share/languagetool:/usr/share/java/languagetool/*"
+                langtool-default-language "en-US"))
 
 (provide 'init)
 ;;; init.el ends here
