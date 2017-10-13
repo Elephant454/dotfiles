@@ -936,6 +936,8 @@ Lisp function does not specify a special indentation."
             :general (elephant454initel-main-menu
                                 "ms" 'flyspell-correct-word-generic)))
 
+;; Note: We can keep "Y" for copying a whole line at a time, and then put the
+;;  binding to copy the current page's URL in the major-mode menu
 (use-package eww
   :ensure nil
   :init (progn
