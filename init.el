@@ -352,24 +352,6 @@ Lisp function does not specify a special indentation."
             (use-package evil-matchit
               :config (global-evil-matchit-mode 1))))
 
-
-;; There is without a doubt a better way of doing this. When should
-;;  this be loaded?
-;; Also, what does kbd do exactly? It looks like it checks to make
-;;  sure keyboard bindings are valid. It returns a string.
-(use-package dired
-  :ensure nil  ; This is a built in file, so we need to override
-               ; ensure so that package.el doesn't try to download a
-               ; package called dired from the repos.
-  :init (use-package dired-x
-          :ensure nil)
-  :config (progn (define-key dired-mode-map [? ] nil)  ; unbind space for dired-mode so
-                                                       ;  that we can map it as our
-                                                       ;  leader key later
-                 (add-hook 'dired-mode-hook 'auto-revert-mode)
-                 ;;(add-hook 'dired-mode-hook 'turn-on-stripe-buffer-mode)
-                 ))
-
 ;; info is all the way up here so we can unbind space and use it for general
 ;;  later
 (use-package info
@@ -497,6 +479,16 @@ Lisp function does not specify a special indentation."
 ;;  etc.)
 (use-package which-key
   :config (which-key-mode 1))
+
+(use-package dired
+  :ensure nil  ; This is a built in file, so we need to override
+               ; ensure so that package.el doesn't try to download a
+               ; package called dired from the repos.
+  :init (use-package dired-x :ensure nil)
+  :general (:states '(normal motion)
+            :keymaps 'dired-mode-map
+            "<SPC>" 'elephant454initel-main-menu-prefix)
+  :config (add-hook 'dired-mode-hook 'auto-revert-mode))
 
 ;; give parenthesis matching colors based upon depth
 (use-package rainbow-delimiters
