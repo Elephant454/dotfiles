@@ -352,13 +352,6 @@ Lisp function does not specify a special indentation."
             (use-package evil-matchit
               :config (global-evil-matchit-mode 1))))
 
-;; info is all the way up here so we can unbind space and use it for general
-;;  later
-(use-package info
-  :ensure nil
-  :config (progn
-            (evil-define-key 'motion Info-mode-map [? ] nil)))
-
 ;; do some calculations to figure out where directories should be
 (setq elephant454initel-current-year (nth 5 (decode-time)))
 (setq elephant454initel-current-month (nth 4 (decode-time)))
@@ -479,6 +472,12 @@ Lisp function does not specify a special indentation."
 ;;  etc.)
 (use-package which-key
   :config (which-key-mode 1))
+
+(use-package info
+  :ensure nil
+  :general (:states '(normal motion)
+            :keymaps 'Info-mode-map
+            "<SPC>" 'elephant454initel-main-menu-prefix))
 
 (use-package dired
   :ensure nil  ; This is a built in file, so we need to override
