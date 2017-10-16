@@ -955,7 +955,7 @@ Lisp function does not specify a special indentation."
              (use-package eww-lnum))
             (eww-browse-url url t)))
   :config (progn
-            (setq eww-search-prefix "https://www.google.com/search?q=")
+            ;;(setq eww-search-prefix "https://www.google.com/search?q=")
             (add-hook 'eww-after-render-hook
                       (lambda()
                         (rename-buffer
