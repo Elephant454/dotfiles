@@ -139,6 +139,8 @@
 (define-key *games-map* (kbd "k") "exec kega-fusion")
 (define-key *games-map* (kbd "f") "exec firestorm")
 (define-key *games-map* (kbd "t") "exec torchlight")
+;; for "Bubble Chains"
+(define-key *games-map* (kbd "c") "exec chains")
 (define-key *games-map* (kbd "s") "exec steam")
 
 ;; sets the focus policy so that the focus follows the mouse
