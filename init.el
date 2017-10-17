@@ -49,7 +49,8 @@
  indent-tabs-mode nil       ; use spaces, not tabs
  tab-width 4                ; use four spaces
  c-basic-offset 4           ; yes, also for c
- c-default-style "linux")   ; don't indent brackets
+ c-default-style "linux"    ; don't indent brackets
+ fill-column 80)            ; make auto-fill-mode break lines at 80 characters
 
 ;; modes
 (electric-indent-mode 1)   ; indent automatically
@@ -63,8 +64,6 @@
 (setq quelpa-update-melpa-p nil)  ; Removes the annoying quelpa trying to update
                                   ;  at startup. When this is set to nil, start
                                   ;  times become sane.
-(setq-default fill-column 80)     ; sets auto-fill-mode to break lines at 80
-                                  ;  characters
 
 ;; don't suspend emacs with "C-z"
 (global-unset-key (kbd "C-z"))
