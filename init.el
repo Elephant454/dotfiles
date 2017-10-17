@@ -61,9 +61,6 @@
 (scroll-bar-mode 0)        ; remove the scroll bar
 (menu-bar-mode 0)          ; remove the menu bar (File, Edit, etc.)
 (tool-bar-mode 0)          ; remove the tool bar (New, Open, etc.)
-(setq quelpa-update-melpa-p nil)  ; Removes the annoying quelpa trying to update
-                                  ;  at startup. When this is set to nil, start
-                                  ;  times become sane.
 
 ;; don't suspend emacs with "C-z"
 (global-unset-key (kbd "C-z"))
@@ -488,7 +485,11 @@
 ;; for installing packages other than ones in repos
 ;; quelpa-use-package doesn't seem to work for whatever reason
 (use-package quelpa
-  :config (use-package quelpa-use-package))
+  :config (progn
+            ;; Makes sure the quelpa auto-updater doesn't make startup take
+            ;;  forever
+            (setq quelpa-update-melpa-p nil)
+            (use-package quelpa-use-package)))
 
 ;; reddit is pretty broken, for the most part, I think
 (use-package tree-mode
