@@ -33,8 +33,12 @@
 
  ;; set the default web browser to google-chrome
  ;;browse-url-browser-function 'browse-url-generic
- browse-url-browser-function 'eww-browse-url
  ;;browse-url-generic-program "google-chrome-stable"
+
+ ;; https://www.reddit.com/r/emacs/comments/6yn8lo/what_do_you_use_eww_for/
+ ;; Look more into using this for opening different websites in different ways
+ ;; Look into using this with Stack Overflow, specifically
+ browse-url-browser-function '("." . eww-browse-url)
 
  ;; start debugging when something signals an error
  debug-on-error t
