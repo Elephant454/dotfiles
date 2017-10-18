@@ -22,10 +22,6 @@
  ;;  when no more scrolling can happen, I think... I'm not sure.
  scroll-error-top-bottom t
  
- ;; ensures that all packages are always installed (and installs ones that are
- ;; listed but not present)
- use-package-always-ensure t
-
  ;; I don't end sentences with two spaces, so Emacs shouldn't expect to see
  ;; them. This is used for "M-a" and "M-e" for jumping forward and back
  ;; sentences. Look up the info page on "Sentences".
@@ -83,7 +79,10 @@
   (package-refresh-contents)
   (package-install 'use-package))
 (require 'use-package)
-(use-package use-package)
+(use-package use-package
+  ;; ensures that all packages are always installed (and installs ones that are
+  ;;  listed but not present)
+  :config (setq use-package-always-ensure t))
 
 ;; load secret settings (location, passwords, etc)
 (add-to-list 'load-path (concat user-emacs-directory "config/"))
