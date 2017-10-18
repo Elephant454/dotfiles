@@ -90,6 +90,15 @@
 
 ;; themes
 
+;; Mark these as variables that I'm going to use properly. Give them docstrings
+;;  and default values later. I might want to use defcustom for these later,
+;;  especially if I put all of the font/theme functionality in a really minimal
+;;  package later on.
+(defvar elephant454initel-theme-pairs)
+(defvar elephant454initel-current-theme-pair)
+(defvar elephant454initel-use-day-theme)
+(defvar elephant454initel-apply-to-stumpwm)
+
 ;; disable the current Emacs 24 theme before enabling a new one. This
 ;; is from
 ;; http://stackoverflow.com/questions/9900232/changing-color-themes-emacs-24-order-matters/15595000#15595000
@@ -197,6 +206,12 @@
 ;;(elephant454initel-jump-to-theme 'dracula)
 
 ;; fonts
+
+;; Mark these as variables properly. Create docstrings for these later.
+(defvar elephant454initel-fonts)
+(defvar elephant454initel-current-font)
+(defvar elephant454initel-font-scale)
+
 ;; there should really be a way to set the font size independently, or perhaps a
 ;;  way to increase font size only if I'm on my laptop
 ;;
@@ -818,6 +833,7 @@ Lisp function does not specify a special indentation."
            'emacs-lisp-mode-hook
            (lambda ()
              (setq-local lisp-indent-function #'Fuco1/lisp-indent-function))))
+
   :general (elephant454initel-major-mode-menu
             :keymaps 'emacs-lisp-mode-map
              "" '(nil :which-key "Emacs Lisp Mode Commands")
