@@ -128,6 +128,7 @@
           spacemacs-theme
           ;; gruvbox
           dracula-theme
+          kaolin-themes
           ))
 
 ;; cons pairs of themes, with the car being the day variant and the cdr being
@@ -135,6 +136,7 @@
 (setq elephant454initel-theme-pairs '((soft-morning . omtose-softer)
                                       (silkworm . foggy-night)
                                       (nubox-light . nubox-dark)
+                                      (kaolin-light . kaolin-eclipse)
                                       (doom-one . doom-one)
                                       (dracula . purple-haze)
                                       (material-light . material)
