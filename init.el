@@ -51,7 +51,7 @@
 ;; modes
 (electric-indent-mode 1)   ; indent automatically
 (electric-pair-mode 1)     ; automatically match closing parentheses, braces,
-                           ; quotes, etc.
+                           ;  quotes, etc.
 (show-paren-mode 1)        ; highlight paired parentheses
 (setq show-paren-delay 0)  ; no delay for highlighting parentheses
 (scroll-bar-mode 0)        ; remove the scroll bar
