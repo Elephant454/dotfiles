@@ -1196,7 +1196,7 @@ Lisp function does not specify a special indentation."
 ;;  snazzy-theme, auto-correct, dired-sidebar, treemacs-projectile,
 ;;  ivy-lobsters, nov (nov.el), achievements, comment-tags, flex-compile,
 ;;  org-projectile, org-super-agenda, avk-emacs-themes, lsp-javacomp,
-;;  pocket-reader
+;;  pocket-reader, counsel-pydoc, jetbrains
 
 ;; how does this work?
 (use-package counsel-spotify)
