@@ -613,7 +613,9 @@
              "." 'org-time-stamp
              "d" 'org-deadline
              "s" 'org-schedule
-             "p" 'org-preview-latex-fragment))
+             "p" 'org-preview-latex-fragment
+             "c" 'org-clock-in
+             "C" 'org-clock-out))
 
 (use-package open-junk-file
   :config (setq open-junk-file-format "~/junk/%Y/%m/%d/%H%M%S/")
