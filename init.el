@@ -1094,6 +1094,7 @@ Lisp function does not specify a special indentation."
 (use-package hexrgb)
 
 (use-package stripe-buffer
+  :disabled
   :config
   ;;(defface my-stripe-highlight-face
   ;;'(:background "CCCCCC"))
