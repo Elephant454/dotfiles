@@ -494,9 +494,9 @@
             "M-7" 'winum-select-window-7
             "M-8" 'winum-select-window-8
             "M-9" 'winum-select-window-9))
-                            
 
-(use-package window-purpose)
+(use-package window-purpose
+  :config (purpose-mode t))
 
 ;; for installing packages other than ones in repos
 ;; quelpa-use-package doesn't seem to work for whatever reason
