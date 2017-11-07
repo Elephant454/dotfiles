@@ -111,7 +111,7 @@
 
 ;; I should set up pairs of night themes and day themes. One keybinding cycles
 ;; between pairs and another keybinding switches between day and night.
-(mapcar #'(lambda (package) (use-package package :defer t))
+(dolist #'(lambda (package) (use-package package :defer t))
         '(color-theme
           soft-morning-theme
           omtose-phellack-theme
