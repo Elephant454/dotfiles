@@ -1248,5 +1248,8 @@ Lisp function does not specify a special indentation."
 
 (use-package wc-mode)
 
+(use-package pkgbuild-mode
+  :mode ("/PKGBUILD$" . pkgbuild-mode))
+
 (provide 'init)
 ;;; init.el ends here
