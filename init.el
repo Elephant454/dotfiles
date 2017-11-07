@@ -966,6 +966,7 @@ Lisp function does not specify a special indentation."
 ;;  binding to copy the current page's URL in the major-mode menu
 (use-package eww
   :ensure nil
+  :functions (eww-suggest-uris eww-current-url)
   :init (progn
           (defun eww-open-in-new-buffer (url)
             ;;this interactive part was taken from the eww function in eww.el
