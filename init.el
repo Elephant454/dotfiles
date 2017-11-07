@@ -750,7 +750,7 @@
                                ;  window instead of opening up a second
                                         ;  one
 
-(use-package emacs-lisp-mode
+(use-package elisp-mode
   :ensure nil
   :init (progn
 
