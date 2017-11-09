@@ -1204,7 +1204,7 @@ Lisp function does not specify a special indentation."
 ;;  ivy-lobsters, nov (nov.el), achievements, comment-tags, flex-compile,
 ;;  org-projectile, org-super-agenda, avk-emacs-themes, lsp-javacomp,
 ;;  pocket-reader, counsel-pydoc, jetbrains, orca, erc-scrolltoplace,
-;;  mu4e-jump-to-list
+;;  mu4e-jump-to-list, iter2, sicp
 
 (use-package counsel-spotify
   :general (elephant454initel-main-menu "am" '(nil :which-key "Spotify (Music)")
