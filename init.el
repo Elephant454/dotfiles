@@ -1206,8 +1206,14 @@ Lisp function does not specify a special indentation."
 ;;  pocket-reader, counsel-pydoc, jetbrains, orca, erc-scrolltoplace,
 ;;  mu4e-jump-to-list
 
-;; how does this work?
-(use-package counsel-spotify)
+(use-package counsel-spotify
+  :general (elephant454initel-main-menu "am" '(nil :which-key "Spotify (Music)")
+                                        "amp" 'counsel-spotify-toggle-play-pause
+                                        "amb" 'counsel-spotify-previous
+                                        "amf" 'counsel-spotify-next
+                                        "amt" 'counsel-spotify-search-track
+                                        "aml" 'counsel-spotify-search-album
+                                        "amr" 'counsel-spotify-search-artist))
 
 (use-package tramp-term)
 
