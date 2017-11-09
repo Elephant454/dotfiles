@@ -495,8 +495,15 @@
             "M-8" 'winum-select-window-8
             "M-9" 'winum-select-window-9))
 
+;; Do some reading to set this up properly
+;;  https://github.com/bmag/emacs-purpose/wiki/Usage
+;;  https://github.com/bmag/emacs-purpose/wiki/Keys-&-Commands
+;;  https://github.com/bmag/emacs-purpose/wiki/Purpose-Configuration
 (use-package window-purpose
-  :config (purpose-mode t))
+  :config (progn
+            (purpose-mode t)
+            (use-package ivy-purpose
+              :config (ivy-purpose-setup))))
 
 ;; for installing packages other than ones in repos
 ;; quelpa-use-package doesn't seem to work for whatever reason
