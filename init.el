@@ -29,7 +29,7 @@
 
  ;; set the default web browser to google-chrome
  ;;browse-url-browser-function 'browse-url-generic
- ;;browse-url-generic-program "google-chrome-stable"
+ ;;browse-url-generic-program "firefox"
 
  ;; https://www.reddit.com/r/emacs/comments/6yn8lo/what_do_you_use_eww_for/
  ;; Look more into using this for opening different websites in different ways
