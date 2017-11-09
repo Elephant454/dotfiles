@@ -869,6 +869,9 @@ Lisp function does not specify a special indentation."
   :ensure nil
   :general (elephant454initel-main-menu "agt" 'tetris))
 
+(use-package mines
+  :general (elephant454initel-main-menu "agm" 'mines))
+
 (use-package magit
   :config (progn
             (use-package evil-magit))
