@@ -95,7 +95,7 @@
 ;;  especially if I put all of the font/theme functionality in a really minimal
 ;;  package later on.
 (defvar elephant454initel-theme-pairs)
-(defvar elephant454initel-current-theme-pair)
+(defvar elephant454initel-current-theme-pairs)
 (defvar elephant454initel-use-day-theme)
 (defvar elephant454initel-apply-to-stumpwm)
 
@@ -146,7 +146,7 @@
                                       (gotham . gotham)
                                       (purple-haze . purple-haze)))
 
-(setq elephant454initel-current-theme-pair (pop elephant454initel-theme-pairs))
+(setq elephant454initel-current-theme-pairs elephant454initel-theme-pairs)
 (setq elephant454initel-use-day-theme t)
 ;;(setq elephant454initel-apply-to-stumpwm t)
 (setq elephant454initel-apply-to-stumpwm nil)
@@ -157,13 +157,27 @@
   (setq elephant454initel-use-day-theme (not elephant454initel-use-day-theme))
   (elephant454initel-load-theme))
 
+
 (defun elephant454initel-cycle-theme-pairs ()
   "Cycle through pairs of themes."
   (interactive)
-  (add-to-list 'elephant454initel-theme-pairs elephant454initel-current-theme-pair t)
-  (setq elephant454initel-current-theme-pair (pop
-                                              elephant454initel-theme-pairs))
+  (if (cdr elephant454initel-current-theme-pairs)
+      (setq elephant454initel-current-theme-pairs
+            (cdr elephant454initel-current-theme-pairs))
+
+    (setq elephant454initel-current-theme-pairs
+          elephant454initel-theme-pairs))
+  
   (elephant454initel-load-theme))
+
+
+;;(defun elephant454initel-cycle-theme-pairs ()
+;;  "Cycle through pairs of themes."
+;;  (interactive)
+;;  (add-to-list 'elephant454initel-theme-pairs elephant454initel-current-theme-pair t)
+;;  (setq elephant454initel-current-theme-pair (pop
+;;                                              elephant454initel-theme-pairs))
+;;  (elephant454initel-load-theme))
 
 (defun elephant454initel-load-theme ()
   "Load either the day or the night variant of the current theme pair. Make sure
@@ -171,10 +185,10 @@ that all themes that might be loaded by this function are safe, as it loads them
 without confirmation."
   (let ((theme-to-apply
         (if elephant454initel-use-day-theme
-            (car elephant454initel-current-theme-pair)  ; the theme-to-apply is
-                                                        ;  the day theme
-          (cdr elephant454initel-current-theme-pair)))) ; the theme-to-apply is
-                                                        ;  the night theme
+            (caar elephant454initel-current-theme-pairs)  ; the theme-to-apply is
+                                                          ;  the day theme
+          (cdar elephant454initel-current-theme-pairs)))) ; the theme-to-apply is
+                                                          ;  the night theme
     (load-theme theme-to-apply t)
     
     (if elephant454initel-apply-to-stumpwm
