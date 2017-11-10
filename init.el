@@ -557,7 +557,14 @@
 
 ;; just for the heck of it 
 (use-package exwm
-  :config (setq exwm-randr-workspace-output-plist '(0 "HDMI-0" 1 "DVI-D-0" 2 "HDMI-0" 3 "HDMI-0" 4 "HDMI-0" 5 "DVI-D-0")))
+  :disabled
+  :config (setq exwm-randr-workspace-output-plist
+                '(0 "HDMI-0"
+                    1 "DVI-D-0"
+                    2 "HDMI-0"
+                    3 "HDMI-0"
+                    4 "HDMI-0"
+                    5 "DVI-D-0")))
 
 ;; org things
 ;; TODO: look into org-dotemacs for organizing this file using org
