@@ -205,18 +205,29 @@ without confirmation."
     theme-to-apply))
 
 (defun elephant454initel-jump-to-theme (theme-to-jump-to)
-  "Jump to THEME-TO-JUMP-TO by cycling to it's place in the list and toggling `elephant454initel-use-day-theme'appropriately."
-  (let ((starting-theme-pair elephant454initel-current-theme-pair)
-        (starting-use-day-theme elephant454initel-use-day-theme))
-    (while
-        (not
-         (or (eq (elephant454initel-toggle-use-day-theme) theme-to-jump-to)
-             (eq (elephant454initel-cycle-theme-pairs) theme-to-jump-to)
-             (eq elephant454initel-current-theme-pair starting-theme-pair))))
+  (elephant454initel-jump-to-theme--recursive theme-to-jump-to elephant454initel-theme-pairs))
 
-    (if (and (eq elephant454initel-current-theme-pair starting-theme-pair)
-             (not (eq elephant454initel-use-day-theme starting-use-day-theme)))
-        (elephant454initel-toggle-use-day-theme))))
+(defun elephant454initel-jump-to-theme--recursive (theme-to-jump-to theme-pairs)
+  (format "%S" theme-pairs)
+
+  (if (not theme-pairs)
+      nil
+
+    (if (eq theme-to-jump-to (caar theme-pairs))
+        (progn
+          (setq elephant454initel-use-day-theme t
+                elephant454initel-current-theme-pairs theme-pairs)
+          (elephant454initel-load-theme))
+
+      (if (eq theme-to-jump-to (cdar theme-pairs))
+          (progn
+            (setq elephant454initel-use-day-theme nil
+                  elephant454initel-current-theme-pairs theme-pairs)
+            (elephant454initel-load-theme))
+
+        (elephant454initel-jump-to-theme--recursive
+         theme-to-jump-to
+         (cdr theme-pairs))))))
 
 (elephant454initel-load-theme)
 
