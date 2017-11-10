@@ -145,28 +145,30 @@
                                       (spacemacs-light . spacemacs-dark)
                                       (gotham . gotham)
                                       (purple-haze . purple-haze)))
+
 (setq elephant454initel-current-theme-pair (pop elephant454initel-theme-pairs))
 (setq elephant454initel-use-day-theme t)
 ;;(setq elephant454initel-apply-to-stumpwm t)
 (setq elephant454initel-apply-to-stumpwm nil)
 
-;; switch between using the day theme and the night theme
 (defun elephant454initel-toggle-use-day-theme()
+  "Switch between using the day theme and the night theme."
   (interactive)
   (setq elephant454initel-use-day-theme (not elephant454initel-use-day-theme))
   (elephant454initel-load-theme))
 
-;; cycle pairs of themes
 (defun elephant454initel-cycle-theme-pairs ()
+  "Cycle through pairs of themes."
   (interactive)
   (add-to-list 'elephant454initel-theme-pairs elephant454initel-current-theme-pair t)
-  (setq elephant454initel-current-theme-pair (pop elephant454initel-theme-pairs))
+  (setq elephant454initel-current-theme-pair (pop
+                                              elephant454initel-theme-pairs))
   (elephant454initel-load-theme))
 
-;; load either the day or the night variant of the current theme pair warning:
-;; this function loads themes with NO-CONFIRM. Make sure that themes aren't
-;; malicious before adding them to the theme-pairs
 (defun elephant454initel-load-theme ()
+  "Load either the day or the night variant of the current theme pair. Make sure
+that all themes that might be loaded by this function are safe, as it loads them
+without confirmation."
   (let ((theme-to-apply
         (if elephant454initel-use-day-theme
             (car elephant454initel-current-theme-pair)  ; the theme-to-apply is
