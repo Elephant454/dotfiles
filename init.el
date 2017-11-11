@@ -94,10 +94,10 @@
 ;;  and default values later. I might want to use defcustom for these later,
 ;;  especially if I put all of the font/theme functionality in a really minimal
 ;;  package later on.
-(defvar elephant454initel-theme-pairs)
-(defvar elephant454initel-current-theme-pairs)
-(defvar elephant454initel-use-day-theme)
-(defvar elephant454initel-apply-to-stumpwm)
+(defvar e454iel-theme-pairs)
+(defvar e454iel-current-theme-pairs)
+(defvar e454iel-use-day-theme)
+(defvar e454iel-apply-to-stumpwm)
 
 ;; disable the current Emacs 24 theme before enabling a new one. This
 ;; is from
@@ -133,7 +133,7 @@
 
 ;; cons pairs of themes, with the car being the day variant and the cdr being
 ;;  the night variant
-(setq elephant454initel-theme-pairs '((soft-morning . omtose-softer)
+(setq e454iel-theme-pairs '((soft-morning . omtose-softer)
                                       (silkworm . foggy-night)
                                       (nubox-light . nubox-dark)
                                       (kaolin-light . kaolin-eclipse)
@@ -146,29 +146,29 @@
                                       (gotham . gotham)
                                       (purple-haze . purple-haze)))
 
-(setq elephant454initel-current-theme-pairs elephant454initel-theme-pairs)
-(setq elephant454initel-use-day-theme t)
+(setq e454iel-current-theme-pairs e454iel-theme-pairs)
+(setq e454iel-use-day-theme t)
 ;;(setq elephant454initel-apply-to-stumpwm t)
-(setq elephant454initel-apply-to-stumpwm nil)
+(setq e454iel-apply-to-stumpwm nil)
 
-(defun elephant454initel-toggle-use-day-theme()
+(defun e454iel-toggle-use-day-theme()
   "Switch between using the day theme and the night theme."
   (interactive)
-  (setq elephant454initel-use-day-theme (not elephant454initel-use-day-theme))
-  (elephant454initel-load-theme))
+  (setq e454iel-use-day-theme (not e454iel-use-day-theme))
+  (e454iel-load-theme))
 
 
-(defun elephant454initel-cycle-theme-pairs ()
+(defun e454iel-cycle-theme-pairs ()
   "Cycle through pairs of themes."
   (interactive)
-  (if (cdr elephant454initel-current-theme-pairs)
-      (setq elephant454initel-current-theme-pairs
-            (cdr elephant454initel-current-theme-pairs))
+  (if (cdr e454iel-current-theme-pairs)
+      (setq e454iel-current-theme-pairs
+            (cdr e454iel-current-theme-pairs))
 
-    (setq elephant454initel-current-theme-pairs
-          elephant454initel-theme-pairs))
+    (setq e454iel-current-theme-pairs
+          e454iel-theme-pairs))
   
-  (elephant454initel-load-theme))
+  (e454iel-load-theme))
 
 
 ;;(defun elephant454initel-cycle-theme-pairs ()
@@ -179,19 +179,19 @@
 ;;                                              elephant454initel-theme-pairs))
 ;;  (elephant454initel-load-theme))
 
-(defun elephant454initel-load-theme ()
+(defun e454iel-load-theme ()
   "Load either the day or the night variant of the current theme pair. Make sure
 that all themes that might be loaded by this function are safe, as it loads them
 without confirmation."
   (let ((theme-to-apply
-        (if elephant454initel-use-day-theme
-            (caar elephant454initel-current-theme-pairs)  ; the theme-to-apply is
+        (if e454iel-use-day-theme
+            (caar e454iel-current-theme-pairs)  ; the theme-to-apply is
                                                           ;  the day theme
-          (cdar elephant454initel-current-theme-pairs)))) ; the theme-to-apply is
+          (cdar e454iel-current-theme-pairs)))) ; the theme-to-apply is
                                                           ;  the night theme
     (load-theme theme-to-apply t)
     
-    (if elephant454initel-apply-to-stumpwm
+    (if e454iel-apply-to-stumpwm
         (progn 
           (if (not (slime-connected-p))
               (slime-connect "localhost" "4004"))
@@ -204,32 +204,32 @@ without confirmation."
                                           ;;")"))
     theme-to-apply))
 
-(defun elephant454initel-jump-to-theme (theme-to-jump-to)
-  (elephant454initel-jump-to-theme--recursive theme-to-jump-to elephant454initel-theme-pairs))
+(defun e454iel-jump-to-theme (theme-to-jump-to)
+  (e454iel-jump-to-theme--recursive theme-to-jump-to e454iel-theme-pairs))
 
-(defun elephant454initel-jump-to-theme--recursive (theme-to-jump-to theme-pairs)
+(defun e454iel-jump-to-theme--recursive (theme-to-jump-to theme-pairs)
   (cond
    ((not theme-pairs)
     nil)
 
    ((eq theme-to-jump-to (caar theme-pairs))
     (progn
-      (setq elephant454initel-use-day-theme t
-            elephant454initel-current-theme-pairs theme-pairs)
-      (elephant454initel-load-theme)))
+      (setq e454iel-use-day-theme t
+            e454iel-current-theme-pairs theme-pairs)
+      (e454iel-load-theme)))
 
    ((eq theme-to-jump-to (cdar theme-pairs))
     (progn
-      (setq elephant454initel-use-day-theme nil
-            elephant454initel-current-theme-pairs theme-pairs)
-      (elephant454initel-load-theme)))
+      (setq e454iel-use-day-theme nil
+            e454iel-current-theme-pairs theme-pairs)
+      (e454iel-load-theme)))
 
    (t
-    (elephant454initel-jump-to-theme--recursive
+    (e454iel-jump-to-theme--recursive
      theme-to-jump-to
      (cdr theme-pairs)))))
 
-(elephant454initel-load-theme)
+(e454iel-load-theme)
 
 ;; load default theme
 ;;(elephant454initel-jump-to-theme 'dracula)
@@ -237,9 +237,9 @@ without confirmation."
 ;; fonts
 
 ;; Mark these as variables properly. Create docstrings for these later.
-(defvar elephant454initel-fonts)
-(defvar elephant454initel-current-font)
-(defvar elephant454initel-font-scale)
+(defvar e454iel-fonts)
+(defvar e454iel-current-font)
+(defvar e454iel-font-scale)
 
 ;; there should really be a way to set the font size independently, or perhaps a
 ;;  way to increase font size only if I'm on my laptop
@@ -249,46 +249,46 @@ without confirmation."
 ;;
 ;; should I be using (set-frame-font "Inconsolata-16" nil t) to set the font
 ;;  instead?
-(setq elephant454initel-fonts '(("Inconsolata" . 14)
+(setq e454iel-fonts '(("Inconsolata" . 14)
                                 ("Dina" . 14)
                                 ("monofur" . 16)
                                 ("Fantasque Sans Mono" . 14)
                                 ("Source Code Pro" . 14)))
       
-(setq elephant454initel-current-font (pop elephant454initel-fonts))
-(setq elephant454initel-font-scale 0)
+(setq e454iel-current-font (pop e454iel-fonts))
+(setq e454iel-font-scale 0)
 
-(defun elephant454initel-cycle-fonts ()
+(defun e454iel-cycle-fonts ()
   (interactive)
-  (add-to-list 'elephant454initel-fonts elephant454initel-current-font t)
-  (setq elephant454initel-current-font (pop elephant454initel-fonts))
-  (elephant454initel-load-font))
+  (add-to-list 'e454iel-fonts e454iel-current-font t)
+  (setq e454iel-current-font (pop e454iel-fonts))
+  (e454iel-load-font))
 
-(defun elephant454initel-increase-font-size ()
+(defun e454iel-increase-font-size ()
   (interactive)
-  (setq elephant454initel-font-scale (+ 1 elephant454initel-font-scale))
-  (elephant454initel-load-font))
+  (setq e454iel-font-scale (+ 1 e454iel-font-scale))
+  (e454iel-load-font))
 
-(defun elephant454initel-decrease-font-size ()
+(defun e454iel-decrease-font-size ()
   (interactive)
-  (setq elephant454initel-font-scale (+ -1 elephant454initel-font-scale))
-  (elephant454initel-load-font))
+  (setq e454iel-font-scale (+ -1 e454iel-font-scale))
+  (e454iel-load-font))
 
 ;;(defun elephant454initel-load-font ()
   ;;(set-default-font elephant454initel-current-font)
   ;;(car (split-string (elt (font-info (find-font elephant454initel-current-font)) 1) ":")))
 
-(defun elephant454initel-load-font ()
+(defun e454iel-load-font ()
   (let ((font-to-set
         (concat
-         (car elephant454initel-current-font)
+         (car e454iel-current-font)
          "-"
          (number-to-string
-          (+ elephant454initel-font-scale
-             (cdr elephant454initel-current-font))))))
+          (+ e454iel-font-scale
+             (cdr e454iel-current-font))))))
     (set-frame-font font-to-set nil t)
 
-    (if elephant454initel-apply-to-stumpwm
+    (if e454iel-apply-to-stumpwm
         (progn 
           (if (not (slime-connected-p))
               (slime-connect "localhost" "4004"))
@@ -309,11 +309,6 @@ without confirmation."
             (use-package evil-matchit
               :config (global-evil-matchit-mode 1))))
 
-;; do some calculations to figure out where directories should be
-(setq elephant454initel-current-year (nth 5 (decode-time)))
-(setq elephant454initel-current-month (nth 4 (decode-time)))
-(setq elephant454initel-is-second-semester (< elephant454initel-current-month 8))
-
 ;; in order to figure out how binding keys works, I'm going to need
 ;; this page:
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Key-Binding-Commands.html
@@ -330,16 +325,16 @@ without confirmation."
      "<C-right>" 'next-buffer
      "<C-left>" 'previous-buffer)
      
-    (general-create-definer elephant454initel-main-menu
+    (general-create-definer e454iel-main-menu
                             :states '(normal insert visual replace operator motion emacs)
                             :prefix "SPC"
                             :global-prefix "C-SPC"
-                            :prefix-command 'elephant454initel-main-menu-prefix)
-    (general-create-definer elephant454initel-major-mode-menu
+                            :prefix-command 'e454iel-main-menu-prefix)
+    (general-create-definer e454iel-major-mode-menu
                             :states '(normal insert visual replace operator motion emacs)
                             :prefix ","
                             :global-prefix "C-,")
-    (elephant454initel-main-menu
+    (e454iel-main-menu
      ;; double tap Space for M-x
      "<SPC>" '(execute-extended-command :which-key "Main Menu")
 
@@ -394,13 +389,13 @@ without confirmation."
      ;; themes
      "tt" '(:ignore t :which-key "Themes")
      "tts" 'load-theme
-     "ttn" 'elephant454initel-cycle-theme-pairs
-     "ttt" 'elephant454initel-toggle-use-day-theme
+     "ttn" 'e454iel-cycle-theme-pairs
+     "ttt" 'e454iel-toggle-use-day-theme
      ;; fonts
      "tf" '(:ignore t :which-key "Fonts")
-     "tfn" 'elephant454initel-cycle-fonts
-     "tfi" 'elephant454initel-increase-font-size
-     "tfd" 'elephant454initel-decrease-font-size
+     "tfn" 'e454iel-cycle-fonts
+     "tfi" 'e454iel-increase-font-size
+     "tfd" 'e454iel-decrease-font-size
      ;; misc toggles
      "ta" '(auto-fill-mode 1)
      "tr" '(lambda() (interactive)
@@ -433,7 +428,7 @@ without confirmation."
   :ensure nil
   :general (:states '(normal motion)
             :keymaps 'Info-mode-map
-            "<SPC>" 'elephant454initel-main-menu-prefix))
+            "<SPC>" 'e454iel-main-menu-prefix))
 
 (use-package dired
   :ensure nil  ; This is a built in file, so we need to override
@@ -442,7 +437,7 @@ without confirmation."
   :init (use-package dired-x :ensure nil)
   :general (:states '(normal motion)
             :keymaps 'dired-mode-map
-            "<SPC>" 'elephant454initel-main-menu-prefix)
+            "<SPC>" 'e454iel-main-menu-prefix)
   :config (add-hook 'dired-mode-hook 'auto-revert-mode))
 
 ;; give parenthesis matching colors based upon depth
@@ -452,7 +447,7 @@ without confirmation."
 ;; for all of your Java/Scala needs
 (use-package ensime
   :pin melpa-stable
-  :general (elephant454initel-major-mode-menu
+  :general (e454iel-major-mode-menu
             :keymaps 'ensime-mode-map
             "" '(nil :which-key "Ensime Mode Commands")
             "i" 'ensime-import-type-at-point
@@ -499,7 +494,7 @@ without confirmation."
             "7" 'winum-select-window-7
             "8" 'winum-select-window-8
             "9" 'winum-select-window-9)
-  :general (elephant454initel-main-menu
+  :general (e454iel-main-menu
             "0" 'winum-select-window-0
             "1" 'winum-select-window-1
             "2" 'winum-select-window-2
@@ -579,7 +574,7 @@ without confirmation."
             (lyrics (caaadr (assoc "xesam:artist" metadata))
                     (caadr (assoc "xesam:title" metadata)))))
 
-  :general (elephant454initel-main-menu "al" 'lookup-current-spotify-lyrics
+  :general (e454iel-main-menu "al" 'lookup-current-spotify-lyrics
                                         "aL" 'lyrics))
 
 ;; just for the heck of it 
@@ -628,7 +623,7 @@ without confirmation."
                   org-format-latex-options (plist-put org-format-latex-options :scale 2.0)
                   org-ellipsis " ⤵ "
                   org-default-notes-file (concat org-directory "/notes.org")))
-  :general (elephant454initel-main-menu
+  :general (e454iel-main-menu
             "o" '(:ignore t :which-key "Org")
             "oa" 'org-agenda
             ;; add some way for the semester and year to
@@ -644,7 +639,7 @@ without confirmation."
   :general (:keymaps 'org-mode-map
             :states 'normal
             "RET" 'org-open-at-point)
-  :general (elephant454initel-major-mode-menu
+  :general (e454iel-major-mode-menu
             :keymaps 'org-mode-map
              "" '(nil :which-key "Org Mode Commands")
              "a" 'org-archive-subtree
@@ -660,7 +655,7 @@ without confirmation."
 
 (use-package open-junk-file
   :config (setq open-junk-file-format "~/junk/%Y/%m/%d/%H%M%S/")
-  :general (elephant454initel-main-menu "fJ" 'open-junk-file))
+  :general (e454iel-main-menu "fJ" 'open-junk-file))
 
 ;; this needs keybindings in order to work well. Copy them from the
 ;; Spacemacs layer.
@@ -743,7 +738,7 @@ without confirmation."
             ;; # .latexmkrc ends
             (use-package auctex-latexmk
               :config (auctex-latexmk-setup)))
-  :general (elephant454initel-major-mode-menu
+  :general (e454iel-major-mode-menu
             :keymaps 'LaTeX-mode-map
              "c" 'TeX-command-master))
 
@@ -767,16 +762,16 @@ without confirmation."
             ;;                                       "dialog-information"
             ;;                                       :category "transfer.complete"))))
             )
-  :general (elephant454initel-main-menu "at" 'tea-time))
+  :general (e454iel-main-menu "at" 'tea-time))
 
 (use-package seethru
-  :general (elephant454initel-main-menu "tT" 'seethru))
+  :general (e454iel-main-menu "tT" 'seethru))
 
 (use-package buffer-flip
   :config (progn
             (key-chord-mode 1)
             (buffer-flip-mode 1))
-  :general (elephant454initel-main-menu "TAB" 'buffer-flip))
+  :general (e454iel-main-menu "TAB" 'buffer-flip))
 
 ;; My first elisp function!
 (defun kill-buffer-file-name ()
@@ -879,7 +874,7 @@ Lisp function does not specify a special indentation."
            (lambda ()
              (setq-local lisp-indent-function #'Fuco1/lisp-indent-function))))
 
-  :general (elephant454initel-major-mode-menu
+  :general (e454iel-major-mode-menu
             :keymaps 'emacs-lisp-mode-map
              "" '(nil :which-key "Emacs Lisp Mode Commands")
              "b" 'eval-buffer))
@@ -887,16 +882,16 @@ Lisp function does not specify a special indentation."
 (use-package erc
   :ensure nil
   :config (setq erc-autojoin-channels-alist '((".*\\.freenode.net" "#archlinux")))
-  :general (elephant454initel-main-menu "aE" '(lambda() (interactive)
+  :general (e454iel-main-menu "aE" '(lambda() (interactive)
                                                 (progn() (erc-autojoin-mode 1)
                                                       (erc :server "irc.freenode.net"
                                                            :nick "Elephant454"
-                                                           :password elephant454initel-freenode-password)))
+                                                           :password e454iel-freenode-password)))
                                         :which-key "ERC with Default Servers"))
 
 (use-package bubbles
   :ensure nil
-  :general (elephant454initel-main-menu "agb" 'bubbles)
+  :general (e454iel-main-menu "agb" 'bubbles)
   :general (:keymaps 'bubbles-mode-map
             :states '(normal emacs)
             "RET" 'bubbles-plop
@@ -908,10 +903,10 @@ Lisp function does not specify a special indentation."
 
 (use-package tetris
   :ensure nil
-  :general (elephant454initel-main-menu "agt" 'tetris))
+  :general (e454iel-main-menu "agt" 'tetris))
 
 (use-package mines
-  :general (elephant454initel-main-menu "agm" 'mines))
+  :general (e454iel-main-menu "agm" 'mines))
 
 (use-package magit
   :config (progn
@@ -922,7 +917,7 @@ Lisp function does not specify a special indentation."
             "M-2" 'winum-select-window-2
             "M-3" 'winum-select-window-3
             "M-4" 'winum-select-window-4)
-  :general (elephant454initel-main-menu
+  :general (e454iel-main-menu
             "g" 'magit-status
             "G" 'magit-dispatch-popup))
 
@@ -935,7 +930,7 @@ Lisp function does not specify a special indentation."
   :general (:keymaps 'mu4e-view-mode-map
             :states '(normal motion)
             "p" '(lambda() (interactive) (mu4e-action-view-as-pdf (mu4e-message-at-point))))
-  :general (elephant454initel-main-menu
+  :general (e454iel-main-menu
             "ae" 'mu4e))
 
 ;; Slime provides a mode and tools for working with lisp. Of particular interest
@@ -972,7 +967,7 @@ Lisp function does not specify a special indentation."
             (setq inferior-lisp-program "sbcl")
             ;; I'm certain that there is a better way to do this.
             (load (expand-file-name "~/quicklisp/slime-helper.el") t))
-  :general (elephant454initel-main-menu
+  :general (e454iel-main-menu
             "as" 'run-or-raise-stumpwm-repl))
 
 ;;
@@ -1003,7 +998,7 @@ Lisp function does not specify a special indentation."
           (add-hook 'prog-mode-hook 'flyspell-prog-mode))
   :config (use-package flyspell-correct
             :config (use-package flyspell-correct-ivy)
-            :general (elephant454initel-main-menu
+            :general (e454iel-main-menu
                                 "ms" 'flyspell-correct-word-generic)))
 
 ;; Note: We can keep "Y" for copying a whole line at a time, and then put the
@@ -1052,7 +1047,7 @@ Lisp function does not specify a special indentation."
             "q" 'quit-window
             "n" 'eww-buffer-show-next
             "p" 'eww-buffer-show-previous)
-  :general (elephant454initel-main-menu
+  :general (e454iel-main-menu
             "ai" 'eww))
 
 ;; Automatically resizes images to fit the window, because why not?
@@ -1166,8 +1161,8 @@ Lisp function does not specify a special indentation."
   :ensure nil
   :config (progn
             (setq display-time-day-and-date t)
-            (setq elephant454initel-holiday-symbol "π")
-            (setq display-time-format (concat "%a %F %I:%M %p " elephant454initel-holiday-symbol))
+            (setq e454iel-holiday-symbol "π")
+            (setq display-time-format (concat "%a %F %I:%M %p " e454iel-holiday-symbol))
             (display-time-mode 0)))
 
 ;; used to center buffers in the middle of the screen
@@ -1183,7 +1178,7 @@ Lisp function does not specify a special indentation."
 ;; this is where C-c to save and C-k to cancel come from. Rebind these.
 (use-package with-editor
   :ensure nil
-  :general (elephant454initel-major-mode-menu
+  :general (e454iel-major-mode-menu
             :keymaps 'with-editor-mode-map
             "c" 'with-editor-finish
             "k" 'with-editor-cancel))
@@ -1247,7 +1242,7 @@ Lisp function does not specify a special indentation."
 ;;  orca, erc-scrolltoplace,mu4e-jump-to-list, iter2, sicp
 
 (use-package counsel-spotify
-  :general (elephant454initel-main-menu "am" '(nil :which-key "Spotify (Music)")
+  :general (e454iel-main-menu "am" '(nil :which-key "Spotify (Music)")
                                         "amp" 'counsel-spotify-toggle-play-pause
                                         "amb" 'counsel-spotify-previous
                                         "amf" 'counsel-spotify-next
