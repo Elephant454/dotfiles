@@ -134,17 +134,17 @@
 ;; cons pairs of themes, with the car being the day variant and the cdr being
 ;;  the night variant
 (setq e454iel-theme-pairs '((soft-morning . omtose-softer)
-                                      (silkworm . foggy-night)
-                                      (nubox-light . nubox-dark)
-                                      (kaolin-light . kaolin-eclipse)
-                                      (doom-one . doom-one)
-                                      (dracula . purple-haze)
-                                      (material-light . material)
-                                      (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
-                                      (apropospriate-light . apropospriate-dark)
-                                      (spacemacs-light . spacemacs-dark)
-                                      (gotham . gotham)
-                                      (purple-haze . purple-haze)))
+                            (silkworm . foggy-night)
+                            (nubox-light . nubox-dark)
+                            (kaolin-light . kaolin-eclipse)
+                            (doom-one . doom-one)
+                            (dracula . purple-haze)
+                            (material-light . material)
+                            (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
+                            (apropospriate-light . apropospriate-dark)
+                            (spacemacs-light . spacemacs-dark)
+                            (gotham . gotham)
+                            (purple-haze . purple-haze)))
 
 (setq e454iel-current-theme-pairs e454iel-theme-pairs)
 (setq e454iel-use-day-theme t)
@@ -241,10 +241,10 @@ without confirmation."
 ;; should I be using (set-frame-font "Inconsolata-16" nil t) to set the font
 ;;  instead?
 (setq e454iel-fonts '(("Inconsolata" . 14)
-                                ("Dina" . 14)
-                                ("monofur" . 16)
-                                ("Fantasque Sans Mono" . 14)
-                                ("Source Code Pro" . 14)))
+                      ("Dina" . 14)
+                      ("monofur" . 16)
+                      ("Fantasque Sans Mono" . 14)
+                      ("Source Code Pro" . 14)))
       
 (setq e454iel-current-font (pop e454iel-fonts))
 (setq e454iel-font-scale 0)
