@@ -170,15 +170,6 @@
   
   (e454iel-load-theme))
 
-
-;;(defun elephant454initel-cycle-theme-pairs ()
-;;  "Cycle through pairs of themes."
-;;  (interactive)
-;;  (add-to-list 'elephant454initel-theme-pairs elephant454initel-current-theme-pair t)
-;;  (setq elephant454initel-current-theme-pair (pop
-;;                                              elephant454initel-theme-pairs))
-;;  (elephant454initel-load-theme))
-
 (defun e454iel-load-theme ()
   "Load either the day or the night variant of the current theme pair. Make sure
 that all themes that might be loaded by this function are safe, as it loads them
