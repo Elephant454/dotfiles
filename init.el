@@ -175,11 +175,11 @@
 that all themes that might be loaded by this function are safe, as it loads them
 without confirmation."
   (let ((theme-to-apply
-        (if e454iel-use-day-theme
-            (caar e454iel-current-theme-pairs)  ; the theme-to-apply is
-                                                          ;  the day theme
-          (cdar e454iel-current-theme-pairs)))) ; the theme-to-apply is
-                                                          ;  the night theme
+         (if e454iel-use-day-theme
+             (caar e454iel-current-theme-pairs)  ; the theme-to-apply is
+                                                 ;  the day theme
+           (cdar e454iel-current-theme-pairs)))) ; the theme-to-apply is
+                                                 ;  the night theme
     (load-theme theme-to-apply t)
     
     (if e454iel-apply-to-stumpwm
