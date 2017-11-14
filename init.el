@@ -244,7 +244,9 @@ without confirmation."
                       ("Dina" . 14)
                       ("monofur" . 16)
                       ("Fantasque Sans Mono" . 14)
-                      ("Source Code Pro" . 14)))
+                      ("Source Code Pro" . 14)
+                      ("Camingo Code" . 14)
+                      ("Monoid" . 12)))
       
 (setq e454iel-current-font (pop e454iel-fonts))
 (setq e454iel-font-scale 0)
