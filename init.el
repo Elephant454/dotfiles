@@ -1288,5 +1288,19 @@ Lisp function does not specify a special indentation."
 (use-package pkgbuild-mode
   :mode ("/PKGBUILD$" . pkgbuild-mode))
 
+(use-package spray
+  :general (:keymaps 'spray-mode-map
+            :states '(normal emacs motion)
+            "p" 'spray-start/stop
+            "h" 'spray-backward-word
+            "l" 'spray-forward-word
+            "<left>" 'spray-backward-word
+            "<right>" 'spray-forward-word
+            "f" 'spray-faster
+            "s" 'spray-slower
+            "t" 'spray-time
+            "q" 'spray-quit
+            "<return>" 'spray-quit))
+
 (provide 'init)
 ;;; init.el ends here
