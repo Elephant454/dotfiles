@@ -996,6 +996,10 @@ Lisp function does not specify a special indentation."
 
 ;; Note: We can keep "Y" for copying a whole line at a time, and then put the
 ;;  binding to copy the current page's URL in the major-mode menu
+;; Note: It would be nicer to have the pages named using the number of the
+;;  eww buffer (first eww buffer to get opened gets 1, second gets 2, etc), and
+;;  then the name of the page. Like "<1>DuckDuckGo"
+;; Note: Middle mouse should open a page in a new buffer in the background
 (use-package eww
   :ensure nil
   :functions (eww-suggest-uris eww-current-url)
