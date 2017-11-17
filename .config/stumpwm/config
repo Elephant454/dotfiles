@@ -218,9 +218,9 @@
 
 (defun apply-emacs-font ()
   (let ((font-to-apply (emacs-repl-send-string
-                        "(car elephant454initel-current-font)"))
+                        "(car e454iel-current-font)"))
         (size-to-apply (emacs-repl-send-string
-                         "(+ elephant454initel-font-scale (cdr elephant454initel-current-font))")))
+                         "(+ e454iel-font-scale (cdr e454iel-current-font))")))
 
     (handler-case
          (set-font (make-instance 'xft:font
