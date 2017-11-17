@@ -184,15 +184,9 @@ without confirmation."
     
     (if e454iel-apply-to-stumpwm
         (progn 
-          (if (not (slime-connected-p))
-              (slime-connect "localhost" "4004"))
-          (slime-repl-send-string "(in-package stumpwm)")
-          (slime-repl-send-string "(apply-emacs-colors)")))
-          ;;(slime-repl-send-string (concat "(apply-foreground-background "
-                                          ;;(face-foreground 'default)
-                                          ;;" "
-                                          ;;(face-background 'default)
-                                          ;;")"))
+          (if (not e454-stumpwm-connection) (e454-setup-stumpwm-connection))
+          (e454-eval-with-stumpwm "(stumpwm::apply-emacs-colors)")))
+
     theme-to-apply))
 
 (defun e454iel-jump-to-theme (theme-to-jump-to)
@@ -283,11 +277,9 @@ without confirmation."
 
     (if e454iel-apply-to-stumpwm
         (progn 
-          (if (not (slime-connected-p))
-              (slime-connect "localhost" "4004"))
-          (slime-repl-send-string "(in-package stumpwm)")
-          (slime-repl-send-string "(apply-emacs-font)")))
-    ;;(print font-to-set)))
+          (if (not e454-stumpwm-connection) (e454-setup-stumpwm-connection))
+          (e454-eval-with-stumpwm "(stumpwm::apply-emacs-font)")))
+
     font-to-set))
 
 ;;(elephant454initel-load-font)
@@ -929,39 +921,69 @@ Lisp function does not specify a special indentation."
 ;; Slime provides a mode and tools for working with lisp. Of particular interest
 ;;  is the abililty to connect to an instance of SBCL and control it. I learned
 ;;  about this from stumpwm.
-;;
-;; Is there any way to do a "run-or-raise" sort of thing for this? Open a
-;;  connection if we aren't connected to 127.0.0.1:4004, but otherwise open the
-;;  buffer?
-
-;; This fails to make a connection if we have ANY Slime connection established.
-;; How can we get around this...?
-;; I think this is a start, but we need a way to iterate through all of the
-;;  connections and switch to the one with the right port. For the moment, it
-;;  starts a new connection if the /current/ connection doesn't have the right
-;;  port.
-(defun run-or-raise-stumpwm-repl ()
-  (interactive)
-  (if (and
-       (slime-connected-p)
-       (= 4004 (slime-connection-port (slime-current-connection))))
-
-      ;; then
-      (switch-to-buffer (slime-repl-buffer))
-    
-    ;; else
-    (slime-connect "127.0.0.1" 4004)))
-
 (use-package slime
   :init (progn
           (use-package slime-company :demand)
-          (slime-setup '(slime-fancy slime-company)))
+          (slime-setup '(slime-fancy slime-company))
+
+          ;; This was taken from the Lispy package by Abo-Abo
+          (defun e454-create-slime-connection-in-background (host
+                                                             port
+                                                             &optional
+                                                             coding-system
+                                                             interactive-p)
+            "Create a new slime connection, but keep the window layout."
+            (let ((wnd (current-window-configuration))
+                  (current-slime-connection (ignore-errors (slime-connection))))
+              (cond
+               ((and coding-system interactive-p)
+                (slime-connect host port coding-system interactive-p))
+               (coding-system (slime-connect host port coding-system))
+               (interactive-p (slime-connect host port nil interactive-p))
+               (t (slime-connect host port)))
+
+              (while (not (and (not (eq current-slime-connection (slime-current-connection)))
+                               (get-buffer-window (slime-output-buffer))))
+                (sit-for 0.2))
+
+              (set-window-configuration wnd)))
+
+          (defvar e454-stumpwm-connection nil)
+
+          ;; this function need some kind of error handling for when the server isn't
+          ;;  there
+          (defun e454-setup-stumpwm-connection ()
+            "Initialize a connection to a StumpWM Swank server."
+            (setq e454-stumpwm-connection
+                  (progn
+                    (e454-create-slime-connection-in-background
+                     "127.0.0.1" 4004)
+                    (slime-current-connection)))))
+
   :config (progn
             (setq inferior-lisp-program "sbcl")
             ;; I'm certain that there is a better way to do this.
-            (load (expand-file-name "~/quicklisp/slime-helper.el") t))
+            (load (expand-file-name "~/quicklisp/slime-helper.el") t)
+
+            ;; https://stackoverflow.com/questions/22456086/how-to-run-common-lisp-code-with-slime-in-emacs-lisp
+            ;; This is taken from pieces of the lispy package.
+            (defun e454-eval-with-stumpwm (str)
+              "Eval STR using the `e454-stumpwm-connection' connection"
+              (if (not e454-stumpwm-connection) (e454-setup-stumpwm-connection))
+              (let ((temp-connection (ignore-errors (slime-current-connection))))
+                (slime-select-connection e454-stumpwm-connection)
+                (let (deactivate-mark)
+                  (cadr (slime-eval `(swank:eval-and-grab-output ,str))))
+                (slime-select-connection temp-connection)))
+
+            (defun e454-run-or-raise-stumpwm-repl ()
+              (interactive)
+              (if (not e454-stumpwm-connection) (e454-setup-stumpwm-connection))
+
+              (switch-to-buffer
+               (slime-connection-output-buffer e454-stumpwm-connection))))
   :general (e454iel-main-menu
-            "as" 'run-or-raise-stumpwm-repl))
+            "as" 'e454-run-or-raise-stumpwm-repl))
 
 ;;
 (use-package stumpwm-mode)
