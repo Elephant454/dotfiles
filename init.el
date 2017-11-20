@@ -1329,5 +1329,10 @@ Lisp function does not specify a special indentation."
             "q" 'spray-quit
             "<return>" 'spray-quit))
 
+(use-package elfeed)
+
+(use-package arch-packer
+  :config (setq arch-packer-default-command "pacaur"))
+
 (provide 'init)
 ;;; init.el ends here
