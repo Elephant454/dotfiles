@@ -382,12 +382,12 @@ without confirmation."
      "tfi" 'e454iel-increase-font-size
      "tfd" 'e454iel-decrease-font-size
      ;; misc toggles
-     "ta" '(auto-fill-mode 1)
+     "ta" 'auto-fill-mode
      "tr" '(lambda() (interactive)
              (if (yes-or-no-p "Really restart Emacs? ") (restart-emacs)))
      
      "a" '(:ignore t :which-key "Applications")
-     "ap" '(paradox-list-packages)
+     "ap" 'paradox-list-packages
      "ag" '(:ignore t :which-key "Games")
      
      "h" '(help-command :which-key "Help"))))
