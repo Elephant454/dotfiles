@@ -927,7 +927,8 @@ Lisp function does not specify a special indentation."
           (slime-setup '(slime-fancy slime-company))
 
           ;; This was taken from the Lispy package by Abo-Abo
-          (defun e454-create-slime-connection-in-background (host
+          ;; Can I use `slime-rex' to get around needing to sleep?
+          (defun e454iel-create-slime-connection-in-background (host
                                                              port
                                                              &optional
                                                              coding-system
