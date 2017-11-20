@@ -1258,7 +1258,8 @@ Lisp function does not specify a special indentation."
 ;;  auto-correct, dired-sidebar, treemacs-projectile,ivy-lobsters, nov (nov.el),
 ;;  achievements, comment-tags, flex-compile,org-projectile, org-super-agenda,
 ;;  avk-emacs-themes, lsp-javacomp,pocket-reader, counsel-pydoc, jetbrains,
-;;  orca, erc-scrolltoplace,mu4e-jump-to-list, iter2, sicp
+;;  orca, erc-scrolltoplace,mu4e-jump-to-list, iter2, sicp,
+;;  company-eshell-autosuggest, exato, org-randomnote
 
 (use-package counsel-spotify
   :general (e454iel-main-menu "am" '(nil :which-key "Spotify (Music)")
