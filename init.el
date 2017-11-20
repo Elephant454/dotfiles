@@ -184,8 +184,8 @@ without confirmation."
     
     (if e454iel-apply-to-stumpwm
         (progn 
-          (if (not e454-stumpwm-connection) (e454-setup-stumpwm-connection))
-          (e454-eval-with-stumpwm "(stumpwm::apply-emacs-colors)")))
+          (if (not e454iel-stumpwm-connection) (e454iel-setup-stumpwm-connection))
+          (e454iel-eval-with-stumpwm "(stumpwm::apply-emacs-colors)")))
 
     theme-to-apply))
 
@@ -277,8 +277,8 @@ without confirmation."
 
     (if e454iel-apply-to-stumpwm
         (progn 
-          (if (not e454-stumpwm-connection) (e454-setup-stumpwm-connection))
-          (e454-eval-with-stumpwm "(stumpwm::apply-emacs-font)")))
+          (if (not e454iel-stumpwm-connection) (e454iel-setup-stumpwm-connection))
+          (e454iel-eval-with-stumpwm "(stumpwm::apply-emacs-font)")))
 
     font-to-set))
 
@@ -948,15 +948,15 @@ Lisp function does not specify a special indentation."
 
               (set-window-configuration wnd)))
 
-          (defvar e454-stumpwm-connection nil)
+          (defvar e454iel-stumpwm-connection nil)
 
           ;; this function need some kind of error handling for when the server isn't
           ;;  there
-          (defun e454-setup-stumpwm-connection ()
+          (defun e454iel-setup-stumpwm-connection ()
             "Initialize a connection to a StumpWM Swank server."
-            (setq e454-stumpwm-connection
+            (setq e454iel-stumpwm-connection
                   (progn
-                    (e454-create-slime-connection-in-background
+                    (e454iel-create-slime-connection-in-background
                      "127.0.0.1" 4004)
                     (slime-current-connection)))))
 
@@ -967,23 +967,23 @@ Lisp function does not specify a special indentation."
 
             ;; https://stackoverflow.com/questions/22456086/how-to-run-common-lisp-code-with-slime-in-emacs-lisp
             ;; This is taken from pieces of the lispy package.
-            (defun e454-eval-with-stumpwm (str)
-              "Eval STR using the `e454-stumpwm-connection' connection"
-              (if (not e454-stumpwm-connection) (e454-setup-stumpwm-connection))
+            (defun e454iel-eval-with-stumpwm (str)
+              "Eval STR using the `e454iel-stumpwm-connection' connection"
+              (if (not e454iel-stumpwm-connection) (e454iel-setup-stumpwm-connection))
               (let ((temp-connection (ignore-errors (slime-current-connection))))
-                (slime-select-connection e454-stumpwm-connection)
+                (slime-select-connection e454iel-stumpwm-connection)
                 (let (deactivate-mark)
                   (cadr (slime-eval `(swank:eval-and-grab-output ,str))))
                 (slime-select-connection temp-connection)))
 
-            (defun e454-run-or-raise-stumpwm-repl ()
+            (defun e454iel-run-or-raise-stumpwm-repl ()
               (interactive)
-              (if (not e454-stumpwm-connection) (e454-setup-stumpwm-connection))
+              (if (not e454iel-stumpwm-connection) (e454iel-setup-stumpwm-connection))
 
               (switch-to-buffer
-               (slime-connection-output-buffer e454-stumpwm-connection))))
+               (slime-connection-output-buffer e454iel-stumpwm-connection))))
   :general (e454iel-main-menu
-            "as" 'e454-run-or-raise-stumpwm-repl))
+            "as" 'e454iel-run-or-raise-stumpwm-repl))
 
 ;;
 (use-package stumpwm-mode)
