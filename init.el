@@ -1330,7 +1330,13 @@ Lisp function does not specify a special indentation."
             "q" 'spray-quit
             "<return>" 'spray-quit))
 
-(use-package elfeed)
+;; Read https://github.com/skeeto/elfeed,
+;;  https://github.com/remyhonig/elfeed-org, and
+;;  https://github.com/algernon/elfeed-goodies. Maybe steal some of the feeds
+;;  they use as examples, too.
+(use-package elfeed
+  :config (use-package elfeed-org
+            :config (setq rmh-elfeed-org-files "~/org/elfeed.org")))
 
 (use-package arch-packer
   :config (setq arch-packer-default-command "pacaur"))
