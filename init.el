@@ -1336,7 +1336,9 @@ Lisp function does not specify a special indentation."
 ;;  they use as examples, too.
 (use-package elfeed
   :config (use-package elfeed-org
-            :config (setq rmh-elfeed-org-files "~/org/elfeed.org")))
+            :config (progn
+                      (setq rmh-elfeed-org-files '("~/org/elfeed.org"))
+                      (elfeed-org))))
 
 (use-package arch-packer
   :config (setq arch-packer-default-command "pacaur"))
