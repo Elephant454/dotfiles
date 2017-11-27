@@ -507,6 +507,7 @@ without confirmation."
 ;;  https://github.com/bmag/emacs-purpose/wiki/Keys-&-Commands
 ;;  https://github.com/bmag/emacs-purpose/wiki/Purpose-Configuration
 (use-package window-purpose
+  :disabled
   :config (progn
             (purpose-mode t)
             (use-package ivy-purpose
