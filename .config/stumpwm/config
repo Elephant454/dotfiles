@@ -64,7 +64,9 @@
 (setq *mode-line-timeout* 1)
 (setq *mode-line-position* :bottom)
 (setq *time-modeline-string* "%a %F %H:%M:%S")
-(setq *screen-mode-line-format* '("[^B%n^b] %W ^> %B %d"))
+(load-module "net")
+(load-module "wifi")
+(setq *screen-mode-line-format* '("[^B%n^b] %W ^> %B %l %I %d"))
 (mode-line)
 
 ;; frame/window keybindings
