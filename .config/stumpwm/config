@@ -226,7 +226,7 @@
          (set-font (make-instance 'xft:font
                                   :family font-to-apply
                                   :subfamily "Regular"
-                                  :size (parse-integer size-to-apply)))
+                                  :size (- (parse-integer size-to-apply) 1)))
 
       (simple-error (se)
         (set-font (concat "-*-" font-to-apply "-medium-r-*--"
