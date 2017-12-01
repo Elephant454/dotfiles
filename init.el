@@ -1344,5 +1344,11 @@ Lisp function does not specify a special indentation."
 (use-package arch-packer
   :config (setq arch-packer-default-command "pacaur"))
 
+(use-package unison
+  :config (use-package unison-mode
+            :mode ("\\.prf$" . unison-mode)))
+
+(use-package xkcd)
+
 (provide 'init)
 ;;; init.el ends here
