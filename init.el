@@ -621,7 +621,9 @@ without confirmation."
             "od" (lambda() (interactive)
                    (find-file "~/org/derp.org"))
             "oj" 'org-journal-new-entry
-            "oc" 'org-capture)
+            "o C-c" 'org-capture
+            "o c" 'org-clock-in-last
+            "o C" 'org-clock-out)
   :general (:keymaps 'org-mode-map
             :states 'normal
             "RET" 'org-open-at-point)
