@@ -1285,6 +1285,11 @@ Lisp function does not specify a special indentation."
 
             (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)))
 
+(use-package rtags
+  :general (e454iel-major-mode-menu
+            :keymaps 'c-mode-map
+            "s" 'rtags-find-symbol-at-point))
+
 ;;(use-package emms
   ;;:config (progn
             ;;(use-package emms-player-mpv)
