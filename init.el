@@ -1278,15 +1278,23 @@ Lisp function does not specify a special indentation."
 (use-package tramp-term)
 
 (use-package irony
-  :config (progn
-            (use-package company-irony)
+  :defer t
+  :init (progn
             (add-hook 'c++-mode-hook 'irony-mode)
             (add-hook 'c-mode-hook 'irony-mode)
-            (add-hook 'objc-mode-hook 'irony-mode)
-
+            (add-hook 'objc-mode-hook 'irony-mode))
+  :config (progn
+            (use-package company-irony)
             (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)))
 
+;; There are definitely more keybindings I want to add. Look at some of the
+;;  examples https://github.com/Andersbakken/rtags
 (use-package rtags
+  :defer t
+  :init (progn
+          (add-hook 'c-mode-hook 'rtags-start-process-unless-running)
+          (add-hook 'c++-mode-hook 'rtags-start-process-unless-running))
+  :config (setq rtags-use-bookmarks nil)
   :general (e454iel-major-mode-menu
             :keymaps 'c-mode-map
             "s" 'rtags-find-symbol-at-point))
