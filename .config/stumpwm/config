@@ -154,6 +154,12 @@
 ;; take a screenshot
 (define-key *top-map* (kbd "Print") "exec gnome-screenshot")
 
+;;; Now to undefine a bunch of default keybindings
+(undefine-key *root-map* (kbd "C-c"))
+(undefine-key *root-map* (kbd "c"))
+(undefine-key *root-map* (kbd "C-e"))
+(undefine-key *root-map* (kbd "C-m"))
+
 
 (ql:quickload 'cl-colors)
 
