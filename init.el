@@ -183,9 +183,7 @@ without confirmation."
     (load-theme theme-to-apply t)
     
     (if e454iel-apply-to-stumpwm
-        (progn 
-          (if (not e454iel-stumpwm-connection) (e454iel-setup-stumpwm-connection))
-          (e454iel-eval-with-stumpwm "(stumpwm::apply-emacs-colors)")))
+          (e454iel-eval-with-stumpwm "(stumpwm::apply-emacs-colors)"))
 
     theme-to-apply))
 
@@ -276,9 +274,7 @@ without confirmation."
     (set-frame-font font-to-set nil t)
 
     (if e454iel-apply-to-stumpwm
-        (progn 
-          (if (not e454iel-stumpwm-connection) (e454iel-setup-stumpwm-connection))
-          (e454iel-eval-with-stumpwm "(stumpwm::apply-emacs-font)")))
+        (e454iel-eval-with-stumpwm "(stumpwm::apply-emacs-font)"))
 
     font-to-set))
 
@@ -971,21 +967,34 @@ Lisp function does not specify a special indentation."
 
             ;; https://stackoverflow.com/questions/22456086/how-to-run-common-lisp-code-with-slime-in-emacs-lisp
             ;; This is taken from pieces of the lispy package.
-            (defun e454iel-eval-with-stumpwm (str)
+            ;; TODO: There is a better way of doing error handling than having
+            ;;  an optional argument like this. Look more into how to do proper
+            ;;  error handling.
+            (defun e454iel-eval-with-stumpwm (str &optional dont-retry-if-error)
               "Eval STR using the `e454iel-stumpwm-connection' connection"
-              (if (not e454iel-stumpwm-connection) (e454iel-setup-stumpwm-connection))
-              (let ((temp-connection (ignore-errors (slime-current-connection))))
-                (slime-select-connection e454iel-stumpwm-connection)
-                (let (deactivate-mark)
-                  (cadr (slime-eval `(swank:eval-and-grab-output ,str))))
-                (slime-select-connection temp-connection)))
+              (condition-case error-info
+                  (let ((temp-connection (ignore-errors (slime-current-connection))))
+                    (slime-select-connection e454iel-stumpwm-connection)
+                    (let (deactivate-mark)
+                      (cadr (slime-eval `(swank:eval-and-grab-output ,str))))
+                    (slime-select-connection temp-connection))
 
-            (defun e454iel-run-or-raise-stumpwm-repl ()
+                (error (if (not dont-retry-if-error)
+                           (progn (e454iel-setup-stumpwm-connection)
+                                  (e454iel-eval-with-stumpwm str t))
+                   (eval error-info)))))
+
+            (defun e454iel-run-or-raise-stumpwm-repl (&optional
+                                                      dont-retry-if-error)
               (interactive)
-              (if (not e454iel-stumpwm-connection) (e454iel-setup-stumpwm-connection))
+              (condition-case error-info
+                  (display-buffer
+                   (slime-connection-output-buffer e454iel-stumpwm-connection))
 
-              (switch-to-buffer
-               (slime-connection-output-buffer e454iel-stumpwm-connection))))
+                (error (if (not dont-retry-if-error)
+                           (progn (e454iel-setup-stumpwm-connection)
+                                  (e454iel-run-or-raise-stumpwm-repl t))
+                         (eval error-info))))))
   :general (e454iel-main-menu
             "as" 'e454iel-run-or-raise-stumpwm-repl))
 
