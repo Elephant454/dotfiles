@@ -134,6 +134,8 @@
 (define-key *application-map* (kbd "S") "exec skypeforlinux")
 (define-key *application-map* (kbd "p") "exec pavucontrol")
 (define-key *application-map* (kbd "v") "exec vivaldi-stable")
+(defcommand open-mstdn nil nil (run-or-pull "open-mstdn-app" '(:class "Mstdn")))
+(define-key *application-map* (kbd "m") "open-mstdn")
 ;;(define-key *application-map* (kbd "g") "exec gajim")
 
 (defvar *games-map* (make-sparse-keymap))
