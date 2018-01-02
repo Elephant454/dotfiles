@@ -1258,23 +1258,25 @@ Lisp function does not specify a special indentation."
             "<right>" 'picpocket-next
             "<left>" 'picpocket-previous))
 
-;; consider ivy-todo, ivy-historian, thinks, monokai-alt-theme, org-brain,
-;;  arch-packer, bitbucket, html2org, playerctl, flatui-dark-theme,
-;;  hook-helpers, dakrone-light-theme, turing-machine (this sounds awesome!),
-;;  slstats, flycheck-coverity, shx, solaire-mode, google, google-contacts,
-;;  google-maps, google-translate, gited, treemacs (and treemacs-evil),
-;;  coin-ticker, bifocal, dad-joke, github-modern-theme,ob-fsharp, ob-rust,
-;;  org-static-blog, rainbow-identifiers, rainbow-blocks,easy-escape, emacs-lsp,
-;;  face-explorer, makefile-executor, numbers, bifocal,coin-ticker, whatever
-;;  that weather thing was from Spacemacs?, outline-toc,org2web, shrink-path,
-;;  ebdb, company-ebdb, counsel-ebdb, org-mind-map,outrespace, cask,
-;;  smartparens, company-math, green-is-the-new-black,snazzy-theme,
-;;  auto-correct, dired-sidebar, treemacs-projectile,ivy-lobsters, nov (nov.el),
-;;  achievements, comment-tags, flex-compile,org-projectile, org-super-agenda,
-;;  avk-emacs-themes, lsp-javacomp,pocket-reader, counsel-pydoc, jetbrains,
-;;  orca, erc-scrolltoplace,mu4e-jump-to-list, iter2, sicp,
+;; Packages to try:
+;;  ivy-todo, ivy-historian, thinks, monokai-alt-theme, org-brain, arch-packer,
+;;  bitbucket, html2org, playerctl, flatui-dark-theme, hook-helpers,
+;;  dakrone-light-theme, turing-machine (this sounds awesome!), slstats,
+;;  flycheck-coverity, shx, solaire-mode, google, google-contacts, google-maps,
+;;  google-translate, gited, treemacs (and treemacs-evil), coin-ticker, bifocal,
+;;  dad-joke, github-modern-theme,ob-fsharp, ob-rust, org-static-blog,
+;;  rainbow-identifiers, rainbow-blocks,easy-escape, emacs-lsp, face-explorer,
+;;  makefile-executor, numbers, bifocal,coin-ticker, whatever that weather thing
+;;  was from Spacemacs?, outline-toc,org2web, shrink-path, ebdb, company-ebdb,
+;;  counsel-ebdb, org-mind-map,outrespace, cask, smartparens, company-math,
+;;  green-is-the-new-black,snazzy-theme, auto-correct, dired-sidebar,
+;;  treemacs-projectile,ivy-lobsters, nov (nov.el), achievements, comment-tags,
+;;  flex-compile,org-projectile, org-super-agenda, avk-emacs-themes,
+;;  lsp-javacomp,pocket-reader, counsel-pydoc, jetbrains, orca,
+;;  erc-scrolltoplace,mu4e-jump-to-list, iter2, sicp,
 ;;  company-eshell-autosuggest, exato, org-randomnote, abgaben,
-;;  per-buffer-theme, smart-jump, scp, paced, tidal
+;;  per-buffer-theme, smart-jump, scp, paced, tidal, eldoc-overlay, discover,
+;;  disaster
 
 (use-package counsel-spotify
   :general (e454iel-main-menu "am" '(nil :which-key "Spotify (Music)")
