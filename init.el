@@ -395,6 +395,7 @@ without confirmation."
             (use-package counsel
               :general (:keymaps 'help-map
                         "b" 'counsel-descbinds))
+            (use-package counsel-tramp)
             (use-package swiper
               :general (:states '(normal insert visual replace operator motion emacs)
                         :prefix "/"
