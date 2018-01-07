@@ -221,8 +221,8 @@ without confirmation."
 ;; fonts
 
 ;; Mark these as variables properly. Create docstrings for these later.
-(defvar e454iel-fonts)
-(defvar e454iel-current-font)
+(defvar e454iel-font-pairs)
+(defvar e454iel-current-font-pairs)
 (defvar e454iel-font-scale)
 
 ;; there should really be a way to set the font size independently, or perhaps a
@@ -233,21 +233,30 @@ without confirmation."
 ;;
 ;; should I be using (set-frame-font "Inconsolata-16" nil t) to set the font
 ;;  instead?
-(setq e454iel-fonts '(("Inconsolata" . 14)
-                      ("Dina" . 14)
-                      ("monofur" . 16)
-                      ("Fantasque Sans Mono" . 14)
-                      ("Source Code Pro" . 14)
-                      ("Camingo Code" . 14)
-                      ("Monoid" . 12)))
+(setq e454iel-font-pairs '(("Inconsolata" . 14)
+                           ("Dina" . 14)
+                           ("monofur" . 16)
+                           ("Fantasque Sans Mono" . 14)
+                           ("Source Code Pro" . 14)
+                           ("Camingo Code" . 14)
+                           ("Monoid" . 12)))
       
-(setq e454iel-current-font (pop e454iel-fonts))
+(setq e454iel-current-font-pairs e454iel-font-pairs)
 (setq e454iel-font-scale 0)
 
+;;(defun e454iel-cycle-fonts ()
+;;  (interactive)
+;;  (add-to-list 'e454iel-fonts e454iel-current-font t)
+;;  (setq e454iel-current-font (pop e454iel-fonts))
+;;  (e454iel-load-font))
+
 (defun e454iel-cycle-fonts ()
+  "Cycle through pairs of themes."
   (interactive)
-  (add-to-list 'e454iel-fonts e454iel-current-font t)
-  (setq e454iel-current-font (pop e454iel-fonts))
+  (setq e454iel-current-font-pairs (cdr e454iel-current-font-pairs))
+  (if (not e454iel-current-font-pairs)
+      (setq e454iel-current-font-pairs e454iel-font-pairs))
+
   (e454iel-load-font))
 
 (defun e454iel-increase-font-size ()
@@ -265,21 +274,38 @@ without confirmation."
   ;;(car (split-string (elt (font-info (find-font elephant454initel-current-font)) 1) ":")))
 
 (defun e454iel-load-font ()
-  (let ((font-to-set
-        (concat
-         (car e454iel-current-font)
-         "-"
-         (number-to-string
-          (+ e454iel-font-scale
-             (cdr e454iel-current-font))))))
-    (set-frame-font font-to-set nil t)
+  (let ((font-string
+         (concat
+          (caar e454iel-current-font-pairs)
+          "-"
+          (number-to-string
+           (+ e454iel-font-scale (cdar e454iel-current-font-pairs))))))
 
+    (set-frame-font font-string nil t)
+    
     (if e454iel-apply-to-stumpwm
         (e454iel-eval-with-stumpwm "(stumpwm::apply-emacs-font)"))
+    
+    font-string))
 
-    font-to-set))
+(defun e454iel-jump-to-font (font-to-jump-to)
+  (e454iel-jump-to-font--recursive font-to-jump-to e454iel-font-pairs))
+
+(defun e454iel-jump-to-font--recursive (font-to-jump-to font-pairs)
+  (cond
+   ((not font-pairs)
+    nil)
+   
+   ((string-equal font-to-jump-to (caar font-pairs))
+    (progn
+      (setq e454iel-current-font-pairs font-pairs)
+      (e454iel-load-font)))
+   
+   (t
+    (e454iel-jump-to-font--recursive font-to-jump-to (cdr font-pairs)))))
 
 ;;(elephant454initel-load-font)
+(e454iel-jump-to-font "Camingo Code")
 
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
