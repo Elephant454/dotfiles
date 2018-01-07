@@ -213,10 +213,10 @@ without confirmation."
      theme-to-jump-to
      (cdr theme-pairs)))))
 
-(e454iel-load-theme)
+;;(e454iel-load-theme)
 
 ;; load default theme
-;;(elephant454initel-jump-to-theme 'dracula)
+(e454iel-jump-to-theme 'kaolin-light)
 
 ;; fonts
 
