@@ -296,6 +296,79 @@ without confirmation."
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Key-Binding-Commands.html
 ;; and this page:
 ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Named-ASCII-Chars.html
+
+;; This is here until use-package-core is once again a thing. See line 1947 in
+;;  general.el 
+(with-eval-after-load 'use-package
+  (declare-function use-package-concat "use-package")
+  (declare-function use-package-process-keywords "use-package")
+  (declare-function use-package-sort-keywords "use-package")
+  (declare-function use-package-plist-maybe-put "use-package")
+  (declare-function use-package-plist-append "use-package")
+  (defvar use-package-keywords)
+  (defvar use-package-deferring-keywords)
+  (setq use-package-keywords
+        ;; should go in the same location as :bind
+        ;; adding to end may not cause problems, but see issue #22
+        (cl-loop for item in use-package-keywords
+                 if (eq item :bind-keymap*)
+                 collect :bind-keymap* and collect :general
+                 else
+                 ;; don't add duplicates
+                 unless (eq item :general)
+                 collect item))
+  (when (boundp 'use-package-deferring-keywords)
+    (add-to-list 'use-package-deferring-keywords :general t))
+  (defun use-package-normalize/:general (_name _keyword args)
+    "Return ARGS."
+    args)
+  (defun general--extract-symbol (def)
+    "Extract autoloadable symbol from DEF, a normal or extended definition."
+    (when def
+      (if (general--extended-def-p def)
+          (let ((first (car def))
+                (inner-def (cl-getf def :def)))
+            (cond ((symbolp inner-def)
+                   inner-def)
+                  ((and (symbolp first)
+                        (not (keywordp first)))
+                   first)))
+        (when (symbolp def)
+          def))))
+  (declare-function general--extract-symbol "general")
+  (defun use-package-handler/:general (name _keyword arglists rest state)
+    "Use-package handler for :general."
+    (let* ((sanitized-arglist
+            ;; combine arglists into one without function names or
+            ;; positional arguments
+            (let (result)
+              (dolist (arglist arglists result)
+                (while (general--positional-arg-p (car arglist))
+                  (setq arglist (cdr arglist)))
+                (setq result (append result arglist)))))
+           (commands
+            (cl-loop for (key def) on sanitized-arglist by 'cddr
+                     when (and (not (keywordp key))
+                               (not (null def))
+                               (ignore-errors
+                                 (setq def (eval def))
+                                 (setq def (general--extract-symbol def))))
+                     collect def)))
+      (use-package-concat
+       (use-package-process-keywords name
+         (use-package-sort-keywords
+          (use-package-plist-append rest :commands commands))
+         state)
+       `((ignore ,@(mapcar (lambda (arglist)
+                             ;; Note: prefix commands are not valid functions
+                             (if (or (functionp (car arglist))
+                                     (macrop (car arglist)))
+                                 `(,@arglist :package ',name)
+                               `(general-def
+                                  ,@arglist
+                                  :package ',name)))
+                           arglists)))))))
+
 (use-package general
   :config
   (progn
