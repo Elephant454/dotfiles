@@ -1,3 +1,9 @@
+;;; init.el --- Elephant454's init.el
+
+;;; Commentary:
+
+;;; Code:
+
 ;; global variables
 (setq
  inhibit-startup-screen t
