@@ -287,20 +287,17 @@ without confirmation."
     font-string))
 
 (defun e454iel-jump-to-font (font-to-jump-to)
-  (e454iel-jump-to-font--recursive font-to-jump-to e454iel-font-pairs))
+"Jump to `FONT-TO-JUMP-TO' in `e454iel-font-pairs' and apply it."
+  (let ((result
+         (member-if
+          (lambda (font-pair) nil nil
+            (equal (car font-pair) font-to-jump-to))
 
-(defun e454iel-jump-to-font--recursive (font-to-jump-to font-pairs)
-  (cond
-   ((not font-pairs)
-    nil)
-   
-   ((string-equal font-to-jump-to (caar font-pairs))
-    (progn
-      (setq e454iel-current-font-pairs font-pairs)
-      (e454iel-load-font)))
-   
-   (t
-    (e454iel-jump-to-font--recursive font-to-jump-to (cdr font-pairs)))))
+          e454iel-font-pairs)))
+
+    (if result
+        (progn (setq e454iel-current-font-pairs result)
+               (e454iel-load-font)))))
 
 ;;(elephant454initel-load-font)
 (e454iel-jump-to-font "Camingo Code")
