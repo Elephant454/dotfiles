@@ -188,30 +188,28 @@ without confirmation."
 
     theme-to-apply))
 
+;; This looks good. This should be the underlying way of changing it when you
+;;  know an exact name, and then I should make an ivy interface for picking one
+;;  conveniently
 (defun e454iel-jump-to-theme (theme-to-jump-to)
-  (e454iel-jump-to-theme--recursive theme-to-jump-to e454iel-theme-pairs))
+"Jump to `THEME-TO-JUMP-TO' in `e454iel-theme-pairs' and apply it."
+  (let ((result
+         (member-if
+          (lambda (theme-pair) nil nil
+            (cond
+             ((equal (car theme-pair) theme-to-jump-to)
+              (progn (setq e454iel-use-day-theme t) t))
 
-(defun e454iel-jump-to-theme--recursive (theme-to-jump-to theme-pairs)
-  (cond
-   ((not theme-pairs)
-    nil)
+             ((equal (cdr theme-pair) theme-to-jump-to)
+              (progn (setq e454iel-use-day-theme nil) t))
 
-   ((eq theme-to-jump-to (caar theme-pairs))
-    (progn
-      (setq e454iel-use-day-theme t
-            e454iel-current-theme-pairs theme-pairs)
-      (e454iel-load-theme)))
+             (t nil)))
 
-   ((eq theme-to-jump-to (cdar theme-pairs))
-    (progn
-      (setq e454iel-use-day-theme nil
-            e454iel-current-theme-pairs theme-pairs)
-      (e454iel-load-theme)))
+          e454iel-theme-pairs)))
 
-   (t
-    (e454iel-jump-to-theme--recursive
-     theme-to-jump-to
-     (cdr theme-pairs)))))
+    (if result
+        (progn (setq e454iel-current-theme-pairs result)
+               (e454iel-load-theme)))))
 
 ;;(e454iel-load-theme)
 
