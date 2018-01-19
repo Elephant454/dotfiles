@@ -700,7 +700,7 @@ without confirmation."
   :config (progn
             (defvar e454iel-documents-dir
               (concat "/"
-                      (let ((year (decode-time))
+                      (let* ((time (decode-time))
                              (month (nth 4 year))
                              (year (nth 5 year)))
                         (if (> month 7)
