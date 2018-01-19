@@ -717,7 +717,7 @@ without confirmation."
             "oe" (lambda() (interactive)
                    (find-file "~/Documents/2017-2018/Semester1/events.org"))
             "od" (lambda() (interactive)
-                   (find-file "~/org/derp.org"))
+                   (find-file (concat org-directory "/derp.org")))
             "oj" 'org-journal-new-entry
             "o C-c" 'org-capture
             "o c" 'org-clock-in-last
