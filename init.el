@@ -865,6 +865,11 @@ without confirmation."
   (interactive)
   (kill-new (buffer-file-name)))
 
+(defun insert-alphabet ()
+  "Insert the English alphabet in lower case at point."
+  (interactive)
+  (dotimes (i 26) (insert-char (+ ?a i))))
+
 (use-package ediff
   :ensure nil
   :config (setq ediff-window-setup-function
