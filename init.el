@@ -698,6 +698,15 @@ without confirmation."
                       (setq alert-default-style 'libnotify)
                       (org-alert-disable))))
   :config (progn
+            (defvar e454iel-documents-dir
+              (concat "/"
+                      (let ((year (decode-time))
+                             (month (nth 4 year))
+                             (year (nth 5 year)))
+                        (if (> month 7)
+                            (format "%d-%d/" year (+ year 1))
+                          (format "%d-%d/" (+ year -1) year)))
+                      "Semester1"))
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1)))
             ;;(add-hook 'org-mode-hook 'turn-on-stripe-table-mode)
             (add-hook 'org-mode-hook (lambda() (auto-fill-mode 1)))
