@@ -698,15 +698,17 @@ without confirmation."
                       (setq alert-default-style 'libnotify)
                       (org-alert-disable))))
   :config (progn
+            (defvar e454iel-current-semester "Semester1")
             (defvar e454iel-documents-dir
-              (concat "/"
+              (concat "~/Documents/"
                       (let* ((time (decode-time))
                              (month (nth 4 time))
-                             (year (nth 5 time)))
-                        (if (> month 7)
-                            (format "%d-%d/" year (+ year 1))
-                          (format "%d-%d/" (+ year -1) year)))
-                      "Semester1"))
+                             (year (nth 5 time))
+                             (start-year (if (> month 7)
+                                             year
+                                           (- year 1))))
+                        (format "%d-%d/" start-year (+ start-year 1)))
+                      e454iel-current-semester))
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1)))
             ;;(add-hook 'org-mode-hook 'turn-on-stripe-table-mode)
             (add-hook 'org-mode-hook (lambda() (auto-fill-mode 1)))
@@ -722,9 +724,9 @@ without confirmation."
             ;; add some way for the semester and year to
             ;;  be figured out automatically
             "ot" (lambda() (interactive)
-                   (find-file "~/Documents/2017-2018/Semester1/todo.org"))
+                   (find-file (concat e454iel-documents-dir "/todo.org"))
             "oe" (lambda() (interactive)
-                   (find-file "~/Documents/2017-2018/Semester1/events.org"))
+                   (find-file (concat e454iel-documents-dir "/events.org"))
             "od" (lambda() (interactive)
                    (find-file (concat org-directory "/derp.org")))
             "oj" 'org-journal-new-entry
