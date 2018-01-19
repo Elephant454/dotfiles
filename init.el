@@ -701,8 +701,8 @@ without confirmation."
             (defvar e454iel-documents-dir
               (concat "/"
                       (let* ((time (decode-time))
-                             (month (nth 4 year))
-                             (year (nth 5 year)))
+                             (month (nth 4 time))
+                             (year (nth 5 time)))
                         (if (> month 7)
                             (format "%d-%d/" year (+ year 1))
                           (format "%d-%d/" (+ year -1) year)))
