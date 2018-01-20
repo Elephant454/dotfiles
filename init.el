@@ -5,6 +5,8 @@
 ;;; Code:
 
 ;; global variables
+(require 'cl)
+
 (setq
  inhibit-startup-screen t
 
@@ -318,105 +320,31 @@ without confirmation."
             (use-package evil-matchit
               :config (global-evil-matchit-mode 1))))
 
-;; in order to figure out how binding keys works, I'm going to need
-;; this page:
-;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Key-Binding-Commands.html
-;; and this page:
-;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Named-ASCII-Chars.html
-
-;; This is here until use-package-core is once again a thing. See line 1947 in
-;;  general.el 
-(with-eval-after-load 'use-package
-  (declare-function use-package-concat "use-package")
-  (declare-function use-package-process-keywords "use-package")
-  (declare-function use-package-sort-keywords "use-package")
-  (declare-function use-package-plist-maybe-put "use-package")
-  (declare-function use-package-plist-append "use-package")
-  (defvar use-package-keywords)
-  (defvar use-package-deferring-keywords)
-  (setq use-package-keywords
-        ;; should go in the same location as :bind
-        ;; adding to end may not cause problems, but see issue #22
-        (cl-loop for item in use-package-keywords
-                 if (eq item :bind-keymap*)
-                 collect :bind-keymap* and collect :general
-                 else
-                 ;; don't add duplicates
-                 unless (eq item :general)
-                 collect item))
-  (when (boundp 'use-package-deferring-keywords)
-    (add-to-list 'use-package-deferring-keywords :general t))
-  (defun use-package-normalize/:general (_name _keyword args)
-    "Return ARGS."
-    args)
-  (defun general--extract-symbol (def)
-    "Extract autoloadable symbol from DEF, a normal or extended definition."
-    (when def
-      (if (general--extended-def-p def)
-          (let ((first (car def))
-                (inner-def (cl-getf def :def)))
-            (cond ((symbolp inner-def)
-                   inner-def)
-                  ((and (symbolp first)
-                        (not (keywordp first)))
-                   first)))
-        (when (symbolp def)
-          def))))
-  (declare-function general--extract-symbol "general")
-  (defun use-package-handler/:general (name _keyword arglists rest state)
-    "Use-package handler for :general."
-    (let* ((sanitized-arglist
-            ;; combine arglists into one without function names or
-            ;; positional arguments
-            (let (result)
-              (dolist (arglist arglists result)
-                (while (general--positional-arg-p (car arglist))
-                  (setq arglist (cdr arglist)))
-                (setq result (append result arglist)))))
-           (commands
-            (cl-loop for (key def) on sanitized-arglist by 'cddr
-                     when (and (not (keywordp key))
-                               (not (null def))
-                               (ignore-errors
-                                 (setq def (eval def))
-                                 (setq def (general--extract-symbol def))))
-                     collect def)))
-      (use-package-concat
-       (use-package-process-keywords name
-         (use-package-sort-keywords
-          (use-package-plist-append rest :commands commands))
-         state)
-       `((ignore ,@(mapcar (lambda (arglist)
-                             ;; Note: prefix commands are not valid functions
-                             (if (or (functionp (car arglist))
-                                     (macrop (car arglist)))
-                                 `(,@arglist :package ',name)
-                               `(general-def
-                                  ,@arglist
-                                  :package ',name)))
-                           arglists)))))))
-
 (use-package general
+  :demand t
   :config
   (progn
     (global-unset-key (kbd "<C-SPC>"))
+    (global-unset-key (kbd "<C-,>"))
 
     (general-define-key
      ;; Does it make sense for this to apply to insert/emacs states?
-     :states '(normal insert emacs motion)
+     :keymaps '(normal insert emacs motion)
      "<C-right>" 'next-buffer
      "<C-left>" 'previous-buffer)
      
     (general-create-definer e454iel-main-menu
-                            :states '(normal insert visual replace operator motion emacs)
+                            :keymaps '(normal insert motion emacs)
                             :prefix "SPC"
-                            :global-prefix "C-SPC"
+                            :non-normal-prefix "C-SPC"
                             :prefix-command 'e454iel-main-menu-prefix)
     (general-create-definer e454iel-major-mode-menu
-                            :states '(normal insert visual replace operator motion emacs)
+                            :states '(normal insert motion emacs)
                             :prefix ","
-                            :global-prefix "C-,")
+                            :non-normal-prefix "C-,")
     (e454iel-main-menu
+     ;;"" 'nil
+
      ;; double tap Space for M-x
      "<SPC>" '(execute-extended-command :which-key "Main Menu")
 
@@ -493,13 +421,15 @@ without confirmation."
   :config (progn
             (ivy-mode 1)
             (use-package counsel
-              :general (:keymaps 'help-map
+              :config (general-define-key
+                       :keymaps 'help-map
                         "b" 'counsel-descbinds))
             (use-package counsel-tramp)
             (use-package swiper
-              :general (:states '(normal insert visual replace operator motion emacs)
+              :config (general-define-key
+                       :keymaps '(normal insert motion emacs)
                         :prefix "/"
-                        :global-prefix "\C-s"
+                        :non-normal-prefix "C-s"
                         "" 'swiper))))
 
 ;; this shows possible key combinations in a pop-up (like when I do C-x, C-c, 
@@ -509,8 +439,9 @@ without confirmation."
 
 (use-package info
   :ensure nil
-  :general (:states '(normal motion)
-            :keymaps 'Info-mode-map
+  :config (general-define-key
+           :states '(normal motion)
+           :keymaps 'Info-mode-map
             "<SPC>" 'e454iel-main-menu-prefix))
 
 (use-package dired
@@ -518,10 +449,12 @@ without confirmation."
                ; ensure so that package.el doesn't try to download a
                ; package called dired from the repos.
   :init (use-package dired-x :ensure nil)
-  :general (:states '(normal motion)
-            :keymaps 'dired-mode-map
-            "<SPC>" 'e454iel-main-menu-prefix)
-  :config (add-hook 'dired-mode-hook 'auto-revert-mode))
+  :config (progn
+            (general-define-key
+             :states '(normal motion)
+             :keymaps 'dired-mode-map
+              "<SPC>" 'e454iel-main-menu-prefix)
+            (add-hook 'dired-mode-hook 'auto-revert-mode)))
 
 ;; give parenthesis matching colors based upon depth
 (use-package rainbow-delimiters
@@ -530,9 +463,10 @@ without confirmation."
 ;; for all of your Java/Scala needs
 (use-package ensime
   :pin melpa-stable
-  :general (e454iel-major-mode-menu
+  :config (e454iel-major-mode-menu
+           :major-modes 'ensime-mode-map
             :keymaps 'ensime-mode-map
-            "" '(nil :which-key "Ensime Mode Commands")
+            ;;"" '(nil :which-key "Ensime Mode Commands")
             "i" 'ensime-import-type-at-point
             "s" 'ensime-sbt
             "r" 'ensime-sbt-do-run))
@@ -565,40 +499,43 @@ without confirmation."
 ;;(window-numbering-mode 1))
 (use-package winum
   :demand
-  :config (winum-mode 1)
-  :general (:keymaps 'evil-window-map
-            "0" 'winum-select-window-0
-            "1" 'winum-select-window-1
-            "2" 'winum-select-window-2
-            "3" 'winum-select-window-3
-            "4" 'winum-select-window-4
-            "5" 'winum-select-window-5
-            "6" 'winum-select-window-6
-            "7" 'winum-select-window-7
-            "8" 'winum-select-window-8
-            "9" 'winum-select-window-9)
-  :general (e454iel-main-menu
-            "0" 'winum-select-window-0
-            "1" 'winum-select-window-1
-            "2" 'winum-select-window-2
-            "3" 'winum-select-window-3
-            "4" 'winum-select-window-4
-            "5" 'winum-select-window-5
-            "6" 'winum-select-window-6
-            "7" 'winum-select-window-7
-            "8" 'winum-select-window-8
-            "9" 'winum-select-window-9)
-  :general (:states '(normal insert visual replace operator motion emacs)
-            "M-0" 'winum-select-window-0
-            "M-1" 'winum-select-window-1
-            "M-2" 'winum-select-window-2
-            "M-3" 'winum-select-window-3
-            "M-4" 'winum-select-window-4
-            "M-5" 'winum-select-window-5
-            "M-6" 'winum-select-window-6
-            "M-7" 'winum-select-window-7
-            "M-8" 'winum-select-window-8
-            "M-9" 'winum-select-window-9))
+  :config (progn
+            (winum-mode 1)
+            (general-define-key
+             :keymaps 'evil-window-map
+              "0" 'winum-select-window-0
+              "1" 'winum-select-window-1
+              "2" 'winum-select-window-2
+              "3" 'winum-select-window-3
+              "4" 'winum-select-window-4
+              "5" 'winum-select-window-5
+              "6" 'winum-select-window-6
+              "7" 'winum-select-window-7
+              "8" 'winum-select-window-8
+              "9" 'winum-select-window-9)
+            (e454iel-main-menu
+             "0" 'winum-select-window-0
+             "1" 'winum-select-window-1
+             "2" 'winum-select-window-2
+             "3" 'winum-select-window-3
+             "4" 'winum-select-window-4
+             "5" 'winum-select-window-5
+             "6" 'winum-select-window-6
+             "7" 'winum-select-window-7
+             "8" 'winum-select-window-8
+             "9" 'winum-select-window-9)
+            (general-define-key
+             :keymaps '(normal insert)
+              "M-0" 'winum-select-window-0
+              "M-1" 'winum-select-window-1
+              "M-2" 'winum-select-window-2
+              "M-3" 'winum-select-window-3
+              "M-4" 'winum-select-window-4
+              "M-5" 'winum-select-window-5
+              "M-6" 'winum-select-window-6
+              "M-7" 'winum-select-window-7
+              "M-8" 'winum-select-window-8
+              "M-9" 'winum-select-window-9)))
 
 ;; Do some reading to set this up properly
 ;;  https://github.com/bmag/emacs-purpose/wiki/Usage
@@ -629,7 +566,8 @@ without confirmation."
                                 :repo "death/reddit-mode"))
                       (use-package reddit
                         :ensure nil
-                        :general (:keymaps 'reddit-mode-map
+                        :config (general-define-key
+                                 :keymaps 'reddit-mode-map
                                   :states '(normal emacs insert visual motion)
                                   "q" 'quit-window
                                   "g" 'reddit-refresh
@@ -658,8 +596,8 @@ without confirmation."
             (lyrics (caaadr (assoc "xesam:artist" metadata))
                     (caadr (assoc "xesam:title" metadata)))))
 
-  :general (e454iel-main-menu "al" 'lookup-current-spotify-lyrics
-                                        "aL" 'lyrics))
+  :config (e454iel-main-menu "al" 'lookup-current-spotify-lyrics
+                             "aL" 'lyrics))
 
 ;; just for the heck of it 
 (use-package exwm
@@ -717,42 +655,47 @@ without confirmation."
                   org-image-actual-width nil
                   org-format-latex-options (plist-put org-format-latex-options :scale 2.0)
                   org-ellipsis " ⤵ "
-                  org-default-notes-file (concat org-directory "/notes.org")))
-  :general (e454iel-main-menu
-            "o" '(:ignore t :which-key "Org")
-            "oa" 'org-agenda
-            ;; add some way for the semester and year to
-            ;;  be figured out automatically
-            "ot" (lambda() (interactive)
-                   (find-file (concat e454iel-documents-dir "/todo.org"))
-            "oe" (lambda() (interactive)
-                   (find-file (concat e454iel-documents-dir "/events.org"))
-            "od" (lambda() (interactive)
-                   (find-file (concat org-directory "/derp.org")))
-            "oj" 'org-journal-new-entry
-            "o C-c" 'org-capture
-            "o c" 'org-clock-in-last
-            "o C" 'org-clock-out)
-  :general (:keymaps 'org-mode-map
-            :states 'normal
-            "RET" 'org-open-at-point)
-  :general (e454iel-major-mode-menu
-            :keymaps 'org-mode-map
-             "" '(nil :which-key "Org Mode Commands")
-             "a" 'org-archive-subtree
-             "h" 'org-toggle-heading
-             "e" 'org-export-dispatch
-             "E" 'org-edit-special
-             "." 'org-time-stamp
-             "d" 'org-deadline
-             "s" 'org-schedule
-             "p" 'org-preview-latex-fragment
-             "c" 'org-clock-in
-             "C" 'org-clock-out))
+                  org-default-notes-file (concat org-directory "/notes.org"))
+
+            (e454iel-main-menu
+             "o" '(:ignore t :which-key "Org")
+             "oa" 'org-agenda
+             ;; add some way for the semester and year to
+             ;;  be figured out automatically
+             "ot" (lambda() (interactive)
+                    (find-file (concat e454iel-documents-dir "/todo.org")))
+             "oe" (lambda() (interactive)
+                    (find-file (concat e454iel-documents-dir "/events.org")))
+             "od" (lambda() (interactive)
+                    (find-file (concat org-directory "/derp.org")))
+             "oj" 'org-journal-new-entry
+             "o C-c" 'org-capture
+             "o c" 'org-clock-in-last
+             "o C" 'org-clock-out)
+
+            (general-define-key
+             :keymaps 'org-mode-map
+             :states 'normal
+              "RET" 'org-open-at-point)
+
+            (e454iel-major-mode-menu
+             :keymaps 'org-mode-map
+              ;;"" '(nil :which-key "Org Mode Commands")
+              "a" 'org-archive-subtree
+              "h" 'org-toggle-heading
+              "e" 'org-export-dispatch
+              "E" 'org-edit-special
+              "." 'org-time-stamp
+              "d" 'org-deadline
+              "s" 'org-schedule
+              "p" 'org-preview-latex-fragment
+              "c" 'org-clock-in
+              "C" 'org-clock-out)))
 
 (use-package open-junk-file
-  :config (setq open-junk-file-format "~/junk/%Y/%m/%d/%H%M%S/")
-  :general (e454iel-main-menu "fJ" 'open-junk-file))
+  :config (progn
+            (setq open-junk-file-format "~/junk/%Y/%m/%d/%H%M%S/")
+            (e454iel-main-menu "fJ" 'open-junk-file)))
 
 ;; this needs keybindings in order to work well. Copy them from the
 ;; Spacemacs layer.
@@ -769,52 +712,54 @@ without confirmation."
             ;;(add-hook 'midnight-mode-hook (lambda() (setq pdf-view-midnight-colors (cons (face-foreground 'default) (face-background 'default))))))
             (add-hook 'pdf-view-midnight-minor-mode-hook (lambda() (setq pdf-view-midnight-colors (cons (face-foreground 'default) (face-background 'default)))))
 
-            (setq evil-emacs-state-modes (remq 'pdf-view-mode evil-emacs-state-modes)))
+            (setq evil-emacs-state-modes (remq 'pdf-view-mode evil-emacs-state-modes))
+
+            (general-define-key
+             :keymaps 'pdf-view-mode-map
+             :states '(normal emacs insert visual motion)
+              "j"        'pdf-view-next-line-or-next-page
+              "<down>"   'pdf-view-next-line-or-next-page
+              "k"        'pdf-view-previous-line-or-previous-page
+              "<up>"     'pdf-view-previous-line-or-previous-page
+              "l"        'image-forward-hscroll
+              "<left>"   'image-forward-hscroll
+              "h"        'image-backward-hscroll
+              "<right>"  'image-backward-hscroll
+              "J"        'pdf-view-next-page
+              "K"        'pdf-view-previous-page
+              "u"        'pdf-view-scroll-down-or-previous-page
+              "d"        'pdf-view-scroll-up-or-next-page
+              "0"        'image-bol
+              "$"        'image-eol
+              ;; Scale/Fit
+              "W"  'pdf-view-fit-width-to-window
+              "H"  'pdf-view-fit-height-to-window
+              "P"  'pdf-view-fit-page-to-window
+              "+"  'pdf-view-enlarge
+              "-"  'pdf-view-shrink
+              "m"  'pdf-view-set-slice-using-mouse
+              "b"  'pdf-view-set-slice-from-bounding-box
+              "R"  'pdf-view-reset-slice
+              "zr" 'pdf-view-scale-reset
+              ;; Annotations
+              "aD" 'pdf-annot-delete
+              "at" 'pdf-annot-attachment-dired
+              "al" 'pdf-annot-list-annotations
+              "am" 'pdf-annot-add-markup-annotation
+              ;; Actions
+              "s" 'pdf-occur
+              "O" 'pdf-outline
+              "p" 'pdf-misc-print-document
+              "o" 'pdf-links-action-perform
+              "r" 'pdf-view-revert-buffer
+              "t" 'pdf-annot-attachment-dired
+              "n" 'pdf-view-midnight-minor-mode
+              "/" 'pdf-isearch
+              ;; selection
+              "<down-mouse-1>" 'pdf-view-mouse-set-region
+              "y" 'pdf-view-kill-ring-save))
   :defer t
-  :mode (("\\.pdf\\'" . pdf-view-mode))
-  :general (:keymaps 'pdf-view-mode-map
-            :states '(normal emacs insert visual motion)
-            "j"        'pdf-view-next-line-or-next-page
-            "<down>"   'pdf-view-next-line-or-next-page
-            "k"        'pdf-view-previous-line-or-previous-page
-            "<up>"     'pdf-view-previous-line-or-previous-page
-            "l"        'image-forward-hscroll
-            "<left>"   'image-forward-hscroll
-            "h"        'image-backward-hscroll
-            "<right>"  'image-backward-hscroll
-            "J"        'pdf-view-next-page
-            "K"        'pdf-view-previous-page
-            "u"        'pdf-view-scroll-down-or-previous-page
-            "d"        'pdf-view-scroll-up-or-next-page
-            "0"        'image-bol
-            "$"        'image-eol
-            ;; Scale/Fit
-            "W"  'pdf-view-fit-width-to-window
-            "H"  'pdf-view-fit-height-to-window
-            "P"  'pdf-view-fit-page-to-window
-            "+"  'pdf-view-enlarge
-            "-"  'pdf-view-shrink
-            "m"  'pdf-view-set-slice-using-mouse
-            "b"  'pdf-view-set-slice-from-bounding-box
-            "R"  'pdf-view-reset-slice
-            "zr" 'pdf-view-scale-reset
-            ;; Annotations
-            "aD" 'pdf-annot-delete
-            "at" 'pdf-annot-attachment-dired
-            "al" 'pdf-annot-list-annotations
-            "am" 'pdf-annot-add-markup-annotation
-            ;; Actions
-            "s" 'pdf-occur
-            "O" 'pdf-outline
-            "p" 'pdf-misc-print-document
-            "o" 'pdf-links-action-perform
-            "r" 'pdf-view-revert-buffer
-            "t" 'pdf-annot-attachment-dired
-            "n" 'pdf-view-midnight-minor-mode
-            "/" 'pdf-isearch
-            ;; selection
-            "<down-mouse-1>" 'pdf-view-mouse-set-region
-            "y" 'pdf-view-kill-ring-save))
+  :mode (("\\.pdf\\'" . pdf-view-mode)))
 
 ;; I might want to add more from the latex spacemacs layer. Folding in
 ;; particular sounds interesting.
@@ -834,10 +779,11 @@ without confirmation."
             ;; $pdf_mode = 1;
             ;; # .latexmkrc ends
             (use-package auctex-latexmk
-              :config (auctex-latexmk-setup)))
-  :general (e454iel-major-mode-menu
-            :keymaps 'LaTeX-mode-map
-             "c" 'TeX-command-master))
+              :config (auctex-latexmk-setup))
+            (e454iel-major-mode-menu
+             :keymaps 'LaTeX-mode-map
+             :major-modes 'LaTeX-mode-map
+              "c" 'TeX-command-master)))
 
 ;; The fact that this is strewn haphazardly here goes to show that
 ;; this needs some sort of categorical organization.
@@ -858,17 +804,16 @@ without confirmation."
             ;;                                       :image-path
             ;;                                       "dialog-information"
             ;;                                       :category "transfer.complete"))))
-            )
-  :general (e454iel-main-menu "at" 'tea-time))
+            (e454iel-main-menu "at" 'tea-time)))
 
 (use-package seethru
-  :general (e454iel-main-menu "tT" 'seethru))
+  :config (e454iel-main-menu "tT" 'seethru))
 
 (use-package buffer-flip
   :config (progn
             (key-chord-mode 1)
-            (buffer-flip-mode 1))
-  :general (e454iel-main-menu "TAB" 'buffer-flip))
+            (buffer-flip-mode 1)
+            (e454iel-main-menu "TAB" 'buffer-flip)))
 
 ;; My first elisp function!
 (defun kill-buffer-file-name ()
@@ -976,64 +921,72 @@ Lisp function does not specify a special indentation."
            (lambda ()
              (setq-local lisp-indent-function #'Fuco1/lisp-indent-function))))
 
-  :general (e454iel-major-mode-menu
+  :config (e454iel-major-mode-menu
             :keymaps 'emacs-lisp-mode-map
-             "" '(nil :which-key "Emacs Lisp Mode Commands")
+            :major-modes 'emacs-lisp-mode-map
+             ;;"" '(nil :which-key "Emacs Lisp Mode Commands")
              "b" 'eval-buffer))
 
 (use-package erc
   :ensure nil
-  :config (setq erc-autojoin-channels-alist '((".*\\.freenode.net" "#archlinux")))
-  :general (e454iel-main-menu "aE" '(lambda() (interactive)
-                                                (progn() (erc-autojoin-mode 1)
-                                                      (erc :server "irc.freenode.net"
-                                                           :nick "Elephant454"
-                                                           :password e454iel-freenode-password)))
-                                        :which-key "ERC with Default Servers"))
+  :config (progn
+            (setq erc-autojoin-channels-alist '((".*\\.freenode.net" "#archlinux")))
+
+            (e454iel-main-menu "aE" '(lambda() (interactive)
+                                       (progn() (erc-autojoin-mode 1)
+                                             (erc :server "irc.freenode.net"
+                                                  :nick "Elephant454"
+                                                  :password e454iel-freenode-password)))
+                               :which-key "ERC with Default Servers")))
 
 (use-package bubbles
   :ensure nil
-  :general (e454iel-main-menu "agb" 'bubbles)
-  :general (:keymaps 'bubbles-mode-map
-            :states '(normal emacs)
-            "RET" 'bubbles-plop
-            "u"   'bubbles-undo
-            ;; for starting a new game
-            "r"   'bubbles
-            "q"   'bubbles-quit)
-  :config (setq bubbles-game-theme 'medium))
+  :config (progn
+            (setq bubbles-game-theme 'medium)
+            (general-define-key
+             :keymaps 'bubbles-mode-map
+             :states '(normal emacs)
+              "RET" 'bubbles-plop
+              "u"   'bubbles-undo
+              ;; for starting a new game
+              "r"   'bubbles
+              "q"   'bubbles-quit)
+            (e454iel-main-menu "agb" 'bubbles)))
 
 (use-package tetris
   :ensure nil
-  :general (e454iel-main-menu "agt" 'tetris))
+  :config (e454iel-main-menu "agt" 'tetris))
 
 (use-package mines
-  :general (e454iel-main-menu "agm" 'mines))
+  :config (e454iel-main-menu "agm" 'mines))
 
 (use-package magit
   :config (progn
-            (use-package evil-magit))
-  :general (:states '(normal emacs insert visual motion)
-            :keymaps 'magit-mode-map
-            "M-1" 'winum-select-window-1
-            "M-2" 'winum-select-window-2
-            "M-3" 'winum-select-window-3
-            "M-4" 'winum-select-window-4)
-  :general (e454iel-main-menu
-            "g" 'magit-status
-            "G" 'magit-dispatch-popup))
+            (use-package evil-magit)
+            (general-define-key
+             :states '(normal emacs insert visual motion)
+             :keymaps 'magit-mode-map
+              "M-1" 'winum-select-window-1
+              "M-2" 'winum-select-window-2
+              "M-3" 'winum-select-window-3
+              "M-4" 'winum-select-window-4)
+            (e454iel-main-menu
+             "g" 'magit-status
+             "G" 'magit-dispatch-popup)))
 
 ;; Email!
 (use-package mu4e
   :ensure nil
   :config (progn
             (use-package evil-mu4e)
-            (setq mu4e-msg2pdf "/usr/bin/msg2pdf"))
-  :general (:keymaps 'mu4e-view-mode-map
-            :states '(normal motion)
-            "p" '(lambda() (interactive) (mu4e-action-view-as-pdf (mu4e-message-at-point))))
-  :general (e454iel-main-menu
-            "ae" 'mu4e))
+            (setq mu4e-msg2pdf "/usr/bin/msg2pdf")
+            (general-define-key
+             :keymaps 'mu4e-view-mode-map
+             :states '(normal motion)
+              "p" '(lambda() (interactive) (mu4e-action-view-as-pdf (mu4e-message-at-point))))
+
+            (e454iel-main-menu
+             "ae" 'mu4e)))
 
 ;; Slime provides a mode and tools for working with lisp. Of particular interest
 ;;  is the abililty to connect to an instance of SBCL and control it. I learned
@@ -1112,9 +1065,10 @@ Lisp function does not specify a special indentation."
                 (error (if (not dont-retry-if-error)
                            (progn (e454iel-setup-stumpwm-connection)
                                   (e454iel-run-or-raise-stumpwm-repl t))
-                         (eval error-info))))))
-  :general (e454iel-main-menu
-            "as" 'e454iel-run-or-raise-stumpwm-repl))
+                         (eval error-info)))))
+
+            (e454iel-main-menu
+             "as" 'e454iel-run-or-raise-stumpwm-repl)))
 
 ;;
 (use-package stumpwm-mode)
@@ -1143,9 +1097,10 @@ Lisp function does not specify a special indentation."
           (add-hook 'text-mode-hook 'flyspell-mode)
           (add-hook 'prog-mode-hook 'flyspell-prog-mode))
   :config (use-package flyspell-correct
-            :config (use-package flyspell-correct-ivy)
-            :general (e454iel-main-menu
-                                "ms" 'flyspell-correct-word-generic)))
+            :config (progn
+                      (use-package flyspell-correct-ivy)
+
+                      (e454iel-main-menu "ms" 'flyspell-correct-word-generic))))
 
 ;; Note: We can keep "Y" for copying a whole line at a time, and then put the
 ;;  binding to copy the current page's URL in the major-mode menu
@@ -1173,32 +1128,36 @@ Lisp function does not specify a special indentation."
             (add-hook 'eww-after-render-hook
                       (lambda()
                         (rename-buffer
-                         (concat "*eww " (eww-current-url) "*")))))
-  :general (:keymaps 'eww-mode-map
-            :states 'normal
-            ;; there are probably more interesting binds worth going back for,
-            ;;  but these are the essentials, I think.
-            "H" 'eww-back-url
-            "L" 'eww-forward-url
-            ;; do I need to do anything special for insert mode?
-            ;;"i" 
-            "o" 'eww
-            "O" 'eww-open-in-new-buffer
-            "B" 'eww-list-buffers
-            "Y" 'eww-copy-page-url
-            "&" 'eww-browse-with-external-browser
-            "d" 'eww-download
-            "r" 'eww-readable
-            "f" 'eww-lnum-follow
-            "F" '(lambda() (interactive) (eww-lnum-follow -1)))
-  :general (:keymaps 'eww-buffers-mode-map
-            :states 'normal
-            "RET" 'eww-buffer-select
-            "q" 'quit-window
-            "n" 'eww-buffer-show-next
-            "p" 'eww-buffer-show-previous)
-  :general (e454iel-main-menu
-            "ai" 'eww))
+                         (concat "*eww " (eww-current-url) "*"))))
+            (general-define-key
+             :keymaps 'eww-mode-map
+             :states 'normal
+              ;; there are probably more interesting binds worth going back for,
+              ;;  but these are the essentials, I think.
+              "H" 'eww-back-url
+              "L" 'eww-forward-url
+              ;; do I need to do anything special for insert mode?
+              ;;"i" 
+              "o" 'eww
+              "O" 'eww-open-in-new-buffer
+              "B" 'eww-list-buffers
+              "Y" 'eww-copy-page-url
+              "&" 'eww-browse-with-external-browser
+              "d" 'eww-download
+              "r" 'eww-readable
+              "f" 'eww-lnum-follow
+              "F" '(lambda() (interactive) (eww-lnum-follow -1)))
+
+            (general-define-key
+             :keymaps 'eww-buffers-mode-map
+             :states 'normal
+              "RET" 'eww-buffer-select
+              "q" 'quit-window
+              "n" 'eww-buffer-show-next
+              "p" 'eww-buffer-show-previous)
+
+            (e454iel-main-menu
+             "ai" 'eww)))
 
 ;; Automatically resizes images to fit the window, because why not?
 (use-package image+
@@ -1217,32 +1176,34 @@ Lisp function does not specify a special indentation."
   :demand
   :config (progn
             (setq eyebrowse-mode-line-style 'smart)
-            (eyebrowse-mode 1))
-  :general (:keymaps 'evil-window-map
-            "g" '(nil :which-key "Groups")
-            "g0" 'eyebrowse-switch-to-window-config-0
-            "g1" 'eyebrowse-switch-to-window-config-1
-            "g2" 'eyebrowse-switch-to-window-config-2
-            "g3" 'eyebrowse-switch-to-window-config-3
-            "g4" 'eyebrowse-switch-to-window-config-4
-            "g5" 'eyebrowse-switch-to-window-config-5
-            "g6" 'eyebrowse-switch-to-window-config-6
-            "g7" 'eyebrowse-switch-to-window-config-7
-            "g8" 'eyebrowse-switch-to-window-config-8
-            "g9" 'eyebrowse-switch-to-window-config-9
+            (eyebrowse-mode 1)
 
-            "gc" 'eyebrowse-close-window-config-prompt))
+            (general-define-key
+             :keymaps 'evil-window-map
+              "g" '(nil :which-key "Groups")
+              "g0" 'eyebrowse-switch-to-window-config-0
+              "g1" 'eyebrowse-switch-to-window-config-1
+              "g2" 'eyebrowse-switch-to-window-config-2
+              "g3" 'eyebrowse-switch-to-window-config-3
+              "g4" 'eyebrowse-switch-to-window-config-4
+              "g5" 'eyebrowse-switch-to-window-config-5
+              "g6" 'eyebrowse-switch-to-window-config-6
+              "g7" 'eyebrowse-switch-to-window-config-7
+              "g8" 'eyebrowse-switch-to-window-config-8
+              "g9" 'eyebrowse-switch-to-window-config-9
+              
+              "gc" 'eyebrowse-close-window-config-prompt)))
 
 ;; improved list-packages manager
 ;; what is paradox-execute-asynchronously?
 (use-package paradox
   :init (setq paradox-automatically-star nil
               paradox-github-token t)
-  :general (:keymaps 'paradox-menu-mode-map
-            :states 'normal
+  :config (general-define-key
+           :keymaps 'paradox-menu-mode-map
+           :states 'normal
             "q" 'paradox-quit-and-close
-            "x" 'paradox-menu-execute
-            ))
+            "x" 'paradox-menu-execute))
 
 ;; improved mode line
 ;;(use-package telephone-line
@@ -1328,8 +1289,10 @@ Lisp function does not specify a special indentation."
 ;; this is where C-c to save and C-k to cancel come from. Rebind these.
 (use-package with-editor
   :ensure nil
-  :general (e454iel-major-mode-menu
-            :keymaps 'with-editor-mode-map
+  :config (e454iel-major-mode-menu
+           :keymaps 'with-editor-mode-map
+           :major-modes 'with-editor-mode-map
+            ;;"" '(nil :which-key "With-Editor Mode Commands")
             "c" 'with-editor-finish
             "k" 'with-editor-cancel))
 
@@ -1364,13 +1327,15 @@ Lisp function does not specify a special indentation."
 
 (use-package comint
   :ensure nil
-  :general (:states 'insert
+  :config (general-define-key
+           :states 'insert
             :keymaps 'comint-mode-map
             "<up>" 'comint-previous-input
             "<down>" 'comint-next-input))
 
 (use-package picpocket
-  :general (:states 'normal
+  :config (general-define-key
+           :states 'normal
             :keymaps 'picpocket-mode-map
             "<right>" 'picpocket-next
             "<left>" 'picpocket-previous))
@@ -1397,7 +1362,7 @@ Lisp function does not specify a special indentation."
 ;;  mode-line-bell, lsp-ui, gdscript-mode, lognav-mode
 
 (use-package counsel-spotify
-  :general (e454iel-main-menu "am" '(nil :which-key "Spotify (Music)")
+  :config (e454iel-main-menu "am" '(nil :which-key "Spotify (Music)")
                                         "amp" 'counsel-spotify-toggle-play-pause
                                         "amb" 'counsel-spotify-previous
                                         "amf" 'counsel-spotify-next
@@ -1424,10 +1389,13 @@ Lisp function does not specify a special indentation."
   :init (progn
           (add-hook 'c-mode-hook 'rtags-start-process-unless-running)
           (add-hook 'c++-mode-hook 'rtags-start-process-unless-running))
-  :config (setq rtags-use-bookmarks nil)
-  :general (e454iel-major-mode-menu
-            :keymaps 'c-mode-map
-            "s" 'rtags-find-symbol-at-point))
+  :config (progn
+            (setq rtags-use-bookmarks nil)
+
+            (e454iel-major-mode-menu
+             :keymaps 'c-mode-map
+             :major-modes 'c-mode-map
+              "s" 'rtags-find-symbol-at-point)))
 
 ;;(use-package emms
   ;;:config (progn
@@ -1464,7 +1432,8 @@ Lisp function does not specify a special indentation."
   :mode ("/PKGBUILD$" . pkgbuild-mode))
 
 (use-package spray
-  :general (:keymaps 'spray-mode-map
+  :config (general-define-key
+           :keymaps 'spray-mode-map
             :states '(normal emacs motion)
             "p" 'spray-start/stop
             "h" 'spray-backward-word
