@@ -628,6 +628,7 @@ without confirmation."
           (use-package org-clock-today
             :config (org-clock-today-mode 1))
           (use-package org-alert
+            :disabled
             ;; org-alert checks for things scheduled or due the current day
             ;;  every 300 seconds. It is not a replacement for alerts on your
             ;;  phone (I don't think). It's disabled for now. Look into it more
