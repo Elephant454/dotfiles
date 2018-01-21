@@ -637,7 +637,7 @@ without confirmation."
                       (setq alert-default-style 'libnotify)
                       (org-alert-disable))))
   :config (progn
-            (defvar e454iel-current-semester "Semester1")
+            (defvar e454iel-current-semester "Semester2")
             (defvar e454iel-documents-dir
               (concat "~/Documents/"
                       (let* ((time (decode-time))
