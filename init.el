@@ -648,6 +648,27 @@ without confirmation."
                                            (- year 1))))
                         (format "%d-%d/" start-year (+ start-year 1)))
                       e454iel-current-semester))
+
+            (defvar e454iel-extra-org-agenda-files
+              '("~/org/birthdays.org" "~/org/derp.org"))
+
+            (setf org-agenda-files
+                  (let* ((documents-subdirs
+                          (remove-if
+                           #'(lambda (file) (not (file-directory-p file)))
+                           (directory-files e454iel-documents-dir t nil t)))
+
+                         (org-files-pattern
+                          "\\(todo.org\\|events.org\\|schedule.org\\)$")
+
+                         (documents-org-files
+                          (mapcan
+                           #'(lambda (file)
+                               (directory-files file t org-files-pattern))
+                           documents-subdirs)))
+
+                    (nconc e454iel-extra-org-agenda-files documents-org-files)))
+
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1)))
             ;;(add-hook 'org-mode-hook 'turn-on-stripe-table-mode)
             (add-hook 'org-mode-hook (lambda() (auto-fill-mode 1)))
