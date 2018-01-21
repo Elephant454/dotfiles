@@ -679,6 +679,12 @@ without confirmation."
              :states 'normal
               "RET" 'org-open-at-point)
 
+            ;; I should probably figure out how the keybinding priorities work...
+            (general-define-key
+             :keymaps 'org-mode-map
+             :states 'insert
+              "RET" 'newline)
+
             (e454iel-major-mode-menu
              :keymaps 'org-mode-map
               ;;"" '(nil :which-key "Org Mode Commands")
