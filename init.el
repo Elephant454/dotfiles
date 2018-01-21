@@ -525,7 +525,7 @@ without confirmation."
              "8" 'winum-select-window-8
              "9" 'winum-select-window-9)
             (general-define-key
-             :keymaps '(normal insert)
+             :keymaps '(normal insert motion emacs)
               "M-0" 'winum-select-window-0
               "M-1" 'winum-select-window-1
               "M-2" 'winum-select-window-2
