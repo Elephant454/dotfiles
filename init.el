@@ -610,6 +610,28 @@ without confirmation."
                     4 "HDMI-0"
                     5 "DVI-D-0")))
 
+(defun directory-directories (directory &optional full match nosort)
+  "Find the sub-directories in `DIRECTORY'.
+`FULL', `MATCH', and `NOSORT' behave as they do in the `directory-files'
+function. A non-nil value for `FULL' returns a list of full path-names. A
+non-nil value for `MATCH' returns only directories that match the regex
+defined by `MATCH'. A non-nil value for `NOSORT' keeps the returned list
+unsorted."
+
+  ;; Setting directory here is a quick hack to fix a bug with trailing slashes
+  ;;  appearing in the beginning of the paths in the returned list.
+  (let ((directory (if (not (string-match-p "/$" directory))
+                       (concat directory "/")
+                     directory))
+        (result (remove-if
+                 #'(lambda (file) (not (file-directory-p file)))
+                 (directory-files directory t match nosort))))
+
+    (if full
+        result
+      (mapcar #'(lambda (x) (string-remove-prefix (expand-file-name directory) x))
+              result))))
+
 ;; org things
 ;; TODO: look into org-dotemacs for organizing this file using org
 ;; TODO: org mode confirm for capture is different than with-editor confirm for
@@ -852,28 +874,6 @@ without confirmation."
   "Insert the English alphabet in lower case at point."
   (interactive)
   (dotimes (i 26) (insert-char (+ ?a i))))
-
-(defun directory-directories (directory &optional full match nosort)
-  "Find the sub-directories in `DIRECTORY'.
-`FULL', `MATCH', and `NOSORT' behave as they do in the `directory-files'
-function. A non-nil value for `FULL' returns a list of full path-names. A
-non-nil value for `MATCH' returns only directories that match the regex
-defined by `MATCH'. A non-nil value for `NOSORT' keeps the returned list
-unsorted."
-
-  ;; Setting directory here is a quick hack to fix a bug with trailing slashes
-  ;;  appearing in the beginning of the paths in the returned list.
-  (let ((directory (if (not (string-match-p "/$" directory))
-                       (concat directory "/")
-                     directory))
-        (result (remove-if
-                 #'(lambda (file) (not (file-directory-p file)))
-                 (directory-files directory t match nosort))))
-
-    (if full
-        result
-      (mapcar #'(lambda (x) (string-remove-prefix (expand-file-name directory) x))
-              result))))
 
 (use-package ediff
   :ensure nil
