@@ -677,7 +677,7 @@ unsorted."
 
             (setf org-agenda-files
                   (let* ((documents-subdirs
-                          (directory-directories e454iel-documents-dir t nil t)
+                          (directory-directories e454iel-documents-dir t nil t))
 
                          (org-files-pattern
                           "\\(todo.org\\|events.org\\|schedule.org\\)$")
