@@ -451,7 +451,6 @@ without confirmation."
   :init (use-package dired-x :ensure nil)
   :config (progn
             (general-define-key
-             :states '(normal motion)
              :keymaps 'dired-mode-map
               "<SPC>" 'e454iel-main-menu-prefix)
             (add-hook 'dired-mode-hook 'auto-revert-mode)))
@@ -1013,12 +1012,12 @@ Lisp function does not specify a special indentation."
   :config (progn
             (use-package evil-magit)
             (general-define-key
-             :states '(normal emacs insert visual motion)
              :keymaps 'magit-mode-map
               "M-1" 'winum-select-window-1
               "M-2" 'winum-select-window-2
               "M-3" 'winum-select-window-3
-              "M-4" 'winum-select-window-4)
+              "M-4" 'winum-select-window-4
+              "<SPC>" 'e454iel-main-menu-prefix)
             (e454iel-main-menu
              "g" 'magit-status
              "G" 'magit-dispatch-popup)))
