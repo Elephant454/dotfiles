@@ -1513,5 +1513,7 @@ Lisp function does not specify a special indentation."
 
 (use-package xkcd)
 
+(use-package md4rd)
+
 (provide 'init)
 ;;; init.el ends here
