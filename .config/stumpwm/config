@@ -340,7 +340,7 @@
 (ql:quickload "cffi")
 (ql:quickload "dbus")
 (load-module "notify")
-(notify-server-on)
+(notify::notify-server-toggle)
 
 
 ;; some external applications to start up
