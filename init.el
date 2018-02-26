@@ -1520,5 +1520,9 @@ Lisp function does not specify a special indentation."
 
 (use-package md4rd)
 
+
+;; Interactive Fiction Games!
+(use-package malyon)
+
 (provide 'init)
 ;;; init.el ends here
