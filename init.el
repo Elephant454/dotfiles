@@ -120,25 +120,26 @@
 
 ;; I should set up pairs of night themes and day themes. One keybinding cycles
 ;; between pairs and another keybinding switches between day and night.
-(dolist #'(lambda (package) (use-package package :defer t))
-        '(color-theme
-          soft-morning-theme
-          omtose-phellack-theme
-          color-theme-sanityinc-tomorrow
-          light-soap-theme
-          silkworm-theme
-          foggy-night-theme
-          apropospriate-theme
-          gotham-theme
-          purple-haze-theme
-          nubox
-          doom-themes
-          material-theme
-          spacemacs-theme
-          ;; gruvbox
-          dracula-theme
-          kaolin-themes
-          ))
+;;(mapc (lambda (package) "" nil (use-package package :ensure t :defer t))
+(mapc 'use-package-ensure-elpa 
+      '(color-theme
+        soft-morning-theme
+        omtose-phellack-theme
+        color-theme-sanityinc-tomorrow
+        light-soap-theme
+        silkworm-theme
+        foggy-night-theme
+        apropospriate-theme
+        gotham-theme
+        purple-haze-theme
+        nubox
+        doom-themes
+        material-theme
+        spacemacs-theme
+        ;; gruvbox
+        dracula-theme
+        kaolin-themes
+        ))
 
 ;; cons pairs of themes, with the car being the day variant and the cdr being
 ;;  the night variant
