@@ -1409,7 +1409,7 @@ Lisp function does not specify a special indentation."
 ;;  per-buffer-theme, smart-jump, scp, paced, tidal, eldoc-overlay, discover,
 ;;  disaster, erc-status-sidebar, esh-autosuggest, evil-collection,
 ;;  mode-line-bell, lsp-ui, gdscript-mode, lognav-mode, gif-screencast,
-;;  line-up-words, org-rich-yank
+;;  line-up-words, org-rich-yank, chyla-theme, overcast-theme
 
 ;; Look into term management options
 ;; multi-run, multi-term, sane-term, navorski, term+, term+key-intercept,
