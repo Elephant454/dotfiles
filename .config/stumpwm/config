@@ -35,8 +35,11 @@
 
 
 ;; set the font
+(ql:quickload "clx")
+(ql:quickload "clx-truetype")
+(xft:cache-fonts)
 (load-module "ttf-fonts")
-(set-font "-windows-dina-medium-r-normal--12-*-96-96-c-70-iso8859-1")
+;;(set-font "-windows-dina-medium-r-normal--12-*-96-96-c-70-iso8859-1")
 (set-font (make-instance 'xft:font :family "Inconsolata" :subfamily "Regular" :size 12))
 
 ;;; Define window placement policy...
@@ -54,6 +57,7 @@
 ;;(which-key-mode)
 
 ;; allows us to connect to the wm using SLIME
+(ql:quickload "swank")
 (require :swank)
 (echo (swank-loader:init))
 (echo (swank:create-server :port 4004
@@ -242,7 +246,7 @@
         (set-font (concat "-*-" font-to-apply "-medium-r-*--"
                           size-to-apply "-*-*-*-*-*-*-*"))))))
 
-(apply-emacs-colors)
+;;(apply-emacs-colors)
 
 (load-module "battery-portable")
 
@@ -329,6 +333,15 @@
 ;; this successfully sends a command from emacs lisp to stumpwm
 ;;(slime-connect "localhost" "4004")
 ;;(slime-repl-send-string "(stumpwm:echo \"hi\")")
+
+;; libnotify module for getting notifications
+(ql:quickload "xml-emitter")
+(ql:quickload "split-sequence")
+(ql:quickload "cffi")
+(ql:quickload "dbus")
+(load-module "notify")
+(notify::notify-server-toggle)
+
 
 ;; some external applications to start up
 (run-shell-command "redshift")

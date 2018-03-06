@@ -120,25 +120,26 @@
 
 ;; I should set up pairs of night themes and day themes. One keybinding cycles
 ;; between pairs and another keybinding switches between day and night.
-(dolist #'(lambda (package) (use-package package :defer t))
-        '(color-theme
-          soft-morning-theme
-          omtose-phellack-theme
-          color-theme-sanityinc-tomorrow
-          light-soap-theme
-          silkworm-theme
-          foggy-night-theme
-          apropospriate-theme
-          gotham-theme
-          purple-haze-theme
-          nubox
-          doom-themes
-          material-theme
-          spacemacs-theme
-          ;; gruvbox
-          dracula-theme
-          kaolin-themes
-          ))
+;;(mapc (lambda (package) "" nil (use-package package :ensure t :defer t))
+(mapc 'use-package-ensure-elpa 
+      '(color-theme
+        soft-morning-theme
+        omtose-phellack-theme
+        color-theme-sanityinc-tomorrow
+        light-soap-theme
+        silkworm-theme
+        foggy-night-theme
+        apropospriate-theme
+        gotham-theme
+        purple-haze-theme
+        nubox
+        doom-themes
+        material-theme
+        spacemacs-theme
+        ;; gruvbox
+        dracula-theme
+        kaolin-themes
+        ))
 
 ;; cons pairs of themes, with the car being the day variant and the cdr being
 ;;  the night variant
@@ -1290,31 +1291,31 @@ Lisp function does not specify a special indentation."
 
 (use-package immortal-scratch)
 
-(use-package hexrgb)
+;;(use-package hexrgb)
 
-(use-package stripe-buffer
-  :disabled
-  :config
-  ;;(defface my-stripe-highlight-face
-  ;;'(:background "CCCCCC"))
-  
-  ;;(setq stripe-highlight-face my-stripe-highlight-face)
-  ;;(set-face-attribute stripe-highlight-face nil
-                      ;;:foreground (hexrgb-increment-saturation (face-foreground 'default) -100)
-                      ;;:background (hexrgb-increment-saturation (face-background 'default) -100)))
-
-  ;;(setq stripe-highlight-face 
-        ;;`((:foreground ,(hexrgb-increment-saturation
-                         ;;(hexrgb-increment-value (face-foreground 'default) -1) -1)
-           ;;:background ,(hexrgb-increment-saturation
-                         ;;(hexrgb-increment-value (face-background 'default) -1) -1)))))
-  
-  (setq stripe-highlight-face 
-        `((:foreground ,(hexrgb-increment-saturation (face-foreground 'default) -1)
-           :background ,(hexrgb-increment-saturation (face-background 'default) -1)))))
-
-(use-package hexrgb)
-(use-package doremi-frm)
+;;(use-package stripe-buffer
+;;  :disabled
+;;  :config
+;;  ;;(defface my-stripe-highlight-face
+;;  ;;'(:background "CCCCCC"))
+;;  
+;;  ;;(setq stripe-highlight-face my-stripe-highlight-face)
+;;  ;;(set-face-attribute stripe-highlight-face nil
+;;                      ;;:foreground (hexrgb-increment-saturation (face-foreground 'default) -100)
+;;                      ;;:background (hexrgb-increment-saturation (face-background 'default) -100)))
+;;
+;;  ;;(setq stripe-highlight-face 
+;;        ;;`((:foreground ,(hexrgb-increment-saturation
+;;                         ;;(hexrgb-increment-value (face-foreground 'default) -1) -1)
+;;           ;;:background ,(hexrgb-increment-saturation
+;;                         ;;(hexrgb-increment-value (face-background 'default) -1) -1)))))
+;;  
+;;  (setq stripe-highlight-face 
+;;        `((:foreground ,(hexrgb-increment-saturation (face-foreground 'default) -1)
+;;           :background ,(hexrgb-increment-saturation (face-background 'default) -1)))))
+;;
+;;(use-package hexrgb)
+;;(use-package doremi-frm)
 
 (use-package time
   :ensure nil
@@ -1325,7 +1326,7 @@ Lisp function does not specify a special indentation."
             (display-time-mode 0)))
 
 ;; used to center buffers in the middle of the screen
-(use-package centered-window-mode)
+(use-package centered-window)
 
 ;; this still needs to be configured, particularly for the keybindings
 ;;(use-package pocket-api)
@@ -1405,7 +1406,12 @@ Lisp function does not specify a special indentation."
 ;;  company-eshell-autosuggest, exato, org-randomnote, abgaben,
 ;;  per-buffer-theme, smart-jump, scp, paced, tidal, eldoc-overlay, discover,
 ;;  disaster, erc-status-sidebar, esh-autosuggest, evil-collection,
-;;  mode-line-bell, lsp-ui, gdscript-mode, lognav-mode
+;;  mode-line-bell, lsp-ui, gdscript-mode, lognav-mode, gif-screencast,
+;;  line-up-words, org-rich-yank, chyla-theme, overcast-theme
+
+;; Look into term management options
+;; multi-run, multi-term, sane-term, navorski, term+, term+key-intercept,
+;; term-manager, term-projectile
 
 (use-package counsel-spotify
   :config (e454iel-main-menu "am" '(nil :which-key "Spotify (Music)")
@@ -1522,6 +1528,10 @@ Lisp function does not specify a special indentation."
 (use-package xkcd)
 
 (use-package md4rd)
+
+
+;; Interactive Fiction Games!
+(use-package malyon)
 
 (provide 'init)
 ;;; init.el ends here
