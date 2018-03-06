@@ -1355,8 +1355,6 @@ Lisp function does not specify a special indentation."
 ;;  of that, is this even necessary?
 (use-package projectile
   :config (progn
-            ;; I've disabled it for now, as it seems to break TRAMP
-            ;;(projectile-global-mode t)
             (setq projectile-enable-caching t)
             (use-package counsel-projectile
               :config (progn
@@ -1417,6 +1415,16 @@ Lisp function does not specify a special indentation."
                                         "amt" 'counsel-spotify-search-track
                                         "aml" 'counsel-spotify-search-album
                                         "amr" 'counsel-spotify-search-artist))
+(use-package tramp
+  :ensure nil
+  :config (progn
+            ;; This prevents from tramp from hanging
+            (progn
+              (projectile-mode nil)
+              (add-hook 'find-file-hook
+                        (lambda ()
+                          (when (file-remote-p default-directory)
+                            (setq-local projectile-mode-line "Projectile")))))))
 
 (use-package tramp-term)
 
