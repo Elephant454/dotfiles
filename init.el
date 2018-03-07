@@ -120,25 +120,25 @@
 
 ;; I should set up pairs of night themes and day themes. One keybinding cycles
 ;; between pairs and another keybinding switches between day and night.
-(dolist #'(lambda (package) (use-package package :defer t))
-        '(color-theme
-          soft-morning-theme
-          omtose-phellack-theme
-          color-theme-sanityinc-tomorrow
-          light-soap-theme
-          silkworm-theme
-          foggy-night-theme
-          apropospriate-theme
-          gotham-theme
-          purple-haze-theme
-          nubox
-          doom-themes
-          material-theme
-          spacemacs-theme
-          ;; gruvbox
-          dracula-theme
-          kaolin-themes
-          ))
+(mapc 'use-package-ensure-elpa
+      '(color-theme
+        soft-morning-theme
+        omtose-phellack-theme
+        color-theme-sanityinc-tomorrow
+        light-soap-theme
+        silkworm-theme
+        foggy-night-theme
+        apropospriate-theme
+        gotham-theme
+        purple-haze-theme
+        nubox
+        doom-themes
+        material-theme
+        spacemacs-theme
+        ;; gruvbox
+        dracula-theme
+        kaolin-themes
+        ))
 
 ;; cons pairs of themes, with the car being the day variant and the cdr being
 ;;  the night variant
@@ -1354,8 +1354,6 @@ Lisp function does not specify a special indentation."
 ;;  of that, is this even necessary?
 (use-package projectile
   :config (progn
-            ;; I've disabled it for now, as it seems to break TRAMP
-            ;;(projectile-global-mode t)
             (setq projectile-enable-caching t)
             (use-package counsel-projectile
               :config (progn
@@ -1406,8 +1404,13 @@ Lisp function does not specify a special indentation."
 ;;  company-eshell-autosuggest, exato, org-randomnote, abgaben,
 ;;  per-buffer-theme, smart-jump, scp, paced, tidal, eldoc-overlay, discover,
 ;;  disaster, erc-status-sidebar, esh-autosuggest, evil-collection,
-;;  mode-line-bell, lsp-ui, gdscript-mode, lognav-mode, centered-window,
-;;  monotropic-theme, frameshot, keycast
+;;  mode-line-bell, lsp-ui, gdscript-mode, lognav-mode,
+;;  monotropic-theme, frameshot, keycast, gdscript-mode, gif-screencast,
+;;  line-up-words, org-rich-yank, chyla-theme, overcast-theme
+
+;; Look into term management options
+;; multi-run, multi-term, sane-term, navorski, term+, term+key-intercept,
+;; term-manager, term-projectile
 
 (use-package counsel-spotify
   :config (e454iel-main-menu "am" '(nil :which-key "Spotify (Music)")
@@ -1417,6 +1420,16 @@ Lisp function does not specify a special indentation."
                                         "amt" 'counsel-spotify-search-track
                                         "aml" 'counsel-spotify-search-album
                                         "amr" 'counsel-spotify-search-artist))
+(use-package tramp
+  :ensure nil
+  :config (progn
+            ;; This prevents from tramp from hanging
+            (progn
+              (projectile-mode nil)
+              (add-hook 'find-file-hook
+                        (lambda ()
+                          (when (file-remote-p default-directory)
+                            (setq-local projectile-mode-line "Projectile")))))))
 
 (use-package tramp-term)
 
@@ -1526,6 +1539,9 @@ Lisp function does not specify a special indentation."
   :config (progn
             (use-package sly-company)
             (use-package sly-quicklisp)))
+
+;; Interactive Fiction Games!
+(use-package malyon)
 
 (provide 'init)
 ;;; init.el ends here
