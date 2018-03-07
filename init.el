@@ -1290,31 +1290,30 @@ Lisp function does not specify a special indentation."
 
 (use-package immortal-scratch)
 
-(use-package hexrgb)
+;;(use-package hexrgb)
 
-(use-package stripe-buffer
-  :disabled
-  :config
-  ;;(defface my-stripe-highlight-face
-  ;;'(:background "CCCCCC"))
-  
-  ;;(setq stripe-highlight-face my-stripe-highlight-face)
-  ;;(set-face-attribute stripe-highlight-face nil
-                      ;;:foreground (hexrgb-increment-saturation (face-foreground 'default) -100)
-                      ;;:background (hexrgb-increment-saturation (face-background 'default) -100)))
+;;(use-package stripe-buffer
+;;  :disabled
+;;  :config
+;;  ;;(defface my-stripe-highlight-face
+;;  ;;'(:background "CCCCCC"))
+;;  
+;;  ;;(setq stripe-highlight-face my-stripe-highlight-face)
+;;  ;;(set-face-attribute stripe-highlight-face nil
+;;                      ;;:foreground (hexrgb-increment-saturation (face-foreground 'default) -100)
+;;                      ;;:background (hexrgb-increment-saturation (face-background 'default) -100)))
+;;
+;;  ;;(setq stripe-highlight-face 
+;;        ;;`((:foreground ,(hexrgb-increment-saturation
+;;                         ;;(hexrgb-increment-value (face-foreground 'default) -1) -1)
+;;           ;;:background ,(hexrgb-increment-saturation
+;;                         ;;(hexrgb-increment-value (face-background 'default) -1) -1)))))
+;;  
+;;  (setq stripe-highlight-face 
+;;        `((:foreground ,(hexrgb-increment-saturation (face-foreground 'default) -1)
+;;           :background ,(hexrgb-increment-saturation (face-background 'default) -1)))))
 
-  ;;(setq stripe-highlight-face 
-        ;;`((:foreground ,(hexrgb-increment-saturation
-                         ;;(hexrgb-increment-value (face-foreground 'default) -1) -1)
-           ;;:background ,(hexrgb-increment-saturation
-                         ;;(hexrgb-increment-value (face-background 'default) -1) -1)))))
-  
-  (setq stripe-highlight-face 
-        `((:foreground ,(hexrgb-increment-saturation (face-foreground 'default) -1)
-           :background ,(hexrgb-increment-saturation (face-background 'default) -1)))))
-
-(use-package hexrgb)
-(use-package doremi-frm)
+;;(use-package doremi-frm)
 
 (use-package time
   :ensure nil
