@@ -120,8 +120,7 @@
 
 ;; I should set up pairs of night themes and day themes. One keybinding cycles
 ;; between pairs and another keybinding switches between day and night.
-;;(mapc (lambda (package) "" nil (use-package package :ensure t :defer t))
-(mapc 'use-package-ensure-elpa 
+(mapc 'use-package-ensure-elpa
       '(color-theme
         soft-morning-theme
         omtose-phellack-theme
@@ -1313,8 +1312,7 @@ Lisp function does not specify a special indentation."
 ;;  (setq stripe-highlight-face 
 ;;        `((:foreground ,(hexrgb-increment-saturation (face-foreground 'default) -1)
 ;;           :background ,(hexrgb-increment-saturation (face-background 'default) -1)))))
-;;
-;;(use-package hexrgb)
+
 ;;(use-package doremi-frm)
 
 (use-package time
@@ -1406,7 +1404,8 @@ Lisp function does not specify a special indentation."
 ;;  company-eshell-autosuggest, exato, org-randomnote, abgaben,
 ;;  per-buffer-theme, smart-jump, scp, paced, tidal, eldoc-overlay, discover,
 ;;  disaster, erc-status-sidebar, esh-autosuggest, evil-collection,
-;;  mode-line-bell, lsp-ui, gdscript-mode, lognav-mode, gif-screencast,
+;;  mode-line-bell, lsp-ui, gdscript-mode, lognav-mode,
+;;  monotropic-theme, frameshot, keycast, gdscript-mode, gif-screencast,
 ;;  line-up-words, org-rich-yank, chyla-theme, overcast-theme
 
 ;; Look into term management options
@@ -1529,6 +1528,17 @@ Lisp function does not specify a special indentation."
 
 (use-package md4rd)
 
+(use-package guix)
+
+(use-package geiser
+  :config (progn
+            (with-eval-after-load 'geiser-guile
+              (add-to-list 'geiser-guile-load-path "~/.config/guix/latest/"))))
+
+(use-package sly
+  :config (progn
+            (use-package sly-company)
+            (use-package sly-quicklisp)))
 
 ;; Interactive Fiction Games!
 (use-package malyon)
