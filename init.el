@@ -1325,7 +1325,7 @@ Lisp function does not specify a special indentation."
             (display-time-mode 0)))
 
 ;; used to center buffers in the middle of the screen
-(use-package centered-window-mode)
+(use-package centered-window)
 
 ;; this still needs to be configured, particularly for the keybindings
 ;;(use-package pocket-api)
