@@ -1515,5 +1515,17 @@ Lisp function does not specify a special indentation."
 
 (use-package md4rd)
 
+(use-package guix)
+
+(use-package geiser
+  :config (progn
+            (with-eval-after-load 'geiser-guile
+              (add-to-list 'geiser-guile-load-path "~/.config/guix/latest/"))))
+
+(use-package sly
+  :config (progn
+            (use-package sly-company)
+            (use-package sly-quicklisp)))
+
 (provide 'init)
 ;;; init.el ends here
