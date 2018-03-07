@@ -1407,7 +1407,8 @@ Lisp function does not specify a special indentation."
 ;;  company-eshell-autosuggest, exato, org-randomnote, abgaben,
 ;;  per-buffer-theme, smart-jump, scp, paced, tidal, eldoc-overlay, discover,
 ;;  disaster, erc-status-sidebar, esh-autosuggest, evil-collection,
-;;  mode-line-bell, lsp-ui, gdscript-mode, lognav-mode
+;;  mode-line-bell, lsp-ui, gdscript-mode, lognav-mode, centered-window,
+;;  monotropic-theme, frameshot, keycast
 
 (use-package counsel-spotify
   :config (e454iel-main-menu "am" '(nil :which-key "Spotify (Music)")
