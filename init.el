@@ -645,7 +645,8 @@ unsorted."
             :init (use-package evil-leader))
           (use-package org-pomodoro)
           (use-package org-bullets)
-          (use-package org-journal)
+          (use-package org-journal
+            :config (setq org-journal-carryover-items nil))
           (use-package org-clock-today
             :config (org-clock-today-mode 1))
           (use-package org-alert
