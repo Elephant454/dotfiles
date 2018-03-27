@@ -751,10 +751,10 @@ unsorted."
 ;; This still needs fixing. Primarily, pressing "-" in normal mode doesn't zoom
 ;; out, and the cursor blinks around the page (which is annoying).
 (use-package pdf-tools
-  ;; this automatically reloads the pdf when it changes (if I'm
-  ;;  compiling latex for example)
   :config (progn
             (pdf-tools-install)
+            ;; this automatically reloads the pdf when it changes (if I'm
+            ;;  compiling latex for example)
             (add-hook 'doc-view-mode-hook 'auto-revert-mode)
             ;;(setq pdf-view-midnight-colors (cons (foreground-color-at-point) (background-color-at-point)))
             ;;(add-hook 'midnight-mode-hook (lambda() (setq pdf-view-midnight-colors (cons (foreground-color-at-point) (background-color-at-point))))))
@@ -981,12 +981,14 @@ Lisp function does not specify a special indentation."
   :config (progn
             (setq erc-autojoin-channels-alist '((".*\\.freenode.net" "#archlinux")))
 
-            (e454iel-main-menu "aE" '(lambda() (interactive)
-                                       (progn() (erc-autojoin-mode 1)
-                                             (erc :server "irc.freenode.net"
-                                                  :nick "Elephant454"
-                                                  :password e454iel-freenode-password)))
-                               :which-key "ERC with Default Servers")))
+            (e454iel-main-menu "aE" '(lambda ()
+                                       (interactive)
+                                       (progn
+                                         (erc-autojoin-mode 1)
+                                         (erc :server "irc.freenode.net"
+                                              :nick "Elephant454"
+                                              :password e454iel-freenode-password)))
+              :which-key "ERC with Default Servers")))
 
 (use-package bubbles
   :ensure nil
@@ -1020,8 +1022,8 @@ Lisp function does not specify a special indentation."
               "M-4" 'winum-select-window-4
               "<SPC>" 'e454iel-main-menu-prefix)
             (e454iel-main-menu
-             "g" 'magit-status
-             "G" 'magit-dispatch-popup)))
+              "g" 'magit-status
+              "G" 'magit-dispatch-popup)))
 
 ;; Email!
 (use-package mu4e
@@ -1033,9 +1035,9 @@ Lisp function does not specify a special indentation."
              :keymaps 'mu4e-view-mode-map
              :states '(normal motion)
               "p" '(lambda() (interactive) (mu4e-action-view-as-pdf (mu4e-message-at-point))))
-
+            
             (e454iel-main-menu
-             "ae" 'mu4e)))
+              "ae" 'mu4e)))
 
 ;; Slime provides a mode and tools for working with lisp. Of particular interest
 ;;  is the abililty to connect to an instance of SBCL and control it. I learned
