@@ -69,7 +69,12 @@
 (setq *time-modeline-string* "%a %F %H:%M:%S")
 (load-module "net")
 (load-module "wifi")
-(setq *screen-mode-line-format* '("[^B%n^b] %W ^> %B %l %I %d"))
+(load-module "cpu")
+(load-module "mem")
+(load-module "disk")
+(setq *screen-mode-line-format* '("[^B%n^b] %W ^> %c %M %B %D %l %I %d"))
+;;(setq *screen-mode-line-format* '("[^B%n^b] %W ^> %c %N %B %l %I %d"))
+;;(setq *screen-mode-line-format* '("[^B%n^b] %W ^> %B %l %I %d"))
 ;;(setq *screen-mode-line-format* '("[^B%n^b] %W ^> %B %d"))
 (mode-line)
 
