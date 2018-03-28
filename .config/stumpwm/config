@@ -205,14 +205,23 @@ current position. Increment the window's number by @var{n}."
 ;; Note: take what's here and create a function for nicely creating colored
 ;;  strings
 (defun apply-foreground-background (foreground background)
-  (set-fg-color foreground)
-  (set-fg-color background)
-  (set-focus-color foreground)
-  (setq *mode-line-foreground-color* foreground)
-  (setq *mode-line-background-color* background)
-  (set-win-bg-color foreground)
-  (set-focus-color foreground)
-  (set-unfocus-color background)
+  ;; Get the x-color objects here so that we don't have to get them repeatedly
+  ;;  in a bunch of the steps below
+  ;; TODO: What's the difference between "alloc-color" and "lookup-color", both
+  ;;  for XLib and StumpWM?
+  (let ((foreground-x-color
+         (nth-value 2 (alloc-color (current-screen) foreground)))
+
+        (background-x-color
+         (nth-value 2 (alloc-color (current-screen) background))))
+
+        (set-fg-color foreground-x-color)
+        (set-bg-color background-x-color)
+        (setq *mode-line-foreground-color* foreground-x-color)
+        (setq *mode-line-background-color* background-x-color)
+        (set-win-bg-color foreground-x-color)
+        (set-focus-color foreground-x-color)
+        (set-unfocus-color background-x-color))
   ;;(setq *bar-med-color* (concat "^(:fg \"" (dim-hex-color foreground 10) "\")"))
   ;;(setq *bar-hi-color* (concat "^(:fg \"" (dim-hex-color foreground 5) "\")"))
   ;;(setq *bar-crit-color* (concat "^(:fg \"" foreground "\")"))
