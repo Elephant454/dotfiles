@@ -37,10 +37,38 @@
 ;; set the font
 (ql:quickload "clx")
 (ql:quickload "clx-truetype")
-(xft:cache-fonts)
 (load-module "ttf-fonts")
-;;(set-font "-windows-dina-medium-r-normal--12-*-96-96-c-70-iso8859-1")
-(set-font (make-instance 'xft:font :family "Inconsolata" :subfamily "Regular" :size 12))
+
+(defun try-setting-ttf-font
+    (quoted-ttf-font &key fallback-font do-not-retry)
+  "Try to set the font to the truetype font described by the quoted expression
+    `quoted-ttf-font'. If the quoted expression results in a simple-error, the
+    xft font cache is rebuilt and we try setting the font again. The font will
+    be set to a non-ttf font described in the x-font-spec string `fallback-font'
+    if it is non-nil and we fail to set the ttf-font."
+
+  (handler-case
+      (set-font (eval quoted-ttf-font))
+
+    (simple-error ()
+      (if (not do-not-retry)
+          (progn
+            (xft:cache-fonts)
+            (try-setting-ttf-font quoted-ttf-font
+                                  :fallback-font fallback-font
+                                  :do-not-retry t))
+          (progn
+            (echo "Failed to apply truetype font.")
+            (if fallback-font (set-font fallback-font))
+            nil)))))
+
+(try-setting-ttf-font
+ (quote (make-instance 'xft:font
+                       :family "Inconsolata"
+                       :subfamily "Regular"
+                       :size 12))
+ :fallback-font (set-font
+                 "-windows-dina-medium-r-normal--12-*-96-96-c-70-iso8859-1"))
 
 ;;; Define window placement policy...
 
