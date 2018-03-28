@@ -1408,7 +1408,8 @@ Lisp function does not specify a special indentation."
 ;;  disaster, erc-status-sidebar, esh-autosuggest, evil-collection,
 ;;  mode-line-bell, lsp-ui, gdscript-mode, lognav-mode,
 ;;  monotropic-theme, frameshot, keycast, gdscript-mode, gif-screencast,
-;;  line-up-words, org-rich-yank, chyla-theme, overcast-theme
+;;  line-up-words, org-rich-yank, chyla-theme, overcast-theme, academic-phrases,
+;;  auth-source-pass, magit-org-tools, org-radiobutton
 
 ;; Look into term management options
 ;; multi-run, multi-term, sane-term, navorski, term+, term+key-intercept,
