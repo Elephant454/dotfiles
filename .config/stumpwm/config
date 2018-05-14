@@ -117,7 +117,6 @@
 ;;  this.
 (undefine-key *root-map* (kbd "C-k"))
 
-;; Works fantastically!
 (defmacro define-implied-keys-for-map (map &rest things)
   (append
    (list (quote progn))
@@ -125,7 +124,7 @@
       for y in (cdr things) by #'cddr
       collect (list (quote define-key) map (list (quote kbd) x) y))))
 
-(define-keys-for-map-implicit-kbd stumpwm:*top-map*
+(define-implied-keys-for-map stumpwm:*top-map*
     "s-!" "gmove 1"
     "s-@" "gmove 2"
     "s-#" "gmove 3"
@@ -138,35 +137,37 @@
     "s-)" "gmove 10")
 
 ;; switch groups with s-[N]
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-1") "gselect 1")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-2") "gselect 2")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-3") "gselect 3")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-4") "gselect 4")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-5") "gselect 5")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-6") "gselect 6")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-7") "gselect 7")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-8") "gselect 8")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-9") "gselect 9")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-0") "gselect 0")
+(define-implied-keys-for-map *top-map*
+    "s-1" "gselect 1"
+    "s-2" "gselect 2"
+    "s-3" "gselect 3"
+    "s-4" "gselect 4"
+    "s-5" "gselect 5"
+    "s-6" "gselect 6"
+    "s-7" "gselect 7"
+    "s-8" "gselect 8"
+    "s-9" "gselect 9"
+    "s-0" "gselect 0")
 
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-ESC") "gselect 1")
+(define-key *top-map* (stumpwm:kbd "s-ESC") "gselect 1")
 
 ;; move focus with s-[direction]
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-Left") "move-focus left")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-Right") "move-focus right")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-Up") "move-focus up")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-Down") "move-focus Down")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-S-Left") "exchange-direction left")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-S-Right") "exchange-direction right")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-S-Up") "exchange-direction up")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-S-Down") "exchange-direction Down")
-
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-SPC") "pull-hidden-next")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-S-SPC") "pull-hidden-previous")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "C-s-Right") "pull-hidden-next")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "C-s-Left") "pull-hidden-previous")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "M-s-Right") "pull-hidden-next")
-(stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "M-s-Left") "pull-hidden-previous")
+(define-implied-keys-for-map *top-map*
+    "s-Left"    "move-focus left"
+    "s-Right"   "move-focus right"
+    "s-Up"      "move-focus up"
+    "s-Down"    "move-focus Down"
+    "s-S-Left"  "exchange-direction left"
+    "s-S-Right" "exchange-direction right"
+    "s-S-Up"    "exchange-direction up"
+    "s-S-Down"  "exchange-direction Down"
+    
+    "s-SPC"     "pull-hidden-next"
+    "s-S-SPC"   "pull-hidden-previous"
+    "C-s-Right" "pull-hidden-next"
+    "C-s-Left"  "pull-hidden-previous"
+    "M-s-Right" "pull-hidden-next"
+    "M-s-Left"  "pull-hidden-previous")
 
 (defcommand renumber-relative (n) ((:number "How many window numbers forward?: "))
   "Set the current window's number @var{n} places forward relative to it's
