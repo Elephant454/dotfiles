@@ -117,6 +117,85 @@
 ;;  this.
 (undefine-key *root-map* (kbd "C-k"))
 
+(defun convert-list-to-tuple-pairs (list)
+  (append
+   (list (list (car list) (cadr list)))
+   (if (cddr list) (convert-list-to-tuple-pairs (cddr list)))))
+
+(defun mapcar-every-other-keep-all (your-function list)
+  (append
+   (list (funcall your-function (car list)) (cadr list))
+   (if (cddr list) (mapcar-every-other-keep-all your-function (cddr list)))))
+
+;; needs to be tested
+(defun mapcar-every-other (your-function list)
+  (append
+   (list (funcall your-function (cadr list)))
+   (if (cddr list) (mapcar-every-other your-function (cddr list)))))
+
+(defmacro define-keys-for-map (map &rest things)
+  (append
+   (list (quote progn))
+   (mapcar
+    (lambda (x) (list (quote define-key) map (car x) (cadr x)))
+    (convert-list-to-tuple-pairs things))))
+
+(defmacro define-keys-for-map-implicit-kbd (map &rest things)
+  (append
+   (list (quote progn))
+   (mapcar
+    (lambda (x) (list (quote define-key) map (kbd (car x)) (cadr x)))
+    (convert-list-to-tuple-pairs things))))
+
+;; nope
+(defmacro define-keys-for-map-implicit-kbd (map &rest things)
+  (append
+   (list (quote define-keys-for-map) map)
+   (mapcar
+    (lambda (x) (list (list (quote kbd) (car x)) (cadr x)))
+    (convert-list-to-tuple-pairs things))))
+
+(defmacro define-keys-for-map-implicit-kbd (map &rest things)
+  `(define-keys-for-map
+       ,@(mapcar
+         (lambda (x) (list (list (quote kbd) (car x)) (cadr x)))
+         (convert-list-to-tuple-pairs things))))
+
+(defmacro define-keys-for-map-implicit-kbd (map &rest things)
+  (append (list (quote define-keys-for-map) map)
+          (mapcar-every-other-keep-all (lambda (x) (list (quote kbd) x)) things)))
+
+(let ((map *top-map*)
+      (things
+       '("s-!" "gmove 1"
+         "s-@" "gmove 2"
+         "s-#" "gmove 3"
+         "s-$" "gmove 4"
+         "s-%" "gmove 5"
+         "s-^" "gmove 6"
+         "s-&" "gmove 7"
+         "s-*" "gmove 8"
+         "s-(" "gmove 9")))
+  (append (list (quote define-keys-for-map) map)
+          (mapcar-every-other-keep-all (lambda (x) (list (quote kbd) x)) things)))
+
+
+(let ((map 'stumpwm:*top-map*) (things '( (stumpwm:kbd "s-1") "gselect 1" (stumpwm:kbd "s-2") "gselect 2" )))
+
+  )
+
+(define-keys-for-map-implicit-kbd stumpwm:*top-map*
+    "s-!" "gmove 1"
+    "s-@" "gmove 2"
+    "s-#" "gmove 3"
+    "s-$" "gmove 4"
+    "s-%" "gmove 5"
+    "s-^" "gmove 6"
+    "s-&" "gmove 7"
+    "s-*" "gmove 8"
+    "s-(" "gmove 9"
+    "s-)" "gmove 10")
+
 ;; switch groups with s-[N]
 (stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-1") "gselect 1")
 (stumpwm:define-key stumpwm:*top-map* (stumpwm:kbd "s-2") "gselect 2")
