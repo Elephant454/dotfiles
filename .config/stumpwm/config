@@ -133,6 +133,7 @@
    (list (funcall your-function (cadr list)))
    (if (cddr list) (mapcar-every-other your-function (cddr list)))))
 
+;; it definitely works
 (defmacro define-keys-for-map (map &rest things)
   (append
    (list (quote progn))
@@ -140,6 +141,24 @@
     (lambda (x) (list (quote define-key) map (car x) (cadr x)))
     (convert-list-to-tuple-pairs things))))
 
+;; better? It doesn't work at the moment...
+(defmacro define-keys-for-map (map &rest things)
+  (append
+   (list (quote progn))
+   (mapcar (lambda (x) (append (list (quote define-key) map) x))
+           (loop for x in things by #'cddr
+              for y in (cdr things)
+              collect (list (list (quote kbd) x) y)))))
+
+;; Works fantastically!
+(defmacro define-implied-keys-for-map (map &rest things)
+  (append
+   (list (quote progn))
+   (loop for x in things by #'cddr
+      for y in (cdr things) by #'cddr
+      collect (list (quote define-key) map (list (quote kbd) x) y))))
+
+;; nope
 (defmacro define-keys-for-map-implicit-kbd (map &rest things)
   (append
    (list (quote progn))
@@ -155,15 +174,19 @@
     (lambda (x) (list (list (quote kbd) (car x)) (cadr x)))
     (convert-list-to-tuple-pairs things))))
 
+;; nope
 (defmacro define-keys-for-map-implicit-kbd (map &rest things)
   `(define-keys-for-map
        ,@(mapcar
          (lambda (x) (list (list (quote kbd) (car x)) (cadr x)))
          (convert-list-to-tuple-pairs things))))
 
+;; maybe?
 (defmacro define-keys-for-map-implicit-kbd (map &rest things)
   (append (list (quote define-keys-for-map) map)
           (mapcar-every-other-keep-all (lambda (x) (list (quote kbd) x)) things)))
+
+(loop for x in '(foo bar baz qux) by #'cddr for y in (cdr '(foo bar baz qux)) collect (list (list (quote kbd) x) y))
 
 (let ((map *top-map*)
       (things
