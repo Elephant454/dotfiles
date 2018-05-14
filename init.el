@@ -1405,7 +1405,8 @@ Lisp function does not specify a special indentation."
 ;;  monotropic-theme, frameshot, keycast, gdscript-mode, gif-screencast,
 ;;  line-up-words, org-rich-yank, chyla-theme, overcast-theme, academic-phrases,
 ;;  auth-source-pass, magit-org-tools, org-radiobutton, company-suggest, honcho,
-;;  poet-theme 
+;;  poet-theme, counsel-org-clock, desktop-environment, doneburn-theme,
+;;  heaven-and-hel, northcode-theme, org-variable-pitch, nova-theme
 
 ;; Look into term management options
 ;; multi-run, multi-term, sane-term, navorski, term+, term+key-intercept,
