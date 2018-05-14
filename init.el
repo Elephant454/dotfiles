@@ -138,6 +138,7 @@
         ;; gruvbox
         dracula-theme
         kaolin-themes
+        srcery-theme
         ))
 
 ;; cons pairs of themes, with the car being the day variant and the cdr being
@@ -152,6 +153,7 @@
                             (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
                             (apropospriate-light . apropospriate-dark)
                             (spacemacs-light . spacemacs-dark)
+                            (srcery-theme . srcery-theme)
                             (gotham . gotham)
                             (purple-haze . purple-haze)))
 
