@@ -860,12 +860,6 @@ unsorted."
 (use-package seethru
   :config (e454iel-main-menu "tT" 'seethru))
 
-(use-package buffer-flip
-  :config (progn
-            (key-chord-mode 1)
-            (buffer-flip-mode 1)
-            (e454iel-main-menu "TAB" 'buffer-flip)))
-
 ;; My first elisp function!
 (defun kill-buffer-file-name ()
   "Kill the name of the current file to the clipboard."
@@ -1412,7 +1406,9 @@ Lisp function does not specify a special indentation."
 ;;  mode-line-bell, lsp-ui, gdscript-mode, lognav-mode,
 ;;  monotropic-theme, frameshot, keycast, gdscript-mode, gif-screencast,
 ;;  line-up-words, org-rich-yank, chyla-theme, overcast-theme, academic-phrases,
-;;  auth-source-pass, magit-org-tools, org-radiobutton
+;;  auth-source-pass, magit-org-tools, org-radiobutton, company-suggest, honcho,
+;;  poet-theme, counsel-org-clock, desktop-environment, doneburn-theme,
+;;  heaven-and-hel, northcode-theme, org-variable-pitch, nova-theme
 
 ;; Look into term management options
 ;; multi-run, multi-term, sane-term, navorski, term+, term+key-intercept,
