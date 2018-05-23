@@ -303,9 +303,9 @@ current position. Increment the window's number by @var{n}."
 
 (defun apply-emacs-font ()
   (let ((font-to-apply (emacs-repl-send-string
-                        "(car e454iel-current-font)"))
+                        "(caar e454iel-current-font-pairs)"))
         (size-to-apply (emacs-repl-send-string
-                         "(+ e454iel-font-scale (cdr e454iel-current-font))")))
+                         "(+ e454iel-font-scale (cdar e454iel-current-font-pairs))")))
 
     (handler-case
          (set-font (make-instance 'xft:font
