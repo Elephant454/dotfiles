@@ -322,9 +322,9 @@ current position. Increment the window's number by @var{n}."
 (load-module "battery-portable")
 
 (load-module "swm-gaps")
-(setq swm-gaps::*inner-gaps-size* 7)
-(setq swm-gaps::*outer-gaps-size* 0)
-(setq swm-gaps::*gaps-on* t)
+(setq swm-gaps::*inner-gaps-size* 7
+      swm-gaps::*outer-gaps-size* 0
+      swm-gaps::*gaps-on* t)
 
 ;; look into (load-module "ttf-fonts"). This whole page is interesting:
 ;;  https://github.com/ivoarch/.dot-org-files/blob/master/stumpwm.org
