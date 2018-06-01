@@ -153,13 +153,13 @@
 
 ;; move focus with s-[direction]
 (define-implied-keys-for-map *top-map*
-    "s-Left"    "move-focus left"
-    "s-Right"   "move-focus right"
-    "s-Up"      "move-focus up"
+    "s-Left"    "move-focus Left"
+    "s-Right"   "move-focus Right"
+    "s-Up"      "move-focus Up"
     "s-Down"    "move-focus Down"
-    "s-S-Left"  "exchange-direction left"
-    "s-S-Right" "exchange-direction right"
-    "s-S-Up"    "exchange-direction up"
+    "s-S-Left"  "exchange-direction Left"
+    "s-S-Right" "exchange-direction Right"
+    "s-S-Up"    "exchange-direction Up"
     "s-S-Down"  "exchange-direction Down"
     
     "s-SPC"     "pull-hidden-next"
@@ -182,36 +182,41 @@ current position. Increment the window's number by @var{n}."
 
         (renumber desired-window-number))))
 
-(define-key *top-map* (kbd "C-s-S-Left") "renumber-relative -1")
-(define-key *top-map* (kbd "M-s-S-Left") "renumber-relative -1")
-(define-key *top-map* (kbd "C-M-s-Left") "renumber-relative -1")
-(define-key *top-map* (kbd "C-s-S-Right") "renumber-relative 1")
-(define-key *top-map* (kbd "M-s-S-Right") "renumber-relative 1")
-(define-key *top-map* (kbd "C-M-s-Right") "renumber-relative 1")
+(define-implied-keys-for-map *top-map*
+    "C-s-S-Left" "renumber-relative -1"
+    "M-s-S-Left" "renumber-relative -1"
+    "C-M-s-Left" "renumber-relative -1"
+    "C-s-S-Right" "renumber-relative 1"
+    "M-s-S-Right" "renumber-relative 1"
+    "C-M-s-Right" "renumber-relative 1")
+
+(defcommand open-mstdn nil nil (run-or-pull "open-mstdn-app" '(:class "Mstdn")))
+(defcommand open-riot nil nil (run-or-pull "riot-desktop" '(:class "Riot")))
+(defcommand open-spotify nil nil (run-or-pull "spotify" '(:class "Spotify")))
 
 ;; bindings for commonly used apps
 (defvar *application-map* (make-sparse-keymap))
+
 (define-key *root-map* (kbd "a") '*application-map*)
-(define-key *application-map* (kbd "f") "exec firefox")
-(define-key *application-map* (kbd "u") "exec urxvt")
-(define-key *application-map* (kbd "c") "exec google-chrome-stable")
-(define-key *application-map* (kbd "r") "exec riot-desktop")
-(define-key *application-map* (kbd "s") "exec spotify")
-(define-key *application-map* (kbd "S") "exec skypeforlinux")
-(define-key *application-map* (kbd "p") "exec pavucontrol")
-(define-key *application-map* (kbd "v") "exec vivaldi-stable")
-(defcommand open-mstdn nil nil (run-or-pull "open-mstdn-app" '(:class "Mstdn")))
-(define-key *application-map* (kbd "m") "open-mstdn")
+(define-implied-keys-for-map *application-map*
+    "f" "exec firefox"
+    "u" "exec urxvt"
+    "c" "exec google-chrome-stable"
+    "r" "open-riot"
+    "s" "open-spotify"
+    "S" "exec skypeforlinux"
+    "p" "exec pavucontrol"
+    "v" "exec vivaldi-stable"
+    "m" "open-mstdn")
 ;;(define-key *application-map* (kbd "g") "exec gajim")
 
 (defvar *games-map* (make-sparse-keymap))
 (define-key *application-map* (kbd "g") '*games-map*)
-(define-key *games-map* (kbd "k") "exec kega-fusion")
-(define-key *games-map* (kbd "f") "exec firestorm")
-(define-key *games-map* (kbd "t") "exec torchlight")
-;; for "Bubble Chains"
-(define-key *games-map* (kbd "c") "exec chains")
-(define-key *games-map* (kbd "s") "exec steam")
+(define-implied-keys-for-map *games-map*
+    "k" "exec kega-fusion"
+    "f" "exec firestorm"
+    "t" "exec torchlight"
+    "s" "exec steam")
 
 ;; sets the focus policy so that the focus follows the mouse
 (setf *mouse-focus-policy* :sloppy)
