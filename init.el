@@ -659,36 +659,29 @@ unsorted."
                       (setq alert-default-style 'libnotify)
                       (org-alert-disable))))
   :config (progn
-            (defvar e454iel-current-semester "Semester2")
+            (defvar e454iel-documents-time-period "Summer")
             (defvar e454iel-documents-dir
               (concat "~/Documents/"
-                      (let* ((time (decode-time))
-                             (month (nth 4 time))
-                             (year (nth 5 time))
-                             (start-year (if (> month 7)
-                                             year
-                                           (- year 1))))
-                        (format "%d-%d/" start-year (+ start-year 1)))
-                      e454iel-current-semester))
+                      (int-to-string (nth 5 (decode-time))) ; the current year
+                      "/"
+                      e454iel-documents-time-period))
 
             (defvar e454iel-extra-org-agenda-files
               '("~/org/birthdays.org" "~/org/derp.org"))
 
+            (defvar e454iel-documents-org-agenda-file-pattern
+              "\\(todo.org\\|events.org\\|schedule.org\\)$")
 
             (setf org-agenda-files
-                  (let* ((documents-subdirs
-                          (directory-directories e454iel-documents-dir t nil t))
-
-                         (org-files-pattern
-                          "\\(todo.org\\|events.org\\|schedule.org\\)$")
-
-                         (documents-org-files
-                          (mapcan
-                           #'(lambda (file)
-                               (directory-files file t org-files-pattern))
-                           documents-subdirs)))
-
-                    (nconc e454iel-extra-org-agenda-files documents-org-files)))
+                  (append
+                   (remove-if-not #'file-exists-p
+                                  e454iel-extra-org-agenda-files)
+                   (if (file-directory-p e454iel-documents-dir)
+                       (directory-files-recursively
+                        e454iel-documents-dir
+                        e454iel-documents-org-agenda-file-pattern
+                        nil))
+                   org-agenda-files))
 
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1)))
             ;;(add-hook 'org-mode-hook 'turn-on-stripe-table-mode)
