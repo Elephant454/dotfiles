@@ -222,7 +222,8 @@ without confirmation."
 ;;(e454iel-load-theme)
 
 ;; load default theme
-(e454iel-jump-to-theme 'sanityinc-tomorrow-day)
+(e454iel-jump-to-theme 'apropospriate-light)
+
 
 ;; fonts
 
@@ -308,7 +309,7 @@ without confirmation."
                (e454iel-load-font)))))
 
 ;;(elephant454initel-load-font)
-(e454iel-jump-to-font "Fantasque Sans Mono")
+(e454iel-jump-to-font "Monoid")
 
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
