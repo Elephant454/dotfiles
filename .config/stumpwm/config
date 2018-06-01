@@ -72,6 +72,8 @@
 
 ;;; Define window placement policy...
 
+;;(find "Noto" (clx-truetype:get-font-families) :test #'search)
+
 ;; Clear rules
 (clear-window-placement-rules)
 
