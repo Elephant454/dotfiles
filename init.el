@@ -631,6 +631,10 @@ unsorted."
       (mapcar #'(lambda (x) (string-remove-prefix (expand-file-name directory) x))
               result))))
 
+(defun or-list (list)
+  "Return the first non-nil item in `LIST'."
+              (some (lambda (x) x) list))
+
 ;; org things
 ;; TODO: look into org-dotemacs for organizing this file using org
 ;; TODO: org mode confirm for capture is different than with-editor confirm for
