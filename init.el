@@ -633,7 +633,7 @@ unsorted."
 
 (defun or-list (list)
   "Return the first non-nil item in `LIST'."
-              (some (lambda (x) x) list))
+  (some (lambda (x) x) list))
 
 ;; org things
 ;; TODO: look into org-dotemacs for organizing this file using org
