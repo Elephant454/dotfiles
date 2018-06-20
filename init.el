@@ -481,7 +481,7 @@ without confirmation."
 (use-package ensime
   :pin melpa-stable
   :config (e454iel-major-mode-menu
-           :major-modes 'ensime-mode-map
+            :major-modes 'ensime-mode-map
             :keymaps 'ensime-mode-map
             ;;"" '(nil :which-key "Ensime Mode Commands")
             "i" 'ensime-import-type-at-point
