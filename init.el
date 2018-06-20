@@ -705,6 +705,18 @@ unsorted."
                         nil))
                    org-agenda-files))
 
+            (setf org-agenda-custom-commands
+                  (append
+                   org-agenda-custom-commands
+
+                   ;;'(("m" tags "-other-agenda"))))
+                   '(("m" "My Agenda"
+                      agenda ""
+                      ((org-agenda-tag-filter-preset '("-OtherAgenda")))))))
+
+            (use-package calfw
+              :config (use-package calfw-org))
+
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1)))
             ;;(add-hook 'org-mode-hook 'turn-on-stripe-table-mode)
             (add-hook 'org-mode-hook (lambda() (auto-fill-mode 1)))
