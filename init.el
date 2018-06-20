@@ -381,6 +381,7 @@ without confirmation."
      "fbj" 'bookmark-jump
      "fbl" 'bookmark-bmenu-list
      "fy" 'kill-buffer-file-name
+     "fs" 'save-buffer
      
      "s" 'shell                           ; open a shell
      
