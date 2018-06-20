@@ -317,11 +317,12 @@ without confirmation."
 (use-package evil
   :demand
   :config (progn
-            (use-package evil-escape
-              :config (evil-escape-mode))
-            (evil-mode 1)
-            (use-package evil-matchit
-              :config (global-evil-matchit-mode 1))))
+            (evil-mode t)
+            (use-package evil-escape :config (evil-escape-mode t))
+            (use-package evil-matchit :config (global-evil-matchit-mode t))
+            (use-package fringe-helper
+              :config (use-package evil-fringe-mark
+                        :config (global-evil-fringe-mark-mode t)))))
 
 (use-package general
   :demand t
