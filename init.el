@@ -455,6 +455,13 @@ without confirmation."
            :keymaps 'Info-mode-map
             "<SPC>" 'e454iel-main-menu-prefix))
 
+(use-package grep
+  :ensure nil
+  :config (general-define-key
+           :states '(normal motion)
+           :keymaps 'grep-mode-map
+            "<SPC>" 'e454iel-main-menu-prefix))
+
 (use-package dired
   :ensure nil  ; This is a built in file, so we need to override
                ; ensure so that package.el doesn't try to download a
