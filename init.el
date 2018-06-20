@@ -1298,7 +1298,7 @@ Lisp function does not specify a special indentation."
 
 ;; used to hide minor modes or give them alternative names for the modeline
 ;;
-;; these should probably be moved to their respective use-package entries
+;; TODO: these should probably be moved to their respective use-package entries
 (use-package diminish
   :config (progn
             (diminish 'company-mode)
