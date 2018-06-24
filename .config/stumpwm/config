@@ -342,6 +342,63 @@ current position. Increment the window's number by @var{n}."
 (setq *window-border-style* :THIN)
 
 
+;; Now for some experimental root exposure testing sillyness
+
+(defvar *e454-swm/desktop-canvas-points* '((0 0)))
+
+(defun e454-swm/redraw-desktop-canvas-points (screen points-list)
+  (let* ((root-xwindow (screen-root screen))
+        (gcontext (xlib:create-gcontext
+                   :drawable root-xwindow
+                   :line-style :double-dash
+                   :line-width 1
+                   :foreground (xlib:screen-white-pixel
+                                (screen-number screen)))))
+
+    (loop for (first second) on points-list
+       do (when second
+            (progn
+
+              ;;(format t "(~S ~S) -> (~S ~S) ~C" (first first) (second first) (first second) (second second) #\newline)
+              (format t "~S -> ~S ~C" first second #\newline)
+              (xlib:draw-line root-xwindow
+                              gcontext
+                              (first first) (second first)
+                              (first second) (second second))
+
+              )
+            ))))
+
+(defun e454-swm/add-desktop-canvas-point (screen mouse-button x y)
+  (push (list x y) *e454-swm/desktop-canvas-points*)
+  (e454-swm/redraw-desktop-canvas-points screen *e454-swm/desktop-canvas-points*))
+
+(add-hook *root-click-hook* 'e454-swm/add-desktop-canvas-point)
+
+(defvar *root-exposure-hook* '())
+
+(add-hook *root-exposure-hook* (lambda (window &optional x y width height count) (e454-swm/redraw-desktop-canvas-points (find-screen window) *e454-swm/desktop-canvas-points*)))
+
+(define-stump-event-handler :exposure (window x y width height count)
+  (let (screen ml)
+    (when (zerop count)
+      (cond
+        ((setf screen (find-screen window))
+         ;; root exposed
+         (group-root-exposure (screen-current-group screen))
+         (run-hook-with-args *root-exposure-hook* window x y width height count))
+        ((setf screen (find-message-window-screen window))
+         ;; message window exposed
+         (if (plusp (screen-ignore-msg-expose screen))
+             (decf (screen-ignore-msg-expose screen))
+             (redraw-current-message screen)))
+        ((setf ml (find-mode-line-by-window window))
+         (setf screen (mode-line-screen ml))
+         (redraw-mode-line ml t)))
+      ;; Show the area.
+      (when (and *debug-expose-events* screen)
+        (draw-cross screen window x y width height)))))
+
 ;; tried to do a remote thing? This should be run inside of Emacs.
 ;;(slime-connect "localhost" "4004" "utf-8-unix" (slime-interactive-eval "(stumpwm:apply-emacs-colors)"))
 
