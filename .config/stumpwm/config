@@ -364,10 +364,7 @@ current position. Increment the window's number by @var{n}."
               (xlib:draw-line root-xwindow
                               gcontext
                               (first first) (second first)
-                              (first second) (second second))
-
-              )
-            ))))
+                              (first second) (second second)))))))
 
 (defun e454-swm/add-desktop-canvas-point (screen mouse-button x y)
   (push (list x y) *e454-swm/desktop-canvas-points*)
@@ -377,8 +374,12 @@ current position. Increment the window's number by @var{n}."
 
 (defvar *root-exposure-hook* '())
 
-(add-hook *root-exposure-hook* (lambda (window &optional x y width height count) (e454-swm/redraw-desktop-canvas-points (find-screen window) *e454-swm/desktop-canvas-points*)))
+(add-hook *root-exposure-hook*
+          (lambda (window &optional x y width height count)
+            (e454-swm/redraw-desktop-canvas-points
+             (find-screen window) *e454-swm/desktop-canvas-points*)))
 
+;; It's necessary to redefine how Stump handles exposure events in order to add the new hook
 (define-stump-event-handler :exposure (window x y width height count)
   (let (screen ml)
     (when (zerop count)
