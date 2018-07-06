@@ -155,13 +155,13 @@
 
 ;; move focus with s-[direction]
 (define-implied-keys-for-map *top-map*
-    "s-Left"    "move-focus left"
-    "s-Right"   "move-focus right"
-    "s-Up"      "move-focus up"
+    "s-Left"    "move-focus Left"
+    "s-Right"   "move-focus Right"
+    "s-Up"      "move-focus Up"
     "s-Down"    "move-focus Down"
-    "s-S-Left"  "exchange-direction left"
-    "s-S-Right" "exchange-direction right"
-    "s-S-Up"    "exchange-direction up"
+    "s-S-Left"  "exchange-direction Left"
+    "s-S-Right" "exchange-direction Right"
+    "s-S-Up"    "exchange-direction Up"
     "s-S-Down"  "exchange-direction Down"
     
     "s-SPC"     "pull-hidden-next"
@@ -184,36 +184,41 @@ current position. Increment the window's number by @var{n}."
 
         (renumber desired-window-number))))
 
-(define-key *top-map* (kbd "C-s-S-Left") "renumber-relative -1")
-(define-key *top-map* (kbd "M-s-S-Left") "renumber-relative -1")
-(define-key *top-map* (kbd "C-M-s-Left") "renumber-relative -1")
-(define-key *top-map* (kbd "C-s-S-Right") "renumber-relative 1")
-(define-key *top-map* (kbd "M-s-S-Right") "renumber-relative 1")
-(define-key *top-map* (kbd "C-M-s-Right") "renumber-relative 1")
+(define-implied-keys-for-map *top-map*
+    "C-s-S-Left" "renumber-relative -1"
+    "M-s-S-Left" "renumber-relative -1"
+    "C-M-s-Left" "renumber-relative -1"
+    "C-s-S-Right" "renumber-relative 1"
+    "M-s-S-Right" "renumber-relative 1"
+    "C-M-s-Right" "renumber-relative 1")
+
+(defcommand open-mstdn nil nil (run-or-pull "open-mstdn-app" '(:class "Mstdn")))
+(defcommand open-riot nil nil (run-or-pull "riot-desktop" '(:class "Riot")))
+(defcommand open-spotify nil nil (run-or-pull "spotify" '(:class "Spotify")))
 
 ;; bindings for commonly used apps
 (defvar *application-map* (make-sparse-keymap))
+
 (define-key *root-map* (kbd "a") '*application-map*)
-(define-key *application-map* (kbd "f") "exec firefox")
-(define-key *application-map* (kbd "u") "exec urxvt")
-(define-key *application-map* (kbd "c") "exec google-chrome-stable")
-(define-key *application-map* (kbd "r") "exec riot-desktop")
-(define-key *application-map* (kbd "s") "exec spotify")
-(define-key *application-map* (kbd "S") "exec skypeforlinux")
-(define-key *application-map* (kbd "p") "exec pavucontrol")
-(define-key *application-map* (kbd "v") "exec vivaldi-stable")
-(defcommand open-mstdn nil nil (run-or-pull "open-mstdn-app" '(:class "Mstdn")))
-(define-key *application-map* (kbd "m") "open-mstdn")
+(define-implied-keys-for-map *application-map*
+    "f" "exec firefox"
+    "u" "exec urxvt"
+    "c" "exec google-chrome-stable"
+    "r" "open-riot"
+    "s" "open-spotify"
+    "S" "exec skypeforlinux"
+    "p" "exec pavucontrol"
+    "v" "exec vivaldi-stable"
+    "m" "open-mstdn")
 ;;(define-key *application-map* (kbd "g") "exec gajim")
 
 (defvar *games-map* (make-sparse-keymap))
 (define-key *application-map* (kbd "g") '*games-map*)
-(define-key *games-map* (kbd "k") "exec kega-fusion")
-(define-key *games-map* (kbd "f") "exec firestorm")
-(define-key *games-map* (kbd "t") "exec torchlight")
-;; for "Bubble Chains"
-(define-key *games-map* (kbd "c") "exec chains")
-(define-key *games-map* (kbd "s") "exec steam")
+(define-implied-keys-for-map *games-map*
+    "k" "exec kega-fusion"
+    "f" "exec firestorm"
+    "t" "exec torchlight"
+    "s" "exec steam")
 
 ;; sets the focus policy so that the focus follows the mouse
 (setf *mouse-focus-policy* :sloppy)
@@ -305,9 +310,9 @@ current position. Increment the window's number by @var{n}."
 
 (defun apply-emacs-font ()
   (let ((font-to-apply (emacs-repl-send-string
-                        "(car e454iel-current-font)"))
+                        "(caar e454iel-current-font-pairs)"))
         (size-to-apply (emacs-repl-send-string
-                         "(+ e454iel-font-scale (cdr e454iel-current-font))")))
+                         "(+ e454iel-font-scale (cdar e454iel-current-font-pairs))")))
 
     (handler-case
          (set-font (make-instance 'xft:font
@@ -324,9 +329,9 @@ current position. Increment the window's number by @var{n}."
 (load-module "battery-portable")
 
 (load-module "swm-gaps")
-(setq swm-gaps::*inner-gaps-size* 7)
-(setq swm-gaps::*outer-gaps-size* 0)
-(setq swm-gaps::*gaps-on* t)
+(setq swm-gaps::*inner-gaps-size* 7
+      swm-gaps::*outer-gaps-size* 0
+      swm-gaps::*gaps-on* t)
 
 ;; look into (load-module "ttf-fonts"). This whole page is interesting:
 ;;  https://github.com/ivoarch/.dot-org-files/blob/master/stumpwm.org
@@ -336,6 +341,64 @@ current position. Increment the window's number by @var{n}."
 (setq *ignore-wm-inc-hints* t)
 (setq *window-border-style* :THIN)
 
+
+;; Now for some experimental root exposure testing sillyness
+
+(defvar *e454-swm/desktop-canvas-points* '((0 0)))
+
+(defun e454-swm/redraw-desktop-canvas-points (screen points-list)
+  (let* ((root-xwindow (screen-root screen))
+        (gcontext (xlib:create-gcontext
+                   :drawable root-xwindow
+                   :line-style :double-dash
+                   :line-width 1
+                   :foreground (xlib:screen-white-pixel
+                                (screen-number screen)))))
+
+    (loop for (first second) on points-list
+       do (when second
+            (progn
+
+              ;;(format t "(~S ~S) -> (~S ~S) ~C" (first first) (second first) (first second) (second second) #\newline)
+              (format t "~S -> ~S ~C" first second #\newline)
+              (xlib:draw-line root-xwindow
+                              gcontext
+                              (first first) (second first)
+                              (first second) (second second)))))))
+
+(defun e454-swm/add-desktop-canvas-point (screen mouse-button x y)
+  (push (list x y) *e454-swm/desktop-canvas-points*)
+  (e454-swm/redraw-desktop-canvas-points screen *e454-swm/desktop-canvas-points*))
+
+(add-hook *root-click-hook* 'e454-swm/add-desktop-canvas-point)
+
+(defvar *root-exposure-hook* '())
+
+(add-hook *root-exposure-hook*
+          (lambda (window &optional x y width height count)
+            (e454-swm/redraw-desktop-canvas-points
+             (find-screen window) *e454-swm/desktop-canvas-points*)))
+
+;; It's necessary to redefine how Stump handles exposure events in order to add the new hook
+(define-stump-event-handler :exposure (window x y width height count)
+  (let (screen ml)
+    (when (zerop count)
+      (cond
+        ((setf screen (find-screen window))
+         ;; root exposed
+         (group-root-exposure (screen-current-group screen))
+         (run-hook-with-args *root-exposure-hook* window x y width height count))
+        ((setf screen (find-message-window-screen window))
+         ;; message window exposed
+         (if (plusp (screen-ignore-msg-expose screen))
+             (decf (screen-ignore-msg-expose screen))
+             (redraw-current-message screen)))
+        ((setf ml (find-mode-line-by-window window))
+         (setf screen (mode-line-screen ml))
+         (redraw-mode-line ml t)))
+      ;; Show the area.
+      (when (and *debug-expose-events* screen)
+        (draw-cross screen window x y width height)))))
 
 ;; tried to do a remote thing? This should be run inside of Emacs.
 ;;(slime-connect "localhost" "4004" "utf-8-unix" (slime-interactive-eval "(stumpwm:apply-emacs-colors)"))

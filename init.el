@@ -224,7 +224,8 @@ without confirmation."
 ;;(e454iel-load-theme)
 
 ;; load default theme
-(e454iel-jump-to-theme 'sanityinc-tomorrow-day)
+(e454iel-jump-to-theme 'apropospriate-light)
+
 
 ;; fonts
 
@@ -310,17 +311,18 @@ without confirmation."
                (e454iel-load-font)))))
 
 ;;(elephant454initel-load-font)
-(e454iel-jump-to-font "Fantasque Sans Mono")
+(e454iel-jump-to-font "Monoid")
 
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
   :demand
   :config (progn
-            (use-package evil-escape
-              :config (evil-escape-mode))
-            (evil-mode 1)
-            (use-package evil-matchit
-              :config (global-evil-matchit-mode 1))))
+            (evil-mode t)
+            (use-package evil-escape :config (evil-escape-mode t))
+            (use-package evil-matchit :config (global-evil-matchit-mode t))
+            (use-package fringe-helper
+              :config (use-package evil-fringe-mark
+                        :config (global-evil-fringe-mark-mode t)))))
 
 (use-package general
   :demand t
@@ -379,6 +381,7 @@ without confirmation."
      "fbj" 'bookmark-jump
      "fbl" 'bookmark-bmenu-list
      "fy" 'kill-buffer-file-name
+     "fs" 'save-buffer
      
      "s" 'shell                           ; open a shell
      
@@ -434,6 +437,12 @@ without confirmation."
                         :non-normal-prefix "C-s"
                         "" 'swiper))))
 
+(use-package prescient
+  :config (use-package ivy-prescient
+            :config (progn
+                      (setq prescient-persist-mode t)
+                      (ivy-prescient-mode t))))
+
 ;; this shows possible key combinations in a pop-up (like when I do C-x, C-c, 
 ;;  etc.)
 (use-package which-key
@@ -444,6 +453,13 @@ without confirmation."
   :config (general-define-key
            :states '(normal motion)
            :keymaps 'Info-mode-map
+            "<SPC>" 'e454iel-main-menu-prefix))
+
+(use-package grep
+  :ensure nil
+  :config (general-define-key
+           :states '(normal motion)
+           :keymaps 'grep-mode-map
             "<SPC>" 'e454iel-main-menu-prefix))
 
 (use-package dired
@@ -465,7 +481,7 @@ without confirmation."
 (use-package ensime
   :pin melpa-stable
   :config (e454iel-major-mode-menu
-           :major-modes 'ensime-mode-map
+            :major-modes 'ensime-mode-map
             :keymaps 'ensime-mode-map
             ;;"" '(nil :which-key "Ensime Mode Commands")
             "i" 'ensime-import-type-at-point
@@ -633,6 +649,10 @@ unsorted."
       (mapcar #'(lambda (x) (string-remove-prefix (expand-file-name directory) x))
               result))))
 
+(defun or-list (list)
+  "Return the first non-nil item in `LIST'."
+  (some (lambda (x) x) list))
+
 ;; org things
 ;; TODO: look into org-dotemacs for organizing this file using org
 ;; TODO: org mode confirm for capture is different than with-editor confirm for
@@ -661,36 +681,41 @@ unsorted."
                       (setq alert-default-style 'libnotify)
                       (org-alert-disable))))
   :config (progn
-            (defvar e454iel-current-semester "Semester2")
+            (defvar e454iel-documents-time-period "Summer")
             (defvar e454iel-documents-dir
               (concat "~/Documents/"
-                      (let* ((time (decode-time))
-                             (month (nth 4 time))
-                             (year (nth 5 time))
-                             (start-year (if (> month 7)
-                                             year
-                                           (- year 1))))
-                        (format "%d-%d/" start-year (+ start-year 1)))
-                      e454iel-current-semester))
+                      (int-to-string (nth 5 (decode-time))) ; the current year
+                      "/"
+                      e454iel-documents-time-period))
 
             (defvar e454iel-extra-org-agenda-files
               '("~/org/birthdays.org" "~/org/derp.org"))
 
+            (defvar e454iel-documents-org-agenda-file-pattern
+              "\\(todo.org\\|events.org\\|schedule.org\\)$")
 
             (setf org-agenda-files
-                  (let* ((documents-subdirs
-                          (directory-directories e454iel-documents-dir t nil t))
+                  (append
+                   (remove-if-not #'file-exists-p
+                                  e454iel-extra-org-agenda-files)
+                   (if (file-directory-p e454iel-documents-dir)
+                       (directory-files-recursively
+                        e454iel-documents-dir
+                        e454iel-documents-org-agenda-file-pattern
+                        nil))
+                   org-agenda-files))
 
-                         (org-files-pattern
-                          "\\(todo.org\\|events.org\\|schedule.org\\)$")
+            (setf org-agenda-custom-commands
+                  (append
+                   org-agenda-custom-commands
 
-                         (documents-org-files
-                          (mapcan
-                           #'(lambda (file)
-                               (directory-files file t org-files-pattern))
-                           documents-subdirs)))
+                   ;;'(("m" tags "-other-agenda"))))
+                   '(("m" "My Agenda"
+                      agenda ""
+                      ((org-agenda-tag-filter-preset '("-OtherAgenda")))))))
 
-                    (nconc e454iel-extra-org-agenda-files documents-org-files)))
+            (use-package calfw
+              :config (use-package calfw-org))
 
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1)))
             ;;(add-hook 'org-mode-hook 'turn-on-stripe-table-mode)
@@ -1149,12 +1174,12 @@ Lisp function does not specify a special indentation."
 
                       (e454iel-main-menu "ms" 'flyspell-correct-word-generic))))
 
-;; Note: We can keep "Y" for copying a whole line at a time, and then put the
+;; TODO: We can keep "Y" for copying a whole line at a time, and then put the
 ;;  binding to copy the current page's URL in the major-mode menu
-;; Note: It would be nicer to have the pages named using the number of the
+;; TODO: It would be nicer to have the pages named using the number of the
 ;;  eww buffer (first eww buffer to get opened gets 1, second gets 2, etc), and
 ;;  then the name of the page. Like "<1>DuckDuckGo"
-;; Note: Middle mouse should open a page in a new buffer in the background
+;; TODO: Middle mouse should open a page in a new buffer in the background
 (use-package eww
   :ensure nil
   :functions (eww-suggest-uris eww-current-url)
@@ -1273,7 +1298,7 @@ Lisp function does not specify a special indentation."
 
 ;; used to hide minor modes or give them alternative names for the modeline
 ;;
-;; these should probably be moved to their respective use-package entries
+;; TODO: these should probably be moved to their respective use-package entries
 (use-package diminish
   :config (progn
             (diminish 'company-mode)
@@ -1408,7 +1433,8 @@ Lisp function does not specify a special indentation."
 ;;  line-up-words, org-rich-yank, chyla-theme, overcast-theme, academic-phrases,
 ;;  auth-source-pass, magit-org-tools, org-radiobutton, company-suggest, honcho,
 ;;  poet-theme, counsel-org-clock, desktop-environment, doneburn-theme,
-;;  heaven-and-hel, northcode-theme, org-variable-pitch, nova-theme
+;;  heaven-and-hel, northcode-theme, org-variable-pitch, nova-theme,
+;;  ivy-yasnippet, load-env-vars, digitalocean
 
 ;; Look into term management options
 ;; multi-run, multi-term, sane-term, navorski, term+, term+key-intercept,
