@@ -1414,6 +1414,8 @@ Lisp function does not specify a special indentation."
 ;; multi-run, multi-term, sane-term, navorski, term+, term+key-intercept,
 ;; term-manager, term-projectile
 
+;; ivy-yasnippet
+
 (use-package counsel-spotify
   :config (e454iel-main-menu "am" '(nil :which-key "Spotify (Music)")
                                         "amp" 'counsel-spotify-toggle-play-pause
