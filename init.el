@@ -440,12 +440,6 @@ without confirmation."
                         :non-normal-prefix "C-s"
                         "" 'swiper))))
 
-(use-package prescient
-  :config (use-package ivy-prescient
-            :config (progn
-                      (setq prescient-persist-mode t)
-                      (ivy-prescient-mode t))))
-
 ;; this shows possible key combinations in a pop-up (like when I do C-x, C-c, 
 ;;  etc.)
 (use-package which-key
