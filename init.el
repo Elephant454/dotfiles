@@ -427,7 +427,7 @@ without confirmation."
 
 (use-package ivy
   :config (progn
-            (ivy-mode 1)
+            (ivy-mode t)
             (use-package counsel
               :config (general-define-key
                        :keymaps 'help-map
@@ -443,7 +443,7 @@ without confirmation."
 ;; this shows possible key combinations in a pop-up (like when I do C-x, C-c, 
 ;;  etc.)
 (use-package which-key
-  :config (which-key-mode 1))
+  :config (which-key-mode t))
 
 (use-package info
   :ensure nil
