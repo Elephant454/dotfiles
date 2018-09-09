@@ -118,6 +118,9 @@
   (before theme-dont-propagate activate)
   (mapc #'disable-theme custom-enabled-themes))
 
+(doom-themes-visual-bell-config)
+(doom-themes-org-config)
+
 ;; I should set up pairs of night themes and day themes. One keybinding cycles
 ;; between pairs and another keybinding switches between day and night.
 (mapc 'use-package-ensure-elpa
@@ -148,18 +151,18 @@
                             (nubox-light . nubox-dark)
                             (kaolin-light . kaolin-eclipse)
                             (doom-one . doom-one)
+                            (doom-opera-light . doom-opera)
                             (dracula . purple-haze)
                             (material-light . material)
                             (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
                             (apropospriate-light . apropospriate-dark)
                             (spacemacs-light . spacemacs-dark)
-                            (srcery-theme . srcery-theme)
+                            (srcery . srcery)
                             (gotham . gotham)
                             (purple-haze . purple-haze)))
 
 (setq e454iel-current-theme-pairs e454iel-theme-pairs)
 (setq e454iel-use-day-theme t)
-;;(setq elephant454initel-apply-to-stumpwm t)
 (setq e454iel-apply-to-stumpwm nil)
 
 (defun e454iel-toggle-use-day-theme()
@@ -504,7 +507,8 @@ without confirmation."
 ;;  shortcut for it, too?
 (use-package restart-emacs)
 
-(use-package sudo-edit)
+(use-package sudo-edit
+  :config (sudo-edit-indicator-mode t))
 
 ;; This allows for switching between windows so we can 
 ;;(use-package window-numbering
