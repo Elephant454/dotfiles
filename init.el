@@ -677,7 +677,10 @@ unsorted."
             ;;  later.
             :config (progn
                       (setq alert-default-style 'libnotify)
-                      (org-alert-disable))))
+                      (org-alert-disable)))
+
+          ;;(use-package counsel-org-capture-string)
+          )
   :config (progn
             (defvar e454iel-documents-time-period "Summer")
             (defvar e454iel-documents-dir
