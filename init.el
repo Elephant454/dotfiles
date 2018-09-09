@@ -1506,7 +1506,10 @@ Lisp function does not specify a special indentation."
                         (add-hook 'python-mode-hook 'anaconda-mode)
                         (add-hook 'python-mode-hook 'anaconda-eldoc-mode)))
             (use-package yapfify
-              :config (add-hook 'python-mode-hook 'yapf-mode))))
+              :config (add-hook 'python-mode-hook 'yapf-mode))
+            (use-package pyenv-mode
+              :config (use-package pyenv-mode-auto))
+            (use-package pyvenv)))
 
 (use-package flycheck
   :config (global-flycheck-mode t))
