@@ -389,12 +389,19 @@ without confirmation."
      "fe" 'ediff
      
      ;; file bookmark commands
+     "fd" '(lambda() (interactive) (find-file
+                                   (file-truename
+                                    e454iel-documents-dir)))
      "fb" '(:ignore t :which-key "Bookmark")
      "fbs" 'bookmark-set
      "fbj" 'bookmark-jump
      "fbl" 'bookmark-bmenu-list
      "fy" 'kill-buffer-file-name
      "fs" 'save-buffer
+
+     ;; Manipulating text commands
+     "m" '(:ignore t :which-key "Manipulate Text")
+     "mi" 'insert-char
      
      "s" 'shell                           ; open a shell
      
