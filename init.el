@@ -118,6 +118,9 @@
   (before theme-dont-propagate activate)
   (mapc #'disable-theme custom-enabled-themes))
 
+(doom-themes-visual-bell-config)
+(doom-themes-org-config)
+
 ;; I should set up pairs of night themes and day themes. One keybinding cycles
 ;; between pairs and another keybinding switches between day and night.
 (mapc 'use-package-ensure-elpa
@@ -148,18 +151,18 @@
                             (nubox-light . nubox-dark)
                             (kaolin-light . kaolin-eclipse)
                             (doom-one . doom-one)
+                            (doom-opera-light . doom-opera)
                             (dracula . purple-haze)
                             (material-light . material)
                             (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
                             (apropospriate-light . apropospriate-dark)
                             (spacemacs-light . spacemacs-dark)
-                            (srcery-theme . srcery-theme)
+                            (srcery . srcery)
                             (gotham . gotham)
                             (purple-haze . purple-haze)))
 
 (setq e454iel-current-theme-pairs e454iel-theme-pairs)
 (setq e454iel-use-day-theme t)
-;;(setq elephant454initel-apply-to-stumpwm t)
 (setq e454iel-apply-to-stumpwm nil)
 
 (defun e454iel-toggle-use-day-theme()
@@ -424,7 +427,7 @@ without confirmation."
 
 (use-package ivy
   :config (progn
-            (ivy-mode 1)
+            (ivy-mode t)
             (use-package counsel
               :config (general-define-key
                        :keymaps 'help-map
@@ -437,16 +440,10 @@ without confirmation."
                         :non-normal-prefix "C-s"
                         "" 'swiper))))
 
-(use-package prescient
-  :config (use-package ivy-prescient
-            :config (progn
-                      (setq prescient-persist-mode t)
-                      (ivy-prescient-mode t))))
-
 ;; this shows possible key combinations in a pop-up (like when I do C-x, C-c, 
 ;;  etc.)
 (use-package which-key
-  :config (which-key-mode 1))
+  :config (which-key-mode t))
 
 (use-package info
   :ensure nil
@@ -504,7 +501,8 @@ without confirmation."
 ;;  shortcut for it, too?
 (use-package restart-emacs)
 
-(use-package sudo-edit)
+(use-package sudo-edit
+  :config (sudo-edit-indicator-mode t))
 
 ;; This allows for switching between windows so we can 
 ;;(use-package window-numbering
@@ -679,7 +677,10 @@ unsorted."
             ;;  later.
             :config (progn
                       (setq alert-default-style 'libnotify)
-                      (org-alert-disable))))
+                      (org-alert-disable)))
+
+          ;;(use-package counsel-org-capture-string)
+          )
   :config (progn
             (defvar e454iel-documents-time-period "Summer")
             (defvar e454iel-documents-dir
@@ -1434,7 +1435,7 @@ Lisp function does not specify a special indentation."
 ;;  auth-source-pass, magit-org-tools, org-radiobutton, company-suggest, honcho,
 ;;  poet-theme, counsel-org-clock, desktop-environment, doneburn-theme,
 ;;  heaven-and-hel, northcode-theme, org-variable-pitch, nova-theme,
-;;  ivy-yasnippet, load-env-vars, digitalocean
+;;  ivy-yasnippet, load-env-vars, digitalocean, org-emms
 
 ;; Look into term management options
 ;; multi-run, multi-term, sane-term, navorski, term+, term+key-intercept,
