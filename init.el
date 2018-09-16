@@ -67,8 +67,10 @@
 (menu-bar-mode 0)          ; remove the menu bar (File, Edit, etc.)
 (tool-bar-mode 0)          ; remove the tool bar (New, Open, etc.)
 
-;; don't suspend emacs with "C-z"
+;; Don't suspend emacs with "C-z"
 (global-unset-key (kbd "C-z"))
+;; Don't kill the whole line if I accidentally mash C-S
+(global-unset-key (kbd "<C-S-backspace>"))
 
 ;; set the repositories and install use-package
 (require 'package)
@@ -96,6 +98,14 @@
 ;; load custom-file (file where all options set by customize are stored)
 (setq custom-file (concat user-emacs-directory "config/" "custom-file.el"))
 (load "custom-file.el" t)
+
+(defvar e454iel-documents-time-period "Summer")
+(defvar e454iel-documents-dir
+  (concat "~/Documents/"
+          (int-to-string (nth 5 (decode-time))) ; the current year
+          "/"
+          e454iel-documents-time-period))
+
 
 ;; themes
 
@@ -231,6 +241,9 @@ without confirmation."
 
 
 ;; fonts
+
+(set-fontset-font t 'unicode "Symbola" nil 'append)
+(set-fontset-font t 'unicode "EmojiOne" nil 'prepend)
 
 ;; Mark these as variables properly. Create docstrings for these later.
 (defvar e454iel-font-pairs)
@@ -379,12 +392,19 @@ without confirmation."
      "fe" 'ediff
      
      ;; file bookmark commands
+     "fd" '(lambda() (interactive) (find-file
+                                   (file-truename
+                                    e454iel-documents-dir)))
      "fb" '(:ignore t :which-key "Bookmark")
      "fbs" 'bookmark-set
      "fbj" 'bookmark-jump
      "fbl" 'bookmark-bmenu-list
      "fy" 'kill-buffer-file-name
      "fs" 'save-buffer
+
+     ;; Manipulating text commands
+     "m" '(:ignore t :which-key "Manipulate Text")
+     "mi" 'insert-char
      
      "s" 'shell                           ; open a shell
      
@@ -682,13 +702,6 @@ unsorted."
           ;;(use-package counsel-org-capture-string)
           )
   :config (progn
-            (defvar e454iel-documents-time-period "Summer")
-            (defvar e454iel-documents-dir
-              (concat "~/Documents/"
-                      (int-to-string (nth 5 (decode-time))) ; the current year
-                      "/"
-                      e454iel-documents-time-period))
-
             (defvar e454iel-extra-org-agenda-files
               '("~/org/birthdays.org" "~/org/derp.org"))
 
@@ -1575,6 +1588,27 @@ Lisp function does not specify a special indentation."
 
 ;; Interactive Fiction Games!
 (use-package malyon)
+
+(use-package abbrev
+  :ensure nil
+  :config (progn
+            (clear-abbrev-table global-abbrev-table)
+            (define-abbrev-table 'global-abbrev-table
+              '(
+                ("SmallSmileFace" "🙂")
+                ("BigSmileFace" "😊")
+                ("LaughingFace" "😆")
+                ("CatFace" "😺")
+                ("CatSmileFace" "😺")
+                ("CatCryingFace" "😿")
+                ("TongueFace" "😛")
+                ("SweatFace" "😅")
+                ("ExcitedFace" "😃")
+                ("ConfusedFace" "😕")
+                ("FoxFace" "🦊")
+                
+                ))
+            (abbrev-mode t)))
 
 (provide 'init)
 ;;; init.el ends here
