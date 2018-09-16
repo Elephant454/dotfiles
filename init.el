@@ -99,6 +99,14 @@
 (setq custom-file (concat user-emacs-directory "config/" "custom-file.el"))
 (load "custom-file.el" t)
 
+(defvar e454iel-documents-time-period "Summer")
+(defvar e454iel-documents-dir
+  (concat "~/Documents/"
+          (int-to-string (nth 5 (decode-time))) ; the current year
+          "/"
+          e454iel-documents-time-period))
+
+
 ;; themes
 
 ;; Mark these as variables that I'm going to use properly. Give them docstrings
@@ -684,13 +692,6 @@ unsorted."
           ;;(use-package counsel-org-capture-string)
           )
   :config (progn
-            (defvar e454iel-documents-time-period "Summer")
-            (defvar e454iel-documents-dir
-              (concat "~/Documents/"
-                      (int-to-string (nth 5 (decode-time))) ; the current year
-                      "/"
-                      e454iel-documents-time-period))
-
             (defvar e454iel-extra-org-agenda-files
               '("~/org/birthdays.org" "~/org/derp.org"))
 
