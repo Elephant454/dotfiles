@@ -327,7 +327,7 @@ without confirmation."
                (e454iel-load-font)))))
 
 ;;(elephant454initel-load-font)
-(e454iel-jump-to-font "Monoid")
+(e454iel-jump-to-font "Fantasque Sans")
 
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
