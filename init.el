@@ -67,8 +67,10 @@
 (menu-bar-mode 0)          ; remove the menu bar (File, Edit, etc.)
 (tool-bar-mode 0)          ; remove the tool bar (New, Open, etc.)
 
-;; don't suspend emacs with "C-z"
+;; Don't suspend emacs with "C-z"
 (global-unset-key (kbd "C-z"))
+;; Don't kill the whole line if I accidentally mash C-S
+(global-unset-key (kbd "<C-S-backspace>"))
 
 ;; set the repositories and install use-package
 (require 'package)
