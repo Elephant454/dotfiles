@@ -108,6 +108,13 @@
 ;;(setq *screen-mode-line-format* '("[^B%n^b] %W ^> %B %d"))
 (mode-line)
 
+(defmacro define-implied-keys-for-map (map &rest things)
+  (append
+   (list (quote progn))
+   (loop for x in things by #'cddr
+      for y in (cdr things) by #'cddr
+      collect (list (quote define-key) map (list (quote kbd) x) y))))
+
 ;; frame/window keybindings
 (defvar *window-map* (make-sparse-keymap))
 (define-key *root-map* (kbd "w") '*window-map*)
@@ -118,13 +125,6 @@
 ;; For some reason, this will not work. Talk to the IRC channel for help with
 ;;  this.
 (undefine-key *root-map* (kbd "C-k"))
-
-(defmacro define-implied-keys-for-map (map &rest things)
-  (append
-   (list (quote progn))
-   (loop for x in things by #'cddr
-      for y in (cdr things) by #'cddr
-      collect (list (quote define-key) map (list (quote kbd) x) y))))
 
 (define-implied-keys-for-map stumpwm:*top-map*
     "s-!" "gmove 1"
