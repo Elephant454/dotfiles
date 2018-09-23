@@ -1588,26 +1588,26 @@ Lisp function does not specify a special indentation."
 ;; Interactive Fiction Games!
 (use-package malyon)
 
-(use-package abbrev
-  :ensure nil
-  :config (progn
-            (clear-abbrev-table global-abbrev-table)
-            (define-abbrev-table 'global-abbrev-table
-              '(
-                ("SmallSmileFace" "🙂")
-                ("BigSmileFace" "😊")
-                ("LaughingFace" "😆")
-                ("CatFace" "😺")
-                ("CatSmileFace" "😺")
-                ("CatCryingFace" "😿")
-                ("TongueFace" "😛")
-                ("SweatFace" "😅")
-                ("ExcitedFace" "😃")
-                ("ConfusedFace" "😕")
-                ("FoxFace" "🦊")
-                
-                ))
-            (abbrev-mode t)))
+;;(use-package abbrev
+;;  :ensure nil
+;;  :config (progn
+;;            (clear-abbrev-table global-abbrev-table)
+;;            (define-abbrev-table 'global-abbrev-table
+;;              '(
+;;                ("SmallSmileFace" "🙂")
+;;                ("BigSmileFace" "😊")
+;;                ("SmallSadFace" "🙁")
+;;                ("LaughingFace" "😆")
+;;                ("CatFace" "😺")
+;;                ("CatSmileFace" "😺")
+;;                ("CatCryingFace" "😿")
+;;                ("TongueFace" "😛")
+;;                ("SweatFace" "😅")
+;;                ("ExcitedFace" "😃")
+;;                ("ConfusedFace" "😕")
+;;                ("FoxFace" "🦊")
+;;                ))
+;;            (abbrev-mode t)))
 
 (use-package company-emoji
   :config (add-to-list 'company-backends 'company-emoji))
