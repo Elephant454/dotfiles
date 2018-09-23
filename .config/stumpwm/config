@@ -118,9 +118,11 @@
 ;; frame/window keybindings
 (defvar *window-map* (make-sparse-keymap))
 (define-key *root-map* (kbd "w") '*window-map*)
-(define-key *window-map* (kbd "c") "remove-split")
-(define-key *window-map* (kbd "v") "hsplit")
-(define-key *window-map* (kbd "s") "vsplit")
+(define-implied-keys-for-map *window-map*
+    "c" "remove-split"
+    "v" "hsplit"
+    "s" "vsplit"
+    "w" "window-list")
 
 ;; For some reason, this will not work. Talk to the IRC channel for help with
 ;;  this.
