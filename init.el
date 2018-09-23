@@ -243,7 +243,6 @@ without confirmation."
 ;; fonts
 
 (set-fontset-font t 'unicode "Symbola" nil 'append)
-(set-fontset-font t 'unicode "EmojiOne" nil 'prepend)
 
 ;; Mark these as variables properly. Create docstrings for these later.
 (defvar e454iel-font-pairs)
