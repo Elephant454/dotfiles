@@ -1610,5 +1610,13 @@ Lisp function does not specify a special indentation."
                 ))
             (abbrev-mode t)))
 
+(use-package company-emoji
+  :config (add-to-list 'company-backends 'company-emoji))
+
+(use-package emojify
+  :config (progn 
+            (global-emojify-mode t)
+            (emojify-set-emoji-styles '(unicode))))
+
 (provide 'init)
 ;;; init.el ends here
