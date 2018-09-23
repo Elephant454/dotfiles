@@ -1617,5 +1617,44 @@ Lisp function does not specify a special indentation."
             (global-emojify-mode t)
             (emojify-set-emoji-styles '(unicode))))
 
+(use-package mastodon
+  :config (general-define-key
+           :keymaps 'mastodon-mode-map
+            :states 'normal
+            "j" 'mastodon-tl--goto-next-toot
+            "k" 'mastodon-tl--goto-prev-toot
+            "h" 'mastodon-tl--next-tab-item
+            "l" 'mastodon-tl--previous-tab-item
+            ;;[?\t] #'mastodon-tl--next-tab-item
+            ;;[backtab] #'mastodon-tl--previous-tab-item
+            ;;[?\S-\t] #'mastodon-tl--previous-tab-item
+            ;;[?\M-\t] #'mastodon-tl--previous-tab-item
+            ;; Navigating to other buffers:
+            "N" 'mastodon-notifications--get
+            "A" 'mastodon-profile--get-toot-author
+            "U" 'mastodon-profile--show-user
+            "F" 'mastodon-tl--get-federated-timeline
+            "H" 'mastodon-tl--get-home-timeline
+            "L" 'mastodon-tl--get-local-timeline
+            "t" 'mastodon-tl--thread
+            "T" 'mastodon-tl--get-tag-timeline
+            "q" 'kill-this-buffer
+            "Q" 'kill-buffer-and-window
+            ;; Actions
+            "c" 'mastodon-tl--toggle-spoiler-text-in-toot
+            "n" 'mastodon-toot
+            "r" 'mastodon-toot--reply
+            "u" 'mastodon-tl--update
+            "b" 'mastodon-toot--toggle-boost
+            "f" 'mastodon-toot--toggle-favourite)
+
+  ;;(e454iel-major-mode-menu
+  ;;  :keymaps 'mastodon-toot-mode-map
+  ;;  ;;:major-modes 'mastodon-toot-mode-map
+  ;;  "c" 'mastodon-toot--send
+  ;;  "k" 'mastodon-toot-cancel
+  ;;  "w" 'mastodon-toot--content-warning))
+  )
+
 (provide 'init)
 ;;; init.el ends here
