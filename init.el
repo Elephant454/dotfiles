@@ -1656,5 +1656,11 @@ Lisp function does not specify a special indentation."
   ;;  "w" 'mastodon-toot--content-warning))
   )
 
+(use-package password-store
+  :config (progn
+            (use-package pass)
+            (use-package password-generator)
+            (use-package ivy-pass)))
+
 (provide 'init)
 ;;; init.el ends here
