@@ -1055,6 +1055,9 @@ Lisp function does not specify a special indentation."
               "M-3" 'winum-select-window-3
               "M-4" 'winum-select-window-4
               "<SPC>" 'e454iel-main-menu-prefix)
+            (general-define-key
+             :keymaps 'magit-diff-mode-map
+              "<SPC>" 'e454iel-main-menu-prefix)
             (e454iel-main-menu
               "g" 'magit-status
               "G" 'magit-dispatch-popup)))
