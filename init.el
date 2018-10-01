@@ -777,7 +777,7 @@ unsorted."
               "." 'org-time-stamp
               "d" 'org-deadline
               "s" 'org-schedule
-              "p" 'org-preview-latex-fragment
+              "p" 'org-toggle-latex-fragment
               "c" 'org-clock-in
               "C" 'org-clock-out)))
 
