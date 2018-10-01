@@ -386,8 +386,6 @@ without confirmation."
      ;; file commands
      "f" '(:ignore t :which-key "File")   ; label
      "ff" 'find-file                      ; open a dialog to open a file
-     "fj" 'dired-jump                     ; open the directory of the current
-                                          ;  file
      "fe" 'ediff
      
      ;; file bookmark commands
@@ -487,7 +485,12 @@ without confirmation."
             (general-define-key
              :keymaps 'dired-mode-map
               "<SPC>" 'e454iel-main-menu-prefix)
-            (add-hook 'dired-mode-hook 'auto-revert-mode)))
+            (e454iel-main-menu
+              "fj" 'dired-jump)
+            (add-hook 'dired-mode-hook 'auto-revert-mode)
+            (use-package dired-sidebar
+              :config (e454iel-main-menu
+                        "fS" 'dired-sidebar-toggle-sidebar))))
 
 ;; give parenthesis matching colors based upon depth
 (use-package rainbow-delimiters
