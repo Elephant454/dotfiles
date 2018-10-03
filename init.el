@@ -152,6 +152,7 @@
         dracula-theme
         kaolin-themes
         srcery-theme
+        birds-of-paradise-plus-theme
         ))
 
 ;; cons pairs of themes, with the car being the day variant and the cdr being
@@ -162,6 +163,7 @@
                             (kaolin-light . kaolin-eclipse)
                             (doom-one . doom-one)
                             (doom-opera-light . doom-opera)
+                            (birds-of-paradise-plus . dracula)
                             (dracula . purple-haze)
                             (material-light . material)
                             (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
