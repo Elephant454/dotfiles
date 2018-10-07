@@ -503,6 +503,57 @@ without confirmation."
 (use-package rainbow-delimiters
   :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
+(use-package rainbow-mode
+  :config (rainbow-mode t))
+
+(use-package hydra)
+
+(use-package kurecolor
+  ;;(defhydra hydra-awoo nil "awoo" ("a" (print "awoo")))
+  :config (progn
+            (defhydra e454iel-kurecolor-menu nil
+              "
+Adjust colors:
+_h_ue _s_aturation _b_rightness"
+              ("h" (e454iel-kurecolor-menu-hue/body) :exit t)
+              ("s" (e454iel-kurecolor-menu-saturation/body) :exit t)
+              ("b" (e454iel-kurecolor-menu-brightness/body) :exit t))
+
+            (defhydra e454iel-kurecolor-menu-hue nil
+              "
+Adjust hue:
+_-_increase _=_decrease"
+              ("-" #'kurecolor-increase-hue-by-step)
+              ("=" #'kurecolor-decrease-hue-by-step)
+              ("h" (e454iel-kurecolor-menu-hue/body) :exit t)
+              ("s" (e454iel-kurecolor-menu-saturation/body) :exit t)
+              ("b" (e454iel-kurecolor-menu-brightness/body) :exit t))
+
+            (defhydra e454iel-kurecolor-menu-saturation nil
+              "
+Adjust saturation:
+_-_increase _=_decrease"
+              ("-" #'kurecolor-increase-saturation-by-step)
+              ("=" #'kurecolor-decrease-saturation-by-step)
+              ("h" (e454iel-kurecolor-menu-hue/body) :exit t)
+              ("s" (e454iel-kurecolor-menu-saturation/body) :exit t)
+              ("b" (e454iel-kurecolor-menu-brightness/body) :exit t))
+
+            (defhydra e454iel-kurecolor-menu-brightness nil
+              "
+Adjust brightness:
+_-_increase _=_decrease"
+              ("-" #'kurecolor-increase-brightness-by-step)
+              ("=" #'kurecolor-decrease-brightness-by-step)
+              ("h" (e454iel-kurecolor-menu-hue/body) :exit t)
+              ("s" (e454iel-kurecolor-menu-saturation/body) :exit t)
+              ("b" (e454iel-kurecolor-menu-brightness/body) :exit t))
+
+            (e454iel-main-menu
+              "mc" 'e454iel-kurecolor-menu/body)
+
+            ))
+
 ;; for all of your Java/Scala needs
 (use-package ensime
   :pin melpa-stable
