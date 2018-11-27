@@ -550,9 +550,7 @@ _-_increase _=_decrease"
               ("b" (e454iel-kurecolor-menu-brightness/body) :exit t))
 
             (e454iel-main-menu
-              "mc" 'e454iel-kurecolor-menu/body)
-
-            ))
+              "mc" 'e454iel-kurecolor-menu/body)))
 
 ;; for all of your Java/Scala needs
 (use-package ensime
