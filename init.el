@@ -1078,16 +1078,20 @@ Lisp function does not specify a special indentation."
 (use-package erc
   :ensure nil
   :config (progn
-            (setq erc-autojoin-channels-alist '((".*\\.freenode.net" "#archlinux")))
+            (if e454iel-home-computer-p
+                (progn
+                  (setq erc-log-channels-directory (concat user-emacs-directory "erc-logs/"))
+                  (unless (file-exists-p erc-log-channels-directory)
+                    (make-directory erc-log-channels-directory)))
+              (setq erc-save-buffer-on-part t)
+              (setq erc-log-insert-log-on-open nil))
 
-            (e454iel-main-menu "aE" '(lambda ()
-                                       (interactive)
-                                       (progn
-                                         (erc-autojoin-mode 1)
-                                         (erc :server "irc.freenode.net"
-                                              :nick "Elephant454"
-                                              :password e454iel-freenode-password)))
-              :which-key "ERC with Default Servers")))
+            (use-package erc-colorize
+              :config (erc-colorize-mode t))
+
+            (use-package erc-status-sidebar)
+
+            (e454iel-main-menu "aE" 'erc)))
 
 (use-package bubbles
   :ensure nil
