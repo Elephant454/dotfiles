@@ -95,6 +95,12 @@
 (add-to-list 'load-path (concat user-emacs-directory "config/"))
 (load "secret.el" t)
 
+;; Decide if this is a home computer
+(defvar e454iel-home-computer-p
+  (find (system-name)
+        (list "7752.Arch.Matthew" "7548.Arch.Matthew" "7548.Guix.Matthew")
+        :test #'string-equal))
+
 ;; load custom-file (file where all options set by customize are stored)
 (setq custom-file (concat user-emacs-directory "config/" "custom-file.el"))
 (load "custom-file.el" t)
