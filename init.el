@@ -1509,7 +1509,9 @@ Lisp function does not specify a special indentation."
 ;;  auth-source-pass, magit-org-tools, org-radiobutton, company-suggest, honcho,
 ;;  poet-theme, counsel-org-clock, desktop-environment, doneburn-theme,
 ;;  heaven-and-hel, northcode-theme, org-variable-pitch, nova-theme,
-;;  ivy-yasnippet, load-env-vars, digitalocean, org-emms, build-farms
+;;  ivy-yasnippet, load-env-vars, digitalocean, org-emms, build-farms,
+;;  activity-watch-mode, alarm-clock, elsa, objed, ox-wk, quack, zones,
+;;  mediawiki
 
 ;; Look into term management options
 ;; multi-run, multi-term, sane-term, navorski, term+, term+key-intercept,
