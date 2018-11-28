@@ -395,6 +395,7 @@ without confirmation."
      "bp" 'popwin:display-buffer          ; display a buffer using popwin
      ;; I might want to look into how immortal-scratch-buffer handles this
      "bs" '(lambda() (interactive) (switch-to-buffer "*scratch*"))
+     "bi" 'ibuffer
      
      ;; file commands
      "f" '(:ignore t :which-key "File")   ; label
