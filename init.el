@@ -1737,5 +1737,14 @@ Lisp function does not specify a special indentation."
             (use-package password-generator)
             (use-package ivy-pass)))
 
+;;(use-package hl-fill-column
+;;  :config (global-hl-fill-column-mode t))
+
+(use-package qml-mode
+  ;;(autoload 'qml-mode "qml-mode" "Editing Qt Declarative." t)
+  :mode ("\\.qml$" . qml-mode)
+  :config (use-package company-qml
+            :config (add-to-list 'company-backends 'company-qml)))
+
 (provide 'init)
 ;;; init.el ends here
