@@ -250,7 +250,7 @@ without confirmation."
 ;;(e454iel-load-theme)
 
 ;; load default theme
-(e454iel-jump-to-theme 'birds-of-paradise-plus)
+(e454iel-jump-to-theme 'silkworm)
 
 
 ;; fonts
