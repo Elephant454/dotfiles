@@ -668,41 +668,6 @@ _-_increase _=_decrease"
             (use-package ivy-purpose
               :config (ivy-purpose-setup))))
 
-;; for installing packages other than ones in repos
-;; quelpa-use-package doesn't seem to work for whatever reason
-(use-package quelpa
-  :config (progn
-            ;; Makes sure the quelpa auto-updater doesn't make startup take
-            ;;  forever
-            (setq quelpa-update-melpa-p nil)
-            (use-package quelpa-use-package)))
-
-;; reddit is pretty broken, for the most part, I think
-(use-package tree-mode
-  :config (use-package markdown-mode
-            :config (progn
-                      (quelpa '(reddit
-                                :fetcher github
-                                :repo "death/reddit-mode"))
-                      (use-package reddit
-                        :ensure nil
-                        :config (general-define-key
-                                 :keymaps 'reddit-mode-map
-                                  :states '(normal emacs insert visual motion)
-                                  "q" 'quit-window
-                                  "g" 'reddit-refresh
-                                  "c" 'reddit-comments
-                                  "L" 'reddit-login
-                                  "S" 'reddit-search
-                                  "n" 'reddit-next
-                                  "p" 'reddit-prev
-                                  
-                                  "j" 'widget-forward
-                                  ;;"\t" 'widget-forward
-                                  "k" 'widget-backward
-                                  ;;"\e\t" 'widget-backward
-                                  )))))
-
 ;; I might want to look into other spotify clients
 ;;(quelpa '(spotify :fetcher github :repo "danielfm/spotify.el"))
 (use-package spotify)
