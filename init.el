@@ -260,6 +260,15 @@ without confirmation."
 
 ;;(e454iel-load-theme)
 
+;; This doesn't seem to work? 😅
+(defun e454iel-disable-all-theme-pairs ()
+  "Run `disable-theme' on every theme in `e454iel-theme-pairs'."
+  (mapc
+   (lambda (x)
+     (print (car x))
+     (print (cdr x)))
+   e454iel-theme-pairs))
+
 ;; load default theme
 (e454iel-jump-to-theme 'silkworm)
 
