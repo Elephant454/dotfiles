@@ -140,15 +140,21 @@
 ;; I should set up pairs of night themes and day themes. One keybinding cycles
 ;; between pairs and another keybinding switches between day and night.
 
+(defun listify (x)
+  "If `X' is not a list, put it in a list."
+  (if (listp x) x (list x)))
+
+(defun append-to-lists (lists &optional beginning end)
+  "Append `BEGINNING' and / or `END' to each list in `LISTS'.
+Lists in `LISTS' that are not lists will be `listified'."
+  (mapcar
+   (lambda (list)
+     (append (listify beginning) (listify list) (listify end)))
+   lists))
+
 (defmacro use-package-list (&rest packages)
   "Run use-package on each of the `PACKAGES'."
-  (declare nil)
-  (cons
-   (quote progn)
-   (mapcar (lambda (x)
-             (cons (quote use-package)
-                   (if (listp x) x (list x))))
-           packages)))
+  (cons 'progn (append-to-lists packages 'use-package)))
 
 (use-package-list
     color-theme
