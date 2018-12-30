@@ -359,7 +359,10 @@ without confirmation."
                (e454iel-load-font)))))
 
 ;;(elephant454initel-load-font)
-(e454iel-jump-to-font "Fantasque Sans")
+
+;; Check out "spacemacs/core/core-spacemacs.el:121"
+(message "Setting the font..."
+         (e454iel-jump-to-font "Fantasque Sans"))
 
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
