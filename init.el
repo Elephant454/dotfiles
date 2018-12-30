@@ -139,27 +139,38 @@
 
 ;; I should set up pairs of night themes and day themes. One keybinding cycles
 ;; between pairs and another keybinding switches between day and night.
-(mapc 'use-package-ensure-elpa
-      '(color-theme
-        soft-morning-theme
-        omtose-phellack-theme
-        color-theme-sanityinc-tomorrow
-        light-soap-theme
-        silkworm-theme
-        foggy-night-theme
-        apropospriate-theme
-        gotham-theme
-        purple-haze-theme
-        nubox
-        doom-themes
-        material-theme
-        spacemacs-theme
-        ;; gruvbox
-        dracula-theme
-        kaolin-themes
-        srcery-theme
-        birds-of-paradise-plus-theme
-        ))
+
+(defmacro use-package-list (&rest packages)
+  "Run use-package on each of the `PACKAGES'."
+  (declare nil)
+  (cons
+   (quote progn)
+   (mapcar (lambda (x)
+             (cons (quote use-package)
+                   (if (listp x) x (list x))))
+           packages)))
+
+(use-package-list
+    color-theme
+  (soft-morning-theme :disabled)
+  ;;omtose-phellack-theme
+  (color-theme-sanityinc-tomorrow :disabled)
+  (light-soap-theme :disabled)
+  (silkworm-theme :disabled)
+  (foggy-night-theme :disabled)
+  (apropospriate-theme :disabled)
+  (gotham-theme :disabled)
+  (purple-haze-theme :disabled)
+  (nubox :disabled)
+  (doom-themes :disabled)
+  (material-theme :disabled)
+  ;;spacemacs-theme
+  ;; gruvbox
+  (dracula-theme :disabled)
+  (kaolin-themes :disabled)
+  (srcery-theme :disabled)
+  (birds-of-paradise-plus-theme :disabled)
+)
 
 ;;There has to be some sort of better way of doing this. 😅 The autoloads weren't
 ;;  generated right, so the only way to get the birds-of-paradise-plus-theme to
