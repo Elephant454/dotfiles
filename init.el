@@ -445,8 +445,14 @@ without confirmation."
      ;; Manipulating text commands
      "m" '(:ignore t :which-key "Manipulate Text")
      "mi" 'insert-char
-     
-     "s" 'shell                           ; open a shell
+
+     ;; Shells
+     "s" '(:ignore t :which-key "Shells")
+     "ss" 'shell                          ; open a shell
+     "sa" 'ansi-term
+     "sp" 'run-python
+     "sg" 'run-geiser
+     "sl" 'slime
      
      ;; open this configuration file (why is the
      ;;  lambda and interactive necessary?)
