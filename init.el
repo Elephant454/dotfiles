@@ -1749,7 +1749,8 @@ Lisp function does not specify a special indentation."
 (use-package dashboard
   :config (progn
             (dashboard-setup-startup-hook)
-            (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))))
+            (setq initial-buffer-choice (lambda () (get-buffer
+                                                    "*dashboard*")))))
 
 (provide 'init)
 ;;; init.el ends here
