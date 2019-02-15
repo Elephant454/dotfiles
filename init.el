@@ -424,6 +424,9 @@ without confirmation."
      "bp" 'popwin:display-buffer          ; display a buffer using popwin
      ;; I might want to look into how immortal-scratch-buffer handles this
      "bs" '(lambda() (interactive) (switch-to-buffer "*scratch*"))
+     "bh" '(lambda() (interactive) (progn
+                                     (switch-to-buffer "*dashboard*")
+                                     (dashboard-refresh-buffer)))
      "bi" 'ibuffer
      
      ;; file commands
