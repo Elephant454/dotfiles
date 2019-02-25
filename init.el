@@ -105,7 +105,7 @@
 (setq custom-file (concat user-emacs-directory "config/" "custom-file.el"))
 (load "custom-file.el" t)
 
-(defvar e454iel-documents-time-period "Fall")
+(defvar e454iel-documents-time-period "Spring")
 (defvar e454iel-documents-dir
   (concat "~/Documents/"
           (int-to-string (nth 5 (decode-time))) ; the current year
@@ -424,6 +424,9 @@ without confirmation."
      "bp" 'popwin:display-buffer          ; display a buffer using popwin
      ;; I might want to look into how immortal-scratch-buffer handles this
      "bs" '(lambda() (interactive) (switch-to-buffer "*scratch*"))
+     "bh" '(lambda() (interactive) (progn
+                                     (switch-to-buffer "*dashboard*")
+                                     (dashboard-refresh-buffer)))
      "bi" 'ibuffer
      
      ;; file commands
@@ -445,8 +448,14 @@ without confirmation."
      ;; Manipulating text commands
      "m" '(:ignore t :which-key "Manipulate Text")
      "mi" 'insert-char
-     
-     "s" 'shell                           ; open a shell
+
+     ;; Shells
+     "s" '(:ignore t :which-key "Shells")
+     "ss" 'shell                          ; open a shell
+     "sa" 'ansi-term
+     "sp" 'run-python
+     "sg" 'run-geiser
+     "sl" 'slime
      
      ;; open this configuration file (why is the
      ;;  lambda and interactive necessary?)
@@ -1744,7 +1753,8 @@ Lisp function does not specify a special indentation."
 (use-package dashboard
   :config (progn
             (dashboard-setup-startup-hook)
-            (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))))
+            (setq initial-buffer-choice (lambda () (get-buffer
+                                                    "*dashboard*")))))
 
 (provide 'init)
 ;;; init.el ends here
