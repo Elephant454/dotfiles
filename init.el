@@ -1460,6 +1460,7 @@ Lisp function does not specify a special indentation."
   :config (progn
             (setq projectile-enable-caching t)
             (use-package counsel-projectile
+              :disabled
               :config (progn
                         (counsel-projectile-mode t)
                         ;;(fset 'projectile-find-file
