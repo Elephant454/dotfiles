@@ -40,10 +40,12 @@
  ;;browse-url-generic-program "firefox"
 
  ;; https://www.reddit.com/r/emacs/comments/6yn8lo/what_do_you_use_eww_for/
- ;; Look more into using this for opening different websites in different ways
+ ;; TODO: Look more into using this for opening different websites in different
+ ;;  ways
  ;; Look into using this with Stack Overflow, specifically
- browse-url-browser-function '(("." . eww-browse-url)
-                               (".*xkcd.com/[0-9]*" . get-xkcd-from-url))
+ ;; Grabbing XKCDs could be done more cleanly, probably 😅
+ browse-url-browser-function '((".*xkcd.com/[0-9]*" . (lambda (x y) (get-xkcd-from-url x)))
+                               ("." . eww-browse-url))
 
  ;; start debugging when something signals an error
  debug-on-error t
