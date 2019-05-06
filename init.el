@@ -799,6 +799,12 @@ unsorted."
                       agenda ""
                       ((org-agenda-tag-filter-preset '("-OtherAgenda")))))))
 
+            (setf org-babel-load-languages
+                  '((emacs-lisp . t)
+                    (python . t)))
+
+            (use-package ob-python :ensure nil)
+
             (use-package calfw
               :config (use-package calfw-org))
 
@@ -850,6 +856,7 @@ unsorted."
               "d" 'org-deadline
               "s" 'org-schedule
               "p" 'org-toggle-latex-fragment
+              "b" 'org-babel-execute-src-block
               "c" 'org-clock-in
               "C" 'org-clock-out)))
 
