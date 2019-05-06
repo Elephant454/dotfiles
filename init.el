@@ -1545,7 +1545,9 @@ Lisp function does not specify a special indentation."
 ;;  heaven-and-hel, northcode-theme, org-variable-pitch, nova-theme,
 ;;  ivy-yasnippet, load-env-vars, digitalocean, org-emms, build-farms,
 ;;  activity-watch-mode, alarm-clock, elsa, objed, ox-wk, quack, zones,
-;;  mediawiki
+;;  mediawiki, dashboard-hacker, ob-html-chrome, pack, idle-org-agenda,
+;;  literate-elisp, map, reformatter, scrollkeeper, unicode-math-input,
+;;  use-package-hydra
 
 ;; Look into term management options
 ;; multi-run, multi-term, sane-term, navorski, term+, term+key-intercept,
