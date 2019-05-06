@@ -1273,6 +1273,7 @@ Lisp function does not specify a special indentation."
   :ensure nil
   :init (progn
           (setq ispell-program-name "hunspell")
+          (setq ispell-dictionary "american")
           (add-hook 'text-mode-hook 'flyspell-mode)
           (add-hook 'prog-mode-hook 'flyspell-prog-mode))
   :config (use-package flyspell-correct
