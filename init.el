@@ -1378,7 +1378,8 @@ Lisp function does not specify a special indentation."
 ;; what is paradox-execute-asynchronously?
 (use-package paradox
   :init (setq paradox-automatically-star nil
-              paradox-github-token t)
+              paradox-github-token t
+              evil-emacs-state-modes (remq 'package-menu-mode evil-emacs-state-modes))
   :config (general-define-key
            :keymaps 'paradox-menu-mode-map
            :states 'normal
