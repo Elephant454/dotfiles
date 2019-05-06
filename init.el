@@ -882,6 +882,14 @@ unsorted."
 
             (setq evil-emacs-state-modes (remq 'pdf-view-mode evil-emacs-state-modes))
 
+            (use-package pdf-view-restore
+              ;;:after pdf-tools
+              :config (progn
+                        (add-hook 'pdf-view-mode-hook 'pdf-view-restore-mode)
+                        (setq pdf-view-restore-filename
+                              (concat user-emacs-directory
+                                      "pdf-view-restore.dat"))))
+
             (general-define-key
              :keymaps 'pdf-view-mode-map
              :states '(normal emacs insert visual motion)
