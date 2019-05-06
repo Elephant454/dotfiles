@@ -771,6 +771,7 @@ unsorted."
 
           ;;(use-package counsel-org-capture-string)
           )
+
   :config (progn
             (defvar e454iel-extra-org-agenda-files
               '("~/org/birthdays.org" "~/org/derp.org"))
