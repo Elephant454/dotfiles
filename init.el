@@ -289,6 +289,7 @@ without confirmation."
 (defvar e454iel-font-pairs)
 (defvar e454iel-current-font-pairs)
 (defvar e454iel-font-scale)
+(defvar e454iel-use-dyslexic-font nil)
 
 ;; there should really be a way to set the font size independently, or perhaps a
 ;;  way to increase font size only if I'm on my laptop
@@ -338,10 +339,21 @@ without confirmation."
   ;;(set-default-font elephant454initel-current-font)
   ;;(car (split-string (elt (font-info (find-font elephant454initel-current-font)) 1) ":")))
 
+(defun e454iel-toggle-use-dyslexic-font()
+  "Switch between using the currently selected font and the opendyslexic font.
+This makes for easier reading of larger, denser bodies of text."
+  (interactive)
+  (setq e454iel-use-dyslexic-font (not e454iel-use-dyslexic-font))
+  (e454iel-load-font))
+
 (defun e454iel-load-font ()
   (let ((font-string
          (concat
-          (caar e454iel-current-font-pairs)
+          ;; Use the dyslexic font if it is toggled on, otherwise fallback to the
+          ;;  font pair
+          (if e454iel-use-dyslexic-font
+              "opendyslexic"
+              (caar e454iel-current-font-pairs))
           "-"
           (number-to-string
            (+ e454iel-font-scale (cdar e454iel-current-font-pairs))))))
@@ -485,6 +497,7 @@ without confirmation."
      "tfn" 'e454iel-cycle-fonts
      "tfi" 'e454iel-increase-font-size
      "tfd" 'e454iel-decrease-font-size
+     "tft" 'e454iel-toggle-use-dyslexic-font
      ;; misc toggles
      "ta" 'auto-fill-mode
      "tr" '(lambda() (interactive)
