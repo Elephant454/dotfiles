@@ -1111,8 +1111,8 @@ Lisp function does not specify a special indentation."
   :config (e454iel-major-mode-menu
             :keymaps 'emacs-lisp-mode-map
             :major-modes 'emacs-lisp-mode-map
-             ;;"" '(nil :which-key "Emacs Lisp Mode Commands")
-             "b" 'eval-buffer))
+            ;;"" '(nil :which-key "Emacs Lisp Mode Commands")
+            "b" 'eval-buffer))
 
 (use-package erc
   :ensure nil
