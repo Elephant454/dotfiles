@@ -1698,7 +1698,10 @@ Lisp function does not specify a special indentation."
 
 (use-package md4rd)
 
-(use-package guix)
+(use-package guix
+  :config (progn
+            (push "~/.config/guix/current/share/info/" Info-additional-directory-list)
+            (push "~/.guix-profile/share/info/" Info-additional-directory-list)))
 
 (use-package geiser
   :config (progn
