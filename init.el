@@ -1825,5 +1825,10 @@ Lisp function does not specify a special indentation."
           (add-hook 'mingus-browse-hook (lambda () (evil-emacs-state nil)))
           (add-hook 'mingus-playlist-hooks (lambda () (evil-emacs-state nil)))
           (add-hook 'mingus-help-hook (lambda () (evil-emacs-state nil)))))
+
+(use-package forecast
+  :config (progn
+            (setq forecast-units "us")
+            (e454iel-main-menu "af" 'forecast))
 (provide 'init)
 ;;; init.el ends here
