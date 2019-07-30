@@ -1126,7 +1126,9 @@ Lisp function does not specify a special indentation."
                   (unless (file-exists-p erc-log-channels-directory)
                     (make-directory erc-log-channels-directory)))
               (setq erc-save-buffer-on-part t)
-              (setq erc-log-insert-log-on-open nil))
+              (setq erc-log-insert-log-on-open nil)
+              (erc-track-mode 0) ; disable listing ERC channels in the mode line
+              )
 
             (use-package erc-colorize
               :config (erc-colorize-mode t))
