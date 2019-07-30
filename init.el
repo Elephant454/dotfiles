@@ -44,7 +44,9 @@
  ;;  ways
  ;; Look into using this with Stack Overflow, specifically
  ;; Grabbing XKCDs could be done more cleanly, probably 😅
- browse-url-browser-function '((".*xkcd.com/[0-9]*" . (lambda (x y) (get-xkcd-from-url x)))
+ ;; TODO: It would be super great to be able to use this with md4rd and
+ ;;  github-explorer
+ browse-url-browser-function '((".*xkcd.com/[0-9]*" . (lambda (x y) (get-xkcd-from-url x) ))
                                ("." . eww-browse-url))
 
  ;; start debugging when something signals an error
