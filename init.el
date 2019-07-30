@@ -1806,5 +1806,8 @@ Lisp function does not specify a special indentation."
             (setq initial-buffer-choice (lambda () (get-buffer
                                                     "*dashboard*")))))
 
+(use-package scrollkeeper
+  :general ([remap scroll-up-command] #'scrollkeeper-contents-up
+            [remap scroll-down-command] #'scrollkeeper-contents-down))
 (provide 'init)
 ;;; init.el ends here
