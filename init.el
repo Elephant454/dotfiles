@@ -1352,7 +1352,8 @@ Lisp function does not specify a special indentation."
               "d" 'eww-download
               "r" 'eww-readable
               "f" 'eww-lnum-follow
-              "F" '(lambda() (interactive) (eww-lnum-follow -1)))
+              "F" '(lambda() (interactive) (eww-lnum-follow -1))
+              "t" 'eww-toggle-fonts)
 
             (general-define-key
              :keymaps 'eww-buffers-mode-map
