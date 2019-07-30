@@ -1830,5 +1830,9 @@ Lisp function does not specify a special indentation."
   :config (progn
             (setq forecast-units "us")
             (e454iel-main-menu "af" 'forecast)))
+
+;;(use-package vterm
+;;  :config (vterm-install))
+
 (provide 'init)
 ;;; init.el ends here
