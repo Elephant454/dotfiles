@@ -1704,7 +1704,9 @@ Lisp function does not specify a special indentation."
               ;;"n" 'next-line
               "p" 'previous-line
               "+" 'elfeed-search-tag-all
-              "-" 'elfeed-search-untag-all)))
+              "-" 'elfeed-search-untag-all)
+
+            (e454iel-main-menu "ar" 'elfeed)))
 
 (use-package arch-packer
   :config (setq arch-packer-default-command "pacaur"))
