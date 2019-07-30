@@ -1682,10 +1682,28 @@ Lisp function does not specify a special indentation."
 ;;  https://github.com/algernon/elfeed-goodies. Maybe steal some of the feeds
 ;;  they use as examples, too.
 (use-package elfeed
-  :config (use-package elfeed-org
-            :config (progn
-                      (setq rmh-elfeed-org-files '("~/org/elfeed.org"))
-                      (elfeed-org))))
+  :config (progn
+            (use-package elfeed-org
+              :config (progn
+                        (setq rmh-elfeed-org-files '("~/org/elfeed.org"))
+                        (elfeed-org)))
+            (general-define-key
+             :keymaps 'elfeed-search-mode-map
+             :states 'normal
+              "q" 'elfeed-search-quit-window
+              "g" 'elfeed-search-update--force
+              "G" 'elfeed-search-fetch
+              "RET" 'elfeed-search-show-entry
+              "s" 'elfeed-search-live-filter
+              "S" 'elfeed-search-set-filter
+              "b" 'elfeed-search-browse-url
+              "y" 'elfeed-search-yank
+              "u" 'elfeed-search-tag-all-unread
+              "r" 'elfeed-search-untag-all-unread
+              ;;"n" 'next-line
+              "p" 'previous-line
+              "+" 'elfeed-search-tag-all
+              "-" 'elfeed-search-untag-all)))
 
 (use-package arch-packer
   :config (setq arch-packer-default-command "pacaur"))
