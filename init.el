@@ -1666,7 +1666,6 @@ Lisp function does not specify a special indentation."
 (use-package spray
   :config (general-define-key
            :keymaps 'spray-mode-map
-            :states '(normal emacs motion)
             "p" 'spray-start/stop
             "h" 'spray-backward-word
             "l" 'spray-forward-word
