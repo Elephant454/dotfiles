@@ -1809,5 +1809,8 @@ Lisp function does not specify a special indentation."
 (use-package scrollkeeper
   :general ([remap scroll-up-command] #'scrollkeeper-contents-up
             [remap scroll-down-command] #'scrollkeeper-contents-down))
+
+(use-package lua-mode
+  :config (use-package company-lua))
 (provide 'init)
 ;;; init.el ends here
