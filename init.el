@@ -1829,6 +1829,6 @@ Lisp function does not specify a special indentation."
 (use-package forecast
   :config (progn
             (setq forecast-units "us")
-            (e454iel-main-menu "af" 'forecast))
+            (e454iel-main-menu "af" 'forecast)))
 (provide 'init)
 ;;; init.el ends here
