@@ -70,6 +70,7 @@
 (scroll-bar-mode 0)        ; remove the scroll bar
 (menu-bar-mode 0)          ; remove the menu bar (File, Edit, etc.)
 (tool-bar-mode 0)          ; remove the tool bar (New, Open, etc.)
+(global-auto-revert-mode)  ; auto-revert changes for any changes on disk
 
 ;; Don't suspend emacs with "C-z"
 (global-unset-key (kbd "C-z"))
