@@ -1708,11 +1708,11 @@ Lisp function does not specify a special indentation."
             (with-eval-after-load 'geiser-guile
               (add-to-list 'geiser-guile-load-path "~/.config/guix/latest/"))))
 
-(use-package sly
-  :config (progn
-            ;;(use-package sly-company)
-            ;;(use-package sly-quicklisp)
-  ))
+;;(use-package sly
+;;  :config (progn
+;;            ;;(use-package sly-company)
+;;            ;;(use-package sly-quicklisp)
+;;  ))
 
 ;; Interactive Fiction Games!
 (use-package malyon)
