@@ -534,10 +534,11 @@ This makes for easier reading of larger, denser bodies of text."
 
 (use-package info
   :ensure nil
-  :config (general-define-key
-           :states '(normal motion)
-           :keymaps 'Info-mode-map
-            "<SPC>" 'e454iel-main-menu-prefix))
+  :config (progn
+            (general-define-key
+             :states '(normal motion)
+             :keymaps 'Info-mode-map
+              "<SPC>" 'e454iel-main-menu-prefix)))
 
 (use-package grep
   :ensure nil
