@@ -1735,7 +1735,7 @@ Lisp function does not specify a special indentation."
 ;;            ;;(use-package sly-quicklisp)
 ;;  ))
 
-;; Interactive Fiction Games!
+;; Interactive Fiction / Text based adventure games!
 (use-package malyon)
 
 ;;(use-package abbrev
