@@ -110,7 +110,7 @@
 (setq custom-file (concat user-emacs-directory "config/" "custom-file.el"))
 (load "custom-file.el" t)
 
-(defvar e454iel-documents-time-period "Summer")
+(defvar e454iel-documents-time-period "Fall")
 (defvar e454iel-documents-dir
   (concat "~/Documents/"
           (int-to-string (nth 5 (decode-time))) ; the current year
@@ -475,6 +475,7 @@ This makes for easier reading of larger, denser bodies of text."
      "sp" 'run-python
      "sg" 'run-geiser
      "sl" 'slime
+     "sv" 'vterm
      
      ;; open this configuration file (why is the
      ;;  lambda and interactive necessary?)
@@ -1824,6 +1825,7 @@ Lisp function does not specify a special indentation."
             :config (add-to-list 'company-backends 'company-qml)))
 
 (use-package dashboard
+  :disabled
   :config (progn
             (dashboard-setup-startup-hook)
             (setq initial-buffer-choice (lambda () (get-buffer
@@ -1840,22 +1842,24 @@ Lisp function does not specify a special indentation."
   :init (progn
           ;; These aren't working for some frustrating reason
           ;; https://emacs.stackexchange.com/questions/31244/how-can-i-disable-evil-in-help-mode
-          (evil-set-initial-state 'mingus-browse-mode 'emacs)
-          (evil-set-initial-state 'mingus-playlist-mode 'emacs)
-          (evil-set-initial-state 'mingus-help-mode 'emacs)
+          ;;(evil-set-initial-state 'mingus-browse-mode 'emacs)
+          ;;(evil-set-initial-state 'mingus-playlist-mode 'emacs)
+          ;;(evil-set-initial-state 'mingus-help-mode 'emacs)
 
           ;; This hack works for browse, and playlists, but help doesn't have a hook
-          (add-hook 'mingus-browse-hook (lambda () (evil-emacs-state nil)))
-          (add-hook 'mingus-playlist-hooks (lambda () (evil-emacs-state nil)))
-          (add-hook 'mingus-help-hook (lambda () (evil-emacs-state nil)))))
+          ;;(add-hook 'mingus-browse-hook (lambda () (evil-emacs-state nil)))
+          ;;(add-hook 'mingus-playlist-hooks (lambda () (evil-emacs-state nil)))
+          ;;(add-hook 'mingus-help-hook (lambda () (evil-emacs-state nil)))))
+          ))
 
 (use-package forecast
   :config (progn
             (setq forecast-units "us")
             (e454iel-main-menu "af" 'forecast)))
 
-;;(use-package vterm
-;;  :config (vterm-install))
+;; TODO: See if there are any good packages to complement this one
+(use-package vterm)
+  ;;:config (vterm-install))
 
 (provide 'init)
 ;;; init.el ends here
