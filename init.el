@@ -1823,6 +1823,7 @@ Lisp function does not specify a special indentation."
             :config (add-to-list 'company-backends 'company-qml)))
 
 (use-package dashboard
+  :disabled
   :config (progn
             (dashboard-setup-startup-hook)
             (setq initial-buffer-choice (lambda () (get-buffer
