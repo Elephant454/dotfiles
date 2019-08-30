@@ -444,6 +444,8 @@ This makes for easier reading of larger, denser bodies of text."
      "bh" '(lambda() (interactive) (progn
                                      (switch-to-buffer "*dashboard*")
                                      (dashboard-refresh-buffer)))
+     ;; TODO: Make it so I can use space in ibuffer. There's no reason why I
+     ;;  should be able to.
      "bi" 'ibuffer
      
      ;; file commands
