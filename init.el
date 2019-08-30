@@ -796,7 +796,7 @@ unsorted."
               '("~/org/birthdays.org" "~/org/derp.org"))
 
             (defvar e454iel-documents-org-agenda-file-pattern
-              "\\(todo.org\\|events.org\\|schedule.org\\)$")
+              "\\(.*todo.org\\|.*events.org\\|.*schedule.org\\)$")
 
             (setf org-agenda-files
                   (append
