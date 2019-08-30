@@ -473,6 +473,7 @@ This makes for easier reading of larger, denser bodies of text."
      "sp" 'run-python
      "sg" 'run-geiser
      "sl" 'slime
+     "sv" 'vterm
      
      ;; open this configuration file (why is the
      ;;  lambda and interactive necessary?)
@@ -1853,8 +1854,9 @@ Lisp function does not specify a special indentation."
             (setq forecast-units "us")
             (e454iel-main-menu "af" 'forecast)))
 
-;;(use-package vterm
-;;  :config (vterm-install))
+;; TODO: See if there are any good packages to complement this one
+(use-package vterm)
+  ;;:config (vterm-install))
 
 (provide 'init)
 ;;; init.el ends here
