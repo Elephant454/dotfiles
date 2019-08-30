@@ -1838,14 +1838,15 @@ Lisp function does not specify a special indentation."
   :init (progn
           ;; These aren't working for some frustrating reason
           ;; https://emacs.stackexchange.com/questions/31244/how-can-i-disable-evil-in-help-mode
-          (evil-set-initial-state 'mingus-browse-mode 'emacs)
-          (evil-set-initial-state 'mingus-playlist-mode 'emacs)
-          (evil-set-initial-state 'mingus-help-mode 'emacs)
+          ;;(evil-set-initial-state 'mingus-browse-mode 'emacs)
+          ;;(evil-set-initial-state 'mingus-playlist-mode 'emacs)
+          ;;(evil-set-initial-state 'mingus-help-mode 'emacs)
 
           ;; This hack works for browse, and playlists, but help doesn't have a hook
-          (add-hook 'mingus-browse-hook (lambda () (evil-emacs-state nil)))
-          (add-hook 'mingus-playlist-hooks (lambda () (evil-emacs-state nil)))
-          (add-hook 'mingus-help-hook (lambda () (evil-emacs-state nil)))))
+          ;;(add-hook 'mingus-browse-hook (lambda () (evil-emacs-state nil)))
+          ;;(add-hook 'mingus-playlist-hooks (lambda () (evil-emacs-state nil)))
+          ;;(add-hook 'mingus-help-hook (lambda () (evil-emacs-state nil)))))
+          ))
 
 (use-package forecast
   :config (progn
