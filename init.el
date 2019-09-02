@@ -1858,7 +1858,8 @@ Lisp function does not specify a special indentation."
             (e454iel-main-menu "af" 'forecast)))
 
 ;; TODO: See if there are any good packages to complement this one
-(use-package vterm)
+(use-package vterm
+  :config (evil-set-initial-state 'vterm-mode 'emacs))
   ;;:config (vterm-install))
 
 (provide 'init)
