@@ -283,7 +283,7 @@ without confirmation."
    e454iel-theme-pairs))
 
 ;; load default theme
-(e454iel-jump-to-theme 'silkworm)
+(e454iel-jump-to-theme 'birds-of-paradise-plus)
 
 
 ;; fonts
