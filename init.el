@@ -186,7 +186,9 @@ Lists in `LISTS' that are not lists will be `listified'."
 ;;There has to be some sort of better way of doing this. 😅 The autoloads weren't
 ;;  generated right, so the only way to get the birds-of-paradise-plus-theme to
 ;;  load correctly is to add it to the custom-theme-load-path here.
-(add-to-list 'custom-theme-load-path (expand-file-name "~/.emacs.d/elpa/birds-of-paradise-plus-theme-0.1.1/"))
+(add-to-list 'custom-theme-load-path
+             (expand-file-name
+              "~/.emacs.d/elpa/birds-of-paradise-plus-theme-0.1.1/"))
 
 ;; cons pairs of themes, with the car being the day variant and the cdr being
 ;;  the night variant
