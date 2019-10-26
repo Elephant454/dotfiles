@@ -357,7 +357,7 @@ This makes for easier reading of larger, denser bodies of text."
           ;; Use the dyslexic font if it is toggled on, otherwise fallback to the
           ;;  font pair
           (if e454iel-use-dyslexic-font
-              "opendyslexic"
+              "opendyslexicmono"
               (caar e454iel-current-font-pairs))
           "-"
           (number-to-string
