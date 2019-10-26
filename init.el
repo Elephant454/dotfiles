@@ -648,7 +648,10 @@ _-_increase _=_decrease"
 
 ;; define yasnippet more formally here
 (use-package yasnippet
-  :config (use-package java-snippets))
+  :config (progn
+            (use-package yasnippet-classic-snippets)
+            (use-package java-snippets)
+            (yas-global-mode t)))
 
 ;; This does what it says on the tin. It provides a function for restarting
 ;;  emacs.
