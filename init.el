@@ -545,6 +545,14 @@ This makes for easier reading of larger, denser bodies of text."
              :keymaps 'Info-mode-map
               "<SPC>" 'e454iel-main-menu-prefix)))
 
+(use-package ibuffer
+  :ensure nil
+  :config (progn
+            (general-define-key
+             ;;:states '(normal motion)
+             :keymaps 'ibuffer-mode-map
+              "<SPC>" 'e454iel-main-menu-prefix)))
+
 (use-package grep
   :ensure nil
   :config (general-define-key
