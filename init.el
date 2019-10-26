@@ -1363,7 +1363,7 @@ Lisp function does not specify a special indentation."
               "o" 'eww
               "O" 'eww-open-in-new-buffer
               "B" 'eww-list-buffers
-              "Y" 'eww-copy-page-url
+              "c" 'eww-copy-page-url
               "&" 'eww-browse-with-external-browser
               "d" 'eww-download
               "r" 'eww-readable
