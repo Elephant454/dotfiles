@@ -995,7 +995,15 @@ unsorted."
             (e454iel-major-mode-menu
              :keymaps 'LaTeX-mode-map
              :major-modes 'LaTeX-mode-map
-              "c" 'TeX-command-master)))
+              "c" 'TeX-command-master)
+
+            (push '("LatexMk PVC"
+                    "latexmk %(-PDF)%S%(mode) %(file-line-error) %(extraopts) -pvc %t"
+                    TeX-run-latexmk nil
+                    (plain-tex-mode latex-mode doctex-mode)
+                    :help "Run LatexMk with PVC for continuous compilation")
+
+                  TeX-command-list)))
 
 ;; The fact that this is strewn haphazardly here goes to show that
 ;; this needs some sort of categorical organization.
