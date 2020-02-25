@@ -834,9 +834,11 @@ unsorted."
 
             (setf org-babel-load-languages
                   '((emacs-lisp . t)
-                    (python . t)))
+                    (python . t)
+                    (shell . t)))
 
             (use-package ob-python :ensure nil)
+            (use-package ob-shell :ensure nil)
 
             (use-package calfw
               :config (use-package calfw-org))
