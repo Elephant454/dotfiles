@@ -514,6 +514,7 @@ This makes for easier reading of larger, denser bodies of text."
      "a" '(:ignore t :which-key "Applications")
      "ap" 'paradox-list-packages
      "ag" '(:ignore t :which-key "Games")
+     "am" '(:ignore t :which-key "Music")
      
      "h" '(help-command :which-key "Help"))))
 
@@ -1600,13 +1601,13 @@ Lisp function does not specify a special indentation."
 ;; term-manager, term-projectile
 
 (use-package counsel-spotify
-  :config (e454iel-main-menu "am" '(nil :which-key "Spotify (Music)")
-                                        "amp" 'counsel-spotify-toggle-play-pause
-                                        "amb" 'counsel-spotify-previous
-                                        "amf" 'counsel-spotify-next
-                                        "amt" 'counsel-spotify-search-track
-                                        "aml" 'counsel-spotify-search-album
-                                        "amr" 'counsel-spotify-search-artist))
+  :config (e454iel-main-menu "ams" '(nil :which-key "Spotify")
+                                        "amsp" 'counsel-spotify-toggle-play-pause
+                                        "amsb" 'counsel-spotify-previous
+                                        "amsf" 'counsel-spotify-next
+                                        "amst" 'counsel-spotify-search-track
+                                        "amsl" 'counsel-spotify-search-album
+                                        "amsr" 'counsel-spotify-search-artist))
 (use-package tramp
   :ensure nil
   :config (progn
@@ -1865,7 +1866,8 @@ Lisp function does not specify a special indentation."
           ;;(add-hook 'mingus-browse-hook (lambda () (evil-emacs-state nil)))
           ;;(add-hook 'mingus-playlist-hooks (lambda () (evil-emacs-state nil)))
           ;;(add-hook 'mingus-help-hook (lambda () (evil-emacs-state nil)))))
-          ))
+          )
+  :config (e454iel-main-menu "amm" 'mingus))
 
 (use-package forecast
   :config (progn
