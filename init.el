@@ -387,7 +387,7 @@ This makes for easier reading of larger, denser bodies of text."
 
 ;; Check out "spacemacs/core/core-spacemacs.el:121"
 (message "Setting the font..."
-         (e454iel-jump-to-font "Fantasque Sans"))
+         (e454iel-jump-to-font "Fantasque Sans Mono"))
 
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
