@@ -110,7 +110,7 @@
 (setq custom-file (concat user-emacs-directory "config/" "custom-file.el"))
 (load "custom-file.el" t)
 
-(defvar e454iel-documents-time-period "Fall")
+(defvar e454iel-documents-time-period "Spring")
 (defvar e454iel-documents-dir
   (concat "~/Documents/"
           (int-to-string (nth 5 (decode-time))) ; the current year
