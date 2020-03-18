@@ -3,8 +3,8 @@
 ;; Here is a sample .stumpwmrc file
 
 (in-package :stumpwm)
-;;(setq *debug-level* 10)
-;;(redirect-all-output "~/.stumpwm.d/debug-output.txt")
+(setq *debug-level* 10)
+(redirect-all-output "~/.stumpwm.d/debug-output.txt")
 
 ;; change the prefix key to something else
 (set-prefix-key (kbd "M-Tab"))
@@ -97,12 +97,14 @@
 (setq *mode-line-timeout* 1)
 (setq *mode-line-position* :bottom)
 (setq *time-modeline-string* "%a %F %H:%M:%S")
-(load-module "net")
+;; Net has a bug that causes changing the color of the mode line to crash!
+;;(load-module "net")
 (load-module "wifi")
 (load-module "cpu")
 (load-module "mem")
 (load-module "disk")
-(setq *screen-mode-line-format* '("[^B%n^b] %W ^> %c %M %B %D %l %I %d"))
+(setq *screen-mode-line-format* '("[^B%n^b] %W ^> %c %M %B %D %I %d"))
+;;(setq *screen-mode-line-format* '("[^B%n^b] %W ^> %c %M %B %D %l %I %d"))
 ;;(setq *screen-mode-line-format* '("[^B%n^b] %W ^> %c %N %B %l %I %d"))
 ;;(setq *screen-mode-line-format* '("[^B%n^b] %W ^> %B %l %I %d"))
 ;;(setq *screen-mode-line-format* '("[^B%n^b] %W ^> %B %d"))
@@ -217,10 +219,11 @@ current position. Increment the window's number by @var{n}."
 (defvar *games-map* (make-sparse-keymap))
 (define-key *application-map* (kbd "g") '*games-map*)
 (define-implied-keys-for-map *games-map*
-    "k" "exec kega-fusion"
-    "f" "exec firestorm"
-    "t" "exec torchlight"
-    "s" "exec steam")
+  "k" "exec kega-fusion"
+  "f" "exec firestorm"
+  "t" "exec torchlight"
+  "s" "exec steam"
+  "w" "exec wesnoth")
 
 ;; sets the focus policy so that the focus follows the mouse
 (setf *mouse-focus-policy* :sloppy)
@@ -290,6 +293,37 @@ current position. Increment the window's number by @var{n}."
   (mode-line)
   (mode-line))
 
+(defun apply-foreground-background (foreground background)
+  ;; Get the x-color objects here so that we don't have to get them repeatedly
+  ;;  in a bunch of the steps below
+  ;; TODO: What's the difference between "alloc-color" and "lookup-color", both
+  ;;  for XLib and StumpWM?
+
+  (handler-case
+      (progn
+        
+        (set-fg-color foreground)
+        (set-bg-color background)
+        (setq *mode-line-foreground-color* foreground)
+        (setq *mode-line-background-color* background)
+        (set-win-bg-color foreground)
+        (set-focus-color foreground)
+        (set-unfocus-color background)
+        ;;(setq *bar-med-color* (concat "^(:fg \"" (dim-hex-color foreground 10) "\")"))
+        ;;(setq *bar-hi-color* (concat "^(:fg \"" (dim-hex-color foreground 5) "\")"))
+        ;;(setq *bar-crit-color* (concat "^(:fg \"" foreground "\")"))
+        
+        (setq *bar-med-color* (concat "^(:fg \"" foreground "\")"))
+        (setq *bar-hi-color* (concat "^(:fg \"" foreground "\")"))
+        (setq *bar-crit-color* (concat "^(:fg \"" foreground "\")"))
+        
+        (toggle-mode-line (current-screen) (current-head))
+        (toggle-mode-line (current-screen) (current-head)))
+
+    (type-error (te)
+      (message "Oh no D:"))
+    ))
+  
 (ql:quickload 'inferior-shell)
 (defun emacs-repl-send-string (string-to-send)
   (handler-case
@@ -331,7 +365,7 @@ current position. Increment the window's number by @var{n}."
 (load-module "battery-portable")
 
 (load-module "swm-gaps")
-(setq swm-gaps::*inner-gaps-size* 7
+(setq swm-gaps::*inner-gaps-size* 10
       swm-gaps::*outer-gaps-size* 0
       swm-gaps::*gaps-on* t)
 
@@ -346,61 +380,65 @@ current position. Increment the window's number by @var{n}."
 
 ;; Now for some experimental root exposure testing sillyness
 
-(defvar *e454-swm/desktop-canvas-points* '((0 0)))
+;;(defvar *e454-swm/desktop-canvas-points* '((0 0)))
 
-(defun e454-swm/redraw-desktop-canvas-points (screen points-list)
-  (let* ((root-xwindow (screen-root screen))
-        (gcontext (xlib:create-gcontext
-                   :drawable root-xwindow
-                   :line-style :double-dash
-                   :line-width 1
-                   :foreground (xlib:screen-white-pixel
-                                (screen-number screen)))))
+;;(defun e454-swm/redraw-desktop-canvas-points (screen points-list)
+;;  (let* ((root-xwindow (screen-root screen))
+;;        (gcontext (xlib:create-gcontext
+;;                   :drawable root-xwindow
+;;                   :line-style :double-dash
+;;                   :line-width 1
+;;                   :foreground (xlib:screen-white-pixel
+;;                                (screen-number screen)))))
 
-    (loop for (first second) on points-list
-       do (when second
-            (progn
+;;    (loop for (first second) on points-list
+;;       do (when second
+;;            (progn
 
               ;;(format t "(~S ~S) -> (~S ~S) ~C" (first first) (second first) (first second) (second second) #\newline)
-              (format t "~S -> ~S ~C" first second #\newline)
-              (xlib:draw-line root-xwindow
-                              gcontext
-                              (first first) (second first)
-                              (first second) (second second)))))))
+;;              (format t "~S -> ~S ~C" first second #\newline)
+;;              (xlib:draw-line root-xwindow
+;;                              gcontext
+;;                              (first first) (second first)
+;;                              (first second) (second second)))))))
 
-(defun e454-swm/add-desktop-canvas-point (screen mouse-button x y)
-  (push (list x y) *e454-swm/desktop-canvas-points*)
-  (e454-swm/redraw-desktop-canvas-points screen *e454-swm/desktop-canvas-points*))
+;;(defun e454-swm/add-desktop-canvas-point (screen mouse-button x y)
+;;  (push (list x y) *e454-swm/desktop-canvas-points*)
+;;  (e454-swm/redraw-desktop-canvas-points screen *e454-swm/desktop-canvas-points*))
 
-(add-hook *root-click-hook* 'e454-swm/add-desktop-canvas-point)
+;;(add-hook *root-click-hook* 'e454-swm/add-desktop-canvas-point)
 
-(defvar *root-exposure-hook* '())
+;;(defvar *root-exposure-hook* '())
 
-(add-hook *root-exposure-hook*
-          (lambda (window &optional x y width height count)
-            (e454-swm/redraw-desktop-canvas-points
-             (find-screen window) *e454-swm/desktop-canvas-points*)))
+;;(add-hook *root-exposure-hook*
+;;          (lambda (window &optional x y width height count)
+;;            (e454-swm/redraw-desktop-canvas-points
+;;             (find-screen window) *e454-swm/desktop-canvas-points*)))
 
 ;; It's necessary to redefine how Stump handles exposure events in order to add the new hook
-(define-stump-event-handler :exposure (window x y width height count)
-  (let (screen ml)
-    (when (zerop count)
-      (cond
-        ((setf screen (find-screen window))
-         ;; root exposed
-         (group-root-exposure (screen-current-group screen))
-         (run-hook-with-args *root-exposure-hook* window x y width height count))
-        ((setf screen (find-message-window-screen window))
-         ;; message window exposed
-         (if (plusp (screen-ignore-msg-expose screen))
-             (decf (screen-ignore-msg-expose screen))
-             (redraw-current-message screen)))
-        ((setf ml (find-mode-line-by-window window))
-         (setf screen (mode-line-screen ml))
-         (redraw-mode-line ml t)))
-      ;; Show the area.
-      (when (and *debug-expose-events* screen)
-        (draw-cross screen window x y width height)))))
+;;(define-stump-event-handler :exposure (window x y width height count)
+;;  (let (screen ml)
+;;    (when (zerop count)
+;;      (cond
+;;        ((setf screen (find-screen window))
+;;         ;; root exposed
+;;         (group-root-exposure (screen-current-group screen))
+;;         (run-hook-with-args *root-exposure-hook* window x y width height count))
+;;        ((setf screen (find-message-window-screen window))
+;;         ;; message window exposed
+;;         (if (plusp (screen-ignore-msg-expose screen))
+;;             (decf (screen-ignore-msg-expose screen))
+;;             (redraw-current-message screen)))
+;;        ((setf ml (find-mode-line-by-window window))
+;;         (setf screen (mode-line-screen ml))
+;;         (redraw-mode-line ml t)))
+;;      ;; Show the area.
+;;      (when (and *debug-expose-events* screen)
+;;        (draw-cross screen window x y width height)))))
+
+(require :py-configparser)
+(require :FiveAM)
+(load-module "desktop-entry")
 
 ;; tried to do a remote thing? This should be run inside of Emacs.
 ;;(slime-connect "localhost" "4004" "utf-8-unix" (slime-interactive-eval "(stumpwm:apply-emacs-colors)"))
