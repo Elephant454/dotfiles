@@ -1914,6 +1914,9 @@ Lisp function does not specify a special indentation."
   :config (evil-set-initial-state 'vterm-mode 'emacs))
   ;;:config (vterm-install))
 
+;; File uploads to 0x0.st!
+(use-package 0x0)
+
 (use-package scala-mode
   :mode "\\.s\\(cala\\|bt\\)$")
 
