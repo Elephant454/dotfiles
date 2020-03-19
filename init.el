@@ -1975,5 +1975,8 @@ Lisp function does not specify a special indentation."
 
   ;; Install a necessary soft dependency
   :init (use-package posframe))
+
+(use-package quelpa
+  :init (use-package quelpa-use-package))
 (provide 'init)
 ;;; init.el ends here
