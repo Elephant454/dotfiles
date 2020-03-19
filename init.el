@@ -1342,7 +1342,7 @@ Lisp function does not specify a special indentation."
             :config (progn
                       (use-package flyspell-correct-ivy)
 
-                      (e454iel-main-menu "ms" 'flyspell-correct-word-generic))))
+                      (e454iel-main-menu "ms" 'flyspell-correct-at-point))))
 
 ;; TODO: We can keep "Y" for copying a whole line at a time, and then put the
 ;;  binding to copy the current page's URL in the major-mode menu
