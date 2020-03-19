@@ -841,6 +841,21 @@ unsorted."
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1)))
             ;;(add-hook 'org-mode-hook 'turn-on-stripe-table-mode)
             (add-hook 'org-mode-hook (lambda() (auto-fill-mode 1)))
+
+            ;; Undo resizing the headers based on the current theme
+            ;; https://emacs.stackexchange.com/questions/22584/disable-enlarged-org-mode-header-appearance
+            (add-hook
+             'org-mode-hook
+             (lambda ()
+               "Stop the org-level headers from increasing in height relative to the other text."
+               nil
+               (dolist (face '(org-level-1
+                               org-level-2
+                               org-level-3
+                               org-level-4
+                               org-level-5))
+                 (set-face-attribute face nil :weight 'semi-bold :height 1.0))))
+
             (setq org-src-fontify-natively t
                   org-list-allow-alphabetical t
                   org-image-actual-width nil
