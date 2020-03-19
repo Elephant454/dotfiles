@@ -635,17 +635,6 @@ _-_increase _=_decrease"
             (e454iel-main-menu
               "mc" 'e454iel-kurecolor-menu/body)))
 
-;; for all of your Java/Scala needs
-(use-package ensime
-  :pin melpa-stable
-  :config (e454iel-major-mode-menu
-            :major-modes 'ensime-mode-map
-            :keymaps 'ensime-mode-map
-            ;;"" '(nil :which-key "Ensime Mode Commands")
-            "i" 'ensime-import-type-at-point
-            "s" 'ensime-sbt
-            "r" 'ensime-sbt-do-run))
-
 ;; auto completion (needs tweaking)
 (use-package company
   :config (progn
