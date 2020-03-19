@@ -1914,5 +1914,66 @@ Lisp function does not specify a special indentation."
   :config (evil-set-initial-state 'vterm-mode 'emacs))
   ;;:config (vterm-install))
 
+(use-package scala-mode
+  :mode "\\.s\\(cala\\|bt\\)$")
+
+(use-package sbt-mode
+  :commands sbt-start sbt-command
+  :config
+  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map)
+  ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+  (setq sbt:program-options '("-Dsbt.supershell=false")))
+
+(use-package treemacs)
+
+(use-package lsp-mode
+  :hook
+  (scala-mode . lsp)
+  (lsp-mode . lsp-lens-mode)
+  (java-mode . lsp)
+
+  :config
+  (progn
+    (setq lsp-prefer-flymake nil)
+
+    ;; Enable nice rendering of documentation on hover
+    (use-package lsp-ui)
+
+    (use-package company-lsp)
+
+    ;; Use the Tree View Protocol for viewing the project structure and triggering compilation
+    (use-package lsp-treemacs
+      :config
+      (lsp-metals-treeview-enable t)
+      (setq lsp-metals-treeview-show-when-views-received t)
+
+      :init (use-package treemacs)))
+
+  ;; Make Metals work with java
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection 'lsp-metals--server-command)
+                    :major-modes '(scala-mode java-mode)
+                    :priority -1
+                    :notification-handlers (ht ("metals/executeClientCommand" #'lsp-metals--execute-client-command)
+                                               ("metals/treeViewDidChange" #'ignore))
+                    :server-id 'metals
+                    :initialized-fn (lambda (workspace)
+                                      (with-lsp-workspace workspace
+                                                          (lsp--set-configuration
+                                                           (lsp-configuration-section "metals")))))))
+
+;; The debug adapter protocol
+(use-package dap-mode
+  :hook
+  (lsp-mode . dap-mode)
+  (lsp-mode . dap-ui-mode)
+
+  ;; Install a necessary soft dependency
+  :init (use-package posframe))
 (provide 'init)
 ;;; init.el ends here
