@@ -98,6 +98,9 @@
   ;;  listed but not present)
   :config (setq use-package-always-ensure t))
 
+;; Make sure our keyring doesn't get out of date
+(use-package gnu-elpa-keyring-update)
+
 ;; load secret settings (location, passwords, etc)
 (add-to-list 'load-path (concat user-emacs-directory "config/"))
 (load "secret.el" t)
