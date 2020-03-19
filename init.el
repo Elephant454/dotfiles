@@ -1435,7 +1435,25 @@ Lisp function does not specify a special indentation."
               "g8" 'eyebrowse-switch-to-window-config-8
               "g9" 'eyebrowse-switch-to-window-config-9
               
-              "gc" 'eyebrowse-close-window-config-prompt)))
+              "gc" 'eyebrowse-close-window-config-prompt)
+
+            ;; Prevents an evil keybinding that overrides our switching
+            ;;  workspaces using Control 
+            (general-define-key
+             :keymaps 'evil-motion-state-map
+              "C-6" 'nil)
+
+            (general-define-key
+              "C-0" 'eyebrowse-switch-to-window-config-0
+              "C-1" 'eyebrowse-switch-to-window-config-1
+              "C-2" 'eyebrowse-switch-to-window-config-2
+              "C-3" 'eyebrowse-switch-to-window-config-3
+              "C-4" 'eyebrowse-switch-to-window-config-4
+              "C-5" 'eyebrowse-switch-to-window-config-5
+              "C-6" 'eyebrowse-switch-to-window-config-6
+              "C-7" 'eyebrowse-switch-to-window-config-7
+              "C-8" 'eyebrowse-switch-to-window-config-8
+              "C-9" 'eyebrowse-switch-to-window-config-9)))
 
 ;; improved list-packages manager
 ;; what is paradox-execute-asynchronously?
