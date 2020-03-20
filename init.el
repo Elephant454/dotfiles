@@ -92,10 +92,12 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
+
+(straight-use-package 'use-package)
+
 (use-package use-package
-  ;; ensures that all packages are always installed (and installs ones that are
-  ;;  listed but not present)
-  :config (setq use-package-always-ensure t))
+  ;; set all calls to use-package to use Straight as the package manager
+  :config (setq straight-use-package-by-default t))
 
 ;; Make sure our keyring doesn't get out of date
 (use-package gnu-elpa-keyring-update)
