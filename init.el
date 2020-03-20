@@ -890,6 +890,11 @@ unsorted."
              :states 'insert
               "RET" 'newline)
 
+            (general-define-key
+             :keymaps 'org-mode-map
+             :states 'normal
+              "t" 'org-todo)
+
             (e454iel-major-mode-menu
              :keymaps 'org-mode-map
               ;;"" '(nil :which-key "Org Mode Commands")
