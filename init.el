@@ -1917,8 +1917,20 @@ Lisp function does not specify a special indentation."
 ;; File uploads to 0x0.st!
 (use-package 0x0)
 
+;; I'm kinda confused on what this is, but the screenshot makes it look cool
+;;  and helpful? https://github.com/mamapanda/evil-owl
+(use-package evil-owl
+  :config (progn 
+            (setq evil-owl-max-string-length 80)
+            (add-to-list 'display-buffer-alist
+                         '("*evil-owl*"
+                           (display-buffer-in-side-window)
+                           (side . bottom)
+                           (window-height . 0.3)))
+            (evil-owl-mode)))
 
 (use-package org-trello)
+
 (use-package scala-mode
   :mode "\\.s\\(cala\\|bt\\)$")
 
