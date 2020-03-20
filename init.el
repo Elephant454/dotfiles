@@ -546,7 +546,6 @@ This makes for easier reading of larger, denser bodies of text."
   :config (which-key-mode t))
 
 (use-package info
-  :ensure nil
   :config (progn
             (general-define-key
              :states '(normal motion)
@@ -554,7 +553,6 @@ This makes for easier reading of larger, denser bodies of text."
               "<SPC>" 'e454iel-main-menu-prefix)))
 
 (use-package ibuffer
-  :ensure nil
   :config (progn
             (general-define-key
              ;;:states '(normal motion)
@@ -562,17 +560,16 @@ This makes for easier reading of larger, denser bodies of text."
               "<SPC>" 'e454iel-main-menu-prefix)))
 
 (use-package grep
-  :ensure nil
   :config (general-define-key
            :states '(normal motion)
            :keymaps 'grep-mode-map
             "<SPC>" 'e454iel-main-menu-prefix))
 
 (use-package dired
-  :ensure nil  ; This is a built in file, so we need to override
-               ; ensure so that package.el doesn't try to download a
-               ; package called dired from the repos.
-  :init (use-package dired-x :ensure nil)
+  :straight (dired :type built-in)
+  :init (use-package dired-x
+          :straight (dired-x :type built-in)
+          )
   :config (progn
             (general-define-key
              :keymaps 'dired-mode-map
@@ -777,10 +774,10 @@ unsorted."
 ;;  some reason. I might want to submit a patch for that, depending upon what
 ;;  the functions look like.
 (use-package org
-  :pin gnu  ; use the version from the gnu repo
+  :straight (org :type built-in)
   :init (progn
           (use-package ox-latex
-            :ensure nil)
+            :straight (ox-latex :type built-in))
           (use-package evil-org
             :init (use-package evil-leader))
           (use-package org-pomodoro)
@@ -834,8 +831,10 @@ unsorted."
                     (python . t)
                     (shell . t)))
 
-            (use-package ob-python :ensure nil)
-            (use-package ob-shell :ensure nil)
+            (use-package ob-python
+              :straight (ob-python :type built-in))
+            (use-package ob-shell
+              :straight (ob-shell :type built-in))
 
             (use-package calfw
               :config (use-package calfw-org))
@@ -993,7 +992,7 @@ unsorted."
 ;; particular sounds interesting.
 (use-package tex
   :defer t
-  :ensure auctex
+  :straight (auctex)
   :config (progn
             ;; autocompletion for latex related commands
             (use-package company-auctex
@@ -1057,14 +1056,13 @@ unsorted."
   (dotimes (i 26) (insert-char (+ ?a i))))
 
 (use-package ediff
-  :ensure nil
   :config (setq ediff-window-setup-function
   'ediff-setup-windows-plain)) ; makes it so that ediff uses one
                                ;  window instead of opening up a second
                                         ;  one
 
 (use-package elisp-mode
-  :ensure nil
+  :straight (elisp-mode :type built-in)
   :init (progn
 
           ;; Here we redefine the lisp-indent-function in order to indent lists starting
@@ -1161,7 +1159,6 @@ Lisp function does not specify a special indentation."
 ;; https://www.reddit.com/r/emacs/comments/7fa1fb/how_many_of_you_guys_use_emacs_for_irc_whats_your/
 ;; https://www.reddit.com/r/emacs/comments/8ml6na/tip_how_to_make_erc_fun_to_use/
 (use-package erc
-  :ensure nil
   :config (progn
             (if e454iel-home-computer-p
                 (progn
@@ -1185,7 +1182,6 @@ Lisp function does not specify a special indentation."
             (e454iel-main-menu "aE" 'erc)))
 
 (use-package bubbles
-  :ensure nil
   :config (progn
             (setq bubbles-game-theme 'medium)
             (general-define-key
@@ -1199,7 +1195,6 @@ Lisp function does not specify a special indentation."
             (e454iel-main-menu "agb" 'bubbles)))
 
 (use-package tetris
-  :ensure nil
   :config (e454iel-main-menu "agt" 'tetris))
 
 (use-package mines
@@ -1224,7 +1219,8 @@ Lisp function does not specify a special indentation."
 
 ;; Email!
 (use-package mu4e
-  :ensure nil
+  :straight (mu4e :host github :repo "emacsmirror/mu4e"
+                  :files (:defaults "mu4e/*.el"))
   :config (progn
             (use-package evil-mu4e)
             (setq mu4e-msg2pdf "/usr/bin/msg2pdf")
@@ -1339,7 +1335,6 @@ Lisp function does not specify a special indentation."
 ;;  for Camel Case words?
 ;;  http://blog.binchen.org/posts/what-s-the-best-spell-check-set-up-in-emacs.html
 (use-package flyspell
-  :ensure nil
   :init (progn
           (setq ispell-program-name "hunspell")
           (setq ispell-dictionary "american")
@@ -1358,7 +1353,6 @@ Lisp function does not specify a special indentation."
 ;;  then the name of the page. Like "<1>DuckDuckGo"
 ;; TODO: Middle mouse should open a page in a new buffer in the background
 (use-package eww
-  :ensure nil
   :functions (eww-suggest-uris eww-current-url)
   :init (progn
           (defun eww-open-in-new-buffer (url)
@@ -1537,7 +1531,6 @@ Lisp function does not specify a special indentation."
 ;;(use-package doremi-frm)
 
 (use-package time
-  :ensure nil
   :config (progn
             (setq display-time-day-and-date t)
             (setq e454iel-holiday-symbol "π")
@@ -1556,7 +1549,6 @@ Lisp function does not specify a special indentation."
 
 ;; this is where C-c to save and C-k to cancel come from. Rebind these.
 (use-package with-editor
-  :ensure nil
   :config (e454iel-major-mode-menu
            :keymaps 'with-editor-mode-map
            :major-modes 'with-editor-mode-map
@@ -1567,7 +1559,6 @@ Lisp function does not specify a special indentation."
 ;; I don't know what this is for entirely, but customize turned it on and it
 ;;  looks interesting
 (use-package midnight
-  :ensure nil
   :demand
   :config (midnight-mode t))
 
@@ -1593,7 +1584,7 @@ Lisp function does not specify a special indentation."
                         ))))
 
 (use-package comint
-  :ensure nil
+  :straight (elisp-mode :type built-in)
   :config (general-define-key
            :states 'insert
             :keymaps 'comint-mode-map
@@ -1651,7 +1642,6 @@ Lisp function does not specify a special indentation."
                                         "amsl" 'counsel-spotify-search-album
                                         "amsr" 'counsel-spotify-search-artist))
 (use-package tramp
-  :ensure nil
   :config (progn
             ;; This prevents from tramp from hanging
             (progn
@@ -1696,7 +1686,6 @@ Lisp function does not specify a special indentation."
             ;;(add-to-list 'emms-player-list 'emms-player-mpv)))
 
 (use-package python
-  :ensure nil
   :commands (python-mode run-python)
   :mode ("\\.pyw?\\'" . python-mode)
   :interpreter ("python[0-9.]*" . python-mode)
