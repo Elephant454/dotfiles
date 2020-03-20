@@ -143,9 +143,6 @@
   (before theme-dont-propagate activate)
   (mapc #'disable-theme custom-enabled-themes))
 
-(doom-themes-visual-bell-config)
-(doom-themes-org-config)
-
 ;; I should set up pairs of night themes and day themes. One keybinding cycles
 ;; between pairs and another keybinding switches between day and night.
 
@@ -167,24 +164,28 @@ Lists in `LISTS' that are not lists will be `listified'."
 
 (use-package-list
     color-theme
-  (soft-morning-theme :disabled)
+  (soft-morning-theme :defer)
   ;;omtose-phellack-theme
-  (color-theme-sanityinc-tomorrow :disabled)
-  (light-soap-theme :disabled)
-  (silkworm-theme :disabled)
-  (foggy-night-theme :disabled)
-  (apropospriate-theme :disabled)
-  (gotham-theme :disabled)
-  (purple-haze-theme :disabled)
-  (nubox :disabled)
-  (doom-themes :disabled)
-  (material-theme :disabled)
+  (color-theme-sanityinc-tomorrow :defer)
+  (light-soap-theme :defer)
+  (silkworm-theme :defer)
+  (foggy-night-theme :defer)
+  (apropospriate-theme :defer)
+  (gotham-theme :defer)
+  (purple-haze-theme :defer)
+  (nubox :defer)
+  (doom-themes
+   :defer
+   :config (progn
+             (doom-themes-visual-bell-config)
+             (doom-themes-org-config)))
+  (material-theme :defer)
   ;;spacemacs-theme
   ;; gruvbox
-  (dracula-theme :disabled)
-  (kaolin-themes :disabled)
-  (srcery-theme :disabled)
-  (birds-of-paradise-plus-theme :disabled)
+  (dracula-theme :defer)
+  (kaolin-themes :defer)
+  (srcery-theme :defer)
+  (birds-of-paradise-plus-theme :defer)
 )
 
 ;;There has to be some sort of better way of doing this. 😅 The autoloads weren't
