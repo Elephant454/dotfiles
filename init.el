@@ -591,7 +591,7 @@ This makes for easier reading of larger, denser bodies of text."
 (use-package hydra)
 
 (use-package kurecolor
-  ;;(defhydra hydra-awoo nil "awoo" ("a" (print "awoo")))
+  :disabled
   :config (progn
             (defhydra e454iel-kurecolor-menu nil
               "
