@@ -600,18 +600,18 @@ _h_ue _s_aturation _b_rightness"
               ("h" (e454iel-kurecolor-menu-hue/body) :exit t)
               ("s" (e454iel-kurecolor-menu-saturation/body) :exit t)
               ("b" (e454iel-kurecolor-menu-brightness/body) :exit t))
-
-            (defhydra e454iel-kurecolor-menu-hue nil
-              "
+  
+          (defhydra e454iel-kurecolor-menu-hue nil
+            "
 Adjust hue:
 _-_increase _=_decrease"
-              ("-" #'kurecolor-increase-hue-by-step)
-              ("=" #'kurecolor-decrease-hue-by-step)
-              ("h" (e454iel-kurecolor-menu-hue/body) :exit t)
-              ("s" (e454iel-kurecolor-menu-saturation/body) :exit t)
-              ("b" (e454iel-kurecolor-menu-brightness/body) :exit t))
-
-            (defhydra e454iel-kurecolor-menu-saturation nil
+            ("-" #'kurecolor-increase-hue-by-step)
+            ("=" #'kurecolor-decrease-hue-by-step)
+            ("h" (e454iel-kurecolor-menu-hue/body) :exit t)
+            ("s" (e454iel-kurecolor-menu-saturation/body) :exit t)
+            ("b" (e454iel-kurecolor-menu-brightness/body) :exit t))
+  
+          (defhydra e454iel-kurecolor-menu-saturation nil
               "
 Adjust saturation:
 _-_increase _=_decrease"
