@@ -1917,6 +1917,8 @@ Lisp function does not specify a special indentation."
 ;; File uploads to 0x0.st!
 (use-package 0x0)
 
+
+(use-package org-trello)
 (use-package scala-mode
   :mode "\\.s\\(cala\\|bt\\)$")
 
