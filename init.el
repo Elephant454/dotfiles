@@ -1974,24 +1974,30 @@ Lisp function does not specify a special indentation."
 
     ;; Use the Tree View Protocol for viewing the project structure and triggering compilation
     (use-package lsp-treemacs
-      :config
-      (lsp-metals-treeview-enable t)
-      (setq lsp-metals-treeview-show-when-views-received t)
+      :config (progn
+                ;; This hack is to get a file to load to make sure the function
+                ;; lsp-metals-treeview-enable is available when we need it
+                (use-package lsp-metals-treeview
+                  :straight (:type built-in)
+                  :config (progn
+                            (lsp-metals-treeview-enable t)
+                            (setq lsp-metals-treeview-show-when-views-received t))))
 
-      :init (use-package treemacs)))
+      :init (use-package treemacs))
 
-  ;; Make Metals work with java
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection 'lsp-metals--server-command)
-                    :major-modes '(scala-mode java-mode)
-                    :priority -1
-                    :notification-handlers (ht ("metals/executeClientCommand" #'lsp-metals--execute-client-command)
-                                               ("metals/treeViewDidChange" #'ignore))
-                    :server-id 'metals
-                    :initialized-fn (lambda (workspace)
-                                      (with-lsp-workspace workspace
-                                                          (lsp--set-configuration
-                                                           (lsp-configuration-section "metals")))))))
+    ;; Make Metals work with java
+;;    (lsp-register-client
+;;     (make-lsp-client :new-connection (lsp-stdio-connection 'lsp-metals--server-command)
+;;                      :major-modes '(scala-mode java-mode)
+;;                      :priority -1
+;;                      :notification-handlers (ht ("metals/executeClientCommand" #'lsp-metals--execute-client-command)
+;;                                                 ("metals/treeViewDidChange" #'ignore))
+;;                      :server-id 'metals
+;;                      :initialized-fn (lambda (workspace)
+;;                                        (with-lsp-workspace workspace
+;;                                          (lsp--set-configuration
+;;                                           (lsp-configuration-section "metals"))))))))
+    ))
 
 ;; The debug adapter protocol
 (use-package dap-mode
