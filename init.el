@@ -1992,13 +1992,9 @@ Lisp function does not specify a special indentation."
   ;; Install a necessary soft dependency
   :init (use-package posframe))
 
-(use-package quelpa
-  :init (use-package quelpa-use-package))
-
 (use-package matrix-client
-  :ensure nil
-  :quelpa (matrix-client :fetcher github :repo "alphapapa/matrix-client.el"
-                         :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
+  :straight (matrix-client :host github :repo "alphapapa/matrix-client.el"
+                           :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
 
 (provide 'init)
 ;;; init.el ends here
