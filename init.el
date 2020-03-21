@@ -1950,6 +1950,9 @@ Lisp function does not specify a special indentation."
   (lsp-mode . lsp-lens-mode)
   (java-mode . lsp)
 
+  :init
+  (use-package scala-mode)
+
   :config
   (progn
     (setq lsp-prefer-flymake nil)
