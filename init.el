@@ -399,13 +399,19 @@ This makes for easier reading of larger, denser bodies of text."
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
   :demand
+
+  ;; Required by evil-collection
+  :init (setq evil-want-keybinding nil)
+
   :config (progn
             (evil-mode t)
             (use-package evil-escape :config (evil-escape-mode t))
             (use-package evil-matchit :config (global-evil-matchit-mode t))
             (use-package fringe-helper
               :config (use-package evil-fringe-mark
-                        :config (global-evil-fringe-mark-mode t)))))
+                        :config (global-evil-fringe-mark-mode t)))
+            ;; A collection of Evil keybindings for various packages
+            (use-package evil-collection)))
 
 (use-package general
   :demand t
@@ -568,18 +574,21 @@ This makes for easier reading of larger, denser bodies of text."
 (use-package dired
   :straight (dired :type built-in)
   :init (use-package dired-x
-          :straight (dired-x :type built-in)
-          )
+          :straight (dired-x :type built-in))
   :config (progn
+            (evil-collection-init 'dired)
             (general-define-key
+             :states 'normal
              :keymaps 'dired-mode-map
               "<SPC>" 'e454iel-main-menu-prefix)
             (e454iel-main-menu
               "fj" 'dired-jump)
             (add-hook 'dired-mode-hook 'auto-revert-mode)
             (use-package dired-sidebar
-              :config (e454iel-main-menu
-                        "fS" 'dired-sidebar-toggle-sidebar))))
+              :config (progn
+                        (evil-collection-init 'dired-sidebar)
+                        (e454iel-main-menu
+                          "fS" 'dired-sidebar-toggle-sidebar)))))
 
 ;; give parenthesis matching colors based upon depth
 (use-package rainbow-delimiters
@@ -1222,7 +1231,8 @@ Lisp function does not specify a special indentation."
   :straight (mu4e :host github :repo "emacsmirror/mu4e"
                   :files (:defaults "mu4e/*.el"))
   :config (progn
-            (use-package evil-mu4e)
+            (evil-collection-init 'mu4e)
+            (evil-collection-init 'mu4e-conversation)
             (setq mu4e-msg2pdf "/usr/bin/msg2pdf")
             (general-define-key
              :keymaps 'mu4e-view-mode-map
