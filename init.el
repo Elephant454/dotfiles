@@ -175,7 +175,7 @@ Lists in `LISTS' that are not lists will be `listified'."
   (apropospriate-theme :defer)
   (gotham-theme :defer)
   (purple-haze-theme :defer)
-  (nubox :defer)
+  (gruvbox-theme :defer)
   (doom-themes
    :defer
    :config (progn
@@ -183,7 +183,6 @@ Lists in `LISTS' that are not lists will be `listified'."
              (doom-themes-org-config)))
   (material-theme :defer)
   ;;spacemacs-theme
-  ;; gruvbox
   (dracula-theme :defer)
   (kaolin-themes :defer)
   (srcery-theme :defer)
@@ -201,7 +200,7 @@ Lists in `LISTS' that are not lists will be `listified'."
 ;;  the night variant
 (setq e454iel-theme-pairs '((soft-morning . omtose-softer)
                             (silkworm . foggy-night)
-                            (nubox-light . nubox-dark)
+                            (gruvbox-light-hard . gruvbox-dark-hard)
                             (kaolin-light . kaolin-eclipse)
                             (doom-one . doom-one)
                             (doom-opera-light . doom-opera)
@@ -290,7 +289,7 @@ without confirmation."
    e454iel-theme-pairs))
 
 ;; load default theme
-(e454iel-jump-to-theme 'nubox-light)
+(e454iel-jump-to-theme 'gruvbox-light-hard)
 
 
 ;; fonts
