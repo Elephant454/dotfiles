@@ -182,7 +182,7 @@ Lists in `LISTS' that are not lists will be `listified'."
              (doom-themes-visual-bell-config)
              (doom-themes-org-config)))
   (material-theme :defer)
-  ;;spacemacs-theme
+  (spacemacs-theme :defer)
   (dracula-theme :defer)
   (kaolin-themes :defer)
   (srcery-theme :defer)
