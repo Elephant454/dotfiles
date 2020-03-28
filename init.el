@@ -1698,6 +1698,9 @@ Lisp function does not specify a special indentation."
   :commands (python-mode run-python)
   :mode ("\\.pyw?\\'" . python-mode)
   :interpreter ("python[0-9.]*" . python-mode)
+  :init (progn
+          ;; Needed before `run-python' can load
+          (use-package tramp))
   :config (progn
             (use-package anaconda-mode
               :config (progn
