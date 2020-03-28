@@ -114,7 +114,7 @@
 
 ;; load custom-file (file where all options set by customize are stored)
 (setq custom-file (concat user-emacs-directory "config/" "custom-file.el"))
-(load "custom-file.el" t)
+;;(load "custom-file.el" t)
 
 (defvar e454iel-documents-time-period "Spring")
 (defvar e454iel-documents-dir
