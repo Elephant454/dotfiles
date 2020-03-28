@@ -929,7 +929,12 @@ unsorted."
 ;; This still needs fixing. Primarily, pressing "-" in normal mode doesn't zoom
 ;; out, and the cursor blinks around the page (which is annoying).
 (use-package pdf-tools
+  :demand t
   :config (progn
+
+            (use-package pdf-view :straight (pdf-view :type built-in))
+            (use-package pdf-occur :straight (pdf-occur :type built-in))
+
             (pdf-tools-install)
             ;; this automatically reloads the pdf when it changes (if I'm
             ;;  compiling latex for example)
