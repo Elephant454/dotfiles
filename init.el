@@ -202,6 +202,7 @@ Lists in `LISTS' that are not lists will be `listified'."
                             (gruvbox-light-hard . gruvbox-dark-hard)
                             (kaolin-light . kaolin-eclipse)
                             (doom-one . doom-one)
+                            (doom-fairy-floss . doom-laserwave)
                             (doom-opera-light . doom-opera)
                             (birds-of-paradise-plus . dracula)
                             (dracula . purple-haze)
