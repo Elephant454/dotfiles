@@ -1251,9 +1251,6 @@ Lisp function does not specify a special indentation."
 ;;  about this from stumpwm.
 (use-package slime
   :init (progn
-          (use-package slime-company :demand)
-          (slime-setup '(slime-fancy slime-company))
-
           ;; This was taken from the Lispy package by Abo-Abo
           ;; Can I use `slime-rex' to get around needing to sleep?
           (defun e454iel-create-slime-connection-in-background (host
@@ -1293,6 +1290,9 @@ Lisp function does not specify a special indentation."
             (setq inferior-lisp-program "sbcl")
             ;; I'm certain that there is a better way to do this.
             (load (expand-file-name "~/quicklisp/slime-helper.el") t)
+
+            (use-package slime-company :demand)
+            (slime-setup '(slime-fancy slime-company))
 
             ;; https://stackoverflow.com/questions/22456086/how-to-run-common-lisp-code-with-slime-in-emacs-lisp
             ;; This is taken from pieces of the lispy package.
