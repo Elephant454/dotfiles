@@ -1658,6 +1658,7 @@ Lisp function does not specify a special indentation."
                                         "amsl" 'counsel-spotify-search-album
                                         "amsr" 'counsel-spotify-search-artist))
 (use-package tramp
+  :straight (tramp :type built-in)
   :config (progn
             ;; This prevents from tramp from hanging
             (progn
