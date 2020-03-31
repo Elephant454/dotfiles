@@ -928,7 +928,6 @@ unsorted."
 ;; This still needs fixing. Primarily, pressing "-" in normal mode doesn't zoom
 ;; out, and the cursor blinks around the page (which is annoying).
 (use-package pdf-tools
-  :demand t
   :config (progn
 
             (use-package pdf-view :straight (pdf-view :type built-in))
@@ -997,7 +996,6 @@ unsorted."
               ;; selection
               "<down-mouse-1>" 'pdf-view-mouse-set-region
               "y" 'pdf-view-kill-ring-save))
-  :defer t
   :mode (("\\.pdf\\'" . pdf-view-mode)))
 
 ;; I might want to add more from the latex spacemacs layer. Folding in
