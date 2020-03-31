@@ -1170,17 +1170,21 @@ Lisp function does not specify a special indentation."
 ;; https://www.reddit.com/r/emacs/comments/7fa1fb/how_many_of_you_guys_use_emacs_for_irc_whats_your/
 ;; https://www.reddit.com/r/emacs/comments/8ml6na/tip_how_to_make_erc_fun_to_use/
 (use-package erc
+  :init (progn
+          (if e454iel-home-computer-p
+              (progn
+                (setq erc-log-channels-directory (concat user-emacs-directory "erc-logs/"))
+                (unless (file-exists-p erc-log-channels-directory)
+                  (make-directory erc-log-channels-directory))
+                (setq erc-save-buffer-on-part t
+                      erc-save-queries-on-quit t
+                      erc-log-write-after-send t
+                      erc-log-write-after-insert t
+                      erc-log-insert-log-on-open t
+                      ;; disable listing ERC channels in the mode line
+                      erc-track-position-in-mode-line nil))))
+  
   :config (progn
-            (if e454iel-home-computer-p
-                (progn
-                  (setq erc-log-channels-directory (concat user-emacs-directory "erc-logs/"))
-                  (unless (file-exists-p erc-log-channels-directory)
-                    (make-directory erc-log-channels-directory)))
-              (setq erc-save-buffer-on-part t)
-              (setq erc-log-insert-log-on-open nil)
-              (erc-track-mode 0) ; disable listing ERC channels in the mode line
-              )
-
             (use-package erc-colorize
               :config (erc-colorize-mode t))
 
