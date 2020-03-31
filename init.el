@@ -166,7 +166,7 @@ Lists in `LISTS' that are not lists will be `listified'."
 
 (use-package-list
  (soft-morning-theme :defer)
- ;;omtose-phellack-theme
+ (omtose-phellack-theme :defer)
  (color-theme-sanityinc-tomorrow :defer)
  (light-soap-theme :defer)
  (silkworm-theme :defer)
