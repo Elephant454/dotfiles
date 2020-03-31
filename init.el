@@ -1666,9 +1666,9 @@ Lisp function does not specify a special indentation."
               (add-hook 'find-file-hook
                         (lambda ()
                           (when (file-remote-p default-directory)
-                            (setq-local projectile-mode-line "Projectile")))))))
+                            (setq-local projectile-mode-line "Projectile"))))))
 
-(use-package tramp-term)
+  (use-package tramp-term))
 
 (use-package irony
   :defer t
