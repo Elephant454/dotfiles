@@ -1600,7 +1600,7 @@ Lisp function does not specify a special indentation."
                         ))))
 
 (use-package comint
-  :straight (elisp-mode :type built-in)
+  :straight (comint :type built-in)
   :config (general-define-key
            :states 'insert
             :keymaps 'comint-mode-map
@@ -1988,7 +1988,7 @@ Lisp function does not specify a special indentation."
                 ;; This hack is to get a file to load to make sure the function
                 ;; lsp-metals-treeview-enable is available when we need it
                 (use-package lsp-metals-treeview
-                  :straight (:type built-in)
+                  :straight (lsp-metals-treeview :type built-in)
                   :config (progn
                             (lsp-metals-treeview-enable t)
                             (setq lsp-metals-treeview-show-when-views-received t))))
