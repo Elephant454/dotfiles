@@ -165,28 +165,27 @@ Lists in `LISTS' that are not lists will be `listified'."
   (cons 'progn (append-to-lists packages 'use-package)))
 
 (use-package-list
-    color-theme
-  (soft-morning-theme :defer)
-  ;;omtose-phellack-theme
-  (color-theme-sanityinc-tomorrow :defer)
-  (light-soap-theme :defer)
-  (silkworm-theme :defer)
-  (foggy-night-theme :defer)
-  (apropospriate-theme :defer)
-  (gotham-theme :defer)
-  (purple-haze-theme :defer)
-  (gruvbox-theme :defer)
-  (doom-themes
-   :defer
-   :config (progn
-             (doom-themes-visual-bell-config)
-             (doom-themes-org-config)))
-  (material-theme :defer)
-  (spacemacs-theme :defer)
-  (dracula-theme :defer)
-  (kaolin-themes :defer)
-  (srcery-theme :defer)
-  (birds-of-paradise-plus-theme :defer)
+ (soft-morning-theme :defer)
+ ;;omtose-phellack-theme
+ (color-theme-sanityinc-tomorrow :defer)
+ (light-soap-theme :defer)
+ (silkworm-theme :defer)
+ (foggy-night-theme :defer)
+ (apropospriate-theme :defer)
+ (gotham-theme :defer)
+ (purple-haze-theme :defer)
+ (gruvbox-theme :defer)
+ (doom-themes
+  :defer
+  :config (progn
+            (doom-themes-visual-bell-config)
+            (doom-themes-org-config)))
+ (material-theme :defer)
+ (spacemacs-theme :defer)
+ (dracula-theme :defer)
+ (kaolin-themes :defer)
+ (srcery-theme :defer)
+ (birds-of-paradise-plus-theme :defer)
 )
 
 ;;There has to be some sort of better way of doing this. 😅 The autoloads weren't
