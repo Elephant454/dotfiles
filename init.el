@@ -509,7 +509,7 @@ This makes for easier reading of larger, denser bodies of text."
      "t" '(:ignore t :which-key "Toggles/Settings")
      ;; themes
      "tt" '(:ignore t :which-key "Themes")
-     "tts" 'load-theme
+     "tts" 'counsel-load-theme
      "ttn" 'e454iel-cycle-theme-pairs
      "ttt" 'e454iel-toggle-use-day-theme
      ;; fonts
