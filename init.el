@@ -165,28 +165,27 @@ Lists in `LISTS' that are not lists will be `listified'."
   (cons 'progn (append-to-lists packages 'use-package)))
 
 (use-package-list
-    color-theme
-  (soft-morning-theme :defer)
-  ;;omtose-phellack-theme
-  (color-theme-sanityinc-tomorrow :defer)
-  (light-soap-theme :defer)
-  (silkworm-theme :defer)
-  (foggy-night-theme :defer)
-  (apropospriate-theme :defer)
-  (gotham-theme :defer)
-  (purple-haze-theme :defer)
-  (gruvbox-theme :defer)
-  (doom-themes
-   :defer
-   :config (progn
-             (doom-themes-visual-bell-config)
-             (doom-themes-org-config)))
-  (material-theme :defer)
-  (spacemacs-theme :defer)
-  (dracula-theme :defer)
-  (kaolin-themes :defer)
-  (srcery-theme :defer)
-  (birds-of-paradise-plus-theme :defer)
+ (soft-morning-theme :defer)
+ (omtose-phellack-theme :defer)
+ (color-theme-sanityinc-tomorrow :defer)
+ (light-soap-theme :defer)
+ (silkworm-theme :defer)
+ (foggy-night-theme :defer)
+ (apropospriate-theme :defer)
+ (gotham-theme :defer)
+ (purple-haze-theme :defer)
+ (gruvbox-theme :defer)
+ (doom-themes
+  :defer
+  :config (progn
+            (doom-themes-visual-bell-config)
+            (doom-themes-org-config)))
+ (material-theme :defer)
+ (spacemacs-theme :defer)
+ (dracula-theme :defer)
+ (kaolin-themes :defer)
+ (srcery-theme :defer)
+ (birds-of-paradise-plus-theme :defer)
 )
 
 ;;There has to be some sort of better way of doing this. 😅 The autoloads weren't
@@ -203,6 +202,7 @@ Lists in `LISTS' that are not lists will be `listified'."
                             (gruvbox-light-hard . gruvbox-dark-hard)
                             (kaolin-light . kaolin-eclipse)
                             (doom-one . doom-one)
+                            (doom-fairy-floss . doom-laserwave)
                             (doom-opera-light . doom-opera)
                             (birds-of-paradise-plus . dracula)
                             (dracula . purple-haze)
@@ -509,7 +509,7 @@ This makes for easier reading of larger, denser bodies of text."
      "t" '(:ignore t :which-key "Toggles/Settings")
      ;; themes
      "tt" '(:ignore t :which-key "Themes")
-     "tts" 'load-theme
+     "tts" 'counsel-load-theme
      "ttn" 'e454iel-cycle-theme-pairs
      "ttt" 'e454iel-toggle-use-day-theme
      ;; fonts
@@ -929,7 +929,6 @@ unsorted."
 ;; This still needs fixing. Primarily, pressing "-" in normal mode doesn't zoom
 ;; out, and the cursor blinks around the page (which is annoying).
 (use-package pdf-tools
-  :demand t
   :config (progn
 
             (use-package pdf-view :straight (pdf-view :type built-in))
@@ -998,7 +997,6 @@ unsorted."
               ;; selection
               "<down-mouse-1>" 'pdf-view-mouse-set-region
               "y" 'pdf-view-kill-ring-save))
-  :defer t
   :mode (("\\.pdf\\'" . pdf-view-mode)))
 
 ;; I might want to add more from the latex spacemacs layer. Folding in
@@ -1172,17 +1170,21 @@ Lisp function does not specify a special indentation."
 ;; https://www.reddit.com/r/emacs/comments/7fa1fb/how_many_of_you_guys_use_emacs_for_irc_whats_your/
 ;; https://www.reddit.com/r/emacs/comments/8ml6na/tip_how_to_make_erc_fun_to_use/
 (use-package erc
+  :init (progn
+          (if e454iel-home-computer-p
+              (progn
+                (setq erc-log-channels-directory (concat user-emacs-directory "erc-logs/"))
+                (unless (file-exists-p erc-log-channels-directory)
+                  (make-directory erc-log-channels-directory))
+                (setq erc-save-buffer-on-part t
+                      erc-save-queries-on-quit t
+                      erc-log-write-after-send t
+                      erc-log-write-after-insert t
+                      erc-log-insert-log-on-open t
+                      ;; disable listing ERC channels in the mode line
+                      erc-track-position-in-mode-line nil))))
+  
   :config (progn
-            (if e454iel-home-computer-p
-                (progn
-                  (setq erc-log-channels-directory (concat user-emacs-directory "erc-logs/"))
-                  (unless (file-exists-p erc-log-channels-directory)
-                    (make-directory erc-log-channels-directory)))
-              (setq erc-save-buffer-on-part t)
-              (setq erc-log-insert-log-on-open nil)
-              (erc-track-mode 0) ; disable listing ERC channels in the mode line
-              )
-
             (use-package erc-colorize
               :config (erc-colorize-mode t))
 
@@ -1598,7 +1600,7 @@ Lisp function does not specify a special indentation."
                         ))))
 
 (use-package comint
-  :straight (elisp-mode :type built-in)
+  :straight (comint :type built-in)
   :config (general-define-key
            :states 'insert
             :keymaps 'comint-mode-map
@@ -1656,6 +1658,7 @@ Lisp function does not specify a special indentation."
                                         "amsl" 'counsel-spotify-search-album
                                         "amsr" 'counsel-spotify-search-artist))
 (use-package tramp
+  :straight (tramp :type built-in)
   :config (progn
             ;; This prevents from tramp from hanging
             (progn
@@ -1663,9 +1666,9 @@ Lisp function does not specify a special indentation."
               (add-hook 'find-file-hook
                         (lambda ()
                           (when (file-remote-p default-directory)
-                            (setq-local projectile-mode-line "Projectile")))))))
+                            (setq-local projectile-mode-line "Projectile"))))))
 
-(use-package tramp-term)
+  (use-package tramp-term))
 
 (use-package irony
   :defer t
@@ -1985,7 +1988,7 @@ Lisp function does not specify a special indentation."
                 ;; This hack is to get a file to load to make sure the function
                 ;; lsp-metals-treeview-enable is available when we need it
                 (use-package lsp-metals-treeview
-                  :straight (:type built-in)
+                  :straight (lsp-metals-treeview :type built-in)
                   :config (progn
                             (lsp-metals-treeview-enable t)
                             (setq lsp-metals-treeview-show-when-views-received t))))
