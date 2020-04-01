@@ -2023,5 +2023,8 @@ Lisp function does not specify a special indentation."
   :straight (matrix-client :host github :repo "alphapapa/matrix-client.el"
                            :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
 
+;; Front-end for the Emacsmirror package database
+(use-package epkg)
+
 (provide 'init)
 ;;; init.el ends here
