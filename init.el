@@ -154,7 +154,7 @@
 
 (defun append-to-lists (lists &optional beginning end)
   "Append `BEGINNING' and / or `END' to each list in `LISTS'.
-Lists in `LISTS' that are not lists will be `listified'."
+Lists in `LISTS' that are not lists will be listified by `listify'." 
   (mapcar
    (lambda (list)
      (append (listify beginning) (listify list) (listify end)))
