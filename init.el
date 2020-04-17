@@ -46,6 +46,8 @@
  ;; Grabbing XKCDs could be done more cleanly, probably 😅
  ;; TODO: It would be super great to be able to use this with md4rd and
  ;;  github-explorer
+ browse-url-generic-program "firefox"
+
  browse-url-browser-function '((".*xkcd.com/[0-9]*" . (lambda (x y) (get-xkcd-from-url x) ))
                                ("." . eww-browse-url))
 
@@ -77,24 +79,28 @@
 ;; Don't kill the whole line if I accidentally mash C-S
 (global-unset-key (kbd "<C-S-backspace>"))
 
-;; set the repositories and install use-package
-(require 'package)
-(setq
- package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                    ("org" . "http://orgmode.org/elpa/")
-                    ("melpa" . "http://melpa.org/packages/")
-                    ("melpa-stable" . "http://stable.melpa.org/packages/"))
- package-archive-priorities '(("melpa-stable" . 1)))
+;; Install the Straight.el package manager from the bootstrap
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(package-initialize)
-(when (not package-archive-contents)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(require 'use-package)
+(straight-use-package 'use-package)
+
 (use-package use-package
-  ;; ensures that all packages are always installed (and installs ones that are
-  ;;  listed but not present)
-  :config (setq use-package-always-ensure t))
+  ;; set all calls to use-package to use Straight as the package manager
+  :config (setq straight-use-package-by-default t))
+
+;; Make sure our keyring doesn't get out of date
+(use-package gnu-elpa-keyring-update)
 
 ;; load secret settings (location, passwords, etc)
 (add-to-list 'load-path (concat user-emacs-directory "config/"))
@@ -108,9 +114,9 @@
 
 ;; load custom-file (file where all options set by customize are stored)
 (setq custom-file (concat user-emacs-directory "config/" "custom-file.el"))
-(load "custom-file.el" t)
+;;(load "custom-file.el" t)
 
-(defvar e454iel-documents-time-period "Fall")
+(defvar e454iel-documents-time-period "Spring")
 (defvar e454iel-documents-dir
   (concat "~/Documents/"
           (int-to-string (nth 5 (decode-time))) ; the current year
@@ -139,9 +145,6 @@
   (before theme-dont-propagate activate)
   (mapc #'disable-theme custom-enabled-themes))
 
-(doom-themes-visual-bell-config)
-(doom-themes-org-config)
-
 ;; I should set up pairs of night themes and day themes. One keybinding cycles
 ;; between pairs and another keybinding switches between day and night.
 
@@ -151,7 +154,7 @@
 
 (defun append-to-lists (lists &optional beginning end)
   "Append `BEGINNING' and / or `END' to each list in `LISTS'.
-Lists in `LISTS' that are not lists will be `listified'."
+Lists in `LISTS' that are not lists will be listified by `listify'." 
   (mapcar
    (lambda (list)
      (append (listify beginning) (listify list) (listify end)))
@@ -162,25 +165,27 @@ Lists in `LISTS' that are not lists will be `listified'."
   (cons 'progn (append-to-lists packages 'use-package)))
 
 (use-package-list
-    color-theme
-  (soft-morning-theme :disabled)
-  ;;omtose-phellack-theme
-  (color-theme-sanityinc-tomorrow :disabled)
-  (light-soap-theme :disabled)
-  (silkworm-theme :disabled)
-  (foggy-night-theme :disabled)
-  (apropospriate-theme :disabled)
-  (gotham-theme :disabled)
-  (purple-haze-theme :disabled)
-  (nubox :disabled)
-  (doom-themes :disabled)
-  (material-theme :disabled)
-  ;;spacemacs-theme
-  ;; gruvbox
-  (dracula-theme :disabled)
-  (kaolin-themes :disabled)
-  (srcery-theme :disabled)
-  (birds-of-paradise-plus-theme :disabled)
+ (soft-morning-theme :defer)
+ (omtose-phellack-theme :defer)
+ (color-theme-sanityinc-tomorrow :defer)
+ (light-soap-theme :defer)
+ (silkworm-theme :defer)
+ (foggy-night-theme :defer)
+ (apropospriate-theme :defer)
+ (gotham-theme :defer)
+ (purple-haze-theme :defer)
+ (gruvbox-theme :defer)
+ (doom-themes
+  :defer
+  :config (progn
+            (doom-themes-visual-bell-config)
+            (doom-themes-org-config)))
+ (material-theme :defer)
+ (spacemacs-theme :defer)
+ (dracula-theme :defer)
+ (kaolin-themes :defer)
+ (srcery-theme :defer)
+ (birds-of-paradise-plus-theme :defer)
 )
 
 ;;There has to be some sort of better way of doing this. 😅 The autoloads weren't
@@ -194,9 +199,10 @@ Lists in `LISTS' that are not lists will be `listified'."
 ;;  the night variant
 (setq e454iel-theme-pairs '((soft-morning . omtose-softer)
                             (silkworm . foggy-night)
-                            (nubox-light . nubox-dark)
+                            (gruvbox-light-hard . gruvbox-dark-hard)
                             (kaolin-light . kaolin-eclipse)
                             (doom-one . doom-one)
+                            (doom-fairy-floss . doom-laserwave)
                             (doom-opera-light . doom-opera)
                             (birds-of-paradise-plus . dracula)
                             (dracula . purple-haze)
@@ -283,7 +289,7 @@ without confirmation."
    e454iel-theme-pairs))
 
 ;; load default theme
-(e454iel-jump-to-theme 'birds-of-paradise-plus)
+(e454iel-jump-to-theme 'gruvbox-light-hard)
 
 
 ;; fonts
@@ -387,18 +393,24 @@ This makes for easier reading of larger, denser bodies of text."
 
 ;; Check out "spacemacs/core/core-spacemacs.el:121"
 (message "Setting the font..."
-         (e454iel-jump-to-font "Fantasque Sans"))
+         (e454iel-jump-to-font "Fantasque Sans Mono"))
 
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
   :demand
+
+  ;; Required by evil-collection
+  :init (setq evil-want-keybinding nil)
+
   :config (progn
             (evil-mode t)
             (use-package evil-escape :config (evil-escape-mode t))
             (use-package evil-matchit :config (global-evil-matchit-mode t))
             (use-package fringe-helper
               :config (use-package evil-fringe-mark
-                        :config (global-evil-fringe-mark-mode t)))))
+                        :config (global-evil-fringe-mark-mode t)))
+            ;; A collection of Evil keybindings for various packages
+            (use-package evil-collection)))
 
 (use-package general
   :demand t
@@ -497,7 +509,7 @@ This makes for easier reading of larger, denser bodies of text."
      "t" '(:ignore t :which-key "Toggles/Settings")
      ;; themes
      "tt" '(:ignore t :which-key "Themes")
-     "tts" 'load-theme
+     "tts" 'counsel-load-theme
      "ttn" 'e454iel-cycle-theme-pairs
      "ttt" 'e454iel-toggle-use-day-theme
      ;; fonts
@@ -514,6 +526,7 @@ This makes for easier reading of larger, denser bodies of text."
      "a" '(:ignore t :which-key "Applications")
      "ap" 'paradox-list-packages
      "ag" '(:ignore t :which-key "Games")
+     "am" '(:ignore t :which-key "Music")
      
      "h" '(help-command :which-key "Help"))))
 
@@ -538,7 +551,6 @@ This makes for easier reading of larger, denser bodies of text."
   :config (which-key-mode t))
 
 (use-package info
-  :ensure nil
   :config (progn
             (general-define-key
              :states '(normal motion)
@@ -546,7 +558,6 @@ This makes for easier reading of larger, denser bodies of text."
               "<SPC>" 'e454iel-main-menu-prefix)))
 
 (use-package ibuffer
-  :ensure nil
   :config (progn
             (general-define-key
              ;;:states '(normal motion)
@@ -554,27 +565,29 @@ This makes for easier reading of larger, denser bodies of text."
               "<SPC>" 'e454iel-main-menu-prefix)))
 
 (use-package grep
-  :ensure nil
   :config (general-define-key
            :states '(normal motion)
            :keymaps 'grep-mode-map
             "<SPC>" 'e454iel-main-menu-prefix))
 
 (use-package dired
-  :ensure nil  ; This is a built in file, so we need to override
-               ; ensure so that package.el doesn't try to download a
-               ; package called dired from the repos.
-  :init (use-package dired-x :ensure nil)
+  :straight (dired :type built-in)
+  :init (use-package dired-x
+          :straight (dired-x :type built-in))
   :config (progn
+            (evil-collection-init 'dired)
             (general-define-key
+             :states 'normal
              :keymaps 'dired-mode-map
               "<SPC>" 'e454iel-main-menu-prefix)
             (e454iel-main-menu
               "fj" 'dired-jump)
             (add-hook 'dired-mode-hook 'auto-revert-mode)
             (use-package dired-sidebar
-              :config (e454iel-main-menu
-                        "fS" 'dired-sidebar-toggle-sidebar))))
+              :config (progn
+                        (evil-collection-init 'dired-sidebar)
+                        (e454iel-main-menu
+                          "fS" 'dired-sidebar-toggle-sidebar)))))
 
 ;; give parenthesis matching colors based upon depth
 (use-package rainbow-delimiters
@@ -586,7 +599,7 @@ This makes for easier reading of larger, denser bodies of text."
 (use-package hydra)
 
 (use-package kurecolor
-  ;;(defhydra hydra-awoo nil "awoo" ("a" (print "awoo")))
+  :disabled
   :config (progn
             (defhydra e454iel-kurecolor-menu nil
               "
@@ -595,18 +608,18 @@ _h_ue _s_aturation _b_rightness"
               ("h" (e454iel-kurecolor-menu-hue/body) :exit t)
               ("s" (e454iel-kurecolor-menu-saturation/body) :exit t)
               ("b" (e454iel-kurecolor-menu-brightness/body) :exit t))
-
-            (defhydra e454iel-kurecolor-menu-hue nil
-              "
+  
+          (defhydra e454iel-kurecolor-menu-hue nil
+            "
 Adjust hue:
 _-_increase _=_decrease"
-              ("-" #'kurecolor-increase-hue-by-step)
-              ("=" #'kurecolor-decrease-hue-by-step)
-              ("h" (e454iel-kurecolor-menu-hue/body) :exit t)
-              ("s" (e454iel-kurecolor-menu-saturation/body) :exit t)
-              ("b" (e454iel-kurecolor-menu-brightness/body) :exit t))
-
-            (defhydra e454iel-kurecolor-menu-saturation nil
+            ("-" #'kurecolor-increase-hue-by-step)
+            ("=" #'kurecolor-decrease-hue-by-step)
+            ("h" (e454iel-kurecolor-menu-hue/body) :exit t)
+            ("s" (e454iel-kurecolor-menu-saturation/body) :exit t)
+            ("b" (e454iel-kurecolor-menu-brightness/body) :exit t))
+  
+          (defhydra e454iel-kurecolor-menu-saturation nil
               "
 Adjust saturation:
 _-_increase _=_decrease"
@@ -628,17 +641,6 @@ _-_increase _=_decrease"
 
             (e454iel-main-menu
               "mc" 'e454iel-kurecolor-menu/body)))
-
-;; for all of your Java/Scala needs
-(use-package ensime
-  :pin melpa-stable
-  :config (e454iel-major-mode-menu
-            :major-modes 'ensime-mode-map
-            :keymaps 'ensime-mode-map
-            ;;"" '(nil :which-key "Ensime Mode Commands")
-            "i" 'ensime-import-type-at-point
-            "s" 'ensime-sbt
-            "r" 'ensime-sbt-do-run))
 
 ;; auto completion (needs tweaking)
 (use-package company
@@ -780,10 +782,10 @@ unsorted."
 ;;  some reason. I might want to submit a patch for that, depending upon what
 ;;  the functions look like.
 (use-package org
-  :pin gnu  ; use the version from the gnu repo
+  :straight (org :type built-in)
   :init (progn
           (use-package ox-latex
-            :ensure nil)
+            :straight (ox-latex :type built-in))
           (use-package evil-org
             :init (use-package evil-leader))
           (use-package org-pomodoro)
@@ -834,9 +836,13 @@ unsorted."
 
             (setf org-babel-load-languages
                   '((emacs-lisp . t)
-                    (python . t)))
+                    (python . t)
+                    (shell . t)))
 
-            (use-package ob-python :ensure nil)
+            (use-package ob-python
+              :straight (ob-python :type built-in))
+            (use-package ob-shell
+              :straight (ob-shell :type built-in))
 
             (use-package calfw
               :config (use-package calfw-org))
@@ -844,6 +850,21 @@ unsorted."
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1)))
             ;;(add-hook 'org-mode-hook 'turn-on-stripe-table-mode)
             (add-hook 'org-mode-hook (lambda() (auto-fill-mode 1)))
+
+            ;; Undo resizing the headers based on the current theme
+            ;; https://emacs.stackexchange.com/questions/22584/disable-enlarged-org-mode-header-appearance
+            (add-hook
+             'org-mode-hook
+             (lambda ()
+               "Stop the org-level headers from increasing in height relative to the other text."
+               nil
+               (dolist (face '(org-level-1
+                               org-level-2
+                               org-level-3
+                               org-level-4
+                               org-level-5))
+                 (set-face-attribute face nil :weight 'semi-bold :height 1.0))))
+
             (setq org-src-fontify-natively t
                   org-list-allow-alphabetical t
                   org-image-actual-width nil
@@ -878,6 +899,11 @@ unsorted."
              :states 'insert
               "RET" 'newline)
 
+            (general-define-key
+             :keymaps 'org-mode-map
+             :states 'normal
+              "t" 'org-todo)
+
             (e454iel-major-mode-menu
              :keymaps 'org-mode-map
               ;;"" '(nil :which-key "Org Mode Commands")
@@ -904,6 +930,10 @@ unsorted."
 ;; out, and the cursor blinks around the page (which is annoying).
 (use-package pdf-tools
   :config (progn
+
+            (use-package pdf-view :straight (pdf-view :type built-in))
+            (use-package pdf-occur :straight (pdf-occur :type built-in))
+
             (pdf-tools-install)
             ;; this automatically reloads the pdf when it changes (if I'm
             ;;  compiling latex for example)
@@ -967,14 +997,13 @@ unsorted."
               ;; selection
               "<down-mouse-1>" 'pdf-view-mouse-set-region
               "y" 'pdf-view-kill-ring-save))
-  :defer t
   :mode (("\\.pdf\\'" . pdf-view-mode)))
 
 ;; I might want to add more from the latex spacemacs layer. Folding in
 ;; particular sounds interesting.
 (use-package tex
   :defer t
-  :ensure auctex
+  :straight (auctex)
   :config (progn
             ;; autocompletion for latex related commands
             (use-package company-auctex
@@ -992,7 +1021,15 @@ unsorted."
             (e454iel-major-mode-menu
              :keymaps 'LaTeX-mode-map
              :major-modes 'LaTeX-mode-map
-              "c" 'TeX-command-master)))
+              "c" 'TeX-command-master)
+
+            (push '("LatexMk PVC"
+                    "latexmk %(-PDF)%S%(mode) %(file-line-error) %(extraopts) -pvc %t"
+                    TeX-run-latexmk nil
+                    (plain-tex-mode latex-mode doctex-mode)
+                    :help "Run LatexMk with PVC for continuous compilation")
+
+                  TeX-command-list)))
 
 ;; The fact that this is strewn haphazardly here goes to show that
 ;; this needs some sort of categorical organization.
@@ -1030,14 +1067,13 @@ unsorted."
   (dotimes (i 26) (insert-char (+ ?a i))))
 
 (use-package ediff
-  :ensure nil
   :config (setq ediff-window-setup-function
   'ediff-setup-windows-plain)) ; makes it so that ediff uses one
                                ;  window instead of opening up a second
                                         ;  one
 
 (use-package elisp-mode
-  :ensure nil
+  :straight (elisp-mode :type built-in)
   :init (progn
 
           ;; Here we redefine the lisp-indent-function in order to indent lists starting
@@ -1134,18 +1170,21 @@ Lisp function does not specify a special indentation."
 ;; https://www.reddit.com/r/emacs/comments/7fa1fb/how_many_of_you_guys_use_emacs_for_irc_whats_your/
 ;; https://www.reddit.com/r/emacs/comments/8ml6na/tip_how_to_make_erc_fun_to_use/
 (use-package erc
-  :ensure nil
+  :init (progn
+          (if e454iel-home-computer-p
+              (progn
+                (setq erc-log-channels-directory (concat user-emacs-directory "erc-logs/"))
+                (unless (file-exists-p erc-log-channels-directory)
+                  (make-directory erc-log-channels-directory))
+                (setq erc-save-buffer-on-part t
+                      erc-save-queries-on-quit t
+                      erc-log-write-after-send t
+                      erc-log-write-after-insert t
+                      erc-log-insert-log-on-open t
+                      ;; disable listing ERC channels in the mode line
+                      erc-track-position-in-mode-line nil))))
+  
   :config (progn
-            (if e454iel-home-computer-p
-                (progn
-                  (setq erc-log-channels-directory (concat user-emacs-directory "erc-logs/"))
-                  (unless (file-exists-p erc-log-channels-directory)
-                    (make-directory erc-log-channels-directory)))
-              (setq erc-save-buffer-on-part t)
-              (setq erc-log-insert-log-on-open nil)
-              (erc-track-mode 0) ; disable listing ERC channels in the mode line
-              )
-
             (use-package erc-colorize
               :config (erc-colorize-mode t))
 
@@ -1158,7 +1197,6 @@ Lisp function does not specify a special indentation."
             (e454iel-main-menu "aE" 'erc)))
 
 (use-package bubbles
-  :ensure nil
   :config (progn
             (setq bubbles-game-theme 'medium)
             (general-define-key
@@ -1172,7 +1210,6 @@ Lisp function does not specify a special indentation."
             (e454iel-main-menu "agb" 'bubbles)))
 
 (use-package tetris
-  :ensure nil
   :config (e454iel-main-menu "agt" 'tetris))
 
 (use-package mines
@@ -1197,9 +1234,11 @@ Lisp function does not specify a special indentation."
 
 ;; Email!
 (use-package mu4e
-  :ensure nil
+  :straight (mu4e :host github :repo "emacsmirror/mu4e"
+                  :files (:defaults "mu4e/*.el"))
   :config (progn
-            (use-package evil-mu4e)
+            (evil-collection-init 'mu4e)
+            (evil-collection-init 'mu4e-conversation)
             (setq mu4e-msg2pdf "/usr/bin/msg2pdf")
             (general-define-key
              :keymaps 'mu4e-view-mode-map
@@ -1214,9 +1253,6 @@ Lisp function does not specify a special indentation."
 ;;  about this from stumpwm.
 (use-package slime
   :init (progn
-          (use-package slime-company :demand)
-          (slime-setup '(slime-fancy slime-company))
-
           ;; This was taken from the Lispy package by Abo-Abo
           ;; Can I use `slime-rex' to get around needing to sleep?
           (defun e454iel-create-slime-connection-in-background (host
@@ -1256,6 +1292,9 @@ Lisp function does not specify a special indentation."
             (setq inferior-lisp-program "sbcl")
             ;; I'm certain that there is a better way to do this.
             (load (expand-file-name "~/quicklisp/slime-helper.el") t)
+
+            (use-package slime-company :demand)
+            (slime-setup '(slime-fancy slime-company))
 
             ;; https://stackoverflow.com/questions/22456086/how-to-run-common-lisp-code-with-slime-in-emacs-lisp
             ;; This is taken from pieces of the lispy package.
@@ -1312,7 +1351,6 @@ Lisp function does not specify a special indentation."
 ;;  for Camel Case words?
 ;;  http://blog.binchen.org/posts/what-s-the-best-spell-check-set-up-in-emacs.html
 (use-package flyspell
-  :ensure nil
   :init (progn
           (setq ispell-program-name "hunspell")
           (setq ispell-dictionary "american")
@@ -1322,7 +1360,7 @@ Lisp function does not specify a special indentation."
             :config (progn
                       (use-package flyspell-correct-ivy)
 
-                      (e454iel-main-menu "ms" 'flyspell-correct-word-generic))))
+                      (e454iel-main-menu "ms" 'flyspell-correct-at-point))))
 
 ;; TODO: We can keep "Y" for copying a whole line at a time, and then put the
 ;;  binding to copy the current page's URL in the major-mode menu
@@ -1331,7 +1369,6 @@ Lisp function does not specify a special indentation."
 ;;  then the name of the page. Like "<1>DuckDuckGo"
 ;; TODO: Middle mouse should open a page in a new buffer in the background
 (use-package eww
-  :ensure nil
   :functions (eww-suggest-uris eww-current-url)
   :init (progn
           (defun eww-open-in-new-buffer (url)
@@ -1415,7 +1452,25 @@ Lisp function does not specify a special indentation."
               "g8" 'eyebrowse-switch-to-window-config-8
               "g9" 'eyebrowse-switch-to-window-config-9
               
-              "gc" 'eyebrowse-close-window-config-prompt)))
+              "gc" 'eyebrowse-close-window-config-prompt)
+
+            ;; Prevents an evil keybinding that overrides our switching
+            ;;  workspaces using Control 
+            (general-define-key
+             :keymaps 'evil-motion-state-map
+              "C-6" 'nil)
+
+            (general-define-key
+              "C-0" 'eyebrowse-switch-to-window-config-0
+              "C-1" 'eyebrowse-switch-to-window-config-1
+              "C-2" 'eyebrowse-switch-to-window-config-2
+              "C-3" 'eyebrowse-switch-to-window-config-3
+              "C-4" 'eyebrowse-switch-to-window-config-4
+              "C-5" 'eyebrowse-switch-to-window-config-5
+              "C-6" 'eyebrowse-switch-to-window-config-6
+              "C-7" 'eyebrowse-switch-to-window-config-7
+              "C-8" 'eyebrowse-switch-to-window-config-8
+              "C-9" 'eyebrowse-switch-to-window-config-9)))
 
 ;; improved list-packages manager
 ;; what is paradox-execute-asynchronously?
@@ -1492,7 +1547,6 @@ Lisp function does not specify a special indentation."
 ;;(use-package doremi-frm)
 
 (use-package time
-  :ensure nil
   :config (progn
             (setq display-time-day-and-date t)
             (setq e454iel-holiday-symbol "π")
@@ -1511,7 +1565,6 @@ Lisp function does not specify a special indentation."
 
 ;; this is where C-c to save and C-k to cancel come from. Rebind these.
 (use-package with-editor
-  :ensure nil
   :config (e454iel-major-mode-menu
            :keymaps 'with-editor-mode-map
            :major-modes 'with-editor-mode-map
@@ -1522,7 +1575,6 @@ Lisp function does not specify a special indentation."
 ;; I don't know what this is for entirely, but customize turned it on and it
 ;;  looks interesting
 (use-package midnight
-  :ensure nil
   :demand
   :config (midnight-mode t))
 
@@ -1548,7 +1600,7 @@ Lisp function does not specify a special indentation."
                         ))))
 
 (use-package comint
-  :ensure nil
+  :straight (comint :type built-in)
   :config (general-define-key
            :states 'insert
             :keymaps 'comint-mode-map
@@ -1598,15 +1650,15 @@ Lisp function does not specify a special indentation."
 ;; term-manager, term-projectile
 
 (use-package counsel-spotify
-  :config (e454iel-main-menu "am" '(nil :which-key "Spotify (Music)")
-                                        "amp" 'counsel-spotify-toggle-play-pause
-                                        "amb" 'counsel-spotify-previous
-                                        "amf" 'counsel-spotify-next
-                                        "amt" 'counsel-spotify-search-track
-                                        "aml" 'counsel-spotify-search-album
-                                        "amr" 'counsel-spotify-search-artist))
+  :config (e454iel-main-menu "ams" '(nil :which-key "Spotify")
+                                        "amsp" 'counsel-spotify-toggle-play-pause
+                                        "amsb" 'counsel-spotify-previous
+                                        "amsf" 'counsel-spotify-next
+                                        "amst" 'counsel-spotify-search-track
+                                        "amsl" 'counsel-spotify-search-album
+                                        "amsr" 'counsel-spotify-search-artist))
 (use-package tramp
-  :ensure nil
+  :straight (tramp :type built-in)
   :config (progn
             ;; This prevents from tramp from hanging
             (progn
@@ -1614,9 +1666,9 @@ Lisp function does not specify a special indentation."
               (add-hook 'find-file-hook
                         (lambda ()
                           (when (file-remote-p default-directory)
-                            (setq-local projectile-mode-line "Projectile")))))))
+                            (setq-local projectile-mode-line "Projectile"))))))
 
-(use-package tramp-term)
+  (use-package tramp-term))
 
 (use-package irony
   :defer t
@@ -1651,10 +1703,12 @@ Lisp function does not specify a special indentation."
             ;;(add-to-list 'emms-player-list 'emms-player-mpv)))
 
 (use-package python
-  :ensure nil
   :commands (python-mode run-python)
   :mode ("\\.pyw?\\'" . python-mode)
   :interpreter ("python[0-9.]*" . python-mode)
+  :init (progn
+          ;; Needed before `run-python' can load
+          (use-package tramp))
   :config (progn
             (use-package anaconda-mode
               :config (progn
@@ -1863,7 +1917,8 @@ Lisp function does not specify a special indentation."
           ;;(add-hook 'mingus-browse-hook (lambda () (evil-emacs-state nil)))
           ;;(add-hook 'mingus-playlist-hooks (lambda () (evil-emacs-state nil)))
           ;;(add-hook 'mingus-help-hook (lambda () (evil-emacs-state nil)))))
-          ))
+          )
+  :config (e454iel-main-menu "amm" 'mingus))
 
 (use-package forecast
   :config (progn
@@ -1874,6 +1929,102 @@ Lisp function does not specify a special indentation."
 (use-package vterm
   :config (evil-set-initial-state 'vterm-mode 'emacs))
   ;;:config (vterm-install))
+
+;; File uploads to 0x0.st!
+(use-package 0x0)
+
+;; I'm kinda confused on what this is, but the screenshot makes it look cool
+;;  and helpful? https://github.com/mamapanda/evil-owl
+(use-package evil-owl
+  :config (progn 
+            (setq evil-owl-max-string-length 80)
+            (add-to-list 'display-buffer-alist
+                         '("*evil-owl*"
+                           (display-buffer-in-side-window)
+                           (side . bottom)
+                           (window-height . 0.3)))
+            (evil-owl-mode)))
+
+(use-package org-trello)
+
+(use-package scala-mode
+  :mode "\\.s\\(cala\\|bt\\)$")
+
+(use-package sbt-mode
+  :commands sbt-start sbt-command
+  :config
+  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map)
+  ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+  (setq sbt:program-options '("-Dsbt.supershell=false")))
+
+(use-package treemacs)
+
+(use-package lsp-mode
+  :hook
+  (scala-mode . lsp)
+  (lsp-mode . lsp-lens-mode)
+  (java-mode . lsp)
+
+  :init
+  (use-package scala-mode)
+
+  :config
+  (progn
+    (setq lsp-prefer-flymake nil)
+
+    ;; Enable nice rendering of documentation on hover
+    (use-package lsp-ui)
+
+    (use-package company-lsp)
+
+    ;; Use the Tree View Protocol for viewing the project structure and triggering compilation
+    (use-package lsp-treemacs
+      :config (progn
+                ;; This hack is to get a file to load to make sure the function
+                ;; lsp-metals-treeview-enable is available when we need it
+                (use-package lsp-metals-treeview
+                  :straight (lsp-metals-treeview :type built-in)
+                  :config (progn
+                            (lsp-metals-treeview-enable t)
+                            (setq lsp-metals-treeview-show-when-views-received t))))
+
+      :init (use-package treemacs))
+
+    ;; Make Metals work with java
+;;    (lsp-register-client
+;;     (make-lsp-client :new-connection (lsp-stdio-connection 'lsp-metals--server-command)
+;;                      :major-modes '(scala-mode java-mode)
+;;                      :priority -1
+;;                      :notification-handlers (ht ("metals/executeClientCommand" #'lsp-metals--execute-client-command)
+;;                                                 ("metals/treeViewDidChange" #'ignore))
+;;                      :server-id 'metals
+;;                      :initialized-fn (lambda (workspace)
+;;                                        (with-lsp-workspace workspace
+;;                                          (lsp--set-configuration
+;;                                           (lsp-configuration-section "metals"))))))))
+    ))
+
+;; The debug adapter protocol
+(use-package dap-mode
+  :hook
+  (lsp-mode . dap-mode)
+  (lsp-mode . dap-ui-mode)
+
+  ;; Install a necessary soft dependency
+  :init (use-package posframe))
+
+;; Client for the matrix.org chat protocol
+(use-package matrix-client
+  :straight (matrix-client :host github :repo "alphapapa/matrix-client.el"
+                           :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
+
+;; Front-end for the Emacsmirror package database
+(use-package epkg)
 
 (provide 'init)
 ;;; init.el ends here
