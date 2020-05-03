@@ -102,6 +102,14 @@
 ;; Make sure our keyring doesn't get out of date
 (use-package gnu-elpa-keyring-update)
 
+
+;; Create the "emacs-config" directory for storing miscellaneous Emacs
+;;  configuration files
+(defvar e454iel-emacs-config-directory)
+(setq e454iel-emacs-config-directory (concat user-emacs-directory "config/"))
+(unless (file-exists-p e454iel-emacs-config-directory)
+  (make-directory e454iel-emacs-config-directory))
+
 ;; load secret settings (location, passwords, etc)
 (add-to-list 'load-path (concat user-emacs-directory "config/"))
 (load "secret.el" t)
