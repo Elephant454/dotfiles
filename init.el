@@ -121,7 +121,10 @@
 ;; Decide if this is a home computer
 (defvar e454iel-home-computer-p
   (find (system-name)
-        (list "7752.Arch.Matthew" "7548.Arch.Matthew" "7548.Guix.Matthew")
+        (list "7752.Arch.Matthew"
+              "7752.Guix.Matthew"
+              "7548.Arch.Matthew"
+              "7548.Guix.Matthew")
         :test #'string-equal))
 
 (defvar e454iel-documents-time-period "Spring")
