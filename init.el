@@ -2064,5 +2064,43 @@ Lisp function does not specify a special indentation."
     (setq phps-mode-async-process t)
     (setq phps-mode-async-process-using-async-el t)))
 
+;; This page lists all the customizations: https://depp.brause.cc/nov.el/
+(use-package nov
+  :mode (("\\.epub\\'" . nov-mode))
+  :config
+  (progn
+    ;; Change the font face
+    (add-hook 'nov-mode-hook
+              (lambda ()
+                (face-remap-add-relative
+                 'variable-pitch
+                 :family "opendyslexic"
+                 :height 2.3)))
+
+    (setq nov-text-width 120)
+
+    (evil-set-initial-state 'nov-mode 'normal)
+
+    (general-define-key
+     :keymaps 'nov-mode-map
+     :states 'normal
+      "g" 'nov-render-document
+      "n" 'nov-next-document
+      "(point)" 'nov-previous-document
+      "t" 'nov-goto-toc
+      "l" 'nov-history-back
+      "r" 'nov-history-forward
+      "RET" 'nov-browse-url
+      "c" 'nov-copy-url
+      ;;"<follow-link>" 'mouse-face
+      ;;"<mouse-2>" 'nov-browse-url
+      "TAB" 'shr-next-link
+      "M-TAB" 'shr-previous-link
+      "<backtab>" 'shr-previous-link
+      ;; Toggle normal emacs font rendering
+      "f" (lambda ()
+            (interactive)
+            (setq nov-variable-pitch (not nov-variable-pitch))
+            (nov-render-document)))))
 (provide 'init)
 ;;; init.el ends here
