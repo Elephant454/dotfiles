@@ -310,7 +310,7 @@ without confirmation."
 ;; Add fallback black and white rendering of emojis
 (set-fontset-font t 'unicode "Symbola" nil 'append)
 
-;; Mark these as variables properly. Create docstrings for these later.
+;; TODO: Create docstrings for these
 (defvar e454iel-font-pairs)
 (defvar e454iel-current-font-pairs)
 (defvar e454iel-font-scale)
