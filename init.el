@@ -2054,5 +2054,15 @@ Lisp function does not specify a special indentation."
 ;; Front-end for the Emacsmirror package database
 (use-package epkg)
 
+(use-package phps-mode
+    :after flycheck
+    :ensure t
+    :mode ("\\.php\\'" "\\.phtml\\'")
+    :config
+  (progn
+    (phps-mode-flycheck-setup)
+    (setq phps-mode-async-process t)
+    (setq phps-mode-async-process-using-async-el t)))
+
 (provide 'init)
 ;;; init.el ends here
