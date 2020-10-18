@@ -310,6 +310,10 @@ without confirmation."
 ;; Add fallback black and white rendering of emojis
 (set-fontset-font t 'unicode "Symbola" nil 'append)
 
+
+;; Add spacing between the lines to make text easier to read
+(setq-default line-spacing 4)
+
 ;; TODO: Create docstrings for these
 (defvar e454iel-font-pairs)
 (defvar e454iel-current-font-pairs)
