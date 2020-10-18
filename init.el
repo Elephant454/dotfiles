@@ -325,8 +325,10 @@ without confirmation."
 ;;  instead?
 (setq e454iel-font-pairs '(("Inconsolata" . 14)
                            ("Dina" . 14)
+                           ("Tamzen" . 14)
+                           ("Hermit" . 14)
                            ("monofur" . 16)
-                           ("Fantasque Sans Mono" . 14)
+                           ("Fantasque Sans Mono" . 16)
                            ("Source Code Pro" . 14)
                            ("Camingo Code" . 14)
                            ("Monoid" . 12)))
