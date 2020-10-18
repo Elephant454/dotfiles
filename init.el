@@ -302,7 +302,7 @@ without confirmation."
    e454iel-theme-pairs))
 
 ;; load default theme
-(e454iel-jump-to-theme 'gruvbox-light-hard)
+(e454iel-jump-to-theme 'soft-morning)
 
 
 ;; fonts
