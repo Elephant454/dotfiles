@@ -307,6 +307,7 @@ without confirmation."
 
 ;; fonts
 
+;; Add fallback black and white rendering of emojis
 (set-fontset-font t 'unicode "Symbola" nil 'append)
 
 ;; Mark these as variables properly. Create docstrings for these later.
