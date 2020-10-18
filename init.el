@@ -607,7 +607,11 @@ This makes for easier reading of larger, denser bodies of text."
               :config (progn
                         (evil-collection-init 'dired-sidebar)
                         (e454iel-main-menu
-                          "fS" 'dired-sidebar-toggle-sidebar)))))
+                          "fS" 'dired-sidebar-toggle-sidebar)))
+            (use-package dired+
+              :config
+              (progn
+                (setq diredp-image-preview-in-tooltip nil)))))
 
 ;; give parenthesis matching colors based upon depth
 (use-package rainbow-delimiters
