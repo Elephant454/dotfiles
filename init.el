@@ -1399,10 +1399,11 @@ Lisp function does not specify a special indentation."
                     (prompt (concat "Enter URL or keywords"
                                     (if uris (format " (default %s)" (car uris)) "")
                                     ": ")))
-               (list (read-string prompt nil nil uris)))
+               (list (read-string prompt nil nil uris))))
 
-             (use-package eww-lnum))
-            (eww-browse-url url t)))
+            (eww-browse-url url t))
+
+          (use-package eww-lnum))
   :config (progn
             ;;(setq eww-search-prefix "https://www.google.com/search?q=")
             (add-hook 'eww-after-render-hook
