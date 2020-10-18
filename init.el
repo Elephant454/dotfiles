@@ -213,7 +213,7 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
 (setq e454iel-theme-pairs '((soft-morning . omtose-softer)
                             (silkworm . foggy-night)
                             (gruvbox-light-hard . gruvbox-dark-hard)
-                            (kaolin-light . kaolin-eclipse)
+                            (kaolin-light . kaolin-dark)
                             (doom-one . doom-one)
                             (doom-fairy-floss . doom-laserwave)
                             (doom-opera-light . doom-opera)
