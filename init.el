@@ -902,6 +902,8 @@ unsorted."
                     (find-file (concat e454iel-documents-dir "/events.org")))
              "od" (lambda() (interactive)
                     (find-file (concat org-directory "/derp.org")))
+             "oo" (lambda() (interactive)
+                    (find-file org-directory))
              "oj" 'org-journal-new-entry
              "o C-c" 'org-capture
              "o c" 'org-clock-in-last
