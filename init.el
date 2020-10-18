@@ -2102,5 +2102,32 @@ Lisp function does not specify a special indentation."
             (interactive)
             (setq nov-variable-pitch (not nov-variable-pitch))
             (nov-render-document)))))
+
+(use-package bookmark+)
+
+;; Gopher client
+(use-package elpher)
+
+;; Nyan cat in the modeline
+(use-package nyan-mode
+  :config (nyan-mode))
+
+;; Parrot in the modeline
+(use-package parrot
+  :disabled
+  :config
+  (progn
+    (parrot-mode)
+    (setq parrot-num-rotations nil)))
+
+;; Internet song browser, player, and recommendation engine
+(use-package vuiet)
+
+;; For MU* (MUD's, MUCK's, etc)
+(use-package mu)
+
+;; For IRC
+(use-package circe)
+
 (provide 'init)
 ;;; init.el ends here
