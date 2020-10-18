@@ -127,7 +127,7 @@
               "7548.Guix.Matthew")
         :test #'string-equal))
 
-(defvar e454iel-documents-time-period "Spring")
+(defvar e454iel-documents-time-period "Fall")
 (defvar e454iel-documents-dir
   (concat "~/Documents/"
           (int-to-string (nth 5 (decode-time))) ; the current year
