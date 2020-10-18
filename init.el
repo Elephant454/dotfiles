@@ -197,6 +197,8 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
  (kaolin-themes :defer)
  (srcery-theme :defer)
  (birds-of-paradise-plus-theme :defer)
+ (warm-night-theme :defer)
+ (sweet-theme :defer)
 )
 
 ;;There has to be some sort of better way of doing this. 😅 The autoloads weren't
