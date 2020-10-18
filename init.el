@@ -480,6 +480,7 @@ This makes for easier reading of larger, denser bodies of text."
      ;; file commands
      "f" '(:ignore t :which-key "File")   ; label
      "ff" 'find-file                      ; open a dialog to open a file
+     "f C-f" 'sudo-edit
      "fe" 'ediff
      
      ;; file bookmark commands
