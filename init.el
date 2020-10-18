@@ -591,6 +591,9 @@ This makes for easier reading of larger, denser bodies of text."
   :init (use-package dired-x
           :straight (dired-x :type built-in))
   :config (progn
+            ;; When we have two dired windows open, operations like "Copy" or
+            ;;  "Rename" default to the directory of the other open window
+            (setq dired-dwim-target t)
             (evil-collection-init 'dired)
             (general-define-key
              :states 'normal
