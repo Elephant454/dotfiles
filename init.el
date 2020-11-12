@@ -821,18 +821,75 @@ _-_increase _=_decrease"
                               (exwm-workspace-switch-create ,i))))
                         (number-sequence 0 9)))))
     ;; Line-editing shortcuts
+    ;;(unless (get 'exwm-input-simulation-keys 'saved-value)
+    ;;  (setq exwm-input-simulation-keys
+    ;;        '(([?\C-b] . [left])
+    ;;          ([?\C-f] . [right])
+    ;;          ([?\C-p] . [up])
+    ;;          ([?\C-n] . [down])
+    ;;          ([?\C-a] . [home])
+    ;;          ([?\C-e] . [end])
+    ;;          ([?\M-v] . [prior])
+    ;;          ([?\C-v] . [next])
+    ;;          ([?\C-d] . [delete])
+    ;;          ([?\C-k] . [S-end delete]))))
+
     (unless (get 'exwm-input-simulation-keys 'saved-value)
       (setq exwm-input-simulation-keys
-            '(([?\C-b] . [left])
-              ([?\C-f] . [right])
-              ([?\C-p] . [up])
-              ([?\C-n] . [down])
-              ([?\C-a] . [home])
-              ([?\C-e] . [end])
-              ([?\M-v] . [prior])
-              ([?\C-v] . [next])
-              ([?\C-d] . [delete])
-              ([?\C-k] . [S-end delete]))))
+            `((,(kbd "<C-s-escape>") . [escape])
+              )))
+
+    ;; This was modified from
+    ;;  https://github.com/timor/spacemacsOS/blob/master/funcs.el#L33
+    (add-hook 'evil-insert-state-entry-hook
+              (lambda ()
+                (interactive)
+                (setq exwm-input-line-mode-passthrough nil)
+                (call-interactively 'exwm-input-grab-keyboard)))
+
+    (add-hook 'evil-normal-state-entry-hook
+              (lambda ()
+                (interactive)
+                (setq exwm-input-line-mode-passthrough t)
+                (call-interactively 'exwm-input-grab-keyboard)))
+
+    (push
+     (cons (kbd "<escape>") #'evil-normal-state)
+     exwm-input-global-keys)
+
+    ;; TODO: Try commenting this out and restarting to see if this is necessary anymore
+    ;; Hack from
+    ;;  https://github.com/walseb/exwm-firefox-evil/issues/1#issuecomment-672390501
+    ;;  that allows mouse events to work correctly in line mode
+    (defun exwm-input--on-ButtonPress-line-mode (buffer button-event)
+      "Handle button events in line mode.
+BUFFER is the `exwm-mode' buffer the event was generated
+on. BUTTON-EVENT is the X event converted into an Emacs event.
+
+The return value is used as event_mode to release the original
+button event."
+      (with-current-buffer buffer
+        (let ((read-event (exwm-input--mimic-read-event button-event)))
+          (exwm--log "%s" read-event)
+          (if (and read-event
+                   (exwm-input--event-passthrough-p read-event))
+              ;; The event should be forwarded to emacs
+              (progn
+                (exwm-input--cache-event read-event)
+                (exwm-input--unread-event button-event)
+                
+                xcb:Allow:ReplayPointer)
+            ;; The event should be replayed
+            xcb:Allow:ReplayPointer))))
+
+    ;; This was adapted from SpacemacsOS again
+    (general-define-key
+     :states 'normal
+     :keymaps 'exwm-mode-map
+      "<down-mouse-1>" 'evil-insert-state
+      "<down-mouse-2>" 'evil-insert-state
+      "<down-mouse-3>" 'evil-insert-state)
+
     ;; Enable EXWM
     (exwm-enable)
     ;; Other configurations
