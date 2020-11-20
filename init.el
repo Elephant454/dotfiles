@@ -844,13 +844,13 @@ _-_increase _=_decrease"
     (add-hook 'evil-insert-state-entry-hook
               (lambda ()
                 (interactive)
-                (setq exwm-input-line-mode-passthrough nil)
+                (setq-local exwm-input-line-mode-passthrough nil)
                 (call-interactively 'exwm-input-grab-keyboard)))
 
     (add-hook 'evil-normal-state-entry-hook
               (lambda ()
                 (interactive)
-                (setq exwm-input-line-mode-passthrough t)
+                (setq-local exwm-input-line-mode-passthrough t)
                 (call-interactively 'exwm-input-grab-keyboard)))
 
     (push
