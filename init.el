@@ -865,6 +865,20 @@ _-_increase _=_decrease"
       "<down-mouse-2>" 'evil-insert-state
       "<down-mouse-3>" 'evil-insert-state)
 
+    (e454iel-major-mode-menu
+      :keymaps 'exwm-mode-map
+
+      ;; Go into insert and then char mode
+      "c" (lambda () (interactive)
+            (evil-insert-state)
+            (call-interactively 'exwm-input-release-keyboard))
+
+      ;; Toggle in and out of char mode to "refresh" (sometimes keyboard focus
+      ;;  gets stuck and I don't really know why)
+      "r" (lambda () (interactive)
+            (call-interactively 'exwm-input-release-keyboard)
+            (call-interactively 'exwm-input-grab-keyboard)))
+
     ;; Enable EXWM
     (exwm-enable)
     ;; Other configurations
