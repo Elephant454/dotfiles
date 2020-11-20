@@ -857,31 +857,6 @@ _-_increase _=_decrease"
      (cons (kbd "<escape>") #'evil-normal-state)
      exwm-input-global-keys)
 
-    ;; TODO: Try commenting this out and restarting to see if this is necessary anymore
-    ;; Hack from
-    ;;  https://github.com/walseb/exwm-firefox-evil/issues/1#issuecomment-672390501
-    ;;  that allows mouse events to work correctly in line mode
-    (defun exwm-input--on-ButtonPress-line-mode (buffer button-event)
-      "Handle button events in line mode.
-BUFFER is the `exwm-mode' buffer the event was generated
-on. BUTTON-EVENT is the X event converted into an Emacs event.
-
-The return value is used as event_mode to release the original
-button event."
-      (with-current-buffer buffer
-        (let ((read-event (exwm-input--mimic-read-event button-event)))
-          (exwm--log "%s" read-event)
-          (if (and read-event
-                   (exwm-input--event-passthrough-p read-event))
-              ;; The event should be forwarded to emacs
-              (progn
-                (exwm-input--cache-event read-event)
-                (exwm-input--unread-event button-event)
-                
-                xcb:Allow:ReplayPointer)
-            ;; The event should be replayed
-            xcb:Allow:ReplayPointer))))
-
     ;; This was adapted from SpacemacsOS again
     (general-define-key
      :states 'normal
