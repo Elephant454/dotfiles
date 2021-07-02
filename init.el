@@ -568,7 +568,10 @@ This makes for easier reading of larger, denser bodies of text."
              (if (yes-or-no-p "Really restart Emacs? ") (restart-emacs)))
      
      "a" '(:ignore t :which-key "Applications")
-     "ap" 'paradox-list-packages
+     "ap" 'epkg-list-packages
+     "aP" (lambda() (interactive) (find-file
+                                   (file-truename
+                                    "~/.emacs.d/straight/repos/melpa/")))
      "ag" '(:ignore t :which-key "Games")
      "am" '(:ignore t :which-key "Music")
      
