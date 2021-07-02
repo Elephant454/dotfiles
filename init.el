@@ -128,10 +128,11 @@
               "Desktop.Guix.Maddie")
         :test #'string-equal))
 
-(defvar e454iel-documents-time-period "Fall")
+(defvar e454iel-documents-time-period "Summer")
 (defvar e454iel-documents-dir
   (concat "~/Documents/"
-          (int-to-string (nth 5 (decode-time))) ; the current year
+          ;;(int-to-string (nth 5 (decode-time))) ; the current year
+          "2021"
           "/"
           e454iel-documents-time-period))
 
