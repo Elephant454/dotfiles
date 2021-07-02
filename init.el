@@ -1407,13 +1407,15 @@ unsorted."
   :config (progn
             (setq tea-time-sound "/usr/share/sounds/KDE-Sys-App-Positive.ogg"
                   tea-time-sound-command "mplayer")
-            ;;(add-hook 'tea-time-notification-hook (lambda() notifications-notify
-            ;;                                       :title "Tea is ready!"
-            ;;                                       :body "Your tea has finished steeping."
-            ;;                                       :sound-name "dialog-information"
-            ;;                                       :image-path
-            ;;                                       "dialog-information"
-            ;;                                       :category "transfer.complete"))))
+            (add-hook 'tea-time-notification-hook (lambda()
+                                                    (notifications-notify
+                                                     :title "Tea is ready!"
+                                                     :body "Your tea has finished steeping."
+                                                     ;;:sound-name "dialog-information"
+                                                     :sound-name "completion-sucess.oga"
+                                                     :image-path
+                                                      "dialog-information"
+                                                      :category "transfer.complete")))
             (e454iel-main-menu "at" 'tea-time)))
 
 (use-package seethru
