@@ -2391,8 +2391,15 @@ Lisp function does not specify a special indentation."
             (e454iel-main-menu "af" 'forecast)))
 
 ;; TODO: See if there are any good packages to complement this one
+;; TODO: See if I can make this package use the built-in version when I'm on
+;;  Guix and the repo version otherwise 
 (use-package vterm
-  :config (evil-set-initial-state 'vterm-mode 'emacs))
+  ;;:disabled
+  ;; I generally want this provided by the package manager, so let's not pull it from melpa
+  :straight (vterm :type built-in)
+  ;;:config (evil-set-initial-state 'vterm-mode 'emacs)
+  :config (evil-collection-init 'vterm)
+  )
   ;;:config (vterm-install))
 
 ;; File uploads to 0x0.st!
