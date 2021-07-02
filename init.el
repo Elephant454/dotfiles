@@ -1746,17 +1746,6 @@ Lisp function does not specify a special indentation."
 (use-package eww
   :functions (eww-suggest-uris eww-current-url)
   :init (progn
-          (defun eww-open-in-new-buffer (url)
-            ;;this interactive part was taken from the eww function in eww.el
-            (interactive
-             (let* ((uris (eww-suggested-uris))
-                    (prompt (concat "Enter URL or keywords"
-                                    (if uris (format " (default %s)" (car uris)) "")
-                                    ": ")))
-               (list (read-string prompt nil nil uris))))
-
-            (eww-browse-url url t))
-
           (use-package eww-lnum))
   :config (progn
             ;;(setq eww-search-prefix "https://www.google.com/search?q=")
@@ -1774,7 +1763,14 @@ Lisp function does not specify a special indentation."
               ;; do I need to do anything special for insert mode?
               ;;"i" 
               "o" 'eww
-              "O" 'eww-open-in-new-buffer
+              "O" (lambda ()
+                    "open in a new eww buffer rather than the current one"
+                    (interactive)
+                    (let
+                        ;; This is equivalent to C-u according to info's entry
+                        ;;  on "(elisp) Prefix Command Arguments"
+                        ((current-prefix-arg '(4)))
+                      (call-interactively 'eww)))
               "B" 'eww-list-buffers
               "c" 'eww-copy-page-url
               "&" 'eww-browse-with-external-browser
