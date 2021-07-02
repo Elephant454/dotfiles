@@ -424,14 +424,15 @@ This makes for easier reading of larger, denser bodies of text."
 (use-package evil
   :demand
 
-  ;; Required by evil-collection
-  :init (setq evil-want-keybinding nil)
   :init
   (progn
     ;;(custom-set-variables '(evil-undo-system 'undo-tree))
 
     ;; I need this according to evil if I want undo in non-file buffers
     ;;(add-hook 'evil-local-mode-hook 'turn-on-undo-tree-mode)
+
+    ;; Required by evil-collection
+    (setq evil-want-keybinding nil))
 
   :config (progn
             (evil-mode t)
