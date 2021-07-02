@@ -323,14 +323,9 @@ without confirmation."
 (defvar e454iel-font-scale)
 (defvar e454iel-use-dyslexic-font nil)
 
-;; there should really be a way to set the font size independently, or perhaps a
-;;  way to increase font size only if I'm on my laptop
-;;
-;; (x-list-fonts "inconsolata:size=12") allows me to get
-;;  x-logical-font-discriptors
-;;
-;; should I be using (set-frame-font "Inconsolata-16" nil t) to set the font
-;;  instead?
+;; TODO: Add error handling if I don't have an installed font, so I just skip
+;;  over it. Look at Tecosaur's config for an example
+
 (setq e454iel-font-pairs '(("Inconsolata" . 14)
                            ("Dina" . 14)
                            ("Tamzen" . 14)
