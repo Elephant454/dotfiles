@@ -2571,8 +2571,68 @@ Lisp function does not specify a special indentation."
     (parrot-mode)
     (setq parrot-num-rotations nil)))
 
-;; Internet song browser, player, and recommendation engine
-(use-package vuiet)
+;; TODO: Do that thing where this package instructs the system to install
+;;  youtube-dl and mpv as part of downloading itself (or does it only need mpv?)
+
+;; Internet song browser, music player, and recommendation engine. A replacement
+;;  for Spotify using both YouTubeDL and Last.FM
+(use-package vuiet
+  ;; TODO: I don't know why this is the case, but in order to get it working
+  ;;  right now, I need to evaluate "signal" in the mpv-start call in the stack
+  ;;  frame, (use-package mpv) until it load correctly, play a local file using
+  ;;  (call-interactively #'mpv-play), and then it works. There has to be a more
+  ;;  simple way to get this working, right?
+  ;;
+  ;;  Maybe the library isn't auto-loading right, so maybe I need to load it
+  ;;  with (load-library) as part of mpv's config attribute
+
+  :init
+  (use-package mpv
+    :config
+    (progn
+      (load-library "mpv")
+      ;; TODO: For whatever reason, it needs mpd to be started once before use.
+      ;;  This call isn't sufficient, but starting it in a shell with `shell'
+      ;;  for some reason is 
+      (start-process-shell-command "mpd" nil "mpd")))
+
+  :config
+  (progn
+    (e454iel-main-menu
+      "amvp" 'vuiet-play-pause
+      "amvt" 'vuiet-play-track-search
+      "amvL" 'vuiet-playing-track-lyrics
+      "amvl" 'vuiet-play-track-by-lyrics
+      "amvA" 'vuiet-playing-artist-info
+      "amva" 'vuiet-play-artist
+      "amv C-A" 'vuiet-play-artist-similar
+      "amvh" 'vuiet-play-loved-tracks
+      ;; TODO: Fill out this half finished function
+      "amvH" (lambda ()
+               "Verbosely heart the current track"
+               (interactive)
+               (vuiet-love-track)
+               (message (concat "Loved " (e454iel-vuiet-current-track))))
+      "amv C-H" 'vuiet-play-loved-tracks-similar
+      "amvg" 'vuiet-play-tag-similar
+      "amvG" 'vuiet-tag-info
+      "amv C-G" 'vuiet-play-playing-tags-similar
+      "amvf" 'vuiet-next
+      "amvb" 'vuiet-previous)
+
+    (defun e454iel-vuiet-current-track ()
+      "Get (or print) the currently playing track from vuiet"
+      (interactive)
+      (let ((current-track (vuiet--playing-track)))
+        (concat
+         (vuiet-track-artist current-track)
+         " - "
+         (vuiet-track-name current-track))))
+
+    ;; TODO: I need to advise this function so that it doesn't destroy the
+    ;;  mode line (including the display-time-mode and eyebrowse indicators)
+    (defun vuiet-update-mode-line (&optional position) t)
+    ))
 
 ;; For MU* (MUD's, MUCK's, etc)
 (use-package mu)
