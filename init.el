@@ -1793,8 +1793,19 @@ Lisp function does not specify a special indentation."
 
 ;; Automatically resizes images to fit the window, because why not?
 (use-package image+
+  :disabled
   :config (progn (imagex-auto-adjust-mode)
                  (imagex-global-sticky-mode)))
+
+(use-package image
+  :straight (image :type built-in)
+  :config (general-define-key
+           :keymaps 'image-mode-map
+           :states 'normal
+            "n" 'image-next-file
+            "p" 'image-previous-file
+            )
+  )
 
 ;; delightful little window popups
 (use-package popwin
