@@ -458,8 +458,8 @@ This makes for easier reading of larger, denser bodies of text."
     (general-define-key
      ;; Does it make sense for this to apply to insert/emacs states?
      :keymaps '(normal insert emacs motion)
-     "<C-right>" 'next-buffer
-     "<C-left>" 'previous-buffer)
+     "<C-left>" 'previous-buffer
+     "<C-right>" 'next-buffer)
      
     (general-create-definer e454iel-main-menu
                             :keymaps '(normal insert motion emacs)
