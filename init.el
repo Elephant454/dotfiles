@@ -2408,7 +2408,8 @@ Lisp function does not specify a special indentation."
                            (display-buffer-in-side-window)
                            (side . bottom)
                            (window-height . 0.3)))
-            (evil-owl-mode)))
+            (evil-owl-mode)
+            (diminish 'evil-owl-mode)))
 
 (use-package org-trello)
 
