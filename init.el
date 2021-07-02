@@ -46,7 +46,7 @@
  ;; Grabbing XKCDs could be done more cleanly, probably 😅
  ;; TODO: It would be super great to be able to use this with md4rd and
  ;;  github-explorer
- browse-url-generic-program "firefox"
+ browse-url-generic-program "qutebrowser"
 
  browse-url-browser-function '((".*xkcd.com/[0-9]*" . (lambda (x y) (get-xkcd-from-url x) ))
                                ("." . eww-browse-url))
