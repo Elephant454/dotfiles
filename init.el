@@ -2004,6 +2004,8 @@ Lisp function does not specify a special indentation."
 (use-package projectile
   :config (progn
             (setq projectile-enable-caching t)
+            (diminish 'global-projectile-mode)
+            (diminish 'projectile-mode)
             (use-package counsel-projectile
               :disabled
               :config (progn
