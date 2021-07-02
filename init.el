@@ -722,6 +722,9 @@ _-_increase _=_decrease"
             (use-package java-snippets)
             (yas-global-mode t)))
 
+(use-package eldoc
+  :straight (eldoc :source gnu-elpa-mirror))
+
 ;; This does what it says on the tin. It provides a function for restarting
 ;;  emacs.
 ;; TODO: Make a confirm dialog for restarting. Maybe there should be a
