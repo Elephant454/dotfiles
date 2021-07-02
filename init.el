@@ -1835,7 +1835,7 @@ Lisp function does not specify a special indentation."
               "g8" 'eyebrowse-switch-to-window-config-8
               "g9" 'eyebrowse-switch-to-window-config-9
               
-              "gc" 'eyebrowse-close-window-config-prompt)
+              "gc" 'eyebrowse-close-window-config)
 
             ;; Prevents an evil keybinding that overrides our switching
             ;;  workspaces using Control 
