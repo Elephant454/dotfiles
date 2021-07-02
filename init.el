@@ -1868,14 +1868,49 @@ Lisp function does not specify a special indentation."
             "x" 'paradox-menu-execute))
 
 (use-package doom-modeline
+  :disabled
   :config
   (progn
     (use-package all-the-icons
-      :config (all-the-icons-install-fonts))
+      ;; TODO: There needs to be some way of telling whether or not these icons
+      ;;  have been downloaded. I only want to install on the first run.
+
+      ;;:config (all-the-icons-install-fonts)
+      )
 
     (setq doom-modeline-icon t)
 
     (doom-modeline-mode)))
+
+(use-package spaceline
+  :disabled
+  :config
+  (use-package spaceline-config
+    :straight (spaceline-config :type built-in)
+    :config (spaceline-emacs-theme)))
+
+(use-package telephone-line
+  :disabled
+  :config (progn
+            ;;(telephone-line-defsegment
+            ;;  telephone-line-window-numbering
+            ;;  (list (number-to-string (eyebrowse--get 'current-slot)) "|" (window-numbering-get-number-string)))
+            (setq telephone-line-lhs
+                  '(
+                    ;;(evil   . (telephone-line-evil-tag-segment))
+                    ;;(evil   . (telephone-line-window-numbering))
+                    (evil   . (telephone-line-airline-position-segment))
+                    (accent . (telephone-line-vc-segment
+                               telephone-line-erc-modified-channels-segment
+                               telephone-line-process-segment))
+                    (nil    . (telephone-line-buffer-segment
+                               telephone-line-minor-mode-segment))))
+            (setq telephone-line-rhs
+                  '((nil    . (telephone-line-misc-info-segment))
+                    (accent . (telephone-line-major-mode-segment))
+                    ))
+  (telephone-line-mode t)))
+  
 
 ;; used to hide minor modes or give them alternative names for the modeline
 ;;
