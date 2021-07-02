@@ -1925,8 +1925,12 @@ Lisp function does not specify a special indentation."
             (diminish 'evil-org-mode)
             ;; Projectile mode did have a helpful indicator associated with it,
             ;;  though. It should be re-added to the mode-line in a nicer way.
-            (diminish 'projectile-mode)
-            (diminish 'projectile-global-mode)))
+            (diminish 'projectile-global-mode)
+            ;;(diminish 'projectile-mode)
+            (diminish 'global-evil-fringe-mark-mode)
+            (diminish 'yas-minor-mode)
+            (diminish 'eldoc-mode)
+            (diminish 'counsel-mode)))
 
 (use-package immortal-scratch)
 
