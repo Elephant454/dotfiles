@@ -2233,14 +2233,34 @@ Lisp function does not specify a special indentation."
 (use-package xkcd)
 
 (use-package guix
+  ;; This is a temporary fix while I wait for this to be merged
+  ;;:straight (guix :fork (:host gitlab :repo "john.soo/emacs-guix"))
   :config (progn
             (push "~/.config/guix/current/share/info/" Info-additional-directory-list)
-            (push "~/.guix-profile/share/info/" Info-additional-directory-list)))
+            (push "~/.guix-profile/share/info/" Info-additional-directory-list)
+
+            ;; Temporary workaround to get this all working again
+            ;; https://github.com/alezost/guix.el/issues/39
+            ;;(defun guix-buffer-p (&optional buffer)
+            ;;  (let ((buf-name (buffer-name (or buffer (current-buffer)))))
+            ;;    (not (null (or (string-match "*Guix REPL" buf-name)
+		    ;;                   (string-match "*Guix Internal REPL" buf-name))))))
+
+            ;;(defun guix-geiser--set-project (&optional _impl _prompt)
+            ;;  (when (and (eq 'guile geiser-impl--implementation)
+	        ;;             (null geiser-repl--project)
+	        ;;             (guix-buffer-p))
+            ;;    (geiser-repl--set-this-buffer-project 'guix)))
+
+            ;;(advice-add 'geiser-impl--set-buffer-implementation :after #'guix-geiser--set-project)
+  ))
 
 (use-package geiser
-  :config (progn
-            (with-eval-after-load 'geiser-guile
-              (add-to-list 'geiser-guile-load-path "~/.config/guix/latest/"))))
+  :config
+  (progn
+    (use-package geiser-guile
+      :config
+      (add-to-list 'geiser-guile-load-path "~/.config/guix/latest/"))))
 
 ;;(use-package sly
 ;;  :config (progn
