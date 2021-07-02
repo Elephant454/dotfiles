@@ -436,7 +436,11 @@ This makes for easier reading of larger, denser bodies of text."
 
   :config (progn
             (evil-mode t)
-            (use-package evil-escape :config (evil-escape-mode t))
+            (use-package evil-escape
+              :config
+              (progn
+                (setq evil-escape-unordered-key-sequence t)
+                (evil-escape-mode t)))
             (use-package evil-matchit :config (global-evil-matchit-mode t))
             (use-package fringe-helper
               :config (use-package evil-fringe-mark
