@@ -811,8 +811,11 @@ _-_increase _=_decrease"
             ;; TODO: I need to write some sort of function for looking up an arbitrary song
             ))
 
-;; just for the heck of it 
+;; TODO: I applied patches to my local copy of EXWM in order to make it play
+;;  nice with eyebrowse. See if I can apply that patch as advice in this file
+;;  instead (or if that patch has been merged yet)
 (use-package exwm
+  :if (string= (system-name) "Desktop.Guix.Maddie")
   ;;:disabled
   ;;:straight (exwm :type built-in)
   :config
@@ -824,14 +827,25 @@ _-_increase _=_decrease"
     ;;  external xrandr commands) based on the current computer (based on the
     ;;  value of the hostname)
 
+    ;; TODO: How does this correspond to the actual workspace names? Despite the
+    ;;  workspaces starting with being named "1" here, switching to workspace
+    ;;  "0" still switches to the first workspace
     (setq exwm-randr-workspace-output-plist
           '(0 "DisplayPort-1"
               1 "HDMI-A-0"
-              2 "DisplayPort-1"
-              3 "DisplayPort-1"
-              4 "DisplayPort-1"
-              5 "DisplayPort-1"))
+              ;;2 "DisplayPort-1"
+              ;;3 "DisplayPort-1"
+              ;;4 "DisplayPort-1"
+              ;;5 "DisplayPort-1"
+              ))
     (exwm-randr-enable)
+
+    (setq exwm-workspace-show-all-buffers t)  
+    (setq exwm-layout-show-all-buffers t)
+
+    ;; This one may not be the best idea for some of the less common
+    ;;  applications I use
+    (setq exwm-manage-force-tiling t)
 
     ;;(exwm-config-default)
 
@@ -840,7 +854,7 @@ _-_increase _=_decrease"
 
     ;; Set the initial workspace number.
     (unless (get 'exwm-workspace-number 'saved-value)
-      (setq exwm-workspace-number 4))
+      (setq exwm-workspace-number 2))
     ;; Make class name the buffer name
     (add-hook 'exwm-update-class-hook
               (lambda ()
@@ -863,7 +877,7 @@ _-_increase _=_decrease"
                             (lambda ()
                               (interactive)
                               (exwm-workspace-switch-create ,i))))
-                        (number-sequence 0 9)))))
+                        (number-sequence 0 1)))))
     ;; Line-editing shortcuts
     ;;(unless (get 'exwm-input-simulation-keys 'saved-value)
     ;;  (setq exwm-input-simulation-keys
@@ -885,21 +899,39 @@ _-_increase _=_decrease"
 
     ;; This was modified from
     ;;  https://github.com/timor/spacemacsOS/blob/master/funcs.el#L33
+    ;;(add-hook 'evil-insert-state-entry-hook
+    ;;          (lambda ()
+    ;;            (interactive)
+    ;;            (setq-local exwm-input-line-mode-passthrough nil)
+    ;;            (call-interactively 'exwm-input-grab-keyboard)))
+
+    ;; This sets EXWM such that every X window passes all input to Emacs when in
+    ;;  line-mode
+    (setq-default exwm-input-line-mode-passthrough t)
+
     (add-hook 'evil-insert-state-entry-hook
               (lambda ()
                 (interactive)
-                (setq-local exwm-input-line-mode-passthrough nil)
-                (call-interactively 'exwm-input-grab-keyboard)))
+                ;;(setq-local exwm-input-line-mode-passthrough nil)
+                (call-interactively 'exwm-input-release-keyboard)))
 
     (add-hook 'evil-normal-state-entry-hook
               (lambda ()
                 (interactive)
-                (setq-local exwm-input-line-mode-passthrough t)
+                ;;(setq-local exwm-input-line-mode-passthrough t)
                 (call-interactively 'exwm-input-grab-keyboard)))
 
     (push
      (cons (kbd "<escape>") #'evil-normal-state)
      exwm-input-global-keys)
+
+    ;; I want to set the default state to be insert and char-mode to prevent
+    ;;  hiccups in bindings that happen when we get knocked out of char-mode and
+    ;;  stay in insert mode (like with file-dialogs closing, for example) 
+    (evil-set-initial-state 'exwm-mode 'insert)
+    ;; This apparently sets the default input mode to char-mode (according to
+    ;;  the wiki) 
+    (setq exwm-manage-configurations '((t char-mode t)))
 
     ;; This was adapted from SpacemacsOS again
     (general-define-key
@@ -947,6 +979,9 @@ _-_increase _=_decrease"
     (start-process-shell-command "compton"
                                  nil
                                  "compton")
+    (start-process-shell-command "xsettingsd"
+                                 nil
+                                 "xsettingsd")
     (start-process-shell-command  "feh"
                                   nil
                                   "~/.fehbg")
@@ -959,6 +994,12 @@ _-_increase _=_decrease"
     (start-process-shell-command "setxkbmap"
                                  nil
                                  "setxkbmap us,gr")
+    (start-process-shell-command "map wacom tablet"
+                                 nil
+                                 (concat
+                                  "xinput map-to-output"
+                                  "\"Wacom Intuos PT S 2 Pen Pen (0x5881c411)\""
+                                  "\"DisplayPort-1\""))
     (start-process-shell-command "xrandr"
                                  nil
                                  (concat
@@ -970,6 +1011,12 @@ _-_increase _=_decrease"
                                   " --mode 2560x1440"
                                   " --rate 143.96"
                                   " --left-of HDMI-A-0"))
+    (start-process-shell-command "Set Java Nonreparenting"
+                                 nil
+                                 "export _JAVA_AWT_WM_NONREPARENTING=1")
+    (start-process-shell-command "set wname to keep Java apps happy"
+                                 nil
+                                 "export wname=LG3D")
 
     ;; Make C-SPC open the main menu anywhere
     (push
