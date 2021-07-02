@@ -2162,12 +2162,17 @@ Lisp function does not specify a special indentation."
               :disabled)))
 
 (use-package flycheck
-  :config (global-flycheck-mode t))
+  :config (progn
+            (global-flycheck-mode t)
+            (diminish 'flycheck-mode)))
 
 (use-package langtool
+  :disabled
   :config (setq langtool-java-classpath
                 "/usr/share/languagetool:/usr/share/java/languagetool/*"
                 langtool-default-language "en-US"))
+
+(use-package languagetool)
 
 (use-package wc-mode)
 
