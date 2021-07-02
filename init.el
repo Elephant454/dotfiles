@@ -1724,14 +1724,18 @@ Lisp function does not specify a special indentation."
 (use-package flyspell
   :init (progn
           (setq ispell-program-name "hunspell")
-          (setq ispell-dictionary "american")
+          ;;(setq ispell-dictionary "american")
+          (setq ispell-dictionary "en_US")
+          (use-package auto-dictionary)
           (add-hook 'text-mode-hook 'flyspell-mode)
-          (add-hook 'prog-mode-hook 'flyspell-prog-mode))
-  :config (use-package flyspell-correct
-            :config (progn
-                      (use-package flyspell-correct-ivy)
-
-                      (e454iel-main-menu "ms" 'flyspell-correct-at-point))))
+          (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+          (add-hook 'prog-mode-hook 'auto-dictionary-mode))
+  :config
+  (progn
+    (use-package flyspell-correct
+      :config (progn
+                (use-package flyspell-correct-ivy)
+                (e454iel-main-menu "ms" 'flyspell-correct-at-point)))))
 
 ;; TODO: We can keep "Y" for copying a whole line at a time, and then put the
 ;;  binding to copy the current page's URL in the major-mode menu
