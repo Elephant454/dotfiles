@@ -1137,12 +1137,14 @@ unsorted."
   (some (lambda (x) x) list))
 
 ;; org things
-;; TODO: look into org-dotemacs for organizing this file using org
+;; TODO: look into org-dotemacs for organizing my init file using org
 ;; TODO: org mode confirm for capture is different than with-editor confirm for
 ;;  some reason. I might want to submit a patch for that, depending upon what
 ;;  the functions look like.
 (use-package org
   :straight (org :type built-in)
+
+  ;; TODO: Why are all these supplementary packages in init instead of config?
   :init (progn
           (use-package ox-latex
             :straight (ox-latex :type built-in))
