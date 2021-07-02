@@ -797,17 +797,19 @@ _-_increase _=_decrease"
 ;;(quelpa '(spotify :fetcher github :repo "danielfm/spotify.el"))
 (use-package spotify)
 
-(use-package lyrics
-  :init (defun lookup-current-spotify-lyrics ()
+(use-package versuri
+  :init (defun e454-lookup-current-spotify-lyrics ()
           "Lookup lyrics for the currently playing Spotify song."
           (interactive)
           (let ((metadata (spotify-dbus-get-property
                            "org.mpris.MediaPlayer2.Player" "Metadata")))
-            (lyrics (caaadr (assoc "xesam:artist" metadata))
+            (versuri-display (caaadr (assoc "xesam:artist" metadata))
                     (caadr (assoc "xesam:title" metadata)))))
 
-  :config (e454iel-main-menu "al" 'lookup-current-spotify-lyrics
-                             "aL" 'lyrics))
+  :config (e454iel-main-menu "al" 'e454-lookup-current-spotify-lyrics
+            ;;"aL" 'lyrics))
+            ;; TODO: I need to write some sort of function for looking up an arbitrary song
+            ))
 
 ;; just for the heck of it 
 (use-package exwm
