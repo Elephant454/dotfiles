@@ -2298,6 +2298,7 @@ Lisp function does not specify a special indentation."
 (use-package emojify
   :config (progn 
             (global-emojify-mode t)
+            (global-emojify-mode-line-mode t)
             (setq emojify-emoji-set "twemoji-v2-22")
             (emojify-set-emoji-styles '(unicode))))
 
