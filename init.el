@@ -1171,7 +1171,7 @@ unsorted."
 
   :config (progn
             (defvar e454iel-extra-org-agenda-files
-              '("~/org/birthdays.org" "~/org/derp.org"))
+              '("~/org/birthdays.org" "~/org/derp.org" "~/org/holidays.org"))
 
             (defvar e454iel-documents-org-agenda-file-pattern
               "\\(.*todo.org\\|.*events.org\\|.*schedule.org\\)$")
