@@ -35,7 +35,7 @@
  ;; sentences. Look up the info page on "Sentences".
  sentence-end-double-space nil
 
- ;; set the default web browser to google-chrome
+ ;; set the default web browser to firefox
  ;;browse-url-browser-function 'browse-url-generic
  ;;browse-url-generic-program "firefox"
 
