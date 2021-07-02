@@ -708,7 +708,8 @@ _-_increase _=_decrease"
             (e454iel-main-menu
               "mc" 'e454iel-kurecolor-menu/body)))
 
-;; auto completion (needs tweaking)
+;; auto completion
+;; TODO: See what variables I may want to tweak here
 (use-package company
   :config (progn
             (setq company-idle-delay 0.1)
