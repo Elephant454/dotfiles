@@ -1604,6 +1604,7 @@ Lisp function does not specify a special indentation."
 
 ;; Email!
 (use-package mu4e
+  :disabled
   :straight (mu4e :host github :repo "emacsmirror/mu4e"
                   :files (:defaults "mu4e/*.el"))
   :config (progn
