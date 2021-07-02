@@ -124,7 +124,8 @@
         (list "7752.Arch.Matthew"
               "7752.Guix.Matthew"
               "7548.Arch.Matthew"
-              "7548.Guix.Matthew")
+              "7548.Guix.Matthew"
+              "Desktop.Guix.Maddie")
         :test #'string-equal))
 
 (defvar e454iel-documents-time-period "Fall")
