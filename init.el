@@ -996,6 +996,68 @@ _-_increase _=_decrease"
      (cons (kbd "<s-escape>") #'e454iel-jump-to-original-workspace)
      exwm-input-global-keys)
 
+    ;; https://raspberrypi.stackexchange.com/questions/752/how-do-i-prevent-the-screen-from-going-blank
+    (defun e454iel-exwm-enable-screen-off ()
+      (interactive)
+      (setq e454iel-exwm-screen-off-enabled t)
+      (start-process-shell-command "Enable screensaver"
+                                   nil
+                                   "xset s on")
+      (start-process-shell-command "Enable Energy Star features"
+                                   nil
+                                   "xset +dpms")
+      (start-process-shell-command "Enable video blanking"
+                                   nil
+                                   "xset s blank"))
+
+    (defun e454iel-exwm-disable-screen-off ()
+      (interactive)
+      (setq e454iel-exwm-screen-off-enabled nil)
+      (start-process-shell-command "Disable screensaver"
+                                   nil
+                                   "xset s off")
+      (start-process-shell-command "Disable Energy Star features"
+                                   nil
+                                   "xset -dpms")
+      (start-process-shell-command "Disable video blanking"
+                                   nil
+                                   "xset s noblank"))
+
+    (defun e454iel-exwm-toggle-screen-off ()
+      (if e454iel-exwm-screen-off-enabled
+          (e454iel-exwm-disable-screen-off)
+          (e454iel-exwm-enable-screen-off)))
+
+;;    (push
+;;     (cons (kbd "<s-0>") #'eyebrowse-switch-to-window-config-0)
+;;     exwm-input-global-keys)
+;;    (push
+;;     (cons (kbd "<s-1>") #'eyebrowse-switch-to-window-config-1)
+;;     exwm-input-global-keys)
+;;    (push
+;;     (cons (kbd "<s-2>") #'eyebrowse-switch-to-window-config-2)
+;;     exwm-input-global-keys)
+;;    (push
+;;     (cons (kbd "<s-3>") #'eyebrowse-switch-to-window-config-3)
+;;     exwm-input-global-keys)
+;;    (push
+;;     (cons (kbd "<s-4>") #'eyebrowse-switch-to-window-config-4)
+;;     exwm-input-global-keys)
+;;    (push
+;;     (cons (kbd "<s-5>") #'eyebrowse-switch-to-window-config-5)
+;;     exwm-input-global-keys)
+;;    (push
+;;     (cons (kbd "<s-6>") #'eyebrowse-switch-to-window-config-6)
+;;     exwm-input-global-keys)
+;;    (push
+;;     (cons (kbd "<s-7>") #'eyebrowse-switch-to-window-config-7)
+;;     exwm-input-global-keys)
+;;    (push
+;;     (cons (kbd "<s-8>") #'eyebrowse-switch-to-window-config-8)
+;;     exwm-input-global-keys)
+;;    (push
+;;     (cons (kbd "<s-9>") #'eyebrowse-switch-to-window-config-9)
+;;     exwm-input-global-keys)
     ))
 
 (use-package dmenu
