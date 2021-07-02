@@ -526,6 +526,8 @@ This makes for easier reading of larger, denser bodies of text."
      ;; Shells
      "s" '(:ignore t :which-key "Shells")
      "ss" 'shell                          ; open a shell
+     "se" 'eshell
+     "si" 'ielm
      "sa" 'ansi-term
      "sp" 'run-python
      "sg" 'run-geiser
