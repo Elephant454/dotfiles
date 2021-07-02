@@ -2232,8 +2232,6 @@ Lisp function does not specify a special indentation."
 
 (use-package xkcd)
 
-(use-package md4rd)
-
 (use-package guix
   :config (progn
             (push "~/.config/guix/current/share/info/" Info-additional-directory-list)
