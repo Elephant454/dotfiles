@@ -557,6 +557,7 @@ This makes for easier reading of larger, denser bodies of text."
      "ttt" 'e454iel-toggle-use-day-theme
      ;; fonts
      "tf" '(:ignore t :which-key "Fonts")
+     "tfs" 'e454iel-jump-to-font
      "tfn" 'e454iel-cycle-fonts
      "tfi" 'e454iel-increase-font-size
      "tfd" 'e454iel-decrease-font-size
