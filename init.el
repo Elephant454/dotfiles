@@ -2094,7 +2094,9 @@ Lisp function does not specify a special indentation."
 
   (use-package tramp-term))
 
+;; TODO: It's probably time to just remove this. Eglot is a better solution for this 
 (use-package irony
+  :disabled
   :defer t
   :init (progn
             (add-hook 'c++-mode-hook 'irony-mode)
@@ -2106,7 +2108,10 @@ Lisp function does not specify a special indentation."
 
 ;; There are definitely more keybindings I want to add. Look at some of the
 ;;  examples https://github.com/Andersbakken/rtags
+
+;; TODO: It's probably time to just remove this. Eglot is a better solution for this 
 (use-package rtags
+  :disabled 
   :defer t
   :init (progn
           (add-hook 'c-mode-hook 'rtags-start-process-unless-running)
@@ -2132,18 +2137,29 @@ Lisp function does not specify a special indentation."
   :interpreter ("python[0-9.]*" . python-mode)
   :init (progn
           ;; Needed before `run-python' can load
-          (use-package tramp))
+          (use-package tramp)
+
+          (setq python-shell-interpreter "python3"))
   :config (progn
+            (add-hook 'python-mode-hook 'eglot-ensure)
+            
+            ;; TODO: I don't need this for sure if I'm using Eglot
             (use-package anaconda-mode
+              :disabled
               :config (progn
                         (use-package company-anaconda)
                         (add-hook 'python-mode-hook 'anaconda-mode)
                         (add-hook 'python-mode-hook 'anaconda-eldoc-mode)))
+            ;; TODO: I don't know if I need this if I'm using Eglot
             (use-package yapfify
+              :disabled
               :config (add-hook 'python-mode-hook 'yapf-mode))
+            ;; TODO: I have no clue if I still need pyenv-mode or pyvenv with Eglot
             (use-package pyenv-mode
+              :disabled
               :config (use-package pyenv-mode-auto))
-            (use-package pyvenv)))
+            (use-package pyvenv
+              :disabled)))
 
 (use-package flycheck
   :config (global-flycheck-mode t))
@@ -2389,7 +2405,20 @@ Lisp function does not specify a special indentation."
 
 (use-package treemacs)
 
+;; TODO: Figure out how to make this install the Python, Java, and C language
+;;  servers if I'm on a home computer
+(use-package eglot
+  ;; TODO: The fact that I have to do this manually means there's something
+  ;;  wonky going on, perhaps in terms of the version of "project" I'm using
+  :init (load-library "project"))
+
+;; This is needed for eglot, but is likely useful for all sorts of things
+(use-package project
+  :straight (project :source gnu-elpa-mirror))
+
+
 (use-package lsp-mode
+  :disabled
   :hook
   (scala-mode . lsp)
   (lsp-mode . lsp-lens-mode)
@@ -2436,6 +2465,7 @@ Lisp function does not specify a special indentation."
 
 ;; The debug adapter protocol
 (use-package dap-mode
+  :disabled
   :hook
   (lsp-mode . dap-mode)
   (lsp-mode . dap-ui-mode)
