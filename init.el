@@ -585,9 +585,13 @@ This makes for easier reading of larger, denser bodies of text."
   :config (progn
             (ivy-mode t)
             (use-package counsel
-              :config (general-define-key
-                       :keymaps 'help-map
-                        "b" 'counsel-descbinds))
+              :config
+              (counsel-mode t)
+              ;; TODO: Check if enabling counsel mode makes this code redundant
+              ;;(general-define-key
+              ;; :keymaps 'help-map
+              ;;  "b" 'counsel-descbinds)
+              )
             (use-package counsel-tramp)
             (use-package swiper
               :config (general-define-key
