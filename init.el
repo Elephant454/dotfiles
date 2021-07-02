@@ -607,6 +607,10 @@ This makes for easier reading of larger, denser bodies of text."
 
 (use-package info
   :config (progn
+            ;; TODO: Does this package still exist?
+            ;;(use-package info-rename-buffer-mode
+            ;;  :config (add-hook 'Info-mode-hook 'info-rename-buffer-mode))
+
             (general-define-key
              :states '(normal motion)
              :keymaps 'Info-mode-map
