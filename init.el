@@ -1962,9 +1962,12 @@ Lisp function does not specify a special indentation."
 (use-package time
   :config (progn
             (setq display-time-day-and-date t)
-            (setq e454iel-holiday-symbol "π")
-            (setq display-time-format (concat "%a %F %I:%M %p " e454iel-holiday-symbol))
-            (display-time-mode 0)))
+            (setq display-time-interval 0.95)
+            ;; TODO: Pi day, Pride month, December, Fall, Halloween, Thanksgiving week, Birthday
+            ;; TODO: Maybe I could have the cake show every time it's the birthday of someone I know?
+            (setq e454iel-holiday-symbol "☀")
+            (setq display-time-format (concat "%F %H:%M:%S " e454iel-holiday-symbol))
+            (display-time-mode t)))
 
 ;; used to center buffers in the middle of the screen
 (use-package centered-window
