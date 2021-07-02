@@ -1787,9 +1787,9 @@ Lisp function does not specify a special indentation."
               "q" 'quit-window
               "n" 'eww-buffer-show-next
               "p" 'eww-buffer-show-previous)
-
+            
             (e454iel-main-menu
-             "ai" 'eww)))
+              "ai" 'eww)))
 
 ;; Automatically resizes images to fit the window, because why not?
 (use-package image+
