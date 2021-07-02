@@ -2648,5 +2648,133 @@ Lisp function does not specify a special indentation."
 ;; For IRC
 (use-package circe)
 
+(use-package undo-tree
+  :init (custom-set-variables '(evil-undo-system 'undo-tree))
+  :config
+  (progn
+    (global-undo-tree-mode)
+    (diminish 'undo-tree-mode)))
+
+;; For 3D printer G-Code
+(use-package gcode-mode)
+
+;; My minor mode for doing convenient evil fill-paragraphs
+;;(define-minor-mode fill-paragraph-on-normal-state-mode
+;;  "Minor mode to automatically run `fill-paragraph' on entering evil's
+;;normal-state."
+;;  :lighter "fponsm"
+;;  :global nil
+;;
+;;  (setq fill-paragraph-no-undo
+;;        (lamda ()
+;;               (let ((undo-inhibit-record-point t))
+;;                 (fill-paragraph))))
+;;
+;;  (if fill-paragraph-on-normal-state-mode
+;;      (add-hook 'evil-normal-state-entry-hook 'fill-paragraph)
+;;    (remove-hook 'evil-normal-state-entry-hook 'fill-paragraph)))
+
+(define-minor-mode fill-paragraph-on-normal-state-mode
+  "Minor mode to automatically run `fill-paragraph' on entering evil's
+normal-state."
+  :lighter "fponsm"
+  :global nil
+
+  (defun fill-paragraph-no-undo ()
+    "Run fill-paragraph without leaving any undo information."
+    (interactive)
+    (let ((undo-inhibit-record-point t))
+      (fill-paragraph)))
+
+  (if fill-paragraph-on-normal-state-mode
+      (add-hook 'evil-normal-state-entry-hook 'fill-paragraph-no-undo nil t)
+    (remove-hook 'evil-normal-state-entry-hook 'fill-paragraph-no-undo t)))
+
+;;(add-hook 'text-mode-hook 'fill-paragraph-on-normal-state-mode)
+
+(use-package roguel-ike)
+
+(use-package bbdb
+  :config
+  (progn
+    (use-package bbdb-csv-import
+      :straight (bbdb-csv-import :host nil :repo "https://git.sr.ht/~iank/bbdb-csv-import"))))
+
+;; Vastly more detailed help buffers
+(use-package helpful
+  :config
+  (progn
+    (setq counsel-describe-function-function #'helpful-callable)
+    (setq counsel-describe-variable-function #'helpful-variable)
+
+    (push '(helpful-mode :position bottom :height 17) popwin:special-display-config)
+
+    (general-define-key
+     :keymaps 'helpful-mode-map
+     :states 'normal 
+      "q" 'quit-window)))
+
+;; With tweaking, this generates Emacs themes based on the current desktop background
+(use-package ewal
+  ;; TODO: Have this package require installing pywal as a system package if
+  ;;  we're on a home computer
+
+  ;; TODO: Set up menu bindings "tte" for switching to the traditional spacemacs
+  ;;  ewal theme (which is a special category separate from theme pairs)
+
+  ;; TODO: Set up menu binding "ttw" for "finding file" for a wallpaper to
+  ;;  switch to by invoking "wal -i [image]", reloading the ewal theme, and
+  ;;  maybe toggling transparency
+
+  ;; TODO: I want some kind of toggle for switching between ewal theme and theme
+  ;;  pairs theme. Maybe I could have this as a boolean in the theme loader, and
+  ;;  I set it to default to "on" if we're on a home computer
+  :config
+  (progn
+    ;; TODO: There is probably a better way to load this file that I'm not getting
+    (load-file
+     (concat user-emacs-directory
+             "straight/repos/ewal/doom-themes/ewal-doom-themes.el"))
+    (load-file
+     (concat user-emacs-directory
+             "straight/repos/ewal/spacemacs-themes/ewal-spacemacs-themes.el"))))
+
+(use-package dictcc
+  :config
+  (setq dictcc-source-lang "en"
+        dictcc-destination-lang "es"
+        dictcc-completion-backend 'ivy))
+
+(use-package powerthesaurus
+  :config (e454iel-main-menu
+            "mt" 'powerthesaurus-lookup-word-dwim))
+
+;; TODO: This seems like it could be useful for DND, but maybe org-d20 could be
+;;  even better?
+(use-package decide)
+
+;; Comprehensive and flexible tts engine based on speech-dispatcher
+(use-package speechd)
+
+;; A way to quickly read aloud the current buffer and have the cursor follow
+(use-package greader
+  :config
+  (progn 
+
+    (setq e454iel-greader-currently-reading nil)
+
+    (e454iel-main-menu
+      ;; For "toggle narration/narrator"
+      "tn" (lambda () "" (interactive)
+             (if (not e454iel-greader-currently-reading)
+                 (progn
+                   (setq e454iel-greader-currently-reading t)
+                   (greader-read))
+               
+               ;; else
+               (progn
+                 (greader-stop)
+                 (setq e454iel-greader-currently-reading nil)))))))
+
 (provide 'init)
 ;;; init.el ends here
