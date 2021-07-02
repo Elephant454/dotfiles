@@ -1973,7 +1973,8 @@ Lisp function does not specify a special indentation."
 (use-package centered-window
   :config
   (progn
-    (centered-window-mode)
+    (e454iel-main-menu "tc" 'centered-window-mode)
+    (diminish 'centered-window-mode)
     (setq cwm-centered-window-width 150)))
 
 ;; this still needs to be configured, particularly for the keybindings
