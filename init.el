@@ -1583,7 +1583,11 @@ Lisp function does not specify a special indentation."
 
 (use-package magit
   :config (progn
-            (use-package evil-magit)
+            (evil-collection-init 'magit)
+
+            (use-package magit-todos
+              :config (magit-todos-mode))
+
             (general-define-key
              :keymaps 'magit-mode-map
               "M-1" 'winum-select-window-1
