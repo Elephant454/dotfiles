@@ -402,7 +402,12 @@ This makes for easier reading of larger, denser bodies of text."
     font-string))
 
 (defun e454iel-jump-to-font (font-to-jump-to)
-"Jump to `FONT-TO-JUMP-TO' in `e454iel-font-pairs' and apply it."
+  "Jump to `FONT-TO-JUMP-TO' in `e454iel-font-pairs' and apply it."
+  (interactive (list
+                (completing-read
+                 "Which font do you want to jump to?: "
+                 e454iel-font-pairs)))
+
   (let ((result
          (member-if
           (lambda (font-pair) nil nil
