@@ -575,7 +575,11 @@ This makes for easier reading of larger, denser bodies of text."
      "ag" '(:ignore t :which-key "Games")
      "am" '(:ignore t :which-key "Music")
      
-     "h" '(help-command :which-key "Help"))))
+     "h" '(help-command :which-key "Help")
+
+     "<left>" 'previous-buffer
+     "<right>" 'next-buffer
+     )))
 
 (use-package ivy
   :config (progn
