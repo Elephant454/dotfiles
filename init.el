@@ -339,7 +339,9 @@ without confirmation."
                            ("Fantasque Sans Mono" . 16)
                            ("Source Code Pro" . 14)
                            ("Camingo Code" . 14)
-                           ("Monoid" . 12)))
+                           ("Monoid" . 12)
+                           ("Iosevka Term Slab Extended" . 14)
+                           ))
       
 (setq e454iel-current-font-pairs e454iel-font-pairs)
 (setq e454iel-font-scale 0)
