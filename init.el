@@ -2628,6 +2628,8 @@ Lisp function does not specify a special indentation."
       "amvf" 'vuiet-next
       "amvb" 'vuiet-previous)
 
+    ;; TODO: Write this function with the simpler, user facing functions for
+    ;;  looking up playing track name and artist
     (defun e454iel-vuiet-current-track ()
       "Get (or print) the currently playing track from vuiet"
       (interactive)
