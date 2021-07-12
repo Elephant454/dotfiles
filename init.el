@@ -2635,11 +2635,7 @@ Lisp function does not specify a special indentation."
     (defun e454iel-vuiet-current-track ()
       "Get (or print) the currently playing track from vuiet"
       (interactive)
-      (let ((current-track (vuiet--playing-track)))
-        (concat
-         (vuiet-track-artist current-track)
-         " - "
-         (vuiet-track-name current-track))))
+      (concat (vuiet-playing-artist) " - " (vuiet-playing-track-name)))
 
     ;; TODO: Should this use org-store-link instead of the kill ring?
     ;; TODO: Write this function with the simpler, user facing functions for
@@ -2648,16 +2644,10 @@ Lisp function does not specify a special indentation."
       "Kill (to the clipboard) an Org Mode link to play the currently playing track."
       (interactive)
       (kill-new
-       (let ((current-track (vuiet--playing-track)))
-         (concat "[[elisp:(vuiet-play '((\""
-                 (vuiet-track-artist current-track)
-                 "\" \""
-                 (vuiet-track-name current-track)
-                 "\")))][🎵 "
-                 (vuiet-track-artist current-track)
-                 " - "
-                 (vuiet-track-name current-track)
-                 " 🎵]] "))))
+       (format
+        "[[elisp:(vuiet-play '((\"%s\" \"%s\")))][🎵 %s - %s 🎵]] "
+        (vuiet-playing-artist) (vuiet-playing-track-name)
+        (vuiet-playing-artist) (vuiet-playing-track-name))))
 
     ;; TODO: Write functions for storing (or maybe just inserting) org links for
     ;;  current track, current artist, current album, and current tag (from a
