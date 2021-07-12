@@ -2626,7 +2626,9 @@ Lisp function does not specify a special indentation."
       "amvG" 'vuiet-tag-info
       "amv C-G" 'vuiet-play-playing-tags-similar
       "amvf" 'vuiet-next
-      "amvb" 'vuiet-previous)
+      "amvb" 'vuiet-previous
+      ;;"amvy"
+      "amvot" 'e454iel-vuiet-org-kill-current-track)
 
     ;; TODO: Write this function with the simpler, user facing functions for
     ;;  looking up playing track name and artist
@@ -2638,6 +2640,28 @@ Lisp function does not specify a special indentation."
          (vuiet-track-artist current-track)
          " - "
          (vuiet-track-name current-track))))
+
+    ;; TODO: Should this use org-store-link instead of the kill ring?
+    ;; TODO: Write this function with the simpler, user facing functions for
+    ;;  looking up playing track name and artist
+    (defun e454iel-vuiet-org-kill-current-track ()
+      "Kill (to the clipboard) an Org Mode link to play the currently playing track."
+      (interactive)
+      (kill-new
+       (let ((current-track (vuiet--playing-track)))
+         (concat "[[elisp:(vuiet-play '((\""
+                 (vuiet-track-artist current-track)
+                 "\" \""
+                 (vuiet-track-name current-track)
+                 "\")))][🎵 "
+                 (vuiet-track-artist current-track)
+                 " - "
+                 (vuiet-track-name current-track)
+                 " 🎵]] "))))
+
+    ;; TODO: Write functions for storing (or maybe just inserting) org links for
+    ;;  current track, current artist, current album, and current tag (from a
+    ;;  list of tags chosen from a completing-read)
 
     ;; TODO: I need to advise this function so that it doesn't destroy the
     ;;  mode line (including the display-time-mode and eyebrowse indicators)
