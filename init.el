@@ -1911,27 +1911,10 @@ Lisp function does not specify a special indentation."
                     (accent . (telephone-line-major-mode-segment))
                     ))
   (telephone-line-mode t)))
-  
 
-;; used to hide minor modes or give them alternative names for the modeline
-;;
-;; TODO: these should probably be moved to their respective use-package entries
-(use-package diminish
-  :config (progn
-            (diminish 'company-mode)
-            (diminish 'ivy-mode)
-            (diminish 'undo-tree-mode)
-            (diminish 'which-key-mode)
-            (diminish 'evil-escape-mode)
-            (diminish 'evil-org-mode)
-            ;; Projectile mode did have a helpful indicator associated with it,
-            ;;  though. It should be re-added to the mode-line in a nicer way.
-            (diminish 'projectile-global-mode)
-            ;;(diminish 'projectile-mode)
-            (diminish 'global-evil-fringe-mark-mode)
-            (diminish 'yas-minor-mode)
-            (diminish 'eldoc-mode)
-            (diminish 'counsel-mode)))
+;; hides minor modes
+(use-package minions
+  :config (minions-mode))
 
 (use-package immortal-scratch)
 
@@ -1975,7 +1958,6 @@ Lisp function does not specify a special indentation."
   :config
   (progn
     (e454iel-main-menu "tc" 'centered-window-mode)
-    (diminish 'centered-window-mode)
     (setq cwm-centered-window-width 150)))
 
 ;; this still needs to be configured, particularly for the keybindings
@@ -2005,8 +1987,6 @@ Lisp function does not specify a special indentation."
 (use-package projectile
   :config (progn
             (setq projectile-enable-caching t)
-            (diminish 'global-projectile-mode)
-            (diminish 'projectile-mode)
             (use-package counsel-projectile
               :disabled
               :config (progn
@@ -2164,8 +2144,7 @@ Lisp function does not specify a special indentation."
 
 (use-package flycheck
   :config (progn
-            (global-flycheck-mode t)
-            (diminish 'flycheck-mode)))
+            (global-flycheck-mode t)))
 
 (use-package langtool
   :disabled
@@ -2416,8 +2395,7 @@ Lisp function does not specify a special indentation."
                            (display-buffer-in-side-window)
                            (side . bottom)
                            (window-height . 0.3)))
-            (evil-owl-mode)
-            (diminish 'evil-owl-mode)))
+            (evil-owl-mode)))
 
 (use-package org-trello)
 
@@ -2669,8 +2647,7 @@ Lisp function does not specify a special indentation."
   :init (custom-set-variables '(evil-undo-system 'undo-tree))
   :config
   (progn
-    (global-undo-tree-mode)
-    (diminish 'undo-tree-mode)))
+    (global-undo-tree-mode)))
 
 ;; For 3D printer G-Code
 (use-package gcode-mode)
