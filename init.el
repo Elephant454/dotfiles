@@ -125,7 +125,13 @@
               "7752.Guix.Matthew"
               "7548.Arch.Matthew"
               "7548.Guix.Matthew"
-              "Desktop.Guix.Maddie")
+              "Desktop.Guix.Maddie"
+              "mobian")
+        :test #'string-equal))
+
+(defvar e454iel-phone-p
+  (find (system-name)
+        (list "mobian")
         :test #'string-equal))
 
 (defvar e454iel-documents-time-period "Summer")
