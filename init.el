@@ -1543,6 +1543,7 @@ Lisp function does not specify a special indentation."
 ;; TODO: Add suggestions from these Reddit threads
 ;; https://www.reddit.com/r/emacs/comments/7fa1fb/how_many_of_you_guys_use_emacs_for_irc_whats_your/
 ;; https://www.reddit.com/r/emacs/comments/8ml6na/tip_how_to_make_erc_fun_to_use/
+;; TODO: Watch the SystemCrafters videos on ERC for suggestions
 (use-package erc
   :init (progn
           (if e454iel-home-computer-p
