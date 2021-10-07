@@ -619,6 +619,8 @@ This makes for easier reading of larger, denser bodies of text."
             ;;(use-package info-rename-buffer-mode
             ;;  :config (add-hook 'Info-mode-hook 'info-rename-buffer-mode))
 
+            (evil-collection-init 'info)
+
             (general-define-key
              :states '(normal motion)
              :keymaps 'Info-mode-map
