@@ -626,6 +626,7 @@ This makes for easier reading of larger, denser bodies of text."
 
 (use-package ibuffer
   :config (progn
+            (evil-collection-init 'ibuffer)
             (general-define-key
              ;;:states '(normal motion)
              :keymaps 'ibuffer-mode-map
