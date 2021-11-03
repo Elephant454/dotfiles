@@ -75,6 +75,15 @@
 (tool-bar-mode 0)          ; remove the tool bar (New, Open, etc.)
 (global-auto-revert-mode)  ; auto-revert changes for any changes on disk
 
+;; Get rid of the titlebar CSD for Phosh
+(defun e454iel-remove-csd ()
+    "Get rid of the titlebar for Gnome by toggling fullscreen on and off."
+  (toggle-frame-fullscreen)
+  (toggle-frame-fullscreen))
+
+(add-hook 'after-make-frame-functions
+          (e454iel-remove-csd))
+
 ;; Don't suspend emacs with "C-z"
 (global-unset-key (kbd "C-z"))
 ;; Don't kill the whole line if I accidentally mash C-S
