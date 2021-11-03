@@ -1880,19 +1880,23 @@ Lisp function does not specify a special indentation."
             "q" 'paradox-quit-and-close
             "x" 'paradox-menu-execute))
 
+(use-package all-the-icons
+  ;; TODO: There needs to be some way of telling whether or not these icons
+  ;;  have been downloaded. I only want to install on the first run.
+
+  ;;:config (all-the-icons-install-fonts)
+  :config
+  (progn
+    ;; According to the readme for all-the-icons-ibuffer, this reduces
+    ;;  sluggishness when there are multiple icons on screen at the same
+    ;;  time
+    (setq inhibit-compacting-font-caches t)))
+
 (use-package doom-modeline
   :disabled
   :config
   (progn
-    (use-package all-the-icons
-      ;; TODO: There needs to be some way of telling whether or not these icons
-      ;;  have been downloaded. I only want to install on the first run.
-
-      ;;:config (all-the-icons-install-fonts)
-      )
-
     (setq doom-modeline-icon t)
-
     (doom-modeline-mode)))
 
 (use-package spaceline
