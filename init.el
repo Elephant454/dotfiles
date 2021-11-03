@@ -2587,7 +2587,7 @@ Lisp function does not specify a special indentation."
 
 ;; Nyan cat in the modeline
 (use-package nyan-mode
-  :config (nyan-mode))
+  :config (if (not e454iel-phone-p) (nyan-mode)))
 
 ;; Parrot in the modeline
 (use-package parrot
