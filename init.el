@@ -325,8 +325,12 @@ without confirmation."
 ;; Add spacing between the lines to make text easier to read
 (setq-default line-spacing 4)
 
+;; TODO: Set up handling of phone vs desktop fonts in a way that is less likely
+;;  to suffer from side effect related problems
+
 ;; TODO: Create docstrings for these
 (defvar e454iel-font-pairs)
+(defvar e454iel-phone-font-pairs)
 (defvar e454iel-current-font-pairs)
 (defvar e454iel-font-scale)
 (defvar e454iel-use-dyslexic-font nil)
@@ -345,6 +349,12 @@ without confirmation."
                            ("Monoid" . 12)
                            ("Iosevka Term Slab Extended" . 14)
                            ))
+(setq e454iel-phone-font-pairs
+      '(("Hermit" . 5)
+        ("Fantasque Sans Mono" . 6)
+        ))
+(if e454iel-phone-p
+    (setq e454iel-font-pairs e454iel-phone-font-pairs))
       
 (setq e454iel-current-font-pairs e454iel-font-pairs)
 (setq e454iel-font-scale 0)
