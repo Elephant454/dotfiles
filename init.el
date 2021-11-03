@@ -630,6 +630,10 @@ This makes for easier reading of larger, denser bodies of text."
 (use-package ibuffer
   :config (progn
             (evil-collection-init 'ibuffer)
+            (use-package all-the-icons-ibuffer
+              ;; TODO: There ought to be a cleaner way to turn this on only when
+              ;;  ibuffer is opened
+              :init (all-the-icons-ibuffer-mode 1))
             (general-define-key
              ;;:states '(normal motion)
              :keymaps 'ibuffer-mode-map
