@@ -582,7 +582,68 @@ This makes for easier reading of larger, denser bodies of text."
      "<right>" 'next-buffer
      )))
 
+;; Completion framework and completion framework accessories
+;; TODO: Do I want to use vertico instead? How do they compare? Is there a
+;;  SystemCrafters video on this?
+
+;; TODO: Make sure to read the Selectrum Complementary Extensions
+;;  (https://github.com/raxod502/selectrum#complementary-extensions)
+;;  https://www.emacswiki.org/emacs/Icicles
+;;  https://github.com/oantolin/embark/
+;;   https://github.com/minad/consult#embark-integration
+;;   https://github.com/minad/consult#available-commands
+;;  https://github.com/minad/consult
+
+
+;; TODO: Read the full README for every package I use (and maybe also the
+;;  related packages) (selectrum, vertico, consult, orderless, CtrlF, AMX,
+;;  icicles, embark)
+
+(use-package vertico
+  :config (progn
+            (vertico-mode)
+
+            (use-package consult
+              :config
+              (progn
+                
+                (use-package consult-eglot)
+
+                ;; TODO: If I switch most of my checkers to Flycheck, this will
+                ;;  be a lot more useful 
+                (use-package consult-flycheck)
+
+                ;; TODO: Why isn't this available?
+                ;;  https://github.com/karthink/consult-dir
+                ;;(use-package consult-dir)
+
+                )
+
+
+              :general
+              ;; TODO: Look into modifying some hook or some variable or
+              ;;  something so that evil's "n" and "N" commands correspond to
+              ;;  what I search with consult-line
+              ([remap evil-search-forward] #'consult-line
+               [remap isearch-forward] #'consult-line)
+
+              )
+
+            (use-package orderless
+              :config
+              (progn
+                (setq completion-styles '(orderless))
+                (savehist-mode)
+                ))
+
+            (use-package marginalia
+              :config
+              (progn
+                (marginalia-mode)))
+            )
+  )
 (use-package ivy
+  :disabled
   :config (progn
             (ivy-mode t)
             (use-package counsel
