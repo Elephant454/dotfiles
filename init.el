@@ -53,8 +53,9 @@ print-circle t
  ;;  github-explorer
  browse-url-generic-program "qutebrowser"
 
- browse-url-browser-function '((".*xkcd.com/[0-9]*" . (lambda (x y) (get-xkcd-from-url x) ))
-                               ("." . eww-browse-url))
+ browse-url-handlers '((".*xkcd.com/[0-9]*" . (lambda (x y) (get-xkcd-from-url x) ))
+                       ("." . eww-browse-url))
+ browse-url-browser-function #'eww-browse-url
 
  ;; start debugging when something signals an error
  debug-on-error t
