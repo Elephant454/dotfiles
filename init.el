@@ -35,6 +35,11 @@
  ;; sentences. Look up the info page on "Sentences".
  sentence-end-double-space nil
 
+ ;; Allow for correct printing for "circular lists", which are lists that have
+ ;;  their tail point to their head (using something like `(nconc my-list
+ ;;  my-list)')
+print-circle t
+
  ;; set the default web browser to firefox
  ;;browse-url-browser-function 'browse-url-generic
  ;;browse-url-generic-program "firefox"
