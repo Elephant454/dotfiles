@@ -322,7 +322,13 @@ without confirmation."
 
 
 ;; Add spacing between the lines to make text easier to read
-(setq-default line-spacing 4)
+(defvar e454iel-default-line-spacing)
+(defvar e454iel-extra-line-spacing)
+
+(setq e454iel-default-line-spacing 4)
+(setq e454iel-extra-line-spacing 24)
+
+(setq-default line-spacing e454iel-default-line-spacing)
 
 ;; TODO: Create docstrings for these
 (defvar e454iel-font-pairs)
@@ -383,6 +389,16 @@ This makes for easier reading of larger, denser bodies of text."
   (interactive)
   (setq e454iel-use-dyslexic-font (not e454iel-use-dyslexic-font))
   (e454iel-load-font))
+
+(defun e454iel-toggle-use-extra-line-spacing ()
+  "Toggle between using `e454iel-default-line-spacing' and `e454iel-extra-line-spacing' in the current buffer."
+  (interactive)
+  ;; If line-spacing equals default, it is set to extra. Otherwise (whether it
+  ;;  equals extra or any other value), it is set to default
+  (if (= line-spacing e454iel-default-line-spacing)
+      (setq-local line-spacing e454iel-extra-line-spacing)
+    ;; else
+      (setq-local line-spacing e454iel-default-line-spacing)))
 
 (defun e454iel-load-font ()
   (let ((font-string
