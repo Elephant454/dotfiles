@@ -604,6 +604,22 @@ This makes for easier reading of larger, denser bodies of text."
      "<right>" 'next-buffer
      )))
 
+(use-package mini-frame
+  :disabled
+  :config
+  (progn
+    (setq mini-frame-show-parameters
+          `((top . 0.4)
+            (width . 0.7)
+            (left . 0.5)
+            ;;(font . ,(concat
+            ;;          (caar e454iel-current-font-pairs)
+            ;;          "-"
+            ;;          (format "%s" (+ (cdar e454iel-current-font-pairs) e454iel-font-scale 2))))
+            ))
+    (push 'consult-line mini-frame-ignore-commands)
+    (mini-frame-mode)))
+
 (use-package ivy
   :config (progn
             (ivy-mode t)
