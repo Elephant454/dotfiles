@@ -377,7 +377,7 @@ without confirmation."
   ;;(set-default-font elephant454initel-current-font)
   ;;(car (split-string (elt (font-info (find-font elephant454initel-current-font)) 1) ":")))
 
-(defun e454iel-toggle-use-dyslexic-font()
+(defun e454iel-toggle-use-dyslexic-font ()
   "Switch between using the currently selected font and the opendyslexic font.
 This makes for easier reading of larger, denser bodies of text."
   (interactive)
