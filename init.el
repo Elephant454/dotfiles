@@ -1012,6 +1012,29 @@ _-_increase _=_decrease"
                                   ":"
                                   (number-to-string calendar-longitude)
                                   " -t 6500:3000"))
+
+    ;; Start and set-up ssh-agent
+    (defun e454iel-setup-ssh-agent ()
+      "Run shell commands and set environment variables necessary for setting up ssh-agent"
+        (let* ((ssh-agent-output
+                (shell-command-to-string "ssh-agent -s"))
+               (ssh-agent-output-commands
+                (split-string ssh-agent-output ";"))
+               (ssh-agent-auth-sock-set-command
+                (first ssh-agent-output-commands))
+               (ssh-agent-auth-sock
+                (second (split-string ssh-agent-auth-sock-set-command "=")))
+               (ssh-agent-pid-set-command
+                (string-trim-left (third ssh-agent-output-commands)))
+               (ssh-agent-pid
+                (second (split-string ssh-agent-pid-set-command "="))))
+
+          (setenv "SSH_AUTH_SOCK" ssh-agent-auth-sock)
+          (setenv "SSH_AGENT_PID" ssh-agent-pid)))
+
+    (e454iel-setup-ssh-agent)
+
+
     (start-process-shell-command "dunst"
                                  nil
                                  "dunst")
