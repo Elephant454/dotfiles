@@ -836,10 +836,6 @@ _-_increase _=_decrease"
             (use-package ivy-purpose
               :config (ivy-purpose-setup))))
 
-;; I might want to look into other spotify clients
-;;(quelpa '(spotify :fetcher github :repo "danielfm/spotify.el"))
-(use-package spotify)
-
 (use-package versuri
   :init (defun e454-lookup-current-spotify-lyrics ()
           "Lookup lyrics for the currently playing Spotify song."
@@ -2114,15 +2110,6 @@ Lisp function does not specify a special indentation."
 ;; Look into term management options
 ;; multi-run, multi-term, sane-term, navorski, term+, term+key-intercept,
 ;; term-manager, term-projectile
-
-(use-package counsel-spotify
-  :config (e454iel-main-menu "ams" '(nil :which-key "Spotify")
-                                        "amsp" 'counsel-spotify-toggle-play-pause
-                                        "amsb" 'counsel-spotify-previous
-                                        "amsf" 'counsel-spotify-next
-                                        "amst" 'counsel-spotify-search-track
-                                        "amsl" 'counsel-spotify-search-album
-                                        "amsr" 'counsel-spotify-search-artist))
 
 (use-package tramp
   :straight (tramp :type built-in)
