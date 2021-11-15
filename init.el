@@ -1060,8 +1060,8 @@ _-_increase _=_decrease"
                                  nil
                                  (concat
                                   "xinput map-to-output"
-                                  "\"Wacom Intuos PT S 2 Pen Pen (0x5881c411)\""
-                                  "\"DisplayPort-1\""))
+                                  " \"Wacom Intuos PT S 2 Pen Pen (0x5881c411)\""
+                                  " \"DisplayPort-1\""))
     (start-process-shell-command "xrandr"
                                  nil
                                  (concat
