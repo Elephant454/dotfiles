@@ -2702,7 +2702,13 @@ Lisp function does not specify a special indentation."
 (use-package mu)
 
 ;; For IRC
-(use-package circe)
+;; TODO: Advice or redefine functions to prevent it from writing to the
+;;  mode-line. There really needs to be a way to turn that off built-in, but I
+;;  can just write my own.
+;;  https://ag91.github.io/blog/2020/09/18/emacs-slack-and-my-peaceful-modeline/
+
+(use-package circe
+  :config (setq tracking-max-mode-line-entries 1))
 
 (use-package undo-tree
   :init (custom-set-variables '(evil-undo-system 'undo-tree))
