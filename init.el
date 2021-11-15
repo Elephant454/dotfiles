@@ -252,13 +252,11 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
 (defun e454iel-cycle-theme-pairs ()
   "Cycle through pairs of themes."
   (interactive)
-  (if (cdr e454iel-current-theme-pairs)
-      (setq e454iel-current-theme-pairs
-            (cdr e454iel-current-theme-pairs))
-
-    (setq e454iel-current-theme-pairs
+  (setq e454iel-current-theme-pairs
+        (if (cdr e454iel-current-theme-pairs)
+            (cdr e454iel-current-theme-pairs)
+          ;; else
           e454iel-theme-pairs))
-  
   (e454iel-load-theme))
 
 (defun e454iel-load-theme ()
