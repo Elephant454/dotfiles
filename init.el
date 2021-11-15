@@ -1306,6 +1306,7 @@ unsorted."
                   org-image-actual-width nil
                   org-format-latex-options (plist-put org-format-latex-options :scale 2.0)
                   org-ellipsis " ⤵ "
+                  org-adapt-indentation t
                   org-default-notes-file (concat org-directory "/notes.org"))
 
             (e454iel-main-menu
