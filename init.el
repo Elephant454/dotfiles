@@ -1795,6 +1795,7 @@ Lisp function does not specify a special indentation."
 ;;  eww buffer (first eww buffer to get opened gets 1, second gets 2, etc), and
 ;;  then the name of the page. Like "<1>DuckDuckGo"
 ;; TODO: Middle mouse should open a page in a new buffer in the background
+;; TODO: Would I prefer the evil-collection bindings over the ones I have here?
 (use-package eww
   :functions (eww-suggest-uris eww-current-url)
   :init (progn
