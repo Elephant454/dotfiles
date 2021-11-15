@@ -503,6 +503,7 @@ This makes for easier reading of larger, denser bodies of text."
      
      ;; evaluate a snippet of emacs lisp
      ":" 'eval-expression
+     "l" 'eval-expression
      
      ;; modify windows using vim-like keybindings
      "w" '(evil-window-map :which-key "Window")
