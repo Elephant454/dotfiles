@@ -317,7 +317,8 @@ without confirmation."
 ;; fonts
 
 ;; Add fallback black and white rendering of emojis
-(set-fontset-font t 'unicode "Symbola" nil 'append)
+;;(set-fontset-font t 'unicode (font-spec :name "OpenMoji" :style "Color") nil 'prepend)
+;;(set-fontset-font t 'unicode "Symbola" nil 'append)
 
 
 ;; Add spacing between the lines to make text easier to read
