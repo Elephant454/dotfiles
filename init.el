@@ -586,6 +586,7 @@ This makes for easier reading of larger, denser bodies of text."
      "tfi" 'e454iel-increase-font-size
      "tfd" 'e454iel-decrease-font-size
      "tft" 'e454iel-toggle-use-dyslexic-font
+     "tl" 'e454iel-toggle-use-extra-line-spacing
      ;; misc toggles
      "ta" 'auto-fill-mode
      "tr" '(lambda() (interactive)
