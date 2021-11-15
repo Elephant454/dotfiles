@@ -1198,6 +1198,10 @@ unsorted."
   "Return the first non-nil item in `LIST'."
   (some (lambda (x) x) list))
 
+(defun create-circular-list (list)
+  "Set the tail of the LIST as a reference to the head of the LIST."
+  (nconc list list))
+
 ;; org things
 ;; TODO: look into org-dotemacs for organizing my init file using org
 ;; TODO: org mode confirm for capture is different than with-editor confirm for
