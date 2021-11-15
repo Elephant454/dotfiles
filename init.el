@@ -1262,6 +1262,14 @@ unsorted."
                       agenda ""
                       ((org-agenda-tag-filter-preset '("-OtherAgenda")))))))
 
+            ;; The alsa-utils package must be installed so that aplay can run
+            ;; TODO: Any way I can use the system use-package thing for ensuring
+            ;;  alsa-utils is installed for the sake of running this?
+            (setq org-clock-sound "~/.dotfiles/BellCounterA.wav")
+
+            ;; A quick keybinding for setting a tea timer
+            (e454iel-main-menu "at" 'org-timer-set-timer)
+
             (setf org-babel-load-languages
                   '((emacs-lisp . t)
                     (python . t)
@@ -1460,29 +1468,6 @@ unsorted."
                     :help "Run LatexMk with PVC for continuous compilation")
 
                   TeX-command-list)))
-
-;; The fact that this is strewn haphazardly here goes to show that
-;; this needs some sort of categorical organization.
-;; Anyways, this is a great quick tea timer. I can see this package
-;; and I becoming fast friends.
-;; Read more about notifications at
-;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Desktop-Notifications.html
-;; also, this should really be using a general key definer in order to add it to
-;;  our applications menu
-(use-package tea-time
-  :config (progn
-            (setq tea-time-sound "/usr/share/sounds/KDE-Sys-App-Positive.ogg"
-                  tea-time-sound-command "mplayer")
-            (add-hook 'tea-time-notification-hook (lambda()
-                                                    (notifications-notify
-                                                     :title "Tea is ready!"
-                                                     :body "Your tea has finished steeping."
-                                                     ;;:sound-name "dialog-information"
-                                                     :sound-name "completion-sucess.oga"
-                                                     :image-path
-                                                      "dialog-information"
-                                                      :category "transfer.complete")))
-            (e454iel-main-menu "at" 'tea-time)))
 
 (use-package seethru
   :config (e454iel-main-menu "tT" 'seethru))
