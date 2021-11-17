@@ -1929,6 +1929,10 @@ Lisp function does not specify a special indentation."
       ;;  have been downloaded. I only want to install on the first run.
 
       ;;:config (all-the-icons-install-fonts)
+
+      :config
+      (progn
+        (setq inhibit-compacting-font-caches t))
       )
 
     (setq doom-modeline-icon t)
