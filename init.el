@@ -2348,6 +2348,7 @@ Lisp function does not specify a special indentation."
   :config (add-to-list 'company-backends 'company-emoji))
 
 (use-package emojify
+  :disabled
   :config (progn 
             (global-emojify-mode t)
             (global-emojify-mode-line-mode t)
