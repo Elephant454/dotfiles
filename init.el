@@ -2170,12 +2170,18 @@ Lisp function does not specify a special indentation."
              :major-modes 'c-mode-map
               "s" 'rtags-find-symbol-at-point)))
 
-;;(use-package emms
-  ;;:config (progn
+(use-package emms
+  :config (progn
             ;;(use-package emms-player-mpv)
-            ;;(emms-all)
-            ;;(emms-default-players)
-            ;;(add-to-list 'emms-player-list 'emms-player-mpv)))
+            (emms-all)
+            (emms-default-players)
+            ;;(add-to-list 'emms-player-list 'emms-player-mpv)
+            (setq emms-source-file-default-directory "~/Music/")
+            (evil-collection-init 'emms))
+  :general (e454iel-main-menu
+             "ames" 'emms-streams
+             "amef" 'emms-play-file
+             "amep" 'emms-pause))
 
 (use-package python
   :commands (python-mode run-python)
