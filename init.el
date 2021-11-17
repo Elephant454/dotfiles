@@ -2650,14 +2650,23 @@ Lisp function does not specify a special indentation."
   ;;  with (load-library) as part of mpv's config attribute
 
   :init
-  (use-package mpv
-    :config
-    (progn
-      (load-library "mpv")
-      ;; TODO: For whatever reason, it needs mpd to be started once before use.
-      ;;  This call isn't sufficient, but starting it in a shell with `shell'
-      ;;  for some reason is 
-      (start-process-shell-command "mpd" nil "mpd")))
+  (progn
+    ;; TODO: This is a temporary fix for vuiet while LastFM.el is getting
+    ;;  updated to work with DickMao's version of request.el. Remove once
+    ;;  LastFM.el is fixed
+    (use-package lastfm
+      :init
+      (use-package request
+        :straight (:host github :repo "tkf/emacs-request")))
+
+    (use-package mpv
+      :config
+      (progn
+        (load-library "mpv")
+        ;; TODO: For whatever reason, it needs mpd to be started once before use.
+        ;;  This call isn't sufficient, but starting it in a shell with `shell'
+        ;;  for some reason is
+        (start-process-shell-command "mpd" nil "mpd"))))
 
   :config
   (progn
