@@ -2582,14 +2582,16 @@ Lisp function does not specify a special indentation."
   :config
   (progn
     ;; Change the font face
-    (add-hook 'nov-mode-hook
-              (lambda ()
-                (face-remap-add-relative
-                 'variable-pitch
-                 :family "opendyslexic"
-                 :height 2.3)))
+    ;;(add-hook 'nov-mode-hook
+    ;;          (lambda ()
+    ;;            (face-remap-add-relative
+    ;;             'variable-pitch
+    ;;             :family "opendyslexic"
+    ;;             :height 2.3)))
 
-    (setq nov-text-width 120)
+    (setq nov-variable-pitch nil)
+
+    (setq nov-text-width 80)
 
     (evil-set-initial-state 'nov-mode 'normal)
 
