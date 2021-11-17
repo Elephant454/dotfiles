@@ -2022,7 +2022,7 @@ Lisp function does not specify a special indentation."
             (setq display-time-interval 0.95)
             ;; TODO: Pi day, Pride month, December, Fall, Halloween, Thanksgiving week, Birthday
             ;; TODO: Maybe I could have the cake show every time it's the birthday of someone I know?
-            (setq e454iel-holiday-symbol "☀")
+            (setq e454iel-holiday-symbol "🍂")
             (setq display-time-format (concat "%F %H:%M:%S " e454iel-holiday-symbol))
             (display-time-mode t)))
 
