@@ -2027,12 +2027,10 @@ Lisp function does not specify a special indentation."
             (display-time-mode t)))
 
 ;; used to center buffers in the middle of the screen
-(use-package centered-window
-  :config
-  (progn
-    (e454iel-main-menu "tc" 'centered-window-mode)
-    (diminish 'centered-window-mode)
-    (setq cwm-centered-window-width 150)))
+(use-package olivetti
+  ;; TODO: Maybe I can make this similar to centered-window-mode by adding a
+  ;;  global mode that only applies when there's only one frame in the window
+  :general (e454iel-main-menu "tc" 'olivetti-mode))
 
 ;; this still needs to be configured, particularly for the keybindings
 ;;(use-package pocket-api)
