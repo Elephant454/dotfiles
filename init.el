@@ -35,6 +35,11 @@
  ;; sentences. Look up the info page on "Sentences".
  sentence-end-double-space nil
 
+ ;; Allow for correct printing for "circular lists", which are lists that have
+ ;;  their tail point to their head (using something like `(nconc my-list
+ ;;  my-list)')
+print-circle t
+
  ;; set the default web browser to firefox
  ;;browse-url-browser-function 'browse-url-generic
  ;;browse-url-generic-program "firefox"
@@ -48,8 +53,9 @@
  ;;  github-explorer
  browse-url-generic-program "qutebrowser"
 
- browse-url-browser-function '((".*xkcd.com/[0-9]*" . (lambda (x y) (get-xkcd-from-url x) ))
-                               ("." . eww-browse-url))
+ browse-url-handlers '((".*xkcd.com/[0-9]*" . (lambda (x y) (get-xkcd-from-url x) ))
+                       ("." . eww-browse-url))
+ browse-url-browser-function #'eww-browse-url
 
  ;; start debugging when something signals an error
  debug-on-error t
@@ -201,6 +207,7 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
  (birds-of-paradise-plus-theme :defer)
  (warm-night-theme :defer)
  (sweet-theme :defer)
+ (tron-legacy-theme)
 )
 
 ;; TODO: There has to be some sort of better way of doing this. 😅 The autoloads
@@ -245,13 +252,11 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
 (defun e454iel-cycle-theme-pairs ()
   "Cycle through pairs of themes."
   (interactive)
-  (if (cdr e454iel-current-theme-pairs)
-      (setq e454iel-current-theme-pairs
-            (cdr e454iel-current-theme-pairs))
-
-    (setq e454iel-current-theme-pairs
+  (setq e454iel-current-theme-pairs
+        (if (cdr e454iel-current-theme-pairs)
+            (cdr e454iel-current-theme-pairs)
+          ;; else
           e454iel-theme-pairs))
-  
   (e454iel-load-theme))
 
 (defun e454iel-load-theme ()
@@ -312,11 +317,18 @@ without confirmation."
 ;; fonts
 
 ;; Add fallback black and white rendering of emojis
-(set-fontset-font t 'unicode "Symbola" nil 'append)
+;;(set-fontset-font t 'unicode (font-spec :name "OpenMoji" :style "Color") nil 'prepend)
+;;(set-fontset-font t 'unicode "Symbola" nil 'append)
 
 
 ;; Add spacing between the lines to make text easier to read
-(setq-default line-spacing 4)
+(defvar e454iel-default-line-spacing)
+(defvar e454iel-extra-line-spacing)
+
+(setq e454iel-default-line-spacing 4)
+(setq e454iel-extra-line-spacing 24)
+
+(setq-default line-spacing e454iel-default-line-spacing)
 
 ;; TODO: Create docstrings for these
 (defvar e454iel-font-pairs)
@@ -371,12 +383,22 @@ without confirmation."
   ;;(set-default-font elephant454initel-current-font)
   ;;(car (split-string (elt (font-info (find-font elephant454initel-current-font)) 1) ":")))
 
-(defun e454iel-toggle-use-dyslexic-font()
+(defun e454iel-toggle-use-dyslexic-font ()
   "Switch between using the currently selected font and the opendyslexic font.
 This makes for easier reading of larger, denser bodies of text."
   (interactive)
   (setq e454iel-use-dyslexic-font (not e454iel-use-dyslexic-font))
   (e454iel-load-font))
+
+(defun e454iel-toggle-use-extra-line-spacing ()
+  "Toggle between using `e454iel-default-line-spacing' and `e454iel-extra-line-spacing' in the current buffer."
+  (interactive)
+  ;; If line-spacing equals default, it is set to extra. Otherwise (whether it
+  ;;  equals extra or any other value), it is set to default
+  (if (= line-spacing e454iel-default-line-spacing)
+      (setq-local line-spacing e454iel-extra-line-spacing)
+    ;; else
+      (setq-local line-spacing e454iel-default-line-spacing)))
 
 (defun e454iel-load-font ()
   (let ((font-string
@@ -419,7 +441,7 @@ This makes for easier reading of larger, denser bodies of text."
 
 ;; Check out "spacemacs/core/core-spacemacs.el:121"
 (message "Setting the font..."
-         (e454iel-jump-to-font "Hermit"))
+         (e454iel-jump-to-font "Fantasque Sans Mono"))
 
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
@@ -481,6 +503,7 @@ This makes for easier reading of larger, denser bodies of text."
      
      ;; evaluate a snippet of emacs lisp
      ":" 'eval-expression
+     "l" 'eval-expression
      
      ;; modify windows using vim-like keybindings
      "w" '(evil-window-map :which-key "Window")
@@ -563,6 +586,7 @@ This makes for easier reading of larger, denser bodies of text."
      "tfi" 'e454iel-increase-font-size
      "tfd" 'e454iel-decrease-font-size
      "tft" 'e454iel-toggle-use-dyslexic-font
+     "tl" 'e454iel-toggle-use-extra-line-spacing
      ;; misc toggles
      "ta" 'auto-fill-mode
      "tr" '(lambda() (interactive)
@@ -642,6 +666,23 @@ This makes for easier reading of larger, denser bodies of text."
                 (marginalia-mode)))
             )
   )
+
+(use-package mini-frame
+  :disabled
+  :config
+  (progn
+    (setq mini-frame-show-parameters
+          `((top . 0.4)
+            (width . 0.7)
+            (left . 0.5)
+            ;;(font . ,(concat
+            ;;          (caar e454iel-current-font-pairs)
+            ;;          "-"
+            ;;          (format "%s" (+ (cdar e454iel-current-font-pairs) e454iel-font-scale 2))))
+            ))
+    (push 'consult-line mini-frame-ignore-commands)
+    (mini-frame-mode)))
+
 (use-package ivy
   :disabled
   :config (progn
@@ -672,6 +713,8 @@ This makes for easier reading of larger, denser bodies of text."
             ;; TODO: Does this package still exist?
             ;;(use-package info-rename-buffer-mode
             ;;  :config (add-hook 'Info-mode-hook 'info-rename-buffer-mode))
+
+            (evil-collection-init 'info)
 
             (general-define-key
              :states '(normal motion)
@@ -855,10 +898,6 @@ _-_increase _=_decrease"
             (use-package ivy-purpose
               :config (ivy-purpose-setup))))
 
-;; I might want to look into other spotify clients
-;;(quelpa '(spotify :fetcher github :repo "danielfm/spotify.el"))
-(use-package spotify)
-
 (use-package versuri
   :init (defun e454-lookup-current-spotify-lyrics ()
           "Lookup lyrics for the currently playing Spotify song."
@@ -1035,6 +1074,29 @@ _-_increase _=_decrease"
                                   ":"
                                   (number-to-string calendar-longitude)
                                   " -t 6500:3000"))
+
+    ;; Start and set-up ssh-agent
+    (defun e454iel-setup-ssh-agent ()
+      "Run shell commands and set environment variables necessary for setting up ssh-agent"
+        (let* ((ssh-agent-output
+                (shell-command-to-string "ssh-agent -s"))
+               (ssh-agent-output-commands
+                (split-string ssh-agent-output ";"))
+               (ssh-agent-auth-sock-set-command
+                (first ssh-agent-output-commands))
+               (ssh-agent-auth-sock
+                (second (split-string ssh-agent-auth-sock-set-command "=")))
+               (ssh-agent-pid-set-command
+                (string-trim-left (third ssh-agent-output-commands)))
+               (ssh-agent-pid
+                (second (split-string ssh-agent-pid-set-command "="))))
+
+          (setenv "SSH_AUTH_SOCK" ssh-agent-auth-sock)
+          (setenv "SSH_AGENT_PID" ssh-agent-pid)))
+
+    (e454iel-setup-ssh-agent)
+
+
     (start-process-shell-command "dunst"
                                  nil
                                  "dunst")
@@ -1060,8 +1122,8 @@ _-_increase _=_decrease"
                                  nil
                                  (concat
                                   "xinput map-to-output"
-                                  "\"Wacom Intuos PT S 2 Pen Pen (0x5881c411)\""
-                                  "\"DisplayPort-1\""))
+                                  " \"Wacom Intuos PT S 2 Pen Pen (0x5881c411)\""
+                                  " \"DisplayPort-1\""))
     (start-process-shell-command "xrandr"
                                  nil
                                  (concat
@@ -1198,6 +1260,10 @@ unsorted."
   "Return the first non-nil item in `LIST'."
   (some (lambda (x) x) list))
 
+(defun create-circular-list (list)
+  "Set the tail of the LIST as a reference to the head of the LIST."
+  (nconc list list))
+
 ;; org things
 ;; TODO: look into org-dotemacs for organizing my init file using org
 ;; TODO: org mode confirm for capture is different than with-editor confirm for
@@ -1258,6 +1324,33 @@ unsorted."
                       agenda ""
                       ((org-agenda-tag-filter-preset '("-OtherAgenda")))))))
 
+            (setq org-capture-templates
+                  '(("a" "ArticlesToRead" entry
+                     (file "~/org/ArticlesToRead.org")
+                     "* %a "
+                     :prepend t)
+                    ("w" "WikipediaArticles" entry
+                     (file "~/org/WikipediaArticles.org")
+                     "* %a "
+                     :prepend t)
+                    ("3" "3DPrintingProjects" entry
+                     (file "~/org/3dPrintingProjects.org")
+                     "* %a "
+                     :prepend t)
+                    ("f" "Fun" entry
+                     (file "~/org/fun.org")
+                     "* %a "
+                     :prepend t)
+                    ))
+
+            ;; The alsa-utils package must be installed so that aplay can run
+            ;; TODO: Any way I can use the system use-package thing for ensuring
+            ;;  alsa-utils is installed for the sake of running this?
+            (setq org-clock-sound "~/.dotfiles/BellCounterA.wav")
+
+            ;; A quick keybinding for setting a tea timer
+            (e454iel-main-menu "at" 'org-timer-set-timer)
+
             (setf org-babel-load-languages
                   '((emacs-lisp . t)
                     (python . t)
@@ -1267,6 +1360,12 @@ unsorted."
               :straight (ob-python :type built-in))
             (use-package ob-shell
               :straight (ob-shell :type built-in))
+
+            ;; I probably want to start the emacs server with `(start-server)'
+            ;;  before using this outside of Emacs. It /does/ have helpful
+            ;;  functions even without the protocl registered with xdg, though
+            (use-package org-protocol
+              :straight (org-protocol :type built-in))
 
             (use-package calfw
               :config (use-package calfw-org))
@@ -1294,6 +1393,7 @@ unsorted."
                   org-image-actual-width nil
                   org-format-latex-options (plist-put org-format-latex-options :scale 2.0)
                   org-ellipsis " ⤵ "
+                  org-adapt-indentation t
                   org-default-notes-file (concat org-directory "/notes.org"))
 
             (e454iel-main-menu
@@ -1311,6 +1411,7 @@ unsorted."
                     (find-file org-directory))
              "oj" 'org-journal-new-entry
              "o C-c" 'org-capture
+             "o k" 'org-capture
              "o c" 'org-clock-in-last
              "o C" 'org-clock-out)
 
@@ -1456,29 +1557,6 @@ unsorted."
                     :help "Run LatexMk with PVC for continuous compilation")
 
                   TeX-command-list)))
-
-;; The fact that this is strewn haphazardly here goes to show that
-;; this needs some sort of categorical organization.
-;; Anyways, this is a great quick tea timer. I can see this package
-;; and I becoming fast friends.
-;; Read more about notifications at
-;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Desktop-Notifications.html
-;; also, this should really be using a general key definer in order to add it to
-;;  our applications menu
-(use-package tea-time
-  :config (progn
-            (setq tea-time-sound "/usr/share/sounds/KDE-Sys-App-Positive.ogg"
-                  tea-time-sound-command "mplayer")
-            (add-hook 'tea-time-notification-hook (lambda()
-                                                    (notifications-notify
-                                                     :title "Tea is ready!"
-                                                     :body "Your tea has finished steeping."
-                                                     ;;:sound-name "dialog-information"
-                                                     :sound-name "completion-sucess.oga"
-                                                     :image-path
-                                                      "dialog-information"
-                                                      :category "transfer.complete")))
-            (e454iel-main-menu "at" 'tea-time)))
 
 (use-package seethru
   :config (e454iel-main-menu "tT" 'seethru))
@@ -1805,6 +1883,7 @@ Lisp function does not specify a special indentation."
 ;;  eww buffer (first eww buffer to get opened gets 1, second gets 2, etc), and
 ;;  then the name of the page. Like "<1>DuckDuckGo"
 ;; TODO: Middle mouse should open a page in a new buffer in the background
+;; TODO: Would I prefer the evil-collection bindings over the ones I have here?
 (use-package eww
   :functions (eww-suggest-uris eww-current-url)
   :init (progn
@@ -1938,6 +2017,10 @@ Lisp function does not specify a special indentation."
       ;;  have been downloaded. I only want to install on the first run.
 
       ;;:config (all-the-icons-install-fonts)
+
+      :config
+      (progn
+        (setq inhibit-compacting-font-caches t))
       )
 
     (setq doom-modeline-icon t)
@@ -2027,17 +2110,15 @@ Lisp function does not specify a special indentation."
             (setq display-time-interval 0.95)
             ;; TODO: Pi day, Pride month, December, Fall, Halloween, Thanksgiving week, Birthday
             ;; TODO: Maybe I could have the cake show every time it's the birthday of someone I know?
-            (setq e454iel-holiday-symbol "☀")
+            (setq e454iel-holiday-symbol "🍂")
             (setq display-time-format (concat "%F %H:%M:%S " e454iel-holiday-symbol))
             (display-time-mode t)))
 
 ;; used to center buffers in the middle of the screen
-(use-package centered-window
-  :config
-  (progn
-    (e454iel-main-menu "tc" 'centered-window-mode)
-    (diminish 'centered-window-mode)
-    (setq cwm-centered-window-width 150)))
+(use-package olivetti
+  ;; TODO: Maybe I can make this similar to centered-window-mode by adding a
+  ;;  global mode that only applies when there's only one frame in the window
+  :general (e454iel-main-menu "tc" 'olivetti-mode))
 
 ;; this still needs to be configured, particularly for the keybindings
 ;;(use-package pocket-api)
@@ -2134,15 +2215,6 @@ Lisp function does not specify a special indentation."
 ;; multi-run, multi-term, sane-term, navorski, term+, term+key-intercept,
 ;; term-manager, term-projectile
 
-(use-package counsel-spotify
-  :config (e454iel-main-menu "ams" '(nil :which-key "Spotify")
-                                        "amsp" 'counsel-spotify-toggle-play-pause
-                                        "amsb" 'counsel-spotify-previous
-                                        "amsf" 'counsel-spotify-next
-                                        "amst" 'counsel-spotify-search-track
-                                        "amsl" 'counsel-spotify-search-album
-                                        "amsr" 'counsel-spotify-search-artist))
-
 (use-package tramp
   :straight (tramp :type built-in)
   :config (progn
@@ -2186,12 +2258,18 @@ Lisp function does not specify a special indentation."
              :major-modes 'c-mode-map
               "s" 'rtags-find-symbol-at-point)))
 
-;;(use-package emms
-  ;;:config (progn
+(use-package emms
+  :config (progn
             ;;(use-package emms-player-mpv)
-            ;;(emms-all)
-            ;;(emms-default-players)
-            ;;(add-to-list 'emms-player-list 'emms-player-mpv)))
+            (emms-all)
+            (emms-default-players)
+            ;;(add-to-list 'emms-player-list 'emms-player-mpv)
+            (setq emms-source-file-default-directory "~/Music/")
+            (evil-collection-init 'emms))
+  :general (e454iel-main-menu
+             "ames" 'emms-streams
+             "amef" 'emms-play-file
+             "amep" 'emms-pause))
 
 (use-package python
   :commands (python-mode run-python)
@@ -2358,6 +2436,7 @@ Lisp function does not specify a special indentation."
   :config (add-to-list 'company-backends 'company-emoji))
 
 (use-package emojify
+  :disabled
   :config (progn 
             (global-emojify-mode t)
             (global-emojify-mode-line-mode t)
@@ -2480,7 +2559,9 @@ Lisp function does not specify a special indentation."
             (evil-owl-mode)
             (diminish 'evil-owl-mode)))
 
-(use-package org-trello)
+;; TODO: It's creating errors. Disabled for now.
+(use-package org-trello
+  :disabled)
 
 (use-package scala-mode
   :mode "\\.s\\(cala\\|bt\\)$")
@@ -2591,14 +2672,16 @@ Lisp function does not specify a special indentation."
   :config
   (progn
     ;; Change the font face
-    (add-hook 'nov-mode-hook
-              (lambda ()
-                (face-remap-add-relative
-                 'variable-pitch
-                 :family "opendyslexic"
-                 :height 2.3)))
+    ;;(add-hook 'nov-mode-hook
+    ;;          (lambda ()
+    ;;            (face-remap-add-relative
+    ;;             'variable-pitch
+    ;;             :family "opendyslexic"
+    ;;             :height 2.3)))
 
-    (setq nov-text-width 120)
+    (setq nov-variable-pitch nil)
+
+    (setq nov-text-width 80)
 
     (evil-set-initial-state 'nov-mode 'normal)
 
@@ -2657,14 +2740,23 @@ Lisp function does not specify a special indentation."
   ;;  with (load-library) as part of mpv's config attribute
 
   :init
-  (use-package mpv
-    :config
-    (progn
-      (load-library "mpv")
-      ;; TODO: For whatever reason, it needs mpd to be started once before use.
-      ;;  This call isn't sufficient, but starting it in a shell with `shell'
-      ;;  for some reason is 
-      (start-process-shell-command "mpd" nil "mpd")))
+  (progn
+    ;; TODO: This is a temporary fix for vuiet while LastFM.el is getting
+    ;;  updated to work with DickMao's version of request.el. Remove once
+    ;;  LastFM.el is fixed
+    (use-package lastfm
+      :init
+      (use-package request
+        :straight (:host github :repo "tkf/emacs-request")))
+
+    (use-package mpv
+      :config
+      (progn
+        (load-library "mpv")
+        ;; TODO: For whatever reason, it needs mpd to be started once before use.
+        ;;  This call isn't sufficient, but starting it in a shell with `shell'
+        ;;  for some reason is
+        (start-process-shell-command "mpd" nil "mpd"))))
 
   :config
   (progn
@@ -2711,6 +2803,12 @@ Lisp function does not specify a special indentation."
         (vuiet-playing-artist) (vuiet-playing-track-name)
         (vuiet-playing-artist) (vuiet-playing-track-name))))
 
+    (cl-defun e454iel-vuiet-loop-songs (songs &key (random nil))
+      "Play everything in the SONGS list either on loop or at RANDOM with repeats."
+      (if random
+          (vuiet-play (create-circular-list songs) :random)
+        (vuiet-play (create-circular-list songs))))
+
     ;; TODO: Write functions for storing (or maybe just inserting) org links for
     ;;  current track, current artist, current album, and current tag (from a
     ;;  list of tags chosen from a completing-read)
@@ -2724,7 +2822,13 @@ Lisp function does not specify a special indentation."
 (use-package mu)
 
 ;; For IRC
-(use-package circe)
+;; TODO: Advice or redefine functions to prevent it from writing to the
+;;  mode-line. There really needs to be a way to turn that off built-in, but I
+;;  can just write my own.
+;;  https://ag91.github.io/blog/2020/09/18/emacs-slack-and-my-peaceful-modeline/
+
+(use-package circe
+  :config (setq tracking-max-mode-line-entries 1))
 
 (use-package undo-tree
   :init (custom-set-variables '(evil-undo-system 'undo-tree))
@@ -2853,6 +2957,47 @@ normal-state."
                (progn
                  (greader-stop)
                  (setq e454iel-greader-currently-reading nil)))))))
+
+;; A fun virtual fireplace
+(use-package fireplace
+  :general (e454iel-main-menu "agf" 'fireplace))
+
+(use-package sx
+  ;; TODO: Set up keybindings by just copying the default keymap and applying it
+  ;;  to evil normal state
+  )
+
+;; Obfuscate text in ways that are still readable
+(use-package fsc
+  :init (use-package makey)
+  :straight (fsc :host github :repo "kuanyui/fsc.el")
+  ;; The "o" stands for "obfuscate"
+  :general (e454iel-main-menu "mo" 'fsc/rearrange-region))
+
+(use-package go
+  ;; TODO: Use the system use-package thing to make sure the gnu-go package is
+  ;;  installed
+  )
+
+;; For quickly finding RSS feeds from URLs
+(use-package feed-discovery)
+
+;; For getting the current air quality index
+(use-package aqi)
+
+;; For syntax coloring lisp code based on parenthesis nest depth
+(use-package prism
+  :config
+  (progn
+    (add-hook 'prog-mode-hook 'prism-mode)))
+
+(use-package avy
+  :config
+  (use-package ace-window
+    :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+    :general (e454iel-main-menu "jw" 'ace-window))
+
+  :general (e454iel-main-menu "jc" 'avy-goto-char))
 
 (provide 'init)
 ;;; init.el ends here
