@@ -2918,5 +2918,7 @@ normal-state."
 ;; For quickly finding RSS feeds from URLs
 (use-package feed-discovery)
 
+;; For getting the current air quality index
+(use-package aqi)
 (provide 'init)
 ;;; init.el ends here
