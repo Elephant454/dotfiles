@@ -1262,6 +1262,25 @@ unsorted."
                       agenda ""
                       ((org-agenda-tag-filter-preset '("-OtherAgenda")))))))
 
+            (setq org-capture-templates
+                  '(("a" "ArticlesToRead" entry
+                     (file "~/org/ArticlesToRead.org")
+                     "* %a "
+                     :prepend t)
+                    ("w" "WikipediaArticles" entry
+                     (file "~/org/WikipediaArticles.org")
+                     "* %a "
+                     :prepend t)
+                    ("3" "3DPrintingProjects" entry
+                     (file "~/org/3dPrintingProjects.org")
+                     "* %a "
+                     :prepend t)
+                    ("f" "Fun" entry
+                     (file "~/org/fun.org")
+                     "* %a "
+                     :prepend t)
+                    ))
+
             ;; The alsa-utils package must be installed so that aplay can run
             ;; TODO: Any way I can use the system use-package thing for ensuring
             ;;  alsa-utils is installed for the sake of running this?
