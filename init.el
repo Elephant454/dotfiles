@@ -1299,6 +1299,12 @@ unsorted."
             (use-package ob-shell
               :straight (ob-shell :type built-in))
 
+            ;; I probably want to start the emacs server with `(start-server)'
+            ;;  before using this outside of Emacs. It /does/ have helpful
+            ;;  functions even without the protocl registered with xdg, though
+            (use-package org-protocol
+              :straight (org-protocol :type built-in))
+
             (use-package calfw
               :config (use-package calfw-org))
 
