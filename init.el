@@ -2903,5 +2903,12 @@ normal-state."
   ;;  to evil normal state
   )
 
+;; Obfuscate text in ways that are still readable
+(use-package fsc
+  :init (use-package makey)
+  :straight (fsc :host github :repo "kuanyui/fsc.el")
+  ;; The "o" stands for "obfuscate"
+  :general (e454iel-main-menu "mo" 'fsc/rearrange-region))
+
 (provide 'init)
 ;;; init.el ends here
