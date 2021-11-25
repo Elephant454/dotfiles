@@ -1343,6 +1343,7 @@ unsorted."
                     (find-file org-directory))
              "oj" 'org-journal-new-entry
              "o C-c" 'org-capture
+             "o k" 'org-capture
              "o c" 'org-clock-in-last
              "o C" 'org-clock-out)
 
