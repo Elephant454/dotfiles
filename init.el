@@ -2920,5 +2920,12 @@ normal-state."
 
 ;; For getting the current air quality index
 (use-package aqi)
+
+;; For syntax coloring lisp code based on parenthesis nest depth
+(use-package prism
+  :config
+  (progn
+    (add-hook 'prog-mode-hook 'prism-mode)))
+
 (provide 'init)
 ;;; init.el ends here
