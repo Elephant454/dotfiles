@@ -2898,5 +2898,10 @@ normal-state."
 (use-package fireplace
   :general (e454iel-main-menu "agf" 'fireplace))
 
+(use-package sx
+  ;; TODO: Set up keybindings by just copying the default keymap and applying it
+  ;;  to evil normal state
+  )
+
 (provide 'init)
 ;;; init.el ends here
