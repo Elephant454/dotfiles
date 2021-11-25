@@ -80,6 +80,15 @@ print-circle t
 (tool-bar-mode 0)          ; remove the tool bar (New, Open, etc.)
 (global-auto-revert-mode)  ; auto-revert changes for any changes on disk
 
+;; Get rid of the titlebar CSD for Phosh
+(defun e454iel-remove-csd (frame)
+    "Get rid of the Gnome titlebar on FRAME by toggling fullscreen on and off."
+  (toggle-frame-fullscreen)
+  (toggle-frame-fullscreen))
+
+(add-hook 'after-make-frame-functions
+          #'e454iel-remove-csd)
+
 ;; Don't suspend emacs with "C-z"
 (global-unset-key (kbd "C-z"))
 ;; Don't kill the whole line if I accidentally mash C-S
@@ -131,7 +140,13 @@ print-circle t
               "7752.Guix.Matthew"
               "7548.Arch.Matthew"
               "7548.Guix.Matthew"
-              "Desktop.Guix.Maddie")
+              "Desktop.Guix.Maddie"
+              "mobian")
+        :test #'string-equal))
+
+(defvar e454iel-phone-p
+  (find (system-name)
+        (list "mobian")
         :test #'string-equal))
 
 (defvar e454iel-documents-time-period "Summer")
@@ -330,8 +345,12 @@ without confirmation."
 
 (setq-default line-spacing e454iel-default-line-spacing)
 
+;; TODO: Set up handling of phone vs desktop fonts in a way that is less likely
+;;  to suffer from side effect related problems
+
 ;; TODO: Create docstrings for these
 (defvar e454iel-font-pairs)
+(defvar e454iel-phone-font-pairs)
 (defvar e454iel-current-font-pairs)
 (defvar e454iel-font-scale)
 (defvar e454iel-use-dyslexic-font nil)
@@ -350,6 +369,12 @@ without confirmation."
                            ("Monoid" . 12)
                            ("Iosevka Term Slab Extended" . 14)
                            ))
+(setq e454iel-phone-font-pairs
+      '(("Hermit" . 5)
+        ("Fantasque Sans Mono" . 6)
+        ))
+(if e454iel-phone-p
+    (setq e454iel-font-pairs e454iel-phone-font-pairs))
       
 (setq e454iel-current-font-pairs e454iel-font-pairs)
 (setq e454iel-font-scale 0)
@@ -463,6 +488,7 @@ This makes for easier reading of larger, denser bodies of text."
               :config
               (progn
                 (setq evil-escape-unordered-key-sequence t)
+                (setq evil-escape-delay (if e454iel-phone-p 0.3 0.1))
                 (evil-escape-mode t)))
             (use-package evil-matchit :config (global-evil-matchit-mode t))
             (use-package fringe-helper
@@ -661,6 +687,11 @@ This makes for easier reading of larger, denser bodies of text."
 
 (use-package ibuffer
   :config (progn
+            (evil-collection-init 'ibuffer)
+            (use-package all-the-icons-ibuffer
+              ;; TODO: There ought to be a cleaner way to turn this on only when
+              ;;  ibuffer is opened
+              :init (all-the-icons-ibuffer-mode 1))
             (general-define-key
              ;;:states '(normal motion)
              :keymaps 'ibuffer-mode-map
@@ -1613,6 +1644,7 @@ Lisp function does not specify a special indentation."
 ;; TODO: Add suggestions from these Reddit threads
 ;; https://www.reddit.com/r/emacs/comments/7fa1fb/how_many_of_you_guys_use_emacs_for_irc_whats_your/
 ;; https://www.reddit.com/r/emacs/comments/8ml6na/tip_how_to_make_erc_fun_to_use/
+;; TODO: Watch the SystemCrafters videos on ERC for suggestions
 (use-package erc
   :init (progn
           (if e454iel-home-computer-p
@@ -1946,23 +1978,23 @@ Lisp function does not specify a special indentation."
             "q" 'paradox-quit-and-close
             "x" 'paradox-menu-execute))
 
+(use-package all-the-icons
+  ;; TODO: There needs to be some way of telling whether or not these icons
+  ;;  have been downloaded. I only want to install on the first run.
+
+  ;;:config (all-the-icons-install-fonts)
+  :config
+  (progn
+    ;; According to the readme for all-the-icons-ibuffer, this reduces
+    ;;  sluggishness when there are multiple icons on screen at the same
+    ;;  time
+    (setq inhibit-compacting-font-caches t)))
+
 (use-package doom-modeline
   :disabled
   :config
   (progn
-    (use-package all-the-icons
-      ;; TODO: There needs to be some way of telling whether or not these icons
-      ;;  have been downloaded. I only want to install on the first run.
-
-      ;;:config (all-the-icons-install-fonts)
-
-      :config
-      (progn
-        (setq inhibit-compacting-font-caches t))
-      )
-
     (setq doom-modeline-icon t)
-
     (doom-modeline-mode)))
 
 (use-package spaceline
@@ -1993,27 +2025,10 @@ Lisp function does not specify a special indentation."
                     (accent . (telephone-line-major-mode-segment))
                     ))
   (telephone-line-mode t)))
-  
 
-;; used to hide minor modes or give them alternative names for the modeline
-;;
-;; TODO: these should probably be moved to their respective use-package entries
-(use-package diminish
-  :config (progn
-            (diminish 'company-mode)
-            (diminish 'ivy-mode)
-            (diminish 'undo-tree-mode)
-            (diminish 'which-key-mode)
-            (diminish 'evil-escape-mode)
-            (diminish 'evil-org-mode)
-            ;; Projectile mode did have a helpful indicator associated with it,
-            ;;  though. It should be re-added to the mode-line in a nicer way.
-            (diminish 'projectile-global-mode)
-            ;;(diminish 'projectile-mode)
-            (diminish 'global-evil-fringe-mark-mode)
-            (diminish 'yas-minor-mode)
-            (diminish 'eldoc-mode)
-            (diminish 'counsel-mode)))
+;; hides minor modes
+(use-package minions
+  :config (minions-mode))
 
 (use-package immortal-scratch)
 
@@ -2085,8 +2100,6 @@ Lisp function does not specify a special indentation."
 (use-package projectile
   :config (progn
             (setq projectile-enable-caching t)
-            (diminish 'global-projectile-mode)
-            (diminish 'projectile-mode)
             (use-package counsel-projectile
               :disabled
               :config (progn
@@ -2241,8 +2254,7 @@ Lisp function does not specify a special indentation."
 
 (use-package flycheck
   :config (progn
-            (global-flycheck-mode t)
-            (diminish 'flycheck-mode)))
+            (global-flycheck-mode t)))
 
 (use-package langtool
   :disabled
@@ -2494,8 +2506,7 @@ Lisp function does not specify a special indentation."
                            (display-buffer-in-side-window)
                            (side . bottom)
                            (window-height . 0.3)))
-            (evil-owl-mode)
-            (diminish 'evil-owl-mode)))
+            (evil-owl-mode)))
 
 ;; TODO: It's creating errors. Disabled for now.
 (use-package org-trello
@@ -2652,7 +2663,7 @@ Lisp function does not specify a special indentation."
 
 ;; Nyan cat in the modeline
 (use-package nyan-mode
-  :config (nyan-mode))
+  :config (if (not e454iel-phone-p) (nyan-mode)))
 
 ;; Parrot in the modeline
 (use-package parrot
@@ -2772,8 +2783,7 @@ Lisp function does not specify a special indentation."
   :init (custom-set-variables '(evil-undo-system 'undo-tree))
   :config
   (progn
-    (global-undo-tree-mode)
-    (diminish 'undo-tree-mode)))
+    (global-undo-tree-mode)))
 
 ;; For 3D printer G-Code
 (use-package gcode-mode)
