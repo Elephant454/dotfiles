@@ -2910,5 +2910,10 @@ normal-state."
   ;; The "o" stands for "obfuscate"
   :general (e454iel-main-menu "mo" 'fsc/rearrange-region))
 
+(use-package go
+  ;; TODO: Use the system use-package thing to make sure the gnu-go package is
+  ;;  installed
+  )
+
 (provide 'init)
 ;;; init.el ends here
