@@ -2927,5 +2927,13 @@ normal-state."
   (progn
     (add-hook 'prog-mode-hook 'prism-mode)))
 
+(use-package avy
+  :config
+  (use-package ace-window
+    :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+    :general (e454iel-main-menu "jw" 'ace-window))
+
+  :general (e454iel-main-menu "jc" 'avy-goto-char))
+
 (provide 'init)
 ;;; init.el ends here
