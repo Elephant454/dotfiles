@@ -1874,7 +1874,6 @@ Lisp function does not specify a special indentation."
   (progn
     (use-package flyspell-correct
       :config (progn
-                (use-package flyspell-correct-ivy)
                 (e454iel-main-menu "ms" 'flyspell-correct-at-point)))))
 
 ;; TODO: We can keep "Y" for copying a whole line at a time, and then put the
