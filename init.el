@@ -2739,6 +2739,12 @@ Lisp function does not specify a special indentation."
         (vuiet-playing-artist) (vuiet-playing-track-name)
         (vuiet-playing-artist) (vuiet-playing-track-name))))
 
+    (cl-defun e454iel-vuiet-loop-songs (songs &key (random nil))
+      "Play everything in the SONGS list either on loop or at RANDOM with repeats."
+      (if random
+          (vuiet-play (create-circular-list songs) :random)
+        (vuiet-play (create-circular-list songs))))
+
     ;; TODO: Write functions for storing (or maybe just inserting) org links for
     ;;  current track, current artist, current album, and current tag (from a
     ;;  list of tags chosen from a completing-read)
