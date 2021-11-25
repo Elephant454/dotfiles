@@ -2915,5 +2915,8 @@ normal-state."
   ;;  installed
   )
 
+;; For quickly finding RSS feeds from URLs
+(use-package feed-discovery)
+
 (provide 'init)
 ;;; init.el ends here
