@@ -2894,5 +2894,9 @@ normal-state."
                  (greader-stop)
                  (setq e454iel-greader-currently-reading nil)))))))
 
+;; A fun virtual fireplace
+(use-package fireplace
+  :general (e454iel-main-menu "agf" 'fireplace))
+
 (provide 'init)
 ;;; init.el ends here
