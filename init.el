@@ -2497,7 +2497,9 @@ Lisp function does not specify a special indentation."
             (evil-owl-mode)
             (diminish 'evil-owl-mode)))
 
-(use-package org-trello)
+;; TODO: It's creating errors. Disabled for now.
+(use-package org-trello
+  :disabled)
 
 (use-package scala-mode
   :mode "\\.s\\(cala\\|bt\\)$")
