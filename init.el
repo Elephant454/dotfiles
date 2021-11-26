@@ -341,7 +341,7 @@ without confirmation."
 (defvar e454iel-extra-line-spacing)
 
 (setq e454iel-default-line-spacing 4)
-(setq e454iel-extra-line-spacing 24)
+(setq e454iel-extra-line-spacing (if e454iel-phone-p 12 24))
 
 (setq-default line-spacing e454iel-default-line-spacing)
 
