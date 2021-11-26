@@ -1251,6 +1251,7 @@ unsorted."
           (use-package org-bullets)
           (use-package org-journal
             :config (setq org-journal-carryover-items nil))
+          (use-package org-chef)
           (use-package org-clock-today
             :config (org-clock-today-mode 1))
           (use-package org-alert
@@ -1310,7 +1311,11 @@ unsorted."
                      (file "~/org/fun.org")
                      "* %a "
                      :prepend t)
-                    ))
+                    ("c" "Cookbook" entry (file "~/org/cookbook.org")
+                     "%(org-chef-get-recipe-from-url)"
+                     :prepend t)
+                    ("C" "Manual Cookbook" entry (file "~/org/cookbook.org")
+                     "* %^{Recipe title: }\n  :PROPERTIES:\n  :source-url:\n  :servings:\n  :prep-time:\n  :cook-time:\n  :ready-in:\n  :END:\n** Ingredients\n   %?\n** Directions\n\n")))
 
             ;; The alsa-utils package must be installed so that aplay can run
             ;; TODO: Any way I can use the system use-package thing for ensuring
