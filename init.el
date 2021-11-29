@@ -149,13 +149,15 @@ print-circle t
         (list "mobian")
         :test #'string-equal))
 
-(defvar e454iel-documents-time-period "Summer")
-(defvar e454iel-documents-dir
+(defvar e454iel-documents-season)
+(defvar e454iel-documents-dir)
+(setq e454iel-documents-season "Summer")
+(setq e454iel-documents-dir
   (concat "~/Documents/"
           ;;(int-to-string (nth 5 (decode-time))) ; the current year
           "2021"
           "/"
-          e454iel-documents-time-period))
+          e454iel-documents-season))
 
 
 ;; themes
