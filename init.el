@@ -1385,9 +1385,11 @@ unsorted."
                     (find-file org-directory))
              "oj" 'org-journal-new-entry
              "o C-c" 'org-capture
-             "o k" 'org-capture
-             "o c" 'org-clock-in-last
-             "o C" 'org-clock-out)
+             "ok" 'org-capture
+             "oc" 'org-clock-in-last
+             "oC" 'org-clock-out
+             "oy" 'org-store-link
+             "op" 'org-insert-last-stored-link)
 
             (general-define-key
              :keymaps 'org-mode-map
