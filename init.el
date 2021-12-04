@@ -149,13 +149,15 @@ print-circle t
         (list "mobian")
         :test #'string-equal))
 
-(defvar e454iel-documents-time-period "Summer")
-(defvar e454iel-documents-dir
+(defvar e454iel-documents-season)
+(defvar e454iel-documents-dir)
+(setq e454iel-documents-season "Summer")
+(setq e454iel-documents-dir
   (concat "~/Documents/"
           ;;(int-to-string (nth 5 (decode-time))) ; the current year
           "2021"
           "/"
-          e454iel-documents-time-period))
+          e454iel-documents-season))
 
 
 ;; themes
@@ -1403,9 +1405,11 @@ unsorted."
                     (find-file org-directory))
              "oj" 'org-journal-new-entry
              "o C-c" 'org-capture
-             "o k" 'org-capture
-             "o c" 'org-clock-in-last
-             "o C" 'org-clock-out)
+             "ok" 'org-capture
+             "oc" 'org-clock-in-last
+             "oC" 'org-clock-out
+             "oy" 'org-store-link
+             "op" 'org-insert-last-stored-link)
 
             (general-define-key
              :keymaps 'org-mode-map
