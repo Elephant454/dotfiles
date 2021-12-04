@@ -683,7 +683,19 @@ This makes for easier reading of larger, denser bodies of text."
             (general-define-key
              :states '(normal motion)
              :keymaps 'Info-mode-map
-              "<SPC>" 'e454iel-main-menu-prefix)))
+             "<SPC>" 'e454iel-main-menu-prefix)))
+
+(use-package all-the-icons
+  ;; TODO: There needs to be some way of telling whether or not these icons
+  ;;  have been downloaded. I only want to install on the first run.
+
+  ;;:config (all-the-icons-install-fonts)
+  :config
+  (progn
+    ;; According to the readme for all-the-icons-ibuffer, this reduces
+    ;;  sluggishness when there are multiple icons on screen at the same
+    ;;  time
+    (setq inhibit-compacting-font-caches t)))
 
 (use-package ibuffer
   :config (progn
@@ -1982,18 +1994,6 @@ Lisp function does not specify a special indentation."
            :states 'normal
             "q" 'paradox-quit-and-close
             "x" 'paradox-menu-execute))
-
-(use-package all-the-icons
-  ;; TODO: There needs to be some way of telling whether or not these icons
-  ;;  have been downloaded. I only want to install on the first run.
-
-  ;;:config (all-the-icons-install-fonts)
-  :config
-  (progn
-    ;; According to the readme for all-the-icons-ibuffer, this reduces
-    ;;  sluggishness when there are multiple icons on screen at the same
-    ;;  time
-    (setq inhibit-compacting-font-caches t)))
 
 (use-package doom-modeline
   :disabled
