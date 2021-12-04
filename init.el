@@ -1327,7 +1327,13 @@ unsorted."
                      "%(org-chef-get-recipe-from-url)"
                      :prepend t)
                     ("C" "Manual Cookbook" entry (file "~/org/cookbook.org")
-                     "* %^{Recipe title: }\n  :PROPERTIES:\n  :source-url:\n  :servings:\n  :prep-time:\n  :cook-time:\n  :ready-in:\n  :END:\n** Ingredients\n   %?\n** Directions\n\n")))
+                     "* %^{Recipe title: }\n  :PROPERTIES:\n  :source-url:\n  :servings:\n  :prep-time:\n  :cook-time:\n  :ready-in:\n  :END:\n** Ingredients\n   %?\n** Directions\n\n"
+                     :prenend t)
+                    ("m" "music")
+                    ("ma" "Music (Artist)" entry (file "~/org/music.org")
+                     "* [[elisp:(vuiet-play-artist \"%^{Artist name?}\")][%\\1]] "
+                     :prepend t)
+                    ))
 
             ;; The alsa-utils package must be installed so that aplay can run
             ;; TODO: Any way I can use the system use-package thing for ensuring
