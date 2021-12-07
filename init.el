@@ -2962,5 +2962,31 @@ normal-state."
 
   :general (e454iel-main-menu "jc" 'avy-goto-char))
 
+(use-package scad-mode
+  :config
+  (progn
+    (use-package scad-preview
+      :general
+      (e454iel-major-mode-menu
+        :keymaps 'scad-mode-map
+        "c" 'scad-preview-refresh)
+
+      :general
+      (:keymaps 'scad-preview--image-mode-map
+       :states 'normal
+        "r" 'scad-preview-reset-camera-parameters
+        "l" 'scad-preview-rotz+
+        "h" 'scad-preview-rotz-
+        "k" 'scad-preview-rotx+
+        "j" 'scad-preview-rotx-
+        "C-h" 'scad-preview-roty+
+        "C-l" 'scad-preview-roty-
+        "C-k" 'scad-preview-dist-
+        "C-j" 'scad-preview-dist+
+        "M-h" 'scad-preview-trnsx+
+        "M-l" 'scad-preview-trnsx-
+        "M-k" 'scad-preview-trnsz-
+        "M-j" 'scad-preview-trnsz+))))
+
 (provide 'init)
 ;;; init.el ends here
