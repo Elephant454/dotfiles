@@ -1309,7 +1309,11 @@ unsorted."
                       ((org-agenda-tag-filter-preset '("-OtherAgenda")))))))
 
             (setq org-capture-templates
-                  '(("a" "ArticlesToRead" entry
+                  `(("t" "TODO" entry
+                     (file ,(concat e454iel-documents-dir "/todo.org"))
+                     "* %a "
+                     :empty-lines-before 1)
+                    ("a" "ArticlesToRead" entry
                      (file "~/org/ArticlesToRead.org")
                      "* %a "
                      :prepend t)
