@@ -1576,6 +1576,10 @@ unsorted."
   (interactive)
   (dotimes (i 26) (insert-char (+ ?a i))))
 
+(defun e454iel-kill-value (value)
+  "Convert `VALUE' to a string and kill it to the clipboard."
+  (kill-new (format "%s" value)))
+
 (use-package ediff
   :config (setq ediff-window-setup-function
   'ediff-setup-windows-plain)) ; makes it so that ediff uses one
