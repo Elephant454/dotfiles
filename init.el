@@ -141,12 +141,14 @@ print-circle t
               "7548.Arch.Matthew"
               "7548.Guix.Matthew"
               "Desktop.Guix.Maddie"
-              "mobian")
+              "mobian"
+              "danctnix")
         :test #'string-equal))
 
 (defvar e454iel-phone-p
   (find (system-name)
-        (list "mobian")
+        (list "mobian"
+              "danctnix")
         :test #'string-equal))
 
 
