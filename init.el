@@ -2558,6 +2558,7 @@ Lisp function does not specify a special indentation."
 
 ;; TODO: Figure out how to make this install the Python, Java, and C language
 ;;  servers if I'm on a home computer
+;; This is for LSP
 (use-package eglot
   ;; TODO: The fact that I have to do this manually means there's something
   ;;  wonky going on, perhaps in terms of the version of "project" I'm using
