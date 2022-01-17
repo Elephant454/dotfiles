@@ -1329,6 +1329,10 @@ unsorted."
                      (file "~/org/fun.org")
                      "* %a "
                      :prepend t)
+                    ("s" "SCPWiki" entry
+                     (file "~/org/scp.org")
+                     "* %a "
+                     :prepend t)
                     ("c" "Cookbook" entry (file "~/org/cookbook.org")
                      "%(org-chef-get-recipe-from-url)"
                      :prepend t)
