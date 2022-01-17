@@ -149,16 +149,6 @@ print-circle t
         (list "mobian")
         :test #'string-equal))
 
-(defvar e454iel-documents-season)
-(defvar e454iel-documents-dir)
-(setq e454iel-documents-season "Summer")
-(setq e454iel-documents-dir
-  (concat "~/Documents/"
-          ;;(int-to-string (nth 5 (decode-time))) ; the current year
-          "2021"
-          "/"
-          e454iel-documents-season))
-
 
 ;; themes
 
@@ -1282,22 +1272,43 @@ unsorted."
           )
 
   :config (progn
+            (setq e454iel-documents-season "Fall")
+
             (defvar e454iel-extra-org-agenda-files
               '("~/org/birthdays.org" "~/org/derp.org" "~/org/holidays.org"))
 
             (defvar e454iel-documents-org-agenda-file-pattern
               "\\(.*todo.org\\|.*events.org\\|.*schedule.org\\)$")
 
-            (setf org-agenda-files
-                  (append
-                   (remove-if-not #'file-exists-p
-                                  e454iel-extra-org-agenda-files)
-                   (if (file-directory-p e454iel-documents-dir)
-                       (directory-files-recursively
-                        e454iel-documents-dir
-                        e454iel-documents-org-agenda-file-pattern
-                        nil))
-                   org-agenda-files))
+            (defun e454iel-set-documents-dir ()
+              "Automatically set org-agenda-files with a value calculated based
+on my configuration."
+              (interactive)
+              (setq e454iel-documents-dir
+                    (concat "~/Documents/"
+                            ;;(int-to-string (nth 5 (decode-time))) ; the current year
+                            "2021"
+                            "/"
+                            e454iel-documents-season)))
+
+            (e454iel-set-documents-dir)
+
+            (defun e454iel-set-org-agenda-files ()
+              "Automatically set org-agenda-files with a value
+calculated based on my configuration."
+              (interactive)
+              (setf org-agenda-files
+                    (append
+                     (remove-if-not #'file-exists-p
+                                    e454iel-extra-org-agenda-files)
+                     (if (file-directory-p e454iel-documents-dir)
+                         (directory-files-recursively
+                          e454iel-documents-dir
+                          e454iel-documents-org-agenda-file-pattern
+                          nil))
+                     org-agenda-files)))
+
+            (e454iel-set-org-agenda-files)
 
             (setf org-agenda-custom-commands
                   (append
