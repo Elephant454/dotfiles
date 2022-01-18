@@ -232,7 +232,7 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
 (setq e454iel-theme-pairs '((soft-morning . omtose-softer)
                             (silkworm . foggy-night)
                             (gruvbox-light-hard . gruvbox-dark-hard)
-                            (kaolin-light . kaolin-dark)
+                            (kaolin-mono-light . kaolin-mono-dark)
                             (doom-one . doom-one)
                             (doom-fairy-floss . doom-laserwave)
                             (doom-opera-light . doom-opera)
@@ -1342,6 +1342,10 @@ calculated based on my configuration."
                      (file "~/org/fun.org")
                      "* %a "
                      :prepend t)
+                    ("s" "SCPWiki" entry
+                     (file "~/org/scp.org")
+                     "* %a "
+                     :prepend t)
                     ("c" "Cookbook" entry (file "~/org/cookbook.org")
                      "%(org-chef-get-recipe-from-url)"
                      :prepend t)
@@ -1372,7 +1376,7 @@ calculated based on my configuration."
             (use-package ob-shell
               :straight (ob-shell :type built-in))
 
-            ;; I probably want to start the emacs server with `(start-server)'
+            ;; I probably want to start the emacs server with `(server-start)'
             ;;  before using this outside of Emacs. It /does/ have helpful
             ;;  functions even without the protocl registered with xdg, though
             (use-package org-protocol
@@ -1584,6 +1588,10 @@ calculated based on my configuration."
   "Insert the English alphabet in lower case at point."
   (interactive)
   (dotimes (i 26) (insert-char (+ ?a i))))
+
+(defun e454iel-kill-value (value)
+  "Convert `VALUE' to a string and kill it to the clipboard."
+  (kill-new (format "%s" value)))
 
 (use-package ediff
   :config (setq ediff-window-setup-function
@@ -2245,8 +2253,8 @@ Lisp function does not specify a special indentation."
   :config (progn
             ;;(use-package emms-player-mpv)
             (emms-all)
-            (emms-default-players)
-            ;;(add-to-list 'emms-player-list 'emms-player-mpv)
+            ;;(emms-default-players)
+            (add-to-list 'emms-player-list 'emms-player-mpv)
             (setq emms-source-file-default-directory "~/Music/")
             (evil-collection-init 'emms))
   :general (e454iel-main-menu
@@ -2563,6 +2571,7 @@ Lisp function does not specify a special indentation."
 
 ;; TODO: Figure out how to make this install the Python, Java, and C language
 ;;  servers if I'm on a home computer
+;; This is for LSP
 (use-package eglot
   ;; TODO: The fact that I have to do this manually means there's something
   ;;  wonky going on, perhaps in terms of the version of "project" I'm using
