@@ -2691,7 +2691,9 @@ Lisp function does not specify a special indentation."
 (use-package bookmark+)
 
 ;; Gopher client
-(use-package elpher)
+(use-package elpher
+  ;; Its home site is down for the moment, so we're using the emacsmirror
+  :straight (:host github :repo "emacsmirror/elpher"))
 
 ;; Nyan cat in the modeline
 (use-package nyan-mode
