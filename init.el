@@ -3022,5 +3022,13 @@ normal-state."
         "M-k" 'scad-preview-trnsz-
         "M-j" 'scad-preview-trnsz+))))
 
+(use-package scroll-on-drag
+  :disabled
+  :general
+  ([down-mouse-1] (lambda ()
+                  (interactive)
+                  (unless (scroll-on-drag)
+                    (mouse-yank-primary t)))))
+
 (provide 'init)
 ;;; init.el ends here
