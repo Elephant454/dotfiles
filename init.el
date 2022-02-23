@@ -2823,7 +2823,10 @@ Lisp function does not specify a special indentation."
   :config (setq tracking-max-mode-line-entries 1))
 
 (use-package undo-tree
-  :init (custom-set-variables '(evil-undo-system 'undo-tree))
+  :init
+  (progn
+    (custom-set-variables '(evil-undo-system 'undo-tree))
+    (add-hook 'evil-local-mode-hook 'turn-on-undo-tree-mode))
   :config
   (progn
     (global-undo-tree-mode)))
