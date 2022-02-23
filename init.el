@@ -2913,7 +2913,10 @@ normal-state."
              "straight/repos/ewal/doom-themes/ewal-doom-themes.el"))
     (load-file
      (concat user-emacs-directory
-             "straight/repos/ewal/spacemacs-themes/ewal-spacemacs-themes.el"))))
+             "straight/repos/ewal/spacemacs-themes/ewal-spacemacs-themes.el")))
+
+  (use-package ewal-evil-cursors
+    :config (ewal-evil-cursors-get-colors :apply t)))
 
 (use-package dictcc
   :config
