@@ -310,13 +310,12 @@ without confirmation."
 
 ;;(e454iel-load-theme)
 
-;; This doesn't seem to work? 😅
 (defun e454iel-disable-all-theme-pairs ()
   "Run `disable-theme' on every theme in `e454iel-theme-pairs'."
   (mapc
    (lambda (x)
-     (print (car x))
-     (print (cdr x)))
+     (disable-theme (car x))
+     (disable-theme (cdr x)))
    e454iel-theme-pairs))
 
 ;; load default theme
@@ -3029,6 +3028,37 @@ normal-state."
                   (interactive)
                   (unless (scroll-on-drag)
                     (mouse-yank-primary t)))))
+
+;; For SuperCollider (language and server for algorithmic music generation)
+(use-package sclang
+  :config
+  (progn
+    (use-package sclang-extensions)
+    (use-package sclang-snippets)
+    (use-package ob-sclang)))
+
+(use-package webkit
+  :straight
+  (webkit :type git :host github :repo "akirakyle/emacs-webkit"
+          :branch "main"
+          :files (:defaults "*.js" "*.css" "*.so")
+          :pre-build ("make"))
+
+  :config
+  (progn
+    (use-package webkit-ace
+      :straight (webkit-ace :type built-in))
+    (use-package webkit-dark
+      :straight (webkit-dark :type built-in))
+
+    ;; Open a new session instead of using the current one
+    (setq webkit-browse-url-force-new t)
+
+    (setq webkit-dark-mode t)
+
+    (use-package evil-collection-webkit
+      :straight (evil-collection-webkit :type built-in)
+      :config (evil-collection-xwidget-setup))))
 
 (provide 'init)
 ;;; init.el ends here
