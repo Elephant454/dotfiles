@@ -3024,5 +3024,28 @@ normal-state."
     (use-package sclang-snippets)
     (use-package ob-sclang)))
 
+(use-package webkit
+  :straight
+  (webkit :type git :host github :repo "akirakyle/emacs-webkit"
+          :branch "main"
+          :files (:defaults "*.js" "*.css" "*.so")
+          :pre-build ("make"))
+
+  :config
+  (progn
+    (use-package webkit-ace
+      :straight (webkit-ace :type built-in))
+    (use-package webkit-dark
+      :straight (webkit-dark :type built-in))
+
+    ;; Open a new session instead of using the current one
+    (setq webkit-browse-url-force-new t)
+
+    (setq webkit-dark-mode t)
+
+    (use-package evil-collection-webkit
+      :straight (evil-collection-webkit :type built-in)
+      :config (evil-collection-xwidget-setup))))
+
 (provide 'init)
 ;;; init.el ends here
