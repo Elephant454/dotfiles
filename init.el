@@ -3016,5 +3016,13 @@ normal-state."
         "M-k" 'scad-preview-trnsz-
         "M-j" 'scad-preview-trnsz+))))
 
+;; For SuperCollider (language and server for algorithmic music generation)
+(use-package sclang
+  :config
+  (progn
+    (use-package sclang-extensions)
+    (use-package sclang-snippets)
+    (use-package ob-sclang)))
+
 (provide 'init)
 ;;; init.el ends here
