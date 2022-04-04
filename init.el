@@ -2872,8 +2872,7 @@ normal-state."
 (use-package bbdb
   :config
   (progn
-    (use-package bbdb-csv-import
-      :straight (bbdb-csv-import :host nil :repo "https://git.sr.ht/~iank/bbdb-csv-import"))))
+    (use-package bbdb-csv-import)))
 
 ;; Vastly more detailed help buffers
 (use-package helpful
