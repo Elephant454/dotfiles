@@ -2336,10 +2336,31 @@ Lisp function does not specify a special indentation."
               :config (progn
                         (setq rmh-elfeed-org-files '("~/org/elfeed.org"))
                         (elfeed-org)))
+
+            ;; Taken from
+            ;;  http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
+            ;; functions to support syncing .elfeed between machines makes sure
+            ;;  elfeed reads index from disk before launching
+            (defun bjm/elfeed-load-db-and-open ()
+              "Wrapper to load the elfeed db from disk before opening"
+              (interactive)
+              (elfeed-db-load)
+              (elfeed)
+              (elfeed-search-update--force))
+
+            ;; Taken from
+            ;;  http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
+            ;; write to disk when quiting
+            (defun bjm/elfeed-save-db-and-bury ()
+              "Wrapper to save the elfeed db to disk before burying buffer"
+              (interactive)
+              (elfeed-db-save)
+              (quit-window))
+
             (general-define-key
              :keymaps 'elfeed-search-mode-map
              :states 'normal
-              "q" 'elfeed-search-quit-window
+              "q" 'bjm/elfeed-save-db-and-bury
               "g" 'elfeed-search-update--force
               "G" 'elfeed-search-fetch
               "RET" 'elfeed-search-show-entry
@@ -2354,7 +2375,7 @@ Lisp function does not specify a special indentation."
               "+" 'elfeed-search-tag-all
               "-" 'elfeed-search-untag-all)
 
-            (e454iel-main-menu "ar" 'elfeed)))
+            (e454iel-main-menu "ar" 'bjm/elfeed-load-db-and-open)))
 
 (use-package arch-packer
   :config (setq arch-packer-default-command "pacaur"))
