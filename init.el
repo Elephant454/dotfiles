@@ -3030,6 +3030,7 @@ normal-state."
 
 ;; For SuperCollider (language and server for algorithmic music generation)
 (use-package sclang
+  :disabled
   :config
   (progn
     (use-package sclang-extensions)
@@ -3037,6 +3038,7 @@ normal-state."
     (use-package ob-sclang)))
 
 (use-package webkit
+  :disabled
   :straight
   (webkit :type git :host github :repo "akirakyle/emacs-webkit"
           :branch "main"
