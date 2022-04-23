@@ -1075,6 +1075,29 @@ _-_increase _=_decrease"
 
     (e454iel-setup-ssh-agent)
 
+    (defun e454iel-rebuild-xelb ()
+      "Do a clean rebuild of xelb (and exwm) in order to get it Straight, Guix, and native-comp to play nice after a Guix package update."
+      (let* ((straight-directory
+              (expand-file-name (concat user-emacs-directory "straight/")))
+             (exwm-straight-build-directory
+              (concat straight-directory "build/exwm"))
+             (xelb-straight-build-directory
+              (concat straight-directory "build/xelb"))
+             (xelb-straight-repo-directory
+              (concat straight-directory "repo/xelb")))
+
+        ;;(delete-directory exwm-straight-build-directory t)
+        (delete-directory xelb-straight-build-directory t)
+        (delete-directory xelb-straight-repo-directory t))
+
+      ;;(straight-pull-package-and-deps "exwm")
+      ;;(straight-pull-package "exwm")
+      ;;(straight-rebuild-package "exwm")
+
+      (use-package xelb)
+      (straight-pull-package "xelb")
+      (straight-rebuild-package "xelb"))
+
 
     (start-process-shell-command "dunst"
                                  nil
