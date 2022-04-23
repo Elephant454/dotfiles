@@ -361,6 +361,7 @@ without confirmation."
                            ("Camingo Code" . 14)
                            ("Monoid" . 12)
                            ("Iosevka Term Slab Extended" . 14)
+                           ("Cozette" . 8)
                            ))
 (setq e454iel-phone-font-pairs
       '(("Hermit" . 5)
