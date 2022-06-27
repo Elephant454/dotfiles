@@ -2391,16 +2391,16 @@ Lisp function does not specify a special indentation."
             ;; Taken from
             ;;  http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
             ;; write to disk when quiting
-            (defun bjm/elfeed-save-db-and-bury ()
+            (defun e454iel-elfeed-save-db-and-quit ()
               "Wrapper to save the elfeed db to disk before burying buffer"
               (interactive)
-              (elfeed-db-save)
-              (quit-window))
+              (elfeed-search-quit-window)
+              (kill-buffer "*elfeed-search*"))
 
             (general-define-key
              :keymaps 'elfeed-search-mode-map
              :states 'normal
-              "q" 'bjm/elfeed-save-db-and-bury
+              "q" 'e454iel-elfeed-save-db-and-quit
               "g" 'elfeed-search-update--force
               "G" 'elfeed-search-fetch
               "RET" 'elfeed-search-show-entry
