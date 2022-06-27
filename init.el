@@ -566,6 +566,8 @@ This makes for easier reading of larger, denser bodies of text."
      ;; Manipulating text commands
      "m" '(:ignore t :which-key "Manipulate Text")
      "mi" 'insert-char
+     "mi" '(:ignore t :which-key "Insert")
+     "mic" 'insert-char
      "mc" '(lambda () (interactive)
             (if mark-active
                 (call-interactively 'count-words-region)
