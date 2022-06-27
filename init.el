@@ -683,7 +683,18 @@ This makes for easier reading of larger, denser bodies of text."
             (general-define-key
              :states '(normal motion)
              :keymaps 'Info-mode-map
-             "<SPC>" 'e454iel-main-menu-prefix)))
+              "<SPC>" 'e454iel-main-menu-prefix)
+
+            ;; Automatic renaming of buffers based on topic in order to allow multiple
+            ;;  simultaneous Info buffers
+            (use-package info-rename-buffer
+              :config (info-rename-buffer-mode))
+
+            ;; Spawn new uniquely-named Info buffers by typing in a topic from
+            ;;  completing-read (this package may be redundant, but I /do/ really
+            ;;  like using completing-read for picking a topic)
+            (use-package info-buffer
+              :general ([remap info] #'info-buffer))))
 
 (use-package all-the-icons
   ;; TODO: There needs to be some way of telling whether or not these icons
