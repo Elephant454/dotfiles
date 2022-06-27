@@ -2255,7 +2255,10 @@ Lisp function does not specify a special indentation."
               (add-hook 'find-file-hook
                         (lambda ()
                           (when (file-remote-p default-directory)
-                            (setq-local projectile-mode-line "Projectile"))))))
+                            (setq-local projectile-mode-line "Projectile"))))
+
+              ;; This fixes paths to allow using remote Guix machines with TRAMP
+              (push 'tramp-own-remote-path tramp-remote-path)))
 
   (use-package tramp-term))
 
