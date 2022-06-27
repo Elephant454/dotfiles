@@ -679,6 +679,7 @@ This makes for easier reading of larger, denser bodies of text."
 
             (evil-collection-init 'info)
 
+            ;; Unbinds SPC
             (general-define-key
              :states '(normal motion)
              :keymaps 'Info-mode-map
