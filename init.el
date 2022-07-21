@@ -3215,5 +3215,11 @@ normal-state."
       :straight (evil-collection-webkit :type built-in)
       :config (evil-collection-xwidget-setup))))
 
+;; Insert complex emoticons made from misused Unicode symbols and Japanese
+;;  characters
+(use-package insert-kaomoji
+  :general
+  (e454iel-main-menu
+    "mik" 'insert-kaomoji))
 (provide 'init)
 ;;; init.el ends here
