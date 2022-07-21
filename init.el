@@ -1291,8 +1291,15 @@ unsorted."
   :init (progn
           (use-package ox-latex
             :straight (ox-latex :type built-in))
+
           (use-package evil-org
-            :init (use-package evil-leader))
+            :init (use-package evil-leader)
+            :hook (org-mode . (lambda () evil-org-mode))
+            :config
+            (progn
+              (require 'evil-org-agenda)
+              (evil-org-agenda-set-keys)))
+
           (use-package org-pomodoro)
           (use-package org-bullets)
           (use-package org-journal
