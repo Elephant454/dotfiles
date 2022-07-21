@@ -2989,7 +2989,86 @@ normal-state."
              "straight/repos/ewal/spacemacs-themes/ewal-spacemacs-themes.el")))
 
   (use-package ewal-evil-cursors
-    :config (ewal-evil-cursors-get-colors :apply t)))
+    :config (ewal-evil-cursors-get-colors :apply t))
+
+  ;; TODO: This is unsafe to use if pywal and seethru aren't installed. I need
+  ;;  some sort of guarantee those are installed to make these commands or
+  ;;  variables even available.
+
+  (setq e454iel-wallpaper-alist-list
+        '(((name "Hills")
+           (image "~/Pictures/Wallpapers/Hills.jpg")
+           (saturation 1)
+           (opacity 95))
+
+          ((name "Park")
+           (image "~/Pictures/Wallpapers/Park.jpg")
+           (saturation 1)
+           (opacity 95))
+          ))
+
+  ;; The wallpapers aren't "secret" in the sense that they're treasure maps or
+  ;;  something, but rather they're either device-specific or loaded by an
+  ;;  external file such as secret.el
+  (setq e454iel-wallpaper-alist-list
+        (append e454iel-wallpaper-alist-list e454iel-secret-wallpaper-alist-list))
+
+  (setq e454iel-current-wallpaper-alist e454iel-wallpaper-alist-list)
+
+  (setq e454iel-preferred-ewal-theme 'ewal-doom-vibrant)
+
+  (defun e454iel-cycle-wallpapers ()
+    "Cycle through the list of wallpaper alists."
+    (interactive)
+    (setq e454iel-current-wallpaper-alist-list (cdr e454iel-current-wallpaper-alist-list))
+    (if (not e454iel-current-wallpaper-alist-list)
+        (setq e454iel-current-wallpaper-alist-list e454iel-current-wallpaper-alist-list))
+
+    (e454iel-load-wallpaper))
+
+  (defun e454iel-load-wallpaper ()
+  "Sets the wallpaper, theme, and opacity of Emacs based on the user-specified alist."
+  (let* ((current-wallpaper-alist (car e454iel-current-wallpaper-alist-list))
+         (name (cadr (assoc 'name current-wallpaper-alist)))
+         (image (cadr (assoc 'image current-wallpaper-alist)))
+         (saturation (cadr (assoc 'saturation current-wallpaper-alist)))
+         (opacity (cadr (assoc 'opacity current-wallpaper-alist))))
+
+    (print image)
+
+    (shell-command (concat "wal -i "
+                           image
+                           " --saturate "
+                           (format "%s" saturation)))
+
+    (load-theme e454iel-preferred-ewal-theme)
+    (ewal-evil-cursors-get-colors :apply t)
+    (seethru opacity)
+
+    name))
+
+  (defun e454iel-jump-to-wallpaper (wallpaper-to-jump-to)
+    "Jump to `FONT-TO-JUMP-TO' in `e454iel-font-pairs' and apply it."
+    (interactive (list
+                  (completing-read
+                   "Which wallpaper do you want to load?: "
+                   (mapcar 'cadar e454iel-wallpaper-alist-list))))
+
+    (let ((result
+           (member-if
+            (lambda (wallpaper) nil nil
+              (equal (cadar wallpaper) wallpaper-to-jump-to))
+
+          e454iel-wallpaper-alist-list)))
+
+      (if result
+          (progn (setq e454iel-current-wallpaper-alist-list result)
+                 (e454iel-load-wallpaper)))))
+
+  :general
+  (e454iel-main-menu
+    "twn" 'e454iel-cycle-wallpapers
+    "tws" 'e454iel-jump-to-wallpaper))
 
 (use-package dictcc
   :config
