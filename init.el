@@ -2882,7 +2882,9 @@ Lisp function does not specify a special indentation."
     ))
 
 ;; For MU* (MUD's, MUCK's, etc)
-(use-package mu)
+(use-package mu
+  ;; TODO: Disabled due to a conflict with MU4E
+   :disabled)
 
 ;; For IRC
 ;; TODO: Advice or redefine functions to prevent it from writing to the
