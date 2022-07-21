@@ -3221,5 +3221,26 @@ normal-state."
   :general
   (e454iel-main-menu
     "mik" 'insert-kaomoji))
+
+(use-package pulseaudio-control
+  :config
+  (progn
+    (setq pulseaudio-control-default-sink
+          (if (string-equal (system-name) "Desktop.Guix.Maddie")
+              51))
+    (setq pulseaudio-control-volume-step "1%"))
+
+  :general
+  (e454iel-main-menu
+    "=" (lambda () "" (interactive) (pulseaudio-control-set-volume "15%"))
+    "+" 'pulseaudio-control-increase-volume
+    "-" 'pulseaudio-control-decrease-volume
+
+    "v" '(:ignore t :which-key "Volume")
+    "vv" (lambda () "" (interactive) (pulseaudio-control-set-volume "15%"))
+    "vi" 'pulseaudio-control-increase-volume
+    "vd" 'pulseaudio-control-decrease-volume
+    "vm" 'pulseaudio-control-toggle-current-sink-mute))
+
 (provide 'init)
 ;;; init.el ends here
