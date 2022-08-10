@@ -32,7 +32,9 @@
  
  ;; I don't end sentences with two spaces, so Emacs shouldn't expect to see
  ;; them. This is used for "M-a" and "M-e" for jumping forward and back
- ;; sentences. Look up the info page on "Sentences".
+ ;; sentences. It's important to set this, because filling functions (like
+ ;; `paragraph-fill') modify their behavior based on this value. Look up the
+ ;; info page on "Sentences".
  sentence-end-double-space nil
 
  ;; Allow for correct printing for "circular lists", which are lists that have
