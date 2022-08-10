@@ -1375,6 +1375,8 @@ calculated based on my configuration."
                       agenda ""
                       ((org-agenda-tag-filter-preset '("-OtherAgenda")))))))
 
+            (setq org-agenda-span 'day)
+
             (setq org-capture-templates
                   `(("t" "TODO" entry
                      (file ,(concat e454iel-documents-dir "/todo.org"))
