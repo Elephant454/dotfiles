@@ -1294,11 +1294,15 @@ unsorted."
 
           (use-package evil-org
             :init (use-package evil-leader)
-            :hook (org-mode . (lambda () evil-org-mode))
+            :hook (org-mode . (lambda () (evil-org-mode)))
             :config
             (progn
               (require 'evil-org-agenda)
-              (evil-org-agenda-set-keys)))
+              (evil-org-agenda-set-keys))
+            :general
+            (:keymaps 'org-agenda-mode-map
+             :states '(normal motion)
+             "<SPC>" 'e454iel-main-menu-prefix))
 
           (use-package org-pomodoro)
           (use-package org-bullets)
