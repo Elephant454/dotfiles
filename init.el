@@ -219,6 +219,7 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
  (warm-night-theme :defer)
  (sweet-theme :defer)
  (tron-legacy-theme)
+ (shanty-themes)
 )
 
 ;; TODO: There has to be some sort of better way of doing this. 😅 The autoloads
