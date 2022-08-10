@@ -2414,8 +2414,10 @@ Lisp function does not specify a special indentation."
              :keymaps 'elfeed-search-mode-map
              :states 'normal
               "q" 'e454iel-elfeed-save-db-and-quit
-              "g" 'elfeed-search-update--force
-              "G" 'elfeed-search-fetch
+              ;; I figure I can call update commands myself, and I'd rather be
+              ;;  able to use these keys to jump up and down search results
+              ;;"g" 'elfeed-search-update--force
+              ;;"G" 'elfeed-search-fetch
               "RET" 'elfeed-search-show-entry
               "s" 'elfeed-search-live-filter
               "S" 'elfeed-search-set-filter
