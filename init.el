@@ -3253,5 +3253,9 @@ normal-state."
     "vd" 'pulseaudio-control-decrease-volume
     "vm" 'pulseaudio-control-toggle-current-sink-mute))
 
+;; Highlight word stems to improve readability of words when reading quickly
+(use-package stem-reading-mode
+  :general (e454iel-main-menu "ts" 'stem-reading-mode))
+
 (provide 'init)
 ;;; init.el ends here
