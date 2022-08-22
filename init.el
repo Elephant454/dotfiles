@@ -3253,5 +3253,8 @@ normal-state."
     "vd" 'pulseaudio-control-decrease-volume
     "vm" 'pulseaudio-control-toggle-current-sink-mute))
 
+;; I'm trying to decide which mode for Reddit I like better
+(use-package reddigg)
+(use-package md4rd)
 (provide 'init)
 ;;; init.el ends here
