@@ -3253,12 +3253,15 @@ normal-state."
     "vd" 'pulseaudio-control-decrease-volume
     "vm" 'pulseaudio-control-toggle-current-sink-mute))
 
-;; I'm trying to decide which mode for Reddit I like better
 (use-package reddigg)
 (use-package md4rd)
 
 ;; For typing tests
 (use-package speed-type)
+
+;; Highlight word stems to improve readability of words when reading quickly
+(use-package stem-reading-mode
+  :general (e454iel-main-menu "ts" 'stem-reading-mode))
 
 (provide 'init)
 ;;; init.el ends here
