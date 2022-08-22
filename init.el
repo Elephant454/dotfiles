@@ -3256,5 +3256,9 @@ normal-state."
 ;; I'm trying to decide which mode for Reddit I like better
 (use-package reddigg)
 (use-package md4rd)
+
+;; For typing tests
+(use-package speed-type)
+
 (provide 'init)
 ;;; init.el ends here
