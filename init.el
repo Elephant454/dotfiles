@@ -2722,8 +2722,13 @@ Lisp function does not specify a special indentation."
 
 ;; Client for the matrix.org chat protocol
 (use-package matrix-client
+  :disabled
   :straight (matrix-client :host github :repo "alphapapa/matrix-client.el"
                            :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
+
+(use-package ement
+  :straight (ement :host github :repo "alphapapa/ement.el"))
+
 
 ;; Front-end for the Emacsmirror package database
 (use-package epkg)
