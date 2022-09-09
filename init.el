@@ -3057,7 +3057,7 @@ normal-state."
                            " --saturate "
                            (format "%s" saturation)))
 
-    (load-theme e454iel-preferred-ewal-theme)
+    (load-theme e454iel-preferred-ewal-theme t)
     (ewal-evil-cursors-get-colors :apply t)
     (seethru opacity)
 
