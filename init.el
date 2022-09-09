@@ -2726,7 +2726,12 @@ Lisp function does not specify a special indentation."
                            :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
 
 ;; Front-end for the Emacsmirror package database
-(use-package epkg)
+(use-package epkg
+  :init
+  (progn
+    (use-package emacsql)
+    (use-package emacsql-sqlite)
+    (use-package closql)))
 
 (use-package phps-mode
     :after flycheck
