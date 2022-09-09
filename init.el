@@ -3269,5 +3269,9 @@ normal-state."
 (use-package stem-reading-mode
   :general (e454iel-main-menu "ts" 'stem-reading-mode))
 
+(use-package smudge
+  :config (progn
+            (setq smudge-transport 'connect)))
+
 (provide 'init)
 ;;; init.el ends here
