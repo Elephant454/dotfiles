@@ -2727,8 +2727,13 @@ Lisp function does not specify a special indentation."
 
 ;; Client for the matrix.org chat protocol
 (use-package matrix-client
+  :disabled
   :straight (matrix-client :host github :repo "alphapapa/matrix-client.el"
                            :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
+
+(use-package ement
+  :straight (ement :host github :repo "alphapapa/ement.el"))
+
 
 ;; Front-end for the Emacsmirror package database
 (use-package epkg
@@ -3063,7 +3068,7 @@ normal-state."
                            " --saturate "
                            (format "%s" saturation)))
 
-    (load-theme e454iel-preferred-ewal-theme)
+    (load-theme e454iel-preferred-ewal-theme t)
     (ewal-evil-cursors-get-colors :apply t)
     (seethru opacity)
 
@@ -3264,9 +3269,20 @@ normal-state."
     "vd" 'pulseaudio-control-decrease-volume
     "vm" 'pulseaudio-control-toggle-current-sink-mute))
 
+(use-package reddigg)
+;; TODO: Temporarily broken
+;;(use-package md4rd)
+
+;; For typing tests
+(use-package speed-type)
+
 ;; Highlight word stems to improve readability of words when reading quickly
 (use-package stem-reading-mode
   :general (e454iel-main-menu "ts" 'stem-reading-mode))
+
+(use-package smudge
+  :config (progn
+            (setq smudge-transport 'connect)))
 
 (provide 'init)
 ;;; init.el ends here
