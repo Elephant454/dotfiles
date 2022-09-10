@@ -2373,9 +2373,12 @@ Lisp function does not specify a special indentation."
 (use-package spray
   :config (general-define-key
            :keymaps 'spray-mode-map
+           :states 'normal
             "p" 'spray-start/stop
             "h" 'spray-backward-word
             "l" 'spray-forward-word
+            "b" 'spray-backward-word
+            "w" 'spray-forward-word
             "<left>" 'spray-backward-word
             "<right>" 'spray-forward-word
             "f" 'spray-faster
