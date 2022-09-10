@@ -3031,7 +3031,7 @@ normal-state."
 
   (setq e454iel-current-wallpaper-alist e454iel-wallpaper-alist-list)
 
-  (setq e454iel-preferred-ewal-theme 'ewal-doom-vibrant)
+  (setq e454iel-preferred-ewal-theme 'ewal-spacemacs-modern)
 
   (defun e454iel-cycle-wallpapers ()
     "Cycle through the list of wallpaper alists."
