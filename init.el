@@ -911,7 +911,9 @@ _-_increase _=_decrease"
 ;;  nice with eyebrowse. See if I can apply that patch as advice in this file
 ;;  instead (or if that patch has been merged yet)
 (use-package exwm
-  :if (string= (system-name) "Desktop.Guix.Maddie")
+  :if (or
+       (string= (system-name) "Desktop.Guix.Maddie")
+       (string= (system-name) "Laptop-Manjaro-Maddie"))
   ;;:disabled
   ;;:straight (exwm :type built-in)
   :config
