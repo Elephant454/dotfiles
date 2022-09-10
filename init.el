@@ -2958,7 +2958,8 @@ normal-state."
 
 ;;(add-hook 'text-mode-hook 'fill-paragraph-on-normal-state-mode)
 
-(use-package roguel-ike)
+;; TODO: Disabled for now due to what may be a conflict with Emacs 29
+;;(use-package roguel-ike)
 
 (use-package bbdb
   :config
