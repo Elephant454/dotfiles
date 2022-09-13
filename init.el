@@ -143,6 +143,7 @@ print-circle t
               "7548.Arch.Matthew"
               "7548.Guix.Matthew"
               "Desktop.Guix.Maddie"
+              "Laptop-Manjaro-Maddie"
               "mobian"
               "danctnix")
         :test #'string-equal))
