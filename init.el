@@ -2173,6 +2173,12 @@ Lisp function does not specify a special indentation."
             (setq display-time-format (concat "%F %H:%M:%S %a " e454iel-holiday-symbol))
             (display-time-mode t)))
 
+(use-package battery
+  :if e454iel-portable-p
+  :config
+  (progn
+    (display-battery-mode)))
+
 ;; used to center buffers in the middle of the screen
 (use-package olivetti
   ;; TODO: Maybe I can make this similar to centered-window-mode by adding a
