@@ -154,6 +154,13 @@ print-circle t
               "danctnix")
         :test #'string-equal))
 
+(defvar e454iel-laptop-p
+  (find (system-name)
+        (list "Laptop-Manjaro-Maddie")
+        :test #'string-equal))
+
+(defvar e454iel-portable-p
+  (or e454iel-phone-p e454iel-laptop-p))
 
 ;; themes
 
