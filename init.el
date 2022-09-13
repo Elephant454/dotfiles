@@ -2732,7 +2732,10 @@ Lisp function does not specify a special indentation."
                            :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
 
 (use-package ement
-  :straight (ement :host github :repo "alphapapa/ement.el"))
+  :straight (ement :host github :repo "alphapapa/ement.el")
+  :config
+  (progn
+    (setq ement-initial-sync-timeout (* 60 10))))
 
 
 ;; Front-end for the Emacsmirror package database
