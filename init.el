@@ -1949,9 +1949,7 @@ Lisp function does not specify a special indentation."
             (e454iel-main-menu
              "as" 'e454iel-run-or-raise-stumpwm-repl)))
 
-;;
 (use-package stumpwm-mode)
-
 
 ;; interface for ripgrep
 (use-package rg)
