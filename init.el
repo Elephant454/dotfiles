@@ -3031,8 +3031,8 @@ normal-state."
 
 ;; With tweaking, this generates Emacs themes based on the current desktop background
 (use-package ewal
-  ;; TODO: Have this package require installing pywal as a system package if
-  ;;  we're on a home computer
+  :if e454iel-home-computer-p
+  :ensure-system-package python-pywal
 
   ;; TODO: Set up menu bindings "tte" for switching to the traditional spacemacs
   ;;  ewal theme (which is a special category separate from theme pairs)
