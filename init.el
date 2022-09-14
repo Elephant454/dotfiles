@@ -1812,7 +1812,10 @@ Lisp function does not specify a special indentation."
             (e454iel-main-menu "agb" 'bubbles)))
 
 (use-package tetris
-  :config (e454iel-main-menu "agt" 'tetris))
+  :config
+  (progn
+    (evil-collection-init 'tetris))
+  :general (e454iel-main-menu "agt" 'tetris))
 
 (use-package mines
   :config (e454iel-main-menu "agm" 'mines))
