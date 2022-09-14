@@ -2759,10 +2759,22 @@ Lisp function does not specify a special indentation."
 
 (use-package ement
   :straight (ement :host github :repo "alphapapa/ement.el")
+  :ensure-system-package pantalaimon
   :config
   (progn
-    (setq ement-initial-sync-timeout (* 60 10))))
+    (setq ement-initial-sync-timeout (* 60 10))
 
+    ;; TODO: This almost certainly isn't going to work as is, but making it work
+    ;;  correctly will be tricky. Currently I'm thinking that I ought to spawn a
+    ;;  timer, have that timer periodically check the "*pantalaimon*" buffer
+    ;;  until it contains the text "(Press CTRL+C to quit)" (signalling the
+    ;;  deamon is started and running), and then run ement-connect
+    (start-process-shell-command  "pantalaimon"
+                                  "*pantalaimon*"
+                                  "pantalaimon")
+    (ement-connect :uri-prefix "http://localhost:8009"
+                   :user-id e454iel-matrix-user-id
+                   :password e454iel-matrix-password)))
 
 ;; Front-end for the Emacsmirror package database
 (use-package epkg
