@@ -32,7 +32,9 @@
  
  ;; I don't end sentences with two spaces, so Emacs shouldn't expect to see
  ;; them. This is used for "M-a" and "M-e" for jumping forward and back
- ;; sentences. Look up the info page on "Sentences".
+ ;; sentences. It's important to set this, because filling functions (like
+ ;; `paragraph-fill') modify their behavior based on this value. Look up the
+ ;; info page on "Sentences".
  sentence-end-double-space nil
 
  ;; Allow for correct printing for "circular lists", which are lists that have
@@ -80,6 +82,15 @@ print-circle t
 (tool-bar-mode 0)          ; remove the tool bar (New, Open, etc.)
 (global-auto-revert-mode)  ; auto-revert changes for any changes on disk
 
+;; Get rid of the titlebar CSD for Phosh
+(defun e454iel-remove-csd (frame)
+    "Get rid of the Gnome titlebar on FRAME by toggling fullscreen on and off."
+  (toggle-frame-fullscreen)
+  (toggle-frame-fullscreen))
+
+(add-hook 'after-make-frame-functions
+          #'e454iel-remove-csd)
+
 ;; Don't suspend emacs with "C-z"
 (global-unset-key (kbd "C-z"))
 ;; Don't kill the whole line if I accidentally mash C-S
@@ -103,7 +114,9 @@ print-circle t
 
 (use-package use-package
   ;; set all calls to use-package to use Straight as the package manager
-  :config (setq straight-use-package-by-default t))
+  :config (progn
+            (setq straight-use-package-by-default t)
+            (use-package use-package-ensure-system-package)))
 
 ;; Make sure our keyring doesn't get out of date
 (use-package gnu-elpa-keyring-update)
@@ -131,17 +144,25 @@ print-circle t
               "7752.Guix.Matthew"
               "7548.Arch.Matthew"
               "7548.Guix.Matthew"
-              "Desktop.Guix.Maddie")
+              "Desktop.Guix.Maddie"
+              "Laptop-Manjaro-Maddie"
+              "mobian"
+              "danctnix")
         :test #'string-equal))
 
-(defvar e454iel-documents-time-period "Summer")
-(defvar e454iel-documents-dir
-  (concat "~/Documents/"
-          ;;(int-to-string (nth 5 (decode-time))) ; the current year
-          "2021"
-          "/"
-          e454iel-documents-time-period))
+(defvar e454iel-phone-p
+  (find (system-name)
+        (list "mobian"
+              "danctnix")
+        :test #'string-equal))
 
+(defvar e454iel-laptop-p
+  (find (system-name)
+        (list "Laptop-Manjaro-Maddie")
+        :test #'string-equal))
+
+(defvar e454iel-portable-p
+  (or e454iel-phone-p e454iel-laptop-p))
 
 ;; themes
 
@@ -208,6 +229,7 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
  (warm-night-theme :defer)
  (sweet-theme :defer)
  (tron-legacy-theme)
+ (shanty-themes)
 )
 
 ;; TODO: There has to be some sort of better way of doing this. 😅 The autoloads
@@ -223,7 +245,7 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
 (setq e454iel-theme-pairs '((soft-morning . omtose-softer)
                             (silkworm . foggy-night)
                             (gruvbox-light-hard . gruvbox-dark-hard)
-                            (kaolin-light . kaolin-dark)
+                            (kaolin-mono-light . kaolin-mono-dark)
                             (doom-one . doom-one)
                             (doom-fairy-floss . doom-laserwave)
                             (doom-opera-light . doom-opera)
@@ -301,13 +323,12 @@ without confirmation."
 
 ;;(e454iel-load-theme)
 
-;; This doesn't seem to work? 😅
 (defun e454iel-disable-all-theme-pairs ()
   "Run `disable-theme' on every theme in `e454iel-theme-pairs'."
   (mapc
    (lambda (x)
-     (print (car x))
-     (print (cdr x)))
+     (disable-theme (car x))
+     (disable-theme (cdr x)))
    e454iel-theme-pairs))
 
 ;; load default theme
@@ -326,12 +347,16 @@ without confirmation."
 (defvar e454iel-extra-line-spacing)
 
 (setq e454iel-default-line-spacing 4)
-(setq e454iel-extra-line-spacing 24)
+(setq e454iel-extra-line-spacing (if e454iel-phone-p 12 24))
 
 (setq-default line-spacing e454iel-default-line-spacing)
 
+;; TODO: Set up handling of phone vs desktop fonts in a way that is less likely
+;;  to suffer from side effect related problems
+
 ;; TODO: Create docstrings for these
 (defvar e454iel-font-pairs)
+(defvar e454iel-phone-font-pairs)
 (defvar e454iel-current-font-pairs)
 (defvar e454iel-font-scale)
 (defvar e454iel-use-dyslexic-font nil)
@@ -349,7 +374,14 @@ without confirmation."
                            ("Camingo Code" . 14)
                            ("Monoid" . 12)
                            ("Iosevka Term Slab Extended" . 14)
+                           ("Cozette" . 8)
                            ))
+(setq e454iel-phone-font-pairs
+      '(("Hermit" . 5)
+        ("Fantasque Sans Mono" . 6)
+        ))
+(if e454iel-phone-p
+    (setq e454iel-font-pairs e454iel-phone-font-pairs))
       
 (setq e454iel-current-font-pairs e454iel-font-pairs)
 (setq e454iel-font-scale 0)
@@ -459,10 +491,12 @@ This makes for easier reading of larger, denser bodies of text."
 
   :config (progn
             (evil-mode t)
+            (setq evil-want-minibuffer t)
             (use-package evil-escape
               :config
               (progn
                 (setq evil-escape-unordered-key-sequence t)
+                (setq evil-escape-delay (if e454iel-phone-p 0.3 0.1))
                 (evil-escape-mode t)))
             (use-package evil-matchit :config (global-evil-matchit-mode t))
             (use-package fringe-helper
@@ -532,6 +566,10 @@ This makes for easier reading of larger, denser bodies of text."
      "fd" '(lambda() (interactive) (find-file
                                    (file-truename
                                     e454iel-documents-dir)))
+     "fv" '(lambda() (interactive) (find-file
+                                    (concat
+                                     (file-truename e454iel-documents-dir)
+                                     "/Vaccine/StateVaccineRecord.png")))
      "fb" '(:ignore t :which-key "Bookmark")
      "fbs" 'bookmark-set
      "fbj" 'bookmark-jump
@@ -541,7 +579,8 @@ This makes for easier reading of larger, denser bodies of text."
 
      ;; Manipulating text commands
      "m" '(:ignore t :which-key "Manipulate Text")
-     "mi" 'insert-char
+     "mi" '(:ignore t :which-key "Insert")
+     "mic" 'insert-char
      "mc" '(lambda () (interactive)
             (if mark-active
                 (call-interactively 'count-words-region)
@@ -716,13 +755,42 @@ This makes for easier reading of larger, denser bodies of text."
 
             (evil-collection-init 'info)
 
+            ;; Unbinds SPC
             (general-define-key
              :states '(normal motion)
              :keymaps 'Info-mode-map
-              "<SPC>" 'e454iel-main-menu-prefix)))
+              "<SPC>" 'e454iel-main-menu-prefix)
+
+            ;; Automatic renaming of buffers based on topic in order to allow multiple
+            ;;  simultaneous Info buffers
+            (use-package info-rename-buffer
+              :config (info-rename-buffer-mode))
+
+            ;; Spawn new uniquely-named Info buffers by typing in a topic from
+            ;;  completing-read (this package may be redundant, but I /do/ really
+            ;;  like using completing-read for picking a topic)
+            (use-package info-buffer
+              :general ([remap info] #'info-buffer))))
+
+(use-package all-the-icons
+  ;; TODO: There needs to be some way of telling whether or not these icons
+  ;;  have been downloaded. I only want to install on the first run.
+
+  ;;:config (all-the-icons-install-fonts)
+  :config
+  (progn
+    ;; According to the readme for all-the-icons-ibuffer, this reduces
+    ;;  sluggishness when there are multiple icons on screen at the same
+    ;;  time
+    (setq inhibit-compacting-font-caches t)))
 
 (use-package ibuffer
   :config (progn
+            (evil-collection-init 'ibuffer)
+            (use-package all-the-icons-ibuffer
+              ;; TODO: There ought to be a cleaner way to turn this on only when
+              ;;  ibuffer is opened
+              :init (all-the-icons-ibuffer-mode 1))
             (general-define-key
              ;;:states '(normal motion)
              :keymaps 'ibuffer-mode-map
@@ -759,6 +827,13 @@ This makes for easier reading of larger, denser bodies of text."
               :config
               (progn
                 (setq diredp-image-preview-in-tooltip nil)))))
+
+(use-package debug
+  :config (evil-collection-init 'debug))
+
+(use-package eshell
+  :config (progn
+            (evil-collection-init 'eshell)))
 
 ;; give parenthesis matching colors based upon depth
 (use-package rainbow-delimiters
@@ -916,7 +991,9 @@ _-_increase _=_decrease"
 ;;  nice with eyebrowse. See if I can apply that patch as advice in this file
 ;;  instead (or if that patch has been merged yet)
 (use-package exwm
-  :if (string= (system-name) "Desktop.Guix.Maddie")
+  :if (or
+       (string= (system-name) "Desktop.Guix.Maddie")
+       (string= (system-name) "Laptop-Manjaro-Maddie"))
   ;;:disabled
   ;;:straight (exwm :type built-in)
   :config
@@ -1096,6 +1173,29 @@ _-_increase _=_decrease"
 
     (e454iel-setup-ssh-agent)
 
+    (defun e454iel-rebuild-xelb ()
+      "Do a clean rebuild of xelb (and exwm) in order to get it Straight, Guix, and native-comp to play nice after a Guix package update."
+      (let* ((straight-directory
+              (expand-file-name (concat user-emacs-directory "straight/")))
+             (exwm-straight-build-directory
+              (concat straight-directory "build/exwm"))
+             (xelb-straight-build-directory
+              (concat straight-directory "build/xelb"))
+             (xelb-straight-repo-directory
+              (concat straight-directory "repo/xelb")))
+
+        ;;(delete-directory exwm-straight-build-directory t)
+        (delete-directory xelb-straight-build-directory t)
+        (delete-directory xelb-straight-repo-directory t))
+
+      ;;(straight-pull-package-and-deps "exwm")
+      ;;(straight-pull-package "exwm")
+      ;;(straight-rebuild-package "exwm")
+
+      (use-package xelb)
+      (straight-pull-package "xelb")
+      (straight-rebuild-package "xelb"))
+
 
     (start-process-shell-command "dunst"
                                  nil
@@ -1270,18 +1370,39 @@ unsorted."
 ;;  some reason. I might want to submit a patch for that, depending upon what
 ;;  the functions look like.
 (use-package org
+  ;; TODO: I want to be able to use org on non-home computers, and I want to be
+  ;;  able to gracefully drop support for playing alarm noises when necessary.
+  ;;  That makes ensure-system-package an ill fit for this context. I want to
+  ;;  remove this. Instead, in the body of the configuration, I want to check
+  ;;  what platform I'm on and what binaries are available before making noises
+
+  ;; We want alsa-utils to ensure we can use aplay for invoking alert noises
+  :ensure-system-package alsa-utils
+
   :straight (org :type built-in)
 
   ;; TODO: Why are all these supplementary packages in init instead of config?
   :init (progn
           (use-package ox-latex
             :straight (ox-latex :type built-in))
+
           (use-package evil-org
-            :init (use-package evil-leader))
+            :init (use-package evil-leader)
+            :hook (org-mode . (lambda () (evil-org-mode)))
+            :config
+            (progn
+              (require 'evil-org-agenda)
+              (evil-org-agenda-set-keys))
+            :general
+            (:keymaps 'org-agenda-mode-map
+             :states '(normal motion)
+             "<SPC>" 'e454iel-main-menu-prefix))
+
           (use-package org-pomodoro)
           (use-package org-bullets)
           (use-package org-journal
             :config (setq org-journal-carryover-items nil))
+          (use-package org-chef)
           (use-package org-clock-today
             :config (org-clock-today-mode 1))
           (use-package org-alert
@@ -1298,22 +1419,43 @@ unsorted."
           )
 
   :config (progn
+            (setq e454iel-documents-season "Fall")
+
             (defvar e454iel-extra-org-agenda-files
               '("~/org/birthdays.org" "~/org/derp.org" "~/org/holidays.org"))
 
             (defvar e454iel-documents-org-agenda-file-pattern
               "\\(.*todo.org\\|.*events.org\\|.*schedule.org\\)$")
 
-            (setf org-agenda-files
-                  (append
-                   (remove-if-not #'file-exists-p
-                                  e454iel-extra-org-agenda-files)
-                   (if (file-directory-p e454iel-documents-dir)
-                       (directory-files-recursively
-                        e454iel-documents-dir
-                        e454iel-documents-org-agenda-file-pattern
-                        nil))
-                   org-agenda-files))
+            (defun e454iel-set-documents-dir ()
+              "Automatically set org-agenda-files with a value calculated based
+on my configuration."
+              (interactive)
+              (setq e454iel-documents-dir
+                    (concat "~/Documents/"
+                            ;;(int-to-string (nth 5 (decode-time))) ; the current year
+                            "2021"
+                            "/"
+                            e454iel-documents-season)))
+
+            (e454iel-set-documents-dir)
+
+            (defun e454iel-set-org-agenda-files ()
+              "Automatically set org-agenda-files with a value
+calculated based on my configuration."
+              (interactive)
+              (setf org-agenda-files
+                    (append
+                     (remove-if-not #'file-exists-p
+                                    e454iel-extra-org-agenda-files)
+                     (if (file-directory-p e454iel-documents-dir)
+                         (directory-files-recursively
+                          e454iel-documents-dir
+                          e454iel-documents-org-agenda-file-pattern
+                          nil))
+                     org-agenda-files)))
+
+            (e454iel-set-org-agenda-files)
 
             (setf org-agenda-custom-commands
                   (append
@@ -1324,8 +1466,14 @@ unsorted."
                       agenda ""
                       ((org-agenda-tag-filter-preset '("-OtherAgenda")))))))
 
+            (setq org-agenda-span 'day)
+
             (setq org-capture-templates
-                  '(("a" "ArticlesToRead" entry
+                  `(("t" "TODO" entry
+                     (file ,(concat e454iel-documents-dir "/todo.org"))
+                     "* %a "
+                     :empty-lines-before 1)
+                    ("a" "ArticlesToRead" entry
                      (file "~/org/ArticlesToRead.org")
                      "* %a "
                      :prepend t)
@@ -1341,11 +1489,23 @@ unsorted."
                      (file "~/org/fun.org")
                      "* %a "
                      :prepend t)
+                    ("s" "SCPWiki" entry
+                     (file "~/org/scp.org")
+                     "* %a "
+                     :prepend t)
+                    ("c" "Cookbook" entry (file "~/org/cookbook.org")
+                     "%(org-chef-get-recipe-from-url)"
+                     :prepend t)
+                    ("C" "Manual Cookbook" entry (file "~/org/cookbook.org")
+                     "* %^{Recipe title: }\n  :PROPERTIES:\n  :source-url:\n  :servings:\n  :prep-time:\n  :cook-time:\n  :ready-in:\n  :END:\n** Ingredients\n   %?\n** Directions\n\n"
+                     :prenend t)
+                    ("m" "music")
+                    ("ma" "Music (Artist)" entry (file "~/org/music.org")
+                     "* [[elisp:(vuiet-play-artist \"%^{Artist name?}\")][%\\1]] "
+                     :prepend t)
                     ))
 
             ;; The alsa-utils package must be installed so that aplay can run
-            ;; TODO: Any way I can use the system use-package thing for ensuring
-            ;;  alsa-utils is installed for the sake of running this?
             (setq org-clock-sound "~/.dotfiles/BellCounterA.wav")
 
             ;; A quick keybinding for setting a tea timer
@@ -1361,7 +1521,7 @@ unsorted."
             (use-package ob-shell
               :straight (ob-shell :type built-in))
 
-            ;; I probably want to start the emacs server with `(start-server)'
+            ;; I probably want to start the emacs server with `(server-start)'
             ;;  before using this outside of Emacs. It /does/ have helpful
             ;;  functions even without the protocl registered with xdg, though
             (use-package org-protocol
@@ -1411,9 +1571,11 @@ unsorted."
                     (find-file org-directory))
              "oj" 'org-journal-new-entry
              "o C-c" 'org-capture
-             "o k" 'org-capture
-             "o c" 'org-clock-in-last
-             "o C" 'org-clock-out)
+             "ok" 'org-capture
+             "oc" 'org-clock-in-last
+             "oC" 'org-clock-out
+             "oy" 'org-store-link
+             "op" 'org-insert-last-stored-link)
 
             (general-define-key
              :keymaps 'org-mode-map
@@ -1572,6 +1734,10 @@ unsorted."
   (interactive)
   (dotimes (i 26) (insert-char (+ ?a i))))
 
+(defun e454iel-kill-value (value)
+  "Convert `VALUE' to a string and kill it to the clipboard."
+  (kill-new (format "%s" value)))
+
 (use-package ediff
   :config (setq ediff-window-setup-function
   'ediff-setup-windows-plain)) ; makes it so that ediff uses one
@@ -1675,6 +1841,7 @@ Lisp function does not specify a special indentation."
 ;; TODO: Add suggestions from these Reddit threads
 ;; https://www.reddit.com/r/emacs/comments/7fa1fb/how_many_of_you_guys_use_emacs_for_irc_whats_your/
 ;; https://www.reddit.com/r/emacs/comments/8ml6na/tip_how_to_make_erc_fun_to_use/
+;; TODO: Watch the SystemCrafters videos on ERC for suggestions
 (use-package erc
   :init (progn
           (if e454iel-home-computer-p
@@ -1716,7 +1883,10 @@ Lisp function does not specify a special indentation."
             (e454iel-main-menu "agb" 'bubbles)))
 
 (use-package tetris
-  :config (e454iel-main-menu "agt" 'tetris))
+  :config
+  (progn
+    (evil-collection-init 'tetris))
+  :general (e454iel-main-menu "agt" 'tetris))
 
 (use-package mines
   :config (e454iel-main-menu "agm" 'mines))
@@ -1841,9 +2011,7 @@ Lisp function does not specify a special indentation."
             (e454iel-main-menu
              "as" 'e454iel-run-or-raise-stumpwm-repl)))
 
-;;
 (use-package stumpwm-mode)
-
 
 ;; interface for ripgrep
 (use-package rg)
@@ -2011,19 +2179,7 @@ Lisp function does not specify a special indentation."
   :disabled
   :config
   (progn
-    (use-package all-the-icons
-      ;; TODO: There needs to be some way of telling whether or not these icons
-      ;;  have been downloaded. I only want to install on the first run.
-
-      ;;:config (all-the-icons-install-fonts)
-
-      :config
-      (progn
-        (setq inhibit-compacting-font-caches t))
-      )
-
     (setq doom-modeline-icon t)
-
     (doom-modeline-mode)))
 
 (use-package spaceline
@@ -2054,27 +2210,10 @@ Lisp function does not specify a special indentation."
                     (accent . (telephone-line-major-mode-segment))
                     ))
   (telephone-line-mode t)))
-  
 
-;; used to hide minor modes or give them alternative names for the modeline
-;;
-;; TODO: these should probably be moved to their respective use-package entries
-(use-package diminish
-  :config (progn
-            (diminish 'company-mode)
-            (diminish 'ivy-mode)
-            (diminish 'undo-tree-mode)
-            (diminish 'which-key-mode)
-            (diminish 'evil-escape-mode)
-            (diminish 'evil-org-mode)
-            ;; Projectile mode did have a helpful indicator associated with it,
-            ;;  though. It should be re-added to the mode-line in a nicer way.
-            (diminish 'projectile-global-mode)
-            ;;(diminish 'projectile-mode)
-            (diminish 'global-evil-fringe-mark-mode)
-            (diminish 'yas-minor-mode)
-            (diminish 'eldoc-mode)
-            (diminish 'counsel-mode)))
+;; hides minor modes
+(use-package minions
+  :config (minions-mode))
 
 (use-package immortal-scratch)
 
@@ -2109,9 +2248,15 @@ Lisp function does not specify a special indentation."
             (setq display-time-interval 0.95)
             ;; TODO: Pi day, Pride month, December, Fall, Halloween, Thanksgiving week, Birthday
             ;; TODO: Maybe I could have the cake show every time it's the birthday of someone I know?
-            (setq e454iel-holiday-symbol "🍂")
-            (setq display-time-format (concat "%F %H:%M:%S " e454iel-holiday-symbol))
+            (setq e454iel-holiday-symbol "🌴🐚🍹")
+            (setq display-time-format (concat "%F %H:%M:%S %a " e454iel-holiday-symbol))
             (display-time-mode t)))
+
+(use-package battery
+  :if e454iel-portable-p
+  :config
+  (progn
+    (display-battery-mode)))
 
 ;; used to center buffers in the middle of the screen
 (use-package olivetti
@@ -2146,8 +2291,6 @@ Lisp function does not specify a special indentation."
 (use-package projectile
   :config (progn
             (setq projectile-enable-caching t)
-            (diminish 'global-projectile-mode)
-            (diminish 'projectile-mode)
             (use-package counsel-projectile
               :disabled
               :config (progn
@@ -2223,7 +2366,10 @@ Lisp function does not specify a special indentation."
               (add-hook 'find-file-hook
                         (lambda ()
                           (when (file-remote-p default-directory)
-                            (setq-local projectile-mode-line "Projectile"))))))
+                            (setq-local projectile-mode-line "Projectile"))))
+
+              ;; This fixes paths to allow using remote Guix machines with TRAMP
+              (push 'tramp-own-remote-path tramp-remote-path)))
 
   (use-package tramp-term))
 
@@ -2261,8 +2407,8 @@ Lisp function does not specify a special indentation."
   :config (progn
             ;;(use-package emms-player-mpv)
             (emms-all)
-            (emms-default-players)
-            ;;(add-to-list 'emms-player-list 'emms-player-mpv)
+            ;;(emms-default-players)
+            (add-to-list 'emms-player-list 'emms-player-mpv)
             (setq emms-source-file-default-directory "~/Music/")
             (evil-collection-init 'emms))
   :general (e454iel-main-menu
@@ -2302,8 +2448,7 @@ Lisp function does not specify a special indentation."
 
 (use-package flycheck
   :config (progn
-            (global-flycheck-mode t)
-            (diminish 'flycheck-mode)))
+            (global-flycheck-mode t)))
 
 (use-package langtool
   :disabled
@@ -2321,9 +2466,12 @@ Lisp function does not specify a special indentation."
 (use-package spray
   :config (general-define-key
            :keymaps 'spray-mode-map
+           :states 'normal
             "p" 'spray-start/stop
             "h" 'spray-backward-word
             "l" 'spray-forward-word
+            "b" 'spray-backward-word
+            "w" 'spray-forward-word
             "<left>" 'spray-backward-word
             "<right>" 'spray-forward-word
             "f" 'spray-faster
@@ -2342,12 +2490,35 @@ Lisp function does not specify a special indentation."
               :config (progn
                         (setq rmh-elfeed-org-files '("~/org/elfeed.org"))
                         (elfeed-org)))
+
+            ;; Taken from
+            ;;  http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
+            ;; functions to support syncing .elfeed between machines makes sure
+            ;;  elfeed reads index from disk before launching
+            (defun bjm/elfeed-load-db-and-open ()
+              "Wrapper to load the elfeed db from disk before opening"
+              (interactive)
+              (elfeed-db-load)
+              (elfeed)
+              (elfeed-search-update--force))
+
+            ;; Taken from
+            ;;  http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
+            ;; write to disk when quiting
+            (defun e454iel-elfeed-save-db-and-quit ()
+              "Wrapper to save the elfeed db to disk before burying buffer"
+              (interactive)
+              (elfeed-search-quit-window)
+              (kill-buffer "*elfeed-search*"))
+
             (general-define-key
              :keymaps 'elfeed-search-mode-map
              :states 'normal
-              "q" 'elfeed-search-quit-window
-              "g" 'elfeed-search-update--force
-              "G" 'elfeed-search-fetch
+              "q" 'e454iel-elfeed-save-db-and-quit
+              ;; I figure I can call update commands myself, and I'd rather be
+              ;;  able to use these keys to jump up and down search results
+              ;;"g" 'elfeed-search-update--force
+              ;;"G" 'elfeed-search-fetch
               "RET" 'elfeed-search-show-entry
               "s" 'elfeed-search-live-filter
               "S" 'elfeed-search-set-filter
@@ -2360,7 +2531,7 @@ Lisp function does not specify a special indentation."
               "+" 'elfeed-search-tag-all
               "-" 'elfeed-search-untag-all)
 
-            (e454iel-main-menu "ar" 'elfeed)))
+            (e454iel-main-menu "ar" 'bjm/elfeed-load-db-and-open)))
 
 (use-package arch-packer
   :config (setq arch-packer-default-command "pacaur"))
@@ -2531,16 +2702,10 @@ Lisp function does not specify a special indentation."
             (e454iel-main-menu "af" 'forecast)))
 
 ;; TODO: See if there are any good packages to complement this one
-;; TODO: See if I can make this package use the built-in version when I'm on
-;;  Guix and the repo version otherwise 
 (use-package vterm
-  ;;:disabled
-  ;; I generally want this provided by the package manager, so let's not pull it from melpa
+  :ensure-system-package emacs-vterm
   :straight (vterm :type built-in)
-  ;;:config (evil-set-initial-state 'vterm-mode 'emacs)
-  :config (evil-collection-init 'vterm)
-  )
-  ;;:config (vterm-install))
+  :config (evil-collection-init 'vterm))
 
 ;; File uploads to 0x0.st!
 (use-package 0x0)
@@ -2555,8 +2720,7 @@ Lisp function does not specify a special indentation."
                            (display-buffer-in-side-window)
                            (side . bottom)
                            (window-height . 0.3)))
-            (evil-owl-mode)
-            (diminish 'evil-owl-mode)))
+            (evil-owl-mode)))
 
 ;; TODO: It's creating errors. Disabled for now.
 (use-package org-trello
@@ -2581,6 +2745,7 @@ Lisp function does not specify a special indentation."
 
 ;; TODO: Figure out how to make this install the Python, Java, and C language
 ;;  servers if I'm on a home computer
+;; This is for LSP
 (use-package eglot
   ;; TODO: The fact that I have to do this manually means there's something
   ;;  wonky going on, perhaps in terms of the version of "project" I'm using
@@ -2649,11 +2814,36 @@ Lisp function does not specify a special indentation."
 
 ;; Client for the matrix.org chat protocol
 (use-package matrix-client
+  :disabled
   :straight (matrix-client :host github :repo "alphapapa/matrix-client.el"
                            :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
 
+(use-package ement
+  :straight (ement :host github :repo "alphapapa/ement.el")
+  :ensure-system-package pantalaimon
+  :config
+  (progn
+    (setq ement-initial-sync-timeout (* 60 10))
+
+    ;; TODO: This almost certainly isn't going to work as is, but making it work
+    ;;  correctly will be tricky. Currently I'm thinking that I ought to spawn a
+    ;;  timer, have that timer periodically check the "*pantalaimon*" buffer
+    ;;  until it contains the text "(Press CTRL+C to quit)" (signalling the
+    ;;  deamon is started and running), and then run ement-connect
+    (start-process-shell-command  "pantalaimon"
+                                  "*pantalaimon*"
+                                  "pantalaimon")
+    (ement-connect :uri-prefix "http://localhost:8009"
+                   :user-id e454iel-matrix-user-id
+                   :password e454iel-matrix-password)))
+
 ;; Front-end for the Emacsmirror package database
-(use-package epkg)
+(use-package epkg
+  :init
+  (progn
+    (use-package emacsql)
+    (use-package emacsql-sqlite)
+    (use-package closql)))
 
 (use-package phps-mode
     :after flycheck
@@ -2709,11 +2899,13 @@ Lisp function does not specify a special indentation."
 (use-package bookmark+)
 
 ;; Gopher client
-(use-package elpher)
+(use-package elpher
+  ;; Its home site is down for the moment, so we're using the emacsmirror
+  :straight (:host github :repo "emacsmirror/elpher"))
 
 ;; Nyan cat in the modeline
 (use-package nyan-mode
-  :config (nyan-mode))
+  :config (if (not e454iel-phone-p) (nyan-mode)))
 
 ;; Parrot in the modeline
 (use-package parrot
@@ -2722,9 +2914,6 @@ Lisp function does not specify a special indentation."
   (progn
     (parrot-mode)
     (setq parrot-num-rotations nil)))
-
-;; TODO: Do that thing where this package instructs the system to install
-;;  youtube-dl and mpv as part of downloading itself (or does it only need mpv?)
 
 ;; Internet song browser, music player, and recommendation engine. A replacement
 ;;  for Spotify using both YouTubeDL and Last.FM
@@ -2737,6 +2926,10 @@ Lisp function does not specify a special indentation."
   ;;
   ;;  Maybe the library isn't auto-loading right, so maybe I need to load it
   ;;  with (load-library) as part of mpv's config attribute
+
+  :ensure-system-package
+  ((youtube-dl . "youtube-dl")
+   (mpv . "mpv"))
 
   :init
   (progn
@@ -2768,7 +2961,6 @@ Lisp function does not specify a special indentation."
       "amva" 'vuiet-play-artist
       "amv C-A" 'vuiet-play-artist-similar
       "amvh" 'vuiet-play-loved-tracks
-      ;; TODO: Fill out this half finished function
       "amvH" (lambda ()
                "Verbosely heart the current track"
                (interactive)
@@ -2813,28 +3005,31 @@ Lisp function does not specify a special indentation."
     ;;  list of tags chosen from a completing-read)
 
     ;; TODO: I need to advise this function so that it doesn't destroy the
-    ;;  mode line (including the display-time-mode and eyebrowse indicators)
+    ;;  mode line (including the display-time-mode and eyebrowse indicators).
+    ;;  In the meantime, I've set it to be essentially a no-op.
     (defun vuiet-update-mode-line (&optional position) t)
     ))
 
 ;; For MU* (MUD's, MUCK's, etc)
-(use-package mu)
+(use-package mu
+  ;; TODO: Disabled due to a conflict with MU4E
+   :disabled)
 
 ;; For IRC
-;; TODO: Advice or redefine functions to prevent it from writing to the
-;;  mode-line. There really needs to be a way to turn that off built-in, but I
-;;  can just write my own.
-;;  https://ag91.github.io/blog/2020/09/18/emacs-slack-and-my-peaceful-modeline/
-
 (use-package circe
+  ;; This turns off the mode-line clutter:
+  ;;  https://ag91.github.io/blog/2020/09/18/emacs-slack-and-my-peaceful-modeline/
   :config (setq tracking-max-mode-line-entries 1))
 
 (use-package undo-tree
-  :init (custom-set-variables '(evil-undo-system 'undo-tree))
+  :init
+  (progn
+    (custom-set-variables '(evil-undo-system 'undo-tree))
+    (add-hook 'evil-local-mode-hook 'turn-on-undo-tree-mode))
   :config
   (progn
-    (global-undo-tree-mode)
-    (diminish 'undo-tree-mode)))
+    (setq undo-tree-history-directory-alist `(("." . "~/.emacs_backups")))
+    (global-undo-tree-mode)))
 
 ;; For 3D printer G-Code
 (use-package gcode-mode)
@@ -2873,13 +3068,13 @@ normal-state."
 
 ;;(add-hook 'text-mode-hook 'fill-paragraph-on-normal-state-mode)
 
-(use-package roguel-ike)
+;; TODO: Disabled for now due to what may be a conflict with Emacs 29
+;;(use-package roguel-ike)
 
 (use-package bbdb
   :config
   (progn
-    (use-package bbdb-csv-import
-      :straight (bbdb-csv-import :host nil :repo "https://git.sr.ht/~iank/bbdb-csv-import"))))
+    (use-package bbdb-csv-import)))
 
 ;; Vastly more detailed help buffers
 (use-package helpful
@@ -2897,8 +3092,8 @@ normal-state."
 
 ;; With tweaking, this generates Emacs themes based on the current desktop background
 (use-package ewal
-  ;; TODO: Have this package require installing pywal as a system package if
-  ;;  we're on a home computer
+  :if e454iel-home-computer-p
+  :ensure-system-package python-pywal
 
   ;; TODO: Set up menu bindings "tte" for switching to the traditional spacemacs
   ;;  ewal theme (which is a special category separate from theme pairs)
@@ -2918,7 +3113,89 @@ normal-state."
              "straight/repos/ewal/doom-themes/ewal-doom-themes.el"))
     (load-file
      (concat user-emacs-directory
-             "straight/repos/ewal/spacemacs-themes/ewal-spacemacs-themes.el"))))
+             "straight/repos/ewal/spacemacs-themes/ewal-spacemacs-themes.el")))
+
+  (use-package ewal-evil-cursors
+    :config (ewal-evil-cursors-get-colors :apply t))
+
+  ;; TODO: This is unsafe to use if pywal and seethru aren't installed. I need
+  ;;  some sort of guarantee those are installed to make these commands or
+  ;;  variables even available.
+
+  (setq e454iel-wallpaper-alist-list
+        '(((name "Hills")
+           (image "~/Pictures/Wallpapers/Hills.jpg")
+           (saturation 1)
+           (opacity 95))
+
+          ((name "Park")
+           (image "~/Pictures/Wallpapers/Park.jpg")
+           (saturation 1)
+           (opacity 95))
+          ))
+
+  ;; The wallpapers aren't "secret" in the sense that they're treasure maps or
+  ;;  something, but rather they're either device-specific or loaded by an
+  ;;  external file such as secret.el
+  (setq e454iel-wallpaper-alist-list
+        (append e454iel-wallpaper-alist-list e454iel-secret-wallpaper-alist-list))
+
+  (setq e454iel-current-wallpaper-alist e454iel-wallpaper-alist-list)
+
+  (setq e454iel-preferred-ewal-theme 'ewal-spacemacs-modern)
+
+  (defun e454iel-cycle-wallpapers ()
+    "Cycle through the list of wallpaper alists."
+    (interactive)
+    (setq e454iel-current-wallpaper-alist-list (cdr e454iel-current-wallpaper-alist-list))
+    (if (not e454iel-current-wallpaper-alist-list)
+        (setq e454iel-current-wallpaper-alist-list e454iel-current-wallpaper-alist-list))
+
+    (e454iel-load-wallpaper))
+
+  (defun e454iel-load-wallpaper ()
+  "Sets the wallpaper, theme, and opacity of Emacs based on the user-specified alist."
+  (let* ((current-wallpaper-alist (car e454iel-current-wallpaper-alist-list))
+         (name (cadr (assoc 'name current-wallpaper-alist)))
+         (image (cadr (assoc 'image current-wallpaper-alist)))
+         (saturation (cadr (assoc 'saturation current-wallpaper-alist)))
+         (opacity (cadr (assoc 'opacity current-wallpaper-alist))))
+
+    (print image)
+
+    (shell-command (concat "wal -i "
+                           image
+                           " --saturate "
+                           (format "%s" saturation)))
+
+    (load-theme e454iel-preferred-ewal-theme t)
+    (ewal-evil-cursors-get-colors :apply t)
+    (seethru opacity)
+
+    name))
+
+  (defun e454iel-jump-to-wallpaper (wallpaper-to-jump-to)
+    "Jump to `FONT-TO-JUMP-TO' in `e454iel-font-pairs' and apply it."
+    (interactive (list
+                  (completing-read
+                   "Which wallpaper do you want to load?: "
+                   (mapcar 'cadar e454iel-wallpaper-alist-list))))
+
+    (let ((result
+           (member-if
+            (lambda (wallpaper) nil nil
+              (equal (cadar wallpaper) wallpaper-to-jump-to))
+
+          e454iel-wallpaper-alist-list)))
+
+      (if result
+          (progn (setq e454iel-current-wallpaper-alist-list result)
+                 (e454iel-load-wallpaper)))))
+
+  :general
+  (e454iel-main-menu
+    "twn" 'e454iel-cycle-wallpapers
+    "tws" 'e454iel-jump-to-wallpaper))
 
 (use-package dictcc
   :config
@@ -2974,9 +3251,7 @@ normal-state."
   :general (e454iel-main-menu "mo" 'fsc/rearrange-region))
 
 (use-package go
-  ;; TODO: Use the system use-package thing to make sure the gnu-go package is
-  ;;  installed
-  )
+  :ensure-system-package gnugo)
 
 ;; For quickly finding RSS feeds from URLs
 (use-package feed-discovery)
@@ -2997,6 +3272,115 @@ normal-state."
     :general (e454iel-main-menu "jw" 'ace-window))
 
   :general (e454iel-main-menu "jc" 'avy-goto-char))
+
+(use-package scad-mode
+  :config
+  (progn
+    (use-package scad-preview
+      :general
+      (e454iel-major-mode-menu
+        :keymaps 'scad-mode-map
+        "c" 'scad-preview-refresh)
+
+      :general
+      (:keymaps 'scad-preview--image-mode-map
+       :states 'normal
+        "r" 'scad-preview-reset-camera-parameters
+        "l" 'scad-preview-rotz+
+        "h" 'scad-preview-rotz-
+        "k" 'scad-preview-rotx+
+        "j" 'scad-preview-rotx-
+        "C-h" 'scad-preview-roty+
+        "C-l" 'scad-preview-roty-
+        "C-k" 'scad-preview-dist-
+        "C-j" 'scad-preview-dist+
+        "M-h" 'scad-preview-trnsx+
+        "M-l" 'scad-preview-trnsx-
+        "M-k" 'scad-preview-trnsz-
+        "M-j" 'scad-preview-trnsz+))))
+
+(use-package scroll-on-drag
+  :disabled
+  :general
+  ([down-mouse-1] (lambda ()
+                  (interactive)
+                  (unless (scroll-on-drag)
+                    (mouse-yank-primary t)))))
+
+;; For SuperCollider (language and server for algorithmic music generation)
+(use-package sclang
+  :disabled
+  :config
+  (progn
+    (use-package sclang-extensions)
+    (use-package sclang-snippets)
+    (use-package ob-sclang)))
+
+(use-package webkit
+  :disabled
+  :straight
+  (webkit :type git :host github :repo "akirakyle/emacs-webkit"
+          :branch "main"
+          :files (:defaults "*.js" "*.css" "*.so")
+          :pre-build ("make"))
+
+  :config
+  (progn
+    (use-package webkit-ace
+      :straight (webkit-ace :type built-in))
+    (use-package webkit-dark
+      :straight (webkit-dark :type built-in))
+
+    ;; Open a new session instead of using the current one
+    (setq webkit-browse-url-force-new t)
+
+    (setq webkit-dark-mode t)
+
+    (use-package evil-collection-webkit
+      :straight (evil-collection-webkit :type built-in)
+      :config (evil-collection-xwidget-setup))))
+
+;; Insert complex emoticons made from misused Unicode symbols and Japanese
+;;  characters
+(use-package insert-kaomoji
+  :general
+  (e454iel-main-menu
+    "mik" 'insert-kaomoji))
+
+(use-package pulseaudio-control
+  :config
+  (progn
+    (setq pulseaudio-control-default-sink
+          (if (string-equal (system-name) "Desktop.Guix.Maddie")
+              51))
+    (setq pulseaudio-control-volume-step "1%"))
+
+  :general
+  (e454iel-main-menu
+    "=" (lambda () "" (interactive) (pulseaudio-control-set-volume "15%"))
+    "+" 'pulseaudio-control-increase-volume
+    "-" 'pulseaudio-control-decrease-volume
+
+    "v" '(:ignore t :which-key "Volume")
+    "vv" (lambda () "" (interactive) (pulseaudio-control-set-volume "15%"))
+    "vi" 'pulseaudio-control-increase-volume
+    "vd" 'pulseaudio-control-decrease-volume
+    "vm" 'pulseaudio-control-toggle-current-sink-mute))
+
+(use-package reddigg)
+;; TODO: Temporarily broken
+;;(use-package md4rd)
+
+;; For typing tests
+(use-package speed-type)
+
+;; Highlight word stems to improve readability of words when reading quickly
+(use-package stem-reading-mode
+  :general (e454iel-main-menu "ts" 'stem-reading-mode))
+
+(use-package smudge
+  :config (progn
+            (setq smudge-transport 'connect)))
 
 (provide 'init)
 ;;; init.el ends here
