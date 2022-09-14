@@ -2900,7 +2900,6 @@ Lisp function does not specify a special indentation."
       "amva" 'vuiet-play-artist
       "amv C-A" 'vuiet-play-artist-similar
       "amvh" 'vuiet-play-loved-tracks
-      ;; TODO: Fill out this half finished function
       "amvH" (lambda ()
                "Verbosely heart the current track"
                (interactive)
@@ -2945,7 +2944,8 @@ Lisp function does not specify a special indentation."
     ;;  list of tags chosen from a completing-read)
 
     ;; TODO: I need to advise this function so that it doesn't destroy the
-    ;;  mode line (including the display-time-mode and eyebrowse indicators)
+    ;;  mode line (including the display-time-mode and eyebrowse indicators).
+    ;;  In the meantime, I've set it to be essentially a no-op.
     (defun vuiet-update-mode-line (&optional position) t)
     ))
 
