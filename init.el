@@ -1308,6 +1308,15 @@ unsorted."
 ;;  some reason. I might want to submit a patch for that, depending upon what
 ;;  the functions look like.
 (use-package org
+  ;; TODO: I want to be able to use org on non-home computers, and I want to be
+  ;;  able to gracefully drop support for playing alarm noises when necessary.
+  ;;  That makes ensure-system-package an ill fit for this context. I want to
+  ;;  remove this. Instead, in the body of the configuration, I want to check
+  ;;  what platform I'm on and what binaries are available before making noises
+
+  ;; We want alsa-utils to ensure we can use aplay for invoking alert noises
+  :ensure-system-package alsa-utils
+
   :straight (org :type built-in)
 
   ;; TODO: Why are all these supplementary packages in init instead of config?
@@ -1435,8 +1444,6 @@ calculated based on my configuration."
                     ))
 
             ;; The alsa-utils package must be installed so that aplay can run
-            ;; TODO: Any way I can use the system use-package thing for ensuring
-            ;;  alsa-utils is installed for the sake of running this?
             (setq org-clock-sound "~/.dotfiles/BellCounterA.wav")
 
             ;; A quick keybinding for setting a tea timer
