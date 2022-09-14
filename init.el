@@ -2854,9 +2854,6 @@ Lisp function does not specify a special indentation."
     (parrot-mode)
     (setq parrot-num-rotations nil)))
 
-;; TODO: Do that thing where this package instructs the system to install
-;;  youtube-dl and mpv as part of downloading itself (or does it only need mpv?)
-
 ;; Internet song browser, music player, and recommendation engine. A replacement
 ;;  for Spotify using both YouTubeDL and Last.FM
 (use-package vuiet
@@ -2868,6 +2865,10 @@ Lisp function does not specify a special indentation."
   ;;
   ;;  Maybe the library isn't auto-loading right, so maybe I need to load it
   ;;  with (load-library) as part of mpv's config attribute
+
+  :ensure-system-package
+  ((youtube-dl . "youtube-dl")
+   (mpv . "mpv"))
 
   :init
   (progn
