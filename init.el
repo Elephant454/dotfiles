@@ -764,6 +764,13 @@ This makes for easier reading of larger, denser bodies of text."
               (progn
                 (setq diredp-image-preview-in-tooltip nil)))))
 
+(use-package debug
+  :config (evil-collection-init 'debug))
+
+(use-package eshell
+  :config (progn
+            (evil-collection-init 'eshell)))
+
 ;; give parenthesis matching colors based upon depth
 (use-package rainbow-delimiters
   :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
