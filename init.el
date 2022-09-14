@@ -489,6 +489,7 @@ This makes for easier reading of larger, denser bodies of text."
 
   :config (progn
             (evil-mode t)
+            (setq evil-want-minibuffer t)
             (use-package evil-escape
               :config
               (progn
