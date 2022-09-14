@@ -3190,9 +3190,7 @@ normal-state."
   :general (e454iel-main-menu "mo" 'fsc/rearrange-region))
 
 (use-package go
-  ;; TODO: Use the system use-package thing to make sure the gnu-go package is
-  ;;  installed
-  )
+  :ensure-system-package gnugo)
 
 ;; For quickly finding RSS feeds from URLs
 (use-package feed-discovery)
