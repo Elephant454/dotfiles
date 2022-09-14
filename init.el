@@ -114,7 +114,9 @@ print-circle t
 
 (use-package use-package
   ;; set all calls to use-package to use Straight as the package manager
-  :config (setq straight-use-package-by-default t))
+  :config (progn
+            (setq straight-use-package-by-default t)
+            (use-package use-package-ensure-system-package)))
 
 ;; Make sure our keyring doesn't get out of date
 (use-package gnu-elpa-keyring-update)
