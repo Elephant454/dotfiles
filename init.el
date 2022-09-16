@@ -660,7 +660,7 @@ This makes for easier reading of larger, denser bodies of text."
 
 ;; TODO: Read the full README for every package I use (and maybe also the
 ;;  related packages) (selectrum, vertico, consult, orderless, CtrlF, AMX,
-;;  icicles, embark)
+;;  icicles, embark, marginalia, corfu)
 
 (use-package vertico
   :config (progn
