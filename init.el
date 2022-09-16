@@ -704,7 +704,17 @@ This makes for easier reading of larger, denser bodies of text."
               (progn
                 (marginalia-mode)))
             )
-  )
+
+
+  :general
+  (:states 'normal
+   :keymaps 'vertico-map
+   "j" 'vertico-next
+   "k" 'vertico-previous
+   "<return>" 'vertico-exit))
+
+(use-package corfu
+  :config (global-corfu-mode))
 
 (use-package mini-frame
   :disabled
@@ -891,6 +901,7 @@ _-_increase _=_decrease"
 ;; auto completion
 ;; TODO: See what variables I may want to tweak here
 (use-package company
+  :disabled
   :config (progn
             (setq company-idle-delay 0.1)
             (global-company-mode 1)))
