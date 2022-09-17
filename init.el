@@ -1348,6 +1348,8 @@ unsorted."
           (use-package org-chef)
           (use-package org-clock-today
             :config (org-clock-today-mode 1))
+          ;; TODO: How does this compare with org-notifications and org-notify?
+          ;;  Also, why aren't I using this?
           (use-package org-alert
             :disabled
             ;; org-alert checks for things scheduled or due the current day
