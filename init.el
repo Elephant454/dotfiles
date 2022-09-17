@@ -1388,7 +1388,12 @@ unsorted."
   ;;  what platform I'm on and what binaries are available before making noises
 
   ;; We want alsa-utils to ensure we can use aplay for invoking alert noises
-  :ensure-system-package alsa-utils
+
+  ;; TODO: Reenable this after writing a better command to install on Guix. This
+  ;;  likely will mean checking to see if the package is in the current profile
+  ;;  rather than naievely running an update every time Emacs starts
+
+  ;;:ensure-system-package alsa-utils
 
   :straight (org :type built-in)
 
@@ -1416,6 +1421,8 @@ unsorted."
           (use-package org-chef)
           (use-package org-clock-today
             :config (org-clock-today-mode 1))
+          ;; TODO: How does this compare with org-notifications and org-notify?
+          ;;  Also, why aren't I using this?
           (use-package org-alert
             :disabled
             ;; org-alert checks for things scheduled or due the current day
@@ -2714,7 +2721,12 @@ Lisp function does not specify a special indentation."
 
 ;; TODO: See if there are any good packages to complement this one
 (use-package vterm
-  :ensure-system-package emacs-vterm
+  ;; TODO: Reenable this after writing a better command to install on Guix. This
+  ;;  likely will mean checking to see if the package is in the current profile
+  ;;  rather than naievely running an update every time Emacs starts
+
+  ;;:ensure-system-package emacs-vterm
+
   :straight (vterm :type built-in)
   :config (evil-collection-init 'vterm))
 
@@ -2831,7 +2843,13 @@ Lisp function does not specify a special indentation."
 
 (use-package ement
   :straight (ement :host github :repo "alphapapa/ement.el")
-  :ensure-system-package pantalaimon
+
+  ;; TODO: Reenable this after writing a better command to install on Guix. This
+  ;;  likely will mean checking to see if the package is in the current profile
+  ;;  rather than naievely running an update every time Emacs starts
+
+  ;;:ensure-system-package pantalaimon
+
   :config
   (progn
     (setq ement-initial-sync-timeout (* 60 10))
@@ -2938,9 +2956,13 @@ Lisp function does not specify a special indentation."
   ;;  Maybe the library isn't auto-loading right, so maybe I need to load it
   ;;  with (load-library) as part of mpv's config attribute
 
-  :ensure-system-package
-  ((youtube-dl . "youtube-dl")
-   (mpv . "mpv"))
+  ;; TODO: Reenable this after writing a better command to install on Guix. This
+  ;;  likely will mean checking to see if the package is in the current profile
+  ;;  rather than naievely running an update every time Emacs starts
+
+  ;;:ensure-system-package
+  ;;((youtube-dl . "youtube-dl")
+  ;; (mpv . "mpv"))
 
   :init
   (progn
@@ -3104,7 +3126,12 @@ normal-state."
 ;; With tweaking, this generates Emacs themes based on the current desktop background
 (use-package ewal
   :if e454iel-home-computer-p
-  :ensure-system-package python-pywal
+
+  ;; TODO: Reenable this after writing a better command to install on Guix. This
+  ;;  likely will mean checking to see if the package is in the current profile
+  ;;  rather than naievely running an update every time Emacs starts
+
+  ;;:ensure-system-package python-pywal
 
   ;; TODO: Set up menu bindings "tte" for switching to the traditional spacemacs
   ;;  ewal theme (which is a special category separate from theme pairs)
@@ -3262,7 +3289,13 @@ normal-state."
   :general (e454iel-main-menu "mo" 'fsc/rearrange-region))
 
 (use-package go
-  :ensure-system-package gnugo)
+
+  ;; TODO: Reenable this after writing a better command to install on Guix. This
+  ;;  likely will mean checking to see if the package is in the current profile
+  ;;  rather than naievely running an update every time Emacs starts
+
+  ;;:ensure-system-package gnugo
+  )
 
 ;; For quickly finding RSS feeds from URLs
 (use-package feed-discovery)
