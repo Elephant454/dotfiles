@@ -714,7 +714,33 @@ This makes for easier reading of larger, denser bodies of text."
    "<return>" 'vertico-exit))
 
 (use-package corfu
-  :config (global-corfu-mode))
+  :config (progn
+            ;; Enable cycling for `corfu-next/previous'
+            (setq corfu-cycle t)
+            ;; Enable auto completion
+            (setq corfu-auto t)
+            ;; Quit at completion boundary
+            (setq corfu-quit-at-boundary t)
+            ;; Quit if there is no match
+            (setq corfu-quit-no-match t)
+            ;; Disable current candidate preview
+            (setq corfu-preview-current t)
+            ;; Disable candidate preselection
+            (setq corfu-preselect-first t)
+            ;; Disable documentation in the echo area
+            (setq corfu-echo-documentation t)
+            ;; Use scroll margin
+            (setq corfu-scroll-margin 5) 
+
+            ;; TAB cycle if there are only few candidates
+            (setq completion-cycle-threshold 3)
+
+            ;; Enable indentation+completion using the TAB key.
+            (setq tab-always-indent 'complete)
+
+            (global-corfu-mode)
+            )
+  )
 
 (use-package mini-frame
   :disabled
