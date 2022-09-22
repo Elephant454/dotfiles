@@ -738,6 +738,19 @@ This makes for easier reading of larger, denser bodies of text."
             ;; Enable indentation+completion using the TAB key.
             (setq tab-always-indent 'complete)
 
+            (use-package cape
+              :config
+              (progn
+                (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+                (add-to-list 'completion-at-point-functions #'cape-history)
+                (add-to-list 'completion-at-point-functions #'cape-keyword)
+                (add-to-list 'completion-at-point-functions #'cape-symbol)
+                (add-to-list 'completion-at-point-functions #'cape-abbrev)
+                (add-to-list 'completion-at-point-functions #'cape-ispell)
+                (add-to-list 'completion-at-point-functions #'cape-dict)
+                ;;(add-to-list 'completion-at-point-functions #'cape-line)
+                (add-to-list 'completion-at-point-functions #'cape-rfc1345)))
+
             (global-corfu-mode)
             )
   )
