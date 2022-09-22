@@ -769,6 +769,15 @@ This makes for easier reading of larger, denser bodies of text."
 (use-package debug
   :config (evil-collection-init 'debug))
 
+(use-package proced
+  :straight (proced :type built-in)
+  :config (progn
+            (evil-collection-init 'proced))
+  :general (general-define-key
+            :states 'normal
+            :keymaps 'proced-mode-map
+            "<SPC>" 'e454iel-main-menu-prefix))
+
 (use-package eshell
   :config (progn
             (evil-collection-init 'eshell)))
