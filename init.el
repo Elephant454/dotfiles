@@ -658,9 +658,9 @@ This makes for easier reading of larger, denser bodies of text."
 ;;  https://github.com/minad/consult
 
 
-;; TODO: Read the full README for every package I use (and maybe also the
-;;  related packages) (selectrum, vertico, consult, orderless, CtrlF, AMX,
-;;  icicles, embark, marginalia, corfu, cape)
+;; TODO: Read the full README (and the available Wikis) for every package I use
+;;  (and maybe also the related packages) (selectrum, vertico, consult,
+;;  orderless, CtrlF, AMX, icicles, embark, marginalia, corfu, cape)
 
 (use-package vertico
   :config (progn
