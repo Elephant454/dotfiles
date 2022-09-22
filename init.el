@@ -2647,7 +2647,10 @@ Lisp function does not specify a special indentation."
 ;;            (abbrev-mode t)))
 
 (use-package company-emoji
-  :config (add-to-list 'company-backends 'company-emoji))
+  ;; :config (add-to-list 'company-backends 'company-emoji)
+
+  ;; This is set up for use with Corfu
+  :config (add-to-list 'completion-at-point-functions (cape-company-to-capf #'company-emoji)))
 
 (use-package emojify
   :disabled
