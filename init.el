@@ -2181,6 +2181,12 @@ Lisp function does not specify a special indentation."
             )
   )
 
+(use-package iscroll
+  :init
+  (progn
+    (add-hook 'eww-mode-hook 'iscroll-mode)
+    (add-hook 'ement-room-mode-hook 'iscroll-mode)))
+
 ;; delightful little window popups
 (use-package popwin
   :config (popwin-mode 1))
