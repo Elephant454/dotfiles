@@ -788,6 +788,11 @@ This makes for easier reading of larger, denser bodies of text."
                           (redirect-frame-focus corfu-doc--frame
                                                 (or (frame-parent corfu-doc--frame)
                                                     exwm-workspace--current))))
+            ;; TODO: Is this safe?
+            (general-define-key
+             :keymaps 'minibuffer-mode-map
+              "TAB" 'indent-for-tab-command)
+
             (global-corfu-mode)
             )
   )
