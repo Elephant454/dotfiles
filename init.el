@@ -514,7 +514,11 @@ This makes for easier reading of larger, denser bodies of text."
                 (setq evil-escape-unordered-key-sequence t)
                 (setq evil-escape-delay (if e454iel-phone-p 0.3 0.1))
                 (evil-escape-mode t)))
-            (use-package evil-matchit :config (global-evil-matchit-mode t))
+            (use-package evil-matchit
+              :config
+              (progn
+                (setq evilmi-shortcut "m")
+                (global-evil-matchit-mode t)))
             (use-package fringe-helper
               :config (use-package evil-fringe-mark
                         :config (global-evil-fringe-mark-mode t)))
