@@ -2795,6 +2795,37 @@ Lisp function does not specify a special indentation."
   ;; Install a necessary soft dependency
   :init (use-package posframe))
 
+;; TODO: This package could potentially be really useful for buffers for
+;; composing messages for email or IM when the recipient isn't expecting the 80
+;; column rule
+;;
+;; When paired with "visual-line-mode", this allows for a sort of artificial
+;;  auto-fill mode that exists only visually instead of in the actual text. This
+;;  could be really great for composing messages intended to be displayed
+;;  without obeying the 80 column rule
+(use-package visual-fill-column
+  :disabled
+  ;; Setting this globally breaks ement-room-mode and any other mode that
+  ;; interally uses visual-line-mode
+
+  ;;:config (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
+  )
+
+;; TODO: This package could potentially be really useful for buffers for
+;; composing messages for email or IM when the recipient isn't expecting the 80
+;; column rule
+;;
+;; To be honest, I'm a little confused what this does, but it also gets me
+;;  closer to artificial feature parity with auto-fill using "visual-line-mode"
+;;  as a result of my using "adaptive-fill-mode"
+(use-package adaptive-wrap
+  :disabled
+  ;; Setting this globally breaks ement-room-mode and any other mode that
+  ;; interally uses visual-line-mode
+
+  ;; :config (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)
+)
+
 ;; Client for the matrix.org chat protocol
 (use-package matrix-client
   :disabled
