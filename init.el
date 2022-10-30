@@ -2845,6 +2845,15 @@ Lisp function does not specify a special indentation."
   (progn
     (setq ement-initial-sync-timeout (* 60 10))
 
+    (add-hook 'ement-room-compose-hook #'ement-room-compose-org)
+    ;; This is actually for turning auto-fill-mode *off*, because it's normally
+    ;;  default for my org buffers
+    ;;(add-hook 'ement-room-compose-hook #'auto-fill-mode)
+    ;;(add-hook 'ement-room-compose-hook #'visual-line-mode)
+
+    ;;(add-hook 'ement-room-compose-hook #'visual-fill-column-mode)
+    ;;(add-hook 'ement-room-compose-hook #'adaptive-wrap-prefix-mode)
+
     ;; TODO: This almost certainly isn't going to work as is, but making it work
     ;;  correctly will be tricky. Currently I'm thinking that I ought to spawn a
     ;;  timer, have that timer periodically check the "*pantalaimon*" buffer
