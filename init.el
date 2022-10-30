@@ -664,6 +664,8 @@ This makes for easier reading of larger, denser bodies of text."
 
 (use-package vertico
   :config (progn
+            (evil-collection-init 'vertico)
+
             (vertico-mode)
 
             (use-package consult
@@ -703,15 +705,7 @@ This makes for easier reading of larger, denser bodies of text."
               :config
               (progn
                 (marginalia-mode)))
-            )
-
-
-  :general
-  (:states 'normal
-   :keymaps 'vertico-map
-   "j" 'vertico-next
-   "k" 'vertico-previous
-   "<return>" 'vertico-exit))
+            ))
 
 (use-package corfu
   :config (progn
