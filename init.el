@@ -536,7 +536,10 @@ This makes for easier reading of larger, denser bodies of text."
      ;; Does it make sense for this to apply to insert/emacs states?
      :keymaps '(normal insert emacs motion)
      "<C-left>" 'previous-buffer
-     "<C-right>" 'next-buffer)
+     "<C-right>" 'next-buffer
+     ;; These are the mouse "back" and "forward" buttons respectively
+     "<mouse-8>" 'previous-buffer
+     "<mouse-9>" 'next-buffer)
      
     (general-create-definer e454iel-main-menu
                             :keymaps '(normal insert motion emacs)
