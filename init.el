@@ -719,6 +719,7 @@ This makes for easier reading of larger, denser bodies of text."
             (setq corfu-cycle t)
             ;; Enable auto completion
             (setq corfu-auto t)
+            (setq corfu-auto-delay 0.2)
             ;; Quit at completion boundary
             (setq corfu-quit-at-boundary t)
             ;; Quit if there is no match
