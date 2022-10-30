@@ -733,8 +733,8 @@ This makes for easier reading of larger, denser bodies of text."
             ;; Use scroll margin
             (setq corfu-scroll-margin 5) 
 
-            ;; TAB cycle
-            (setq completion-cycle-threshold t)
+            ;; Don't TAB cycle
+            (setq completion-cycle-threshold nil)
 
             ;; Enable indentation+completion using the TAB key.
             (setq tab-always-indent 'complete)
