@@ -55,7 +55,23 @@ print-circle t
  ;;  github-explorer
  browse-url-generic-program "qutebrowser"
 
- browse-url-handlers '((".*xkcd.com/[0-9]*" . (lambda (x y) (get-xkcd-from-url x) ))
+ browse-url-handlers '((".*xkcd.com/[0-9]*" .
+                        (lambda (url rest) (get-xkcd-from-url url) ))
+
+                       ;; If we do a universal argument before opening the link,
+                       ;;  open it in EWW. Otherwise, open in EMMS.
+                       (".*youtube.com/watch\\?v=.*" .
+                        (lambda (url rest)
+                          (if current-prefix-arg
+                              (eww-browse-url url)
+                            (emms-play-url url))))
+
+                       (".*v.redd.it/.*" .
+                        (lambda (url rest)
+                          (if current-prefix-arg
+                              (eww-browse-url url)
+                            (emms-play-url url))))
+
                        ("." . eww-browse-url))
  browse-url-browser-function #'eww-browse-url
 
