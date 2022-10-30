@@ -733,6 +733,9 @@ This makes for easier reading of larger, denser bodies of text."
             ;; Enable indentation+completion using the TAB key.
             (setq tab-always-indent 'complete)
 
+            (setq evil-collection-corfu-maps 'tab-n-go)
+            (evil-collection-init 'corfu)
+
             (use-package cape
               :config
               (progn
