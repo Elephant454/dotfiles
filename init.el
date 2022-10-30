@@ -3389,5 +3389,12 @@ normal-state."
 ;; An Open Street Map package that works utterly ridiculously well
 (use-package osm)
 
+;; Edit a region of text in a new buffer, allowing you to visualize an
+;;  individual sentence and keep track of undo history separately
+(use-package edit-indirect
+  :general
+  (e454iel-main-menu
+    "mr" 'edit-indirect-region))
+
 (provide 'init)
 ;;; init.el ends here
