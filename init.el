@@ -3386,5 +3386,8 @@ normal-state."
   :config (progn
             (setq smudge-transport 'connect)))
 
+;; An Open Street Map package that works utterly ridiculously well
+(use-package osm)
+
 (provide 'init)
 ;;; init.el ends here
