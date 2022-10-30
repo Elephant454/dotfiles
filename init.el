@@ -2864,7 +2864,22 @@ Lisp function does not specify a special indentation."
                                   "pantalaimon")
     (ement-connect :uri-prefix "http://localhost:8009"
                    :user-id e454iel-matrix-user-id
-                   :password e454iel-matrix-password)))
+                   :password e454iel-matrix-password))
+
+  :general
+  (general-define-key
+   :keymaps 'ement-room-mode-map
+   :states 'normal
+    "RET" 'ement-room-send-message
+    "S-RET" 'ement-room-send-reply
+    "r" 'ement-room-send-reply
+    "i" 'ement-room-send-image
+    "I" 'ement-room-send-file
+    "e" 'ement-room-edit-message
+    "E" 'ement-room-send-reaction
+    "o" 'ement-room-compose-message
+    ;; go to room
+    "g" 'ement-view-room))
 
 ;; Front-end for the Emacsmirror package database
 (use-package epkg
