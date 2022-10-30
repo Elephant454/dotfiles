@@ -55,7 +55,23 @@ print-circle t
  ;;  github-explorer
  browse-url-generic-program "qutebrowser"
 
- browse-url-handlers '((".*xkcd.com/[0-9]*" . (lambda (x y) (get-xkcd-from-url x) ))
+ browse-url-handlers '((".*xkcd.com/[0-9]*" .
+                        (lambda (url rest) (get-xkcd-from-url url) ))
+
+                       ;; If we do a universal argument before opening the link,
+                       ;;  open it in EWW. Otherwise, open in EMMS.
+                       (".*youtube.com/watch\\?v=.*" .
+                        (lambda (url rest)
+                          (if current-prefix-arg
+                              (eww-browse-url url)
+                            (emms-play-url url))))
+
+                       (".*v.redd.it/.*" .
+                        (lambda (url rest)
+                          (if current-prefix-arg
+                              (eww-browse-url url)
+                            (emms-play-url url))))
+
                        ("." . eww-browse-url))
  browse-url-browser-function #'eww-browse-url
 
@@ -498,7 +514,11 @@ This makes for easier reading of larger, denser bodies of text."
                 (setq evil-escape-unordered-key-sequence t)
                 (setq evil-escape-delay (if e454iel-phone-p 0.3 0.1))
                 (evil-escape-mode t)))
-            (use-package evil-matchit :config (global-evil-matchit-mode t))
+            (use-package evil-matchit
+              :config
+              (progn
+                (setq evilmi-shortcut "m")
+                (global-evil-matchit-mode t)))
             (use-package fringe-helper
               :config (use-package evil-fringe-mark
                         :config (global-evil-fringe-mark-mode t)))
@@ -516,7 +536,10 @@ This makes for easier reading of larger, denser bodies of text."
      ;; Does it make sense for this to apply to insert/emacs states?
      :keymaps '(normal insert emacs motion)
      "<C-left>" 'previous-buffer
-     "<C-right>" 'next-buffer)
+     "<C-right>" 'next-buffer
+     ;; These are the mouse "back" and "forward" buttons respectively
+     "<mouse-8>" 'previous-buffer
+     "<mouse-9>" 'next-buffer)
      
     (general-create-definer e454iel-main-menu
                             :keymaps '(normal insert motion emacs)
@@ -1576,7 +1599,7 @@ calculated based on my configuration."
             (setq org-capture-templates
                   `(("t" "TODO" entry
                      (file ,(concat e454iel-documents-dir "/todo.org"))
-                     "* %a "
+                     "* TODO %a "
                      :empty-lines-before 1)
                     ("a" "ArticlesToRead" entry
                      (file "~/org/ArticlesToRead.org")
@@ -2931,6 +2954,37 @@ Lisp function does not specify a special indentation."
   ;; Install a necessary soft dependency
   :init (use-package posframe))
 
+;; TODO: This package could potentially be really useful for buffers for
+;; composing messages for email or IM when the recipient isn't expecting the 80
+;; column rule
+;;
+;; When paired with "visual-line-mode", this allows for a sort of artificial
+;;  auto-fill mode that exists only visually instead of in the actual text. This
+;;  could be really great for composing messages intended to be displayed
+;;  without obeying the 80 column rule
+(use-package visual-fill-column
+  :disabled
+  ;; Setting this globally breaks ement-room-mode and any other mode that
+  ;; interally uses visual-line-mode
+
+  ;;:config (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
+  )
+
+;; TODO: This package could potentially be really useful for buffers for
+;; composing messages for email or IM when the recipient isn't expecting the 80
+;; column rule
+;;
+;; To be honest, I'm a little confused what this does, but it also gets me
+;;  closer to artificial feature parity with auto-fill using "visual-line-mode"
+;;  as a result of my using "adaptive-fill-mode"
+(use-package adaptive-wrap
+  :disabled
+  ;; Setting this globally breaks ement-room-mode and any other mode that
+  ;; interally uses visual-line-mode
+
+  ;; :config (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)
+)
+
 ;; Client for the matrix.org chat protocol
 (use-package matrix-client
   :disabled
@@ -2950,6 +3004,15 @@ Lisp function does not specify a special indentation."
   (progn
     (setq ement-initial-sync-timeout (* 60 10))
 
+    (add-hook 'ement-room-compose-hook #'ement-room-compose-org)
+    ;; This is actually for turning auto-fill-mode *off*, because it's normally
+    ;;  default for my org buffers
+    ;;(add-hook 'ement-room-compose-hook #'auto-fill-mode)
+    ;;(add-hook 'ement-room-compose-hook #'visual-line-mode)
+
+    ;;(add-hook 'ement-room-compose-hook #'visual-fill-column-mode)
+    ;;(add-hook 'ement-room-compose-hook #'adaptive-wrap-prefix-mode)
+
     ;; TODO: This almost certainly isn't going to work as is, but making it work
     ;;  correctly will be tricky. Currently I'm thinking that I ought to spawn a
     ;;  timer, have that timer periodically check the "*pantalaimon*" buffer
@@ -2960,7 +3023,22 @@ Lisp function does not specify a special indentation."
                                   "pantalaimon")
     (ement-connect :uri-prefix "http://localhost:8009"
                    :user-id e454iel-matrix-user-id
-                   :password e454iel-matrix-password)))
+                   :password e454iel-matrix-password))
+
+  :general
+  (general-define-key
+   :keymaps 'ement-room-mode-map
+   :states 'normal
+    "RET" 'ement-room-send-message
+    "S-RET" 'ement-room-send-reply
+    "r" 'ement-room-send-reply
+    "i" 'ement-room-send-image
+    "I" 'ement-room-send-file
+    "e" 'ement-room-edit-message
+    "E" 'ement-room-send-reaction
+    "o" 'ement-room-compose-message
+    ;; go to room
+    "g" 'ement-view-room))
 
 ;; Front-end for the Emacsmirror package database
 (use-package epkg
@@ -3521,6 +3599,16 @@ normal-state."
 (use-package smudge
   :config (progn
             (setq smudge-transport 'connect)))
+
+;; An Open Street Map package that works utterly ridiculously well
+(use-package osm)
+
+;; Edit a region of text in a new buffer, allowing you to visualize an
+;;  individual sentence and keep track of undo history separately
+(use-package edit-indirect
+  :general
+  (e454iel-main-menu
+    "mr" 'edit-indirect-region))
 
 (provide 'init)
 ;;; init.el ends here
