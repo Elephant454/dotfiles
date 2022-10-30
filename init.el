@@ -1448,7 +1448,7 @@ calculated based on my configuration."
             (setq org-capture-templates
                   `(("t" "TODO" entry
                      (file ,(concat e454iel-documents-dir "/todo.org"))
-                     "* %a "
+                     "* TODO %a "
                      :empty-lines-before 1)
                     ("a" "ArticlesToRead" entry
                      (file "~/org/ArticlesToRead.org")
