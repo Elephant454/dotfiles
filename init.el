@@ -752,6 +752,42 @@ This makes for easier reading of larger, denser bodies of text."
                 ;;(add-to-list 'completion-at-point-functions #'cape-line)
                 (add-to-list 'completion-at-point-functions #'cape-rfc1345)))
 
+            ;; Allow Corfu to be used in the minibuffer
+            (defun corfu-enable-always-in-minibuffer ()
+              "Enable Corfu in the minibuffer if Vertico/Mct are not active."
+              (unless (or (bound-and-true-p mct--active)
+                          (bound-and-true-p vertico--input))
+                (setq-local corfu-auto t)
+                (corfu-mode 1)))
+            (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
+            (advice-add #'corfu--make-frame :around
+                        (defun +corfu--make-frame-a (oldfun &rest args)
+                          (cl-letf (((symbol-function #'frame-parent)
+                                     (lambda (frame)
+                                       (or (frame-parameter frame 'parent-frame)
+                                           exwm-workspace--current))))
+                            (apply oldfun args))
+                          (when exwm--connection
+                            (set-frame-parameter corfu--frame 'parent-frame nil))))
+            (advice-add #'corfu--popup-redirect-focus :override
+                        (defun +corfu--popup-redirect-focus-a ()
+                          (redirect-frame-focus corfu--frame
+                                                (or (frame-parent corfu--frame)
+                                                    exwm-workspace--current))))
+            (advice-add #'corfu-doc--make-frame :around
+                        (defun +corfu-doc--make-frame-a (oldfun &rest args)
+                          (cl-letf (((symbol-function #'frame-parent)
+                                     (lambda (frame)
+                                       (or (frame-parameter frame 'parent-frame)
+                                           exwm-workspace--current))))
+                            (apply oldfun args))
+                          (when exwm--connection
+                            (set-frame-parameter corfu-doc--frame 'parent-frame nil))))
+            (advice-add #'corfu-doc--redirect-focus :override
+                        (defun +corfu-doc--redirect-focus ()
+                          (redirect-frame-focus corfu-doc--frame
+                                                (or (frame-parent corfu-doc--frame)
+                                                    exwm-workspace--current))))
             (global-corfu-mode)
             )
   )
