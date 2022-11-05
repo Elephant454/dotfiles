@@ -1377,7 +1377,22 @@ unsorted."
                       (org-alert-disable)))
 
           ;;(use-package counsel-org-capture-string)
-          )
+
+          (use-package org-rainbow-tags
+            :straight (:host github :repo "KaratasFurkan/org-rainbow-tags")
+            :config
+            (progn
+              (add-hook 'org-mode-hook 'org-rainbow-tags-mode)
+
+              ;; TODO: Look into modifying this so this runs using a hook that
+              ;;  runs only when org is re-rendering the document. This might be
+              ;;  a hook, but it might also just be a function I'd have to
+              ;;  advise. There's some command along the lines of an
+              ;;  org-auto-fill for this purpose
+              (add-hook 'org-mode-hook
+                        (lambda ()
+                          (add-hook 'post-command-hook
+                                    'org-rainbow-tags--apply-overlays nil t))))))
 
   :config (progn
             (setq e454iel-documents-season "Fall")
