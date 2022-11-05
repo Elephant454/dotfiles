@@ -728,6 +728,15 @@ This makes for easier reading of larger, denser bodies of text."
               :config
               (progn
                 (marginalia-mode)))
+
+            :general
+            (general-define-key
+             :states 'normal
+             :keymaps 'vertico-map
+             "j" 'vertico-next
+             "k" 'vertico-previous
+             "<return>" 'vertico-exit)
+
             ))
 
 (use-package corfu
