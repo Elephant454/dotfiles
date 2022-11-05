@@ -3227,7 +3227,9 @@ normal-state."
   ;; The "o" stands for "obfuscate"
   :general (e454iel-main-menu "mo" 'fsc/rearrange-region))
 
+;; TODO: Disabled for now because it breaks Emacs 29
 (use-package go
+  :disabled
 
   ;; TODO: Reenable this after writing a better command to install on Guix. This
   ;;  likely will mean checking to see if the package is in the current profile
