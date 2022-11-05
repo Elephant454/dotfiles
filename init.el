@@ -2509,7 +2509,12 @@ Lisp function does not specify a special indentation."
               "+" 'elfeed-search-tag-all
               "-" 'elfeed-search-untag-all)
 
-            (e454iel-main-menu "ar" 'bjm/elfeed-load-db-and-open)))
+            (e454iel-main-menu "ar" 'bjm/elfeed-load-db-and-open)
+
+            ;; This "unjams" elfeed-update if it runs for too long
+            ;;  https://reddit.com/r/emacs/comments/yjn76w/elfeed_bug/
+            (add-hook 'elfeed-update-init-hooks
+                      (lambda () (run-with-timer nil (* 60 5) #'elfeed-unjam)))))
 
 (use-package arch-packer
   :config (setq arch-packer-default-command "pacaur"))
