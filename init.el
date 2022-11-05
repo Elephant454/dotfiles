@@ -2819,17 +2819,60 @@ Lisp function does not specify a special indentation."
   (progn
     (setq ement-initial-sync-timeout (* 60 10))
 
-    ;; TODO: This almost certainly isn't going to work as is, but making it work
-    ;;  correctly will be tricky. Currently I'm thinking that I ought to spawn a
-    ;;  timer, have that timer periodically check the "*pantalaimon*" buffer
-    ;;  until it contains the text "(Press CTRL+C to quit)" (signalling the
-    ;;  deamon is started and running), and then run ement-connect
+    (add-hook 'ement-room-compose-hook #'ement-room-compose-org)
+    ;; This is actually for turning auto-fill-mode *off*, because it's normally
+    ;;  default for my org buffers
+    ;;(add-hook 'ement-room-compose-hook #'auto-fill-mode)
+    ;;(add-hook 'ement-room-compose-hook #'visual-line-mode)
+
+    ;;(add-hook 'ement-room-compose-hook #'visual-fill-column-mode)
+    ;;(add-hook 'ement-room-compose-hook #'adaptive-wrap-prefix-mode)
+
     (start-process-shell-command  "pantalaimon"
                                   "*pantalaimon*"
                                   "pantalaimon")
-    (ement-connect :uri-prefix "http://localhost:8009"
-                   :user-id e454iel-matrix-user-id
-                   :password e454iel-matrix-password)))
+
+    (defun e454iel-ement-connect-to-pantalaimon ()
+      (ement-connect :uri-prefix "http://localhost:8009"
+                     :user-id e454iel-matrix-user-id
+                     :password e454iel-matrix-password))
+
+    (defvar e454iel-pantalaimon-timer nil)
+
+    ;; This function is based on
+    ;;  https://stackoverflow.com/questions/3034237/check-if-current-emacs-buffer-contains-a-string
+    ;;
+    ;; This function is run as a timer set as `e454iel-pantalaimon-timer'. It
+    ;;  waits to see if the pantalaimon daemon has started, and then connects
+    ;;  ement to it
+    (defun e454iel-check-if-pantalaimon-started ()
+      (save-excursion
+        (save-match-data
+          (with-current-buffer "*pantalaimon*"
+            (goto-char (point-min))
+            (if
+                (search-forward "(Press CTRL+C to quit)" nil t)
+                (progn
+                  (e454iel-ement-connect-to-pantalaimon)
+                  (cancel-timer e454iel-pantalaimon-timer)))))))
+
+    (setq e454iel-pantalaimon-timer
+          (run-with-timer 10 t #'e454iel-check-if-pantalaimon-started)))
+
+  :general
+  (general-define-key
+   :keymaps 'ement-room-mode-map
+   :states 'normal
+    "RET" 'ement-room-send-message
+    "S-RET" 'ement-room-send-reply
+    "r" 'ement-room-send-reply
+    "i" 'ement-room-send-image
+    "I" 'ement-room-send-file
+    "e" 'ement-room-edit-message
+    "E" 'ement-room-send-reaction
+    "o" 'ement-room-compose-message
+    ;; go to room
+    "g" 'ement-view-room))
 
 ;; Front-end for the Emacsmirror package database
 (use-package epkg
