@@ -55,7 +55,23 @@ print-circle t
  ;;  github-explorer
  browse-url-generic-program "qutebrowser"
 
- browse-url-handlers '((".*xkcd.com/[0-9]*" . (lambda (x y) (get-xkcd-from-url x) ))
+ browse-url-handlers '((".*xkcd.com/[0-9]*" .
+                        (lambda (url rest) (get-xkcd-from-url url) ))
+
+                       ;; If we do a universal argument before opening the link,
+                       ;;  open it in EWW. Otherwise, open in EMMS.
+                       (".*youtube.com/watch\\?v=.*" .
+                        (lambda (url rest)
+                          (if current-prefix-arg
+                              (eww-browse-url url)
+                            (emms-play-url url))))
+
+                       (".*v.redd.it/.*" .
+                        (lambda (url rest)
+                          (if current-prefix-arg
+                              (eww-browse-url url)
+                            (emms-play-url url))))
+
                        ("." . eww-browse-url))
  browse-url-browser-function #'eww-browse-url
 
@@ -523,7 +539,10 @@ This makes for easier reading of larger, denser bodies of text."
      ;; Does it make sense for this to apply to insert/emacs states?
      :keymaps '(normal insert emacs motion)
      "<C-left>" 'previous-buffer
-     "<C-right>" 'next-buffer)
+     "<C-right>" 'next-buffer
+     ;; These are the mouse "back" and "forward" buttons respectively
+     "<mouse-8>" 'previous-buffer
+     "<mouse-9>" 'next-buffer)
      
     (general-create-definer e454iel-main-menu
                             :keymaps '(normal insert motion emacs)
@@ -1447,7 +1466,7 @@ calculated based on my configuration."
             (setq org-capture-templates
                   `(("t" "TODO" entry
                      (file ,(concat e454iel-documents-dir "/todo.org"))
-                     "* %a "
+                     "* TODO %a "
                      :empty-lines-before 1)
                     ("a" "ArticlesToRead" entry
                      (file "~/org/ArticlesToRead.org")
@@ -2800,6 +2819,37 @@ Lisp function does not specify a special indentation."
   ;; Install a necessary soft dependency
   :init (use-package posframe))
 
+;; TODO: This package could potentially be really useful for buffers for
+;; composing messages for email or IM when the recipient isn't expecting the 80
+;; column rule
+;;
+;; When paired with "visual-line-mode", this allows for a sort of artificial
+;;  auto-fill mode that exists only visually instead of in the actual text. This
+;;  could be really great for composing messages intended to be displayed
+;;  without obeying the 80 column rule
+(use-package visual-fill-column
+  :disabled
+  ;; Setting this globally breaks ement-room-mode and any other mode that
+  ;; interally uses visual-line-mode
+
+  ;;:config (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
+  )
+
+;; TODO: This package could potentially be really useful for buffers for
+;; composing messages for email or IM when the recipient isn't expecting the 80
+;; column rule
+;;
+;; To be honest, I'm a little confused what this does, but it also gets me
+;;  closer to artificial feature parity with auto-fill using "visual-line-mode"
+;;  as a result of my using "adaptive-fill-mode"
+(use-package adaptive-wrap
+  :disabled
+  ;; Setting this globally breaks ement-room-mode and any other mode that
+  ;; interally uses visual-line-mode
+
+  ;; :config (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)
+)
+
 ;; Client for the matrix.org chat protocol
 (use-package matrix-client
   :disabled
@@ -3188,7 +3238,7 @@ normal-state."
 
   (setq e454iel-current-wallpaper-alist e454iel-wallpaper-alist-list)
 
-  (setq e454iel-preferred-ewal-theme 'ewal-spacemacs-modern)
+  (setq e454iel-preferred-ewal-theme 'ewal-spacemacs-classic)
 
   (defun e454iel-cycle-wallpapers ()
     "Cycle through the list of wallpaper alists."
@@ -3435,6 +3485,16 @@ normal-state."
 (use-package smudge
   :config (progn
             (setq smudge-transport 'connect)))
+
+;; An Open Street Map package that works utterly ridiculously well
+(use-package osm)
+
+;; Edit a region of text in a new buffer, allowing you to visualize an
+;;  individual sentence and keep track of undo history separately
+(use-package edit-indirect
+  :general
+  (e454iel-main-menu
+    "mr" 'edit-indirect-region))
 
 (provide 'init)
 ;;; init.el ends here
