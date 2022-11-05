@@ -132,7 +132,9 @@ print-circle t
   ;; set all calls to use-package to use Straight as the package manager
   :config (progn
             (setq straight-use-package-by-default t)
-            (use-package use-package-ensure-system-package)))
+            ;; TODO: This seems to break on Emacs 29 for some reason?
+            ;;(use-package use-package-ensure-system-package)
+            ))
 
 ;; Make sure our keyring doesn't get out of date
 (use-package gnu-elpa-keyring-update)
@@ -517,7 +519,8 @@ This makes for easier reading of larger, denser bodies of text."
             (use-package evil-matchit
               :config
               (progn
-                (setq evilmi-shortcut "m")
+                ;; In my head this "t" is for "toggle positon between pairs"
+                (setq evilmi-shortcut "t")
                 (global-evil-matchit-mode t)))
             (use-package fringe-helper
               :config (use-package evil-fringe-mark
@@ -1553,7 +1556,22 @@ unsorted."
                       (org-alert-disable)))
 
           ;;(use-package counsel-org-capture-string)
-          )
+
+          (use-package org-rainbow-tags
+            :straight (:host github :repo "KaratasFurkan/org-rainbow-tags")
+            :config
+            (progn
+              (add-hook 'org-mode-hook 'org-rainbow-tags-mode)
+
+              ;; TODO: Look into modifying this so this runs using a hook that
+              ;;  runs only when org is re-rendering the document. This might be
+              ;;  a hook, but it might also just be a function I'd have to
+              ;;  advise. There's some command along the lines of an
+              ;;  org-auto-fill for this purpose
+              (add-hook 'org-mode-hook
+                        (lambda ()
+                          (add-hook 'post-command-hook
+                                    'org-rainbow-tags--apply-overlays nil t))))))
 
   :config (progn
             (setq e454iel-documents-season "Fall")
@@ -2607,6 +2625,7 @@ Lisp function does not specify a special indentation."
   :mode ("/PKGBUILD$" . pkgbuild-mode))
 
 (use-package spray
+  :straight (spray :host "https://git.sr.ht/~iank/spray")
   :config (general-define-key
            :keymaps 'spray-mode-map
            :states 'normal
@@ -2674,7 +2693,12 @@ Lisp function does not specify a special indentation."
               "+" 'elfeed-search-tag-all
               "-" 'elfeed-search-untag-all)
 
-            (e454iel-main-menu "ar" 'bjm/elfeed-load-db-and-open)))
+            (e454iel-main-menu "ar" 'bjm/elfeed-load-db-and-open)
+
+            ;; This "unjams" elfeed-update if it runs for too long
+            ;;  https://reddit.com/r/emacs/comments/yjn76w/elfeed_bug/
+            (add-hook 'elfeed-update-init-hooks
+                      (lambda () (run-with-timer nil (* 60 5) #'elfeed-unjam)))))
 
 (use-package arch-packer
   :config (setq arch-packer-default-command "pacaur"))
@@ -3022,17 +3046,36 @@ Lisp function does not specify a special indentation."
     ;;(add-hook 'ement-room-compose-hook #'visual-fill-column-mode)
     ;;(add-hook 'ement-room-compose-hook #'adaptive-wrap-prefix-mode)
 
-    ;; TODO: This almost certainly isn't going to work as is, but making it work
-    ;;  correctly will be tricky. Currently I'm thinking that I ought to spawn a
-    ;;  timer, have that timer periodically check the "*pantalaimon*" buffer
-    ;;  until it contains the text "(Press CTRL+C to quit)" (signalling the
-    ;;  deamon is started and running), and then run ement-connect
     (start-process-shell-command  "pantalaimon"
                                   "*pantalaimon*"
                                   "pantalaimon")
-    (ement-connect :uri-prefix "http://localhost:8009"
-                   :user-id e454iel-matrix-user-id
-                   :password e454iel-matrix-password))
+
+    (defun e454iel-ement-connect-to-pantalaimon ()
+      (ement-connect :uri-prefix "http://localhost:8009"
+                     :user-id e454iel-matrix-user-id
+                     :password e454iel-matrix-password))
+
+    (defvar e454iel-pantalaimon-timer nil)
+
+    ;; This function is based on
+    ;;  https://stackoverflow.com/questions/3034237/check-if-current-emacs-buffer-contains-a-string
+    ;;
+    ;; This function is run as a timer set as `e454iel-pantalaimon-timer'. It
+    ;;  waits to see if the pantalaimon daemon has started, and then connects
+    ;;  ement to it
+    (defun e454iel-check-if-pantalaimon-started ()
+      (save-excursion
+        (save-match-data
+          (with-current-buffer "*pantalaimon*"
+            (goto-char (point-min))
+            (if
+                (search-forward "(Press CTRL+C to quit)" nil t)
+                (progn
+                  (e454iel-ement-connect-to-pantalaimon)
+                  (cancel-timer e454iel-pantalaimon-timer)))))))
+
+    (setq e454iel-pantalaimon-timer
+          (run-with-timer 10 t #'e454iel-check-if-pantalaimon-started)))
 
   :general
   (general-define-key
@@ -3471,7 +3514,9 @@ normal-state."
   ;; The "o" stands for "obfuscate"
   :general (e454iel-main-menu "mo" 'fsc/rearrange-region))
 
+;; TODO: Disabled for now because it breaks Emacs 29
 (use-package go
+  :disabled
 
   ;; TODO: Reenable this after writing a better command to install on Guix. This
   ;;  likely will mean checking to see if the package is in the current profile
