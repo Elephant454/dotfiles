@@ -116,7 +116,9 @@ print-circle t
   ;; set all calls to use-package to use Straight as the package manager
   :config (progn
             (setq straight-use-package-by-default t)
-            (use-package use-package-ensure-system-package)))
+            ;; TODO: This seems to break on Emacs 29 for some reason?
+            ;;(use-package use-package-ensure-system-package)
+            ))
 
 ;; Make sure our keyring doesn't get out of date
 (use-package gnu-elpa-keyring-update)
