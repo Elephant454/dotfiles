@@ -2869,11 +2869,34 @@ Lisp function does not specify a special indentation."
     (start-process-shell-command  "pantalaimon"
                                   "*pantalaimon*"
                                   "pantalaimon")
-    (ement-connect :uri-prefix "http://localhost:8009"
-                   :user-id e454iel-matrix-user-id
-                   :password e454iel-matrix-password))
 
-  :general
+    (defun e454iel-ement-connect-to-pantalaimon ()
+      (ement-connect :uri-prefix "http://localhost:8009"
+                     :user-id e454iel-matrix-user-id
+                     :password e454iel-matrix-password))
+
+    (defvar e454iel-pantalaimon-timer nil)
+
+    ;; This function is based on
+    ;;  https://stackoverflow.com/questions/3034237/check-if-current-emacs-buffer-contains-a-string
+    ;;
+    ;; This function is run as a timer set as `e454iel-pantalaimon-timer'. It
+    ;;  waits to see if the pantalaimon daemon has started, and then connects
+    ;;  ement to it
+    (defun e454iel-check-if-pantalaimon-started ()
+      (save-excursion
+        (save-match-data
+          (with-current-buffer "*pantalaimon*"
+            (goto-char (point-min))
+            (if
+                (search-forward "(Press CTRL+C to quit)" nil t)
+                (progn
+                  (e454iel-ement-connect-to-pantalaimon)
+                  (cancel-timer e454iel-pantalaimon-timer)))))))
+
+    (setq e454iel-pantalaimon-timer
+          (run-with-timer 10 t #'e454iel-check-if-pantalaimon-started))
+
   (general-define-key
    :keymaps 'ement-room-mode-map
    :states 'normal
@@ -2886,7 +2909,7 @@ Lisp function does not specify a special indentation."
     "E" 'ement-room-send-reaction
     "o" 'ement-room-compose-message
     ;; go to room
-    "g" 'ement-view-room))
+    "g" 'ement-view-room)))
 
 ;; Front-end for the Emacsmirror package database
 (use-package epkg
