@@ -2921,7 +2921,6 @@ Lisp function does not specify a special indentation."
 
 (use-package phps-mode
     :after flycheck
-    :ensure t
     :mode ("\\.php\\'" "\\.phtml\\'")
     :config
   (progn
