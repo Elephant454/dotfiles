@@ -517,7 +517,14 @@ This makes for easier reading of larger, denser bodies of text."
             (use-package evil-matchit
               :config
               (progn
-                (setq evilmi-shortcut "m")
+                ;; TODO: This blocks use of "t" in Org-Mode. Maybe just bind the
+                ;;  command `evilmi-jump-items' instead of setting this
+                ;;  variable? The hope is that this will allow the command to be
+                ;;  available in the main evil normal state map but still be
+                ;;  allowed to be overwritten by other maps.
+
+                ;; In my head this "t" is for "toggle positon between pairs"
+                (setq evilmi-shortcut "t")
                 (global-evil-matchit-mode t)))
             (use-package fringe-helper
               :config (use-package evil-fringe-mark
