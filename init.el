@@ -72,7 +72,11 @@ print-circle t
                               (eww-browse-url url)
                             (emms-play-url url))))
 
+                       (".*stackoverflow.com/questions/.*" .
+                         (lambda (url rest) (sx-open-link url)))
+
                        ("." . eww-browse-url))
+
  browse-url-browser-function #'eww-browse-url
 
  ;; start debugging when something signals an error
