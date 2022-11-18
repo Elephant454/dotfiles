@@ -79,6 +79,10 @@ print-circle t
 
  browse-url-browser-function #'eww-browse-url
 
+ ;; TODO: This is supposed to allow me to click links inside of eww and have
+ ;;  them use browse-url-handlers, but it's not working for whatever reason
+ eww-use-browse-url ".*"
+
  ;; start debugging when something signals an error
  debug-on-error t
  )
