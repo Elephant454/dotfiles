@@ -56,7 +56,7 @@ print-circle t
  browse-url-generic-program "qutebrowser"
 
  browse-url-handlers '((".*xkcd.com/[0-9]*" .
-                        (lambda (url rest) (get-xkcd-from-url url) ))
+                        (lambda (url rest) (get-xkcd-from-url url)))
 
                        ;; If we do a universal argument before opening the link,
                        ;;  open it in EWW. Otherwise, open in EMMS.
@@ -72,8 +72,16 @@ print-circle t
                               (eww-browse-url url)
                             (emms-play-url url))))
 
+                       (".*stackoverflow.com/questions/.*" .
+                         (lambda (url rest) (sx-open-link url)))
+
                        ("." . eww-browse-url))
+
  browse-url-browser-function #'eww-browse-url
+
+ ;; TODO: This is supposed to allow me to click links inside of eww and have
+ ;;  them use browse-url-handlers, but it's not working for whatever reason
+ eww-use-browse-url ".*"
 
  ;; start debugging when something signals an error
  debug-on-error t
@@ -944,7 +952,20 @@ This makes for easier reading of larger, denser bodies of text."
 
 (use-package eshell
   :config (progn
-            (evil-collection-init 'eshell)))
+            (evil-collection-init 'eshell)
+
+            ;; For using tramp sudo
+            (use-package em-tramp
+              :straight (em-tramp :type built-in))
+
+            (use-package esh-module
+              :straight (esh-module :type built-in))
+
+            (add-to-list 'eshell-modules-list 'eshell-tramp)
+
+            ;; This remembers our password for one hour
+            (setq password-cache t)
+            (setq password-cache-expiry (* 60 60))))
 
 ;; give parenthesis matching colors based upon depth
 (use-package rainbow-delimiters
@@ -1716,7 +1737,7 @@ calculated based on my configuration."
 
             (setq org-src-fontify-natively t
                   org-list-allow-alphabetical t
-                  org-image-actual-width nil
+                  org-image-actual-width 400
                   org-format-latex-options (plist-put org-format-latex-options :scale 2.0)
                   org-ellipsis " ⤵ "
                   org-adapt-indentation t
@@ -2586,7 +2607,9 @@ Lisp function does not specify a special indentation."
   :general (e454iel-main-menu
              "ames" 'emms-streams
              "amef" 'emms-play-file
-             "amep" 'emms-pause))
+             "amep" 'emms-pause
+             ;; This is directionally left for Evil
+             "ameh" 'emms-seek-backward))
 
 (use-package python
   :commands (python-mode run-python)
@@ -3297,7 +3320,10 @@ Lisp function does not specify a special indentation."
   :config
   (progn
     (setq undo-tree-history-directory-alist `(("." . "~/.emacs_backups")))
-    (global-undo-tree-mode)))
+    (global-undo-tree-mode)
+    (general-define-key
+     :states 'normal
+      "U" 'undo-tree-visualize)))
 
 ;; For 3D printer G-Code
 (use-package gcode-mode)
@@ -3672,6 +3698,14 @@ normal-state."
   :general
   (e454iel-main-menu
     "mr" 'edit-indirect-region))
+
+(use-package frameshot)
+
+(use-package org-attach-screenshot)
+
+;; Turn a YouTube video into a text file using YouTube's automatic caption
+;;  generation
+(use-package youtube-sub-extractor)
 
 (provide 'init)
 ;;; init.el ends here
