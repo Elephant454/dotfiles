@@ -818,7 +818,20 @@ This makes for easier reading of larger, denser bodies of text."
 
 (use-package eshell
   :config (progn
-            (evil-collection-init 'eshell)))
+            (evil-collection-init 'eshell)
+
+            ;; For using tramp sudo
+            (use-package em-tramp
+              :straight (em-tramp :type built-in))
+
+            (use-package esh-module
+              :straight (esh-module :type built-in))
+
+            (add-to-list 'eshell-modules-list 'eshell-tramp)
+
+            ;; This remembers our password for one hour
+            (setq password-cache t)
+            (setq password-cache-expiry (* 60 60))))
 
 ;; give parenthesis matching colors based upon depth
 (use-package rainbow-delimiters
