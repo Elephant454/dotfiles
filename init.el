@@ -3480,5 +3480,6 @@ normal-state."
   (e454iel-main-menu
     "mr" 'edit-indirect-region))
 
+(use-package frameshot)
 (provide 'init)
 ;;; init.el ends here
