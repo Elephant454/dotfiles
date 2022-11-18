@@ -3481,5 +3481,7 @@ normal-state."
     "mr" 'edit-indirect-region))
 
 (use-package frameshot)
+
+(use-package org-attach-screenshot)
 (provide 'init)
 ;;; init.el ends here
