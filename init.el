@@ -3106,7 +3106,10 @@ Lisp function does not specify a special indentation."
   :config
   (progn
     (setq undo-tree-history-directory-alist `(("." . "~/.emacs_backups")))
-    (global-undo-tree-mode)))
+    (global-undo-tree-mode)
+    (general-define-key
+     :states 'normal
+      "U" 'undo-tree-visualize)))
 
 ;; For 3D printer G-Code
 (use-package gcode-mode)
