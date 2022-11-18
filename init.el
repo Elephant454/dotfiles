@@ -56,7 +56,7 @@ print-circle t
  browse-url-generic-program "qutebrowser"
 
  browse-url-handlers '((".*xkcd.com/[0-9]*" .
-                        (lambda (url rest) (get-xkcd-from-url url) ))
+                        (lambda (url rest) (get-xkcd-from-url url)))
 
                        ;; If we do a universal argument before opening the link,
                        ;;  open it in EWW. Otherwise, open in EMMS.
