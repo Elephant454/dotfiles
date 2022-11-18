@@ -3483,5 +3483,10 @@ normal-state."
 (use-package frameshot)
 
 (use-package org-attach-screenshot)
+
+;; Turn a YouTube video into a text file using YouTube's automatic caption
+;;  generation
+(use-package youtube-sub-extractor)
+
 (provide 'init)
 ;;; init.el ends here
