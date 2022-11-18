@@ -2399,7 +2399,9 @@ Lisp function does not specify a special indentation."
   :general (e454iel-main-menu
              "ames" 'emms-streams
              "amef" 'emms-play-file
-             "amep" 'emms-pause))
+             "amep" 'emms-pause
+             ;; This is directionally left for Evil
+             "ameh" 'emms-seek-backward))
 
 (use-package python
   :commands (python-mode run-python)
