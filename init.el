@@ -3516,5 +3516,14 @@ normal-state."
   :straight (youtube-sub-extractor
              :host github
              :repo "agzam/youtube-sub-extractor.el"))
+
+(use-package desktop-environment
+  :straight (desktop-environment
+             :host nil
+             :repo "https://gitlab.petton.fr/DamienCassou/desktop-environment")
+  :config
+  (progn
+    (desktop-environment-mode)))
+
 (provide 'init)
 ;;; init.el ends here
