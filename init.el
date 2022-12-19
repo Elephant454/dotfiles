@@ -1858,7 +1858,10 @@ Lisp function does not specify a special indentation."
             (use-package erc-colorize
               :config (erc-colorize-mode t))
 
+            ;; TODO: This package seems to have been deprecated. Consider
+            ;;  removing it.
             (use-package erc-status-sidebar
+              :disabled
               :config (e454iel-major-mode-menu
                         :keymaps 'erc-mode-map
                         :major-modes 'erc-mode-map
