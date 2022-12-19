@@ -248,6 +248,8 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
  (sweet-theme :defer)
  (tron-legacy-theme)
  (shanty-themes)
+ (ef-themes)
+ (weyland-yutani-theme)
 )
 
 ;; TODO: There has to be some sort of better way of doing this. 😅 The autoloads
@@ -1853,7 +1855,9 @@ calculated based on my configuration."
                   TeX-command-list)))
 
 (use-package seethru
-  :config (e454iel-main-menu "tT" 'seethru))
+  :config (e454iel-main-menu "tT" 'seethru)
+  ;; (set-frame-parameter (selected-frame) 'alpha-background 0.9)
+  )
 
 ;; My first elisp function!
 (defun kill-buffer-file-name ()
@@ -1993,7 +1997,10 @@ Lisp function does not specify a special indentation."
             (use-package erc-colorize
               :config (erc-colorize-mode t))
 
+            ;; TODO: This package seems to have been deprecated. Consider
+            ;;  removing it.
             (use-package erc-status-sidebar
+              :disabled
               :config (e454iel-major-mode-menu
                         :keymaps 'erc-mode-map
                         :major-modes 'erc-mode-map
@@ -2602,7 +2609,7 @@ Lisp function does not specify a special indentation."
   :mode ("/PKGBUILD$" . pkgbuild-mode))
 
 (use-package spray
-  :straight (spray :host "https://git.sr.ht/~iank/spray")
+  :straight (spray :host sourcehut :repo "iank/spray")
   :config (general-define-key
            :keymaps 'spray-mode-map
            :states 'normal
@@ -2974,9 +2981,9 @@ Lisp function does not specify a special indentation."
 ;;  without obeying the 80 column rule
 (use-package visual-fill-column
   :disabled
-  ;; Setting this globally breaks ement-room-mode and any other mode that
-  ;; interally uses visual-line-mode
 
+  ;; Setting this globally breaks ement-room-mode and any other mode that
+  ;;  interally uses visual-line-mode (like ement)
   ;;:config (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
   )
 
@@ -2989,11 +2996,15 @@ Lisp function does not specify a special indentation."
 ;;  as a result of my using "adaptive-fill-mode"
 (use-package adaptive-wrap
   :disabled
-  ;; Setting this globally breaks ement-room-mode and any other mode that
-  ;; interally uses visual-line-mode
 
+  ;; Setting this globally breaks ement-room-mode and any other mode that
+  ;;  interally uses visual-line-mode (like ement)
   ;; :config (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)
-)
+  )
+
+;; What if visual-line-mode were way cooler? As in, it does what it normally
+;;  does, but wraps at the fill-column instead of the end of the window
+(use-package virtual-auto-fill)
 
 ;; Client for the matrix.org chat protocol
 (use-package matrix-client
@@ -3028,6 +3039,7 @@ Lisp function does not specify a special indentation."
                                   "pantalaimon")
 
     (defun e454iel-ement-connect-to-pantalaimon ()
+      (interactive)
       (ement-connect :uri-prefix "http://localhost:8009"
                      :user-id e454iel-matrix-user-id
                      :password e454iel-matrix-password))
@@ -3052,9 +3064,8 @@ Lisp function does not specify a special indentation."
                   (cancel-timer e454iel-pantalaimon-timer)))))))
 
     (setq e454iel-pantalaimon-timer
-          (run-with-timer 10 t #'e454iel-check-if-pantalaimon-started)))
+          (run-with-timer 10 t #'e454iel-check-if-pantalaimon-started))
 
-  :general
   (general-define-key
    :keymaps 'ement-room-mode-map
    :states 'normal
@@ -3067,7 +3078,12 @@ Lisp function does not specify a special indentation."
     "E" 'ement-room-send-reaction
     "o" 'ement-room-compose-message
     ;; go to room
-    "g" 'ement-view-room))
+    "g" 'ement-view-room)))
+
+;; Allows for short lambda expressions
+(use-package llama
+  :straight (llama :host sourcehut
+                   :repo "tarsius/llama"))
 
 ;; Front-end for the Emacsmirror package database
 (use-package epkg
@@ -3640,6 +3656,19 @@ normal-state."
   :general
   (e454iel-main-menu
     "mr" 'edit-indirect-region))
+
+(use-package youtube-sub-extractor
+  :straight (youtube-sub-extractor
+             :host github
+             :repo "agzam/youtube-sub-extractor.el"))
+
+(use-package desktop-environment
+  :straight (desktop-environment
+             :host nil
+             :repo "https://gitlab.petton.fr/DamienCassou/desktop-environment")
+  :config
+  (progn
+    (desktop-environment-mode)))
 
 (provide 'init)
 ;;; init.el ends here
