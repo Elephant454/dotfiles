@@ -2855,7 +2855,11 @@ Lisp function does not specify a special indentation."
   ;; Setting this globally breaks ement-room-mode and any other mode that
   ;;  interally uses visual-line-mode (like ement)
   ;; :config (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)
-)
+  )
+
+;; What if visual-line-mode were way cooler? As in, it does what it normally
+;;  does, but wraps at the fill-column instead of the end of the window
+(use-package virtual-auto-fill)
 
 ;; Client for the matrix.org chat protocol
 (use-package matrix-client
