@@ -2836,9 +2836,9 @@ Lisp function does not specify a special indentation."
 ;;  without obeying the 80 column rule
 (use-package visual-fill-column
   :disabled
-  ;; Setting this globally breaks ement-room-mode and any other mode that
-  ;; interally uses visual-line-mode
 
+  ;; Setting this globally breaks ement-room-mode and any other mode that
+  ;;  interally uses visual-line-mode (like ement)
   ;;:config (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
   )
 
@@ -2851,9 +2851,9 @@ Lisp function does not specify a special indentation."
 ;;  as a result of my using "adaptive-fill-mode"
 (use-package adaptive-wrap
   :disabled
-  ;; Setting this globally breaks ement-room-mode and any other mode that
-  ;; interally uses visual-line-mode
 
+  ;; Setting this globally breaks ement-room-mode and any other mode that
+  ;;  interally uses visual-line-mode (like ement)
   ;; :config (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)
 )
 
