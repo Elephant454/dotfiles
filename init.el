@@ -2467,7 +2467,7 @@ Lisp function does not specify a special indentation."
   :mode ("/PKGBUILD$" . pkgbuild-mode))
 
 (use-package spray
-  :straight (spray :host "https://git.sr.ht/~iank/spray")
+  :straight (spray :host sourcehut :repo "iank/spray")
   :config (general-define-key
            :keymaps 'spray-mode-map
            :states 'normal
