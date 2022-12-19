@@ -2919,9 +2919,8 @@ Lisp function does not specify a special indentation."
                   (cancel-timer e454iel-pantalaimon-timer)))))))
 
     (setq e454iel-pantalaimon-timer
-          (run-with-timer 10 t #'e454iel-check-if-pantalaimon-started)))
+          (run-with-timer 10 t #'e454iel-check-if-pantalaimon-started))
 
-  :general
   (general-define-key
    :keymaps 'ement-room-mode-map
    :states 'normal
@@ -2934,7 +2933,7 @@ Lisp function does not specify a special indentation."
     "E" 'ement-room-send-reaction
     "o" 'ement-room-compose-message
     ;; go to room
-    "g" 'ement-view-room))
+    "g" 'ement-view-room)))
 
 ;; Front-end for the Emacsmirror package database
 (use-package epkg
