@@ -3512,5 +3512,9 @@ normal-state."
   (e454iel-main-menu
     "mr" 'edit-indirect-region))
 
+(use-package youtube-sub-extractor
+  :straight (youtube-sub-extractor
+             :host github
+             :repo "agzam/youtube-sub-extractor.el"))
 (provide 'init)
 ;;; init.el ends here
