@@ -1871,6 +1871,7 @@ Lisp function does not specify a special indentation."
               :config (erc-colorize-mode t))
 
             (use-package erc-status-sidebar
+              :disabled
               :config (e454iel-major-mode-menu
                         :keymaps 'erc-mode-map
                         :major-modes 'erc-mode-map
