@@ -2421,7 +2421,12 @@ Lisp function does not specify a special indentation."
             ;;(emms-default-players)
             (add-to-list 'emms-player-list 'emms-player-mpv)
             (setq emms-source-file-default-directory "~/Music/")
-            (evil-collection-init 'emms))
+            (evil-collection-init 'emms)
+            (use-package emms-mode-line-cycle
+              :config (progn
+                        (emms-mode-line 1)
+                        (emms-playing-time 1)
+                        (emms-mode-line-cycle 1))))
   :general (e454iel-main-menu
              "ames" 'emms-streams
              "amef" 'emms-play-file
