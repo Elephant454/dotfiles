@@ -1607,6 +1607,7 @@ calculated based on my configuration."
               "e" 'org-export-dispatch
               "E" 'org-edit-special
               "." 'org-time-stamp
+              ">" 'org-time-stamp-inactive
               "d" 'org-deadline
               "s" 'org-schedule
               "p" 'org-toggle-latex-fragment
