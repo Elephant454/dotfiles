@@ -826,7 +826,13 @@ This makes for easier reading of larger, denser bodies of text."
 
             ;; This remembers our password for one hour
             (setq password-cache t)
-            (setq password-cache-expiry (* 60 60))))
+            (setq password-cache-expiry (* 60 60))
+
+            ;; TODO: How do I make sure the eshell/alias function is loaded at
+            ;;  init?
+            ;;(eshell/alias dired-by-size "dired *(.L0)")
+            ;;(eshell/alias "super-compress-dir" "tar -I \"xz -ze9\" -cf $1.tar.xz $1")
+            ))
 
 ;; give parenthesis matching colors based upon depth
 (use-package rainbow-delimiters
