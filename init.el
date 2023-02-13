@@ -2509,6 +2509,19 @@ Lisp function does not specify a special indentation."
                         (setq rmh-elfeed-org-files '("~/org/elfeed.org"))
                         (elfeed-org)))
 
+            ;; The volume of feeds I'm working with necessitates a *much*
+            ;;  more recent default view
+            ;;  https://github.com/skeeto/elfeed/issues/317#issuecomment-491430753
+            (setq elfeed-search-filter "@2-minutes-ago +unread")
+
+            ;; This prevents from Elfeed from choking the main thread
+            ;;  unnecessarily
+            ;;  https://github.com/skeeto/elfeed/pull/448
+            (if (eq flycheck-global-modes t)
+                (setq flycheck-global-modes '(not . (elfeed-search-mode)))
+                ;; Else
+                (add-to-list flycheck-global-modes '(not . (elfeed-search-mode))))
+
             ;; Taken from
             ;;  http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
             ;; functions to support syncing .elfeed between machines makes sure
