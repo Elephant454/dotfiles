@@ -1476,7 +1476,7 @@ calculated based on my configuration."
 
             (setq org-capture-templates
                   `(("t" "TODO" entry
-                     (file ,(concat e454iel-documents-dir "/todo.org"))
+                     (file+headline ,(concat e454iel-documents-dir "/todo.org") "Unsorted")
                      "* TODO %a "
                      :empty-lines-before 1)
                     ("a" "ArticlesToRead" entry
