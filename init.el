@@ -528,18 +528,7 @@ This makes for easier reading of larger, denser bodies of text."
                 (setq evil-escape-unordered-key-sequence t)
                 (setq evil-escape-delay (if e454iel-phone-p 0.3 0.1))
                 (evil-escape-mode t)))
-            (use-package evil-matchit
-              :config
-              (progn
-                ;; TODO: This blocks use of "t" in Org-Mode. Maybe just bind the
-                ;;  command `evilmi-jump-items' instead of setting this
-                ;;  variable? The hope is that this will allow the command to be
-                ;;  available in the main evil normal state map but still be
-                ;;  allowed to be overwritten by other maps.
 
-                ;; In my head this "t" is for "toggle positon between pairs"
-                (setq evilmi-shortcut "t")
-                (global-evil-matchit-mode t)))
             (use-package fringe-helper
               :config (use-package evil-fringe-mark
                         :config (global-evil-fringe-mark-mode t)))
@@ -2740,6 +2729,21 @@ Lisp function does not specify a special indentation."
                            (side . bottom)
                            (window-height . 0.3)))
             (evil-owl-mode)))
+
+(use-package evil-matchit
+              :config
+              (progn
+                ;; I'm using General to set "t" for jumping between pairs
+                ;;  instead of setting evilmi-shortcut in order to preserve the
+                ;;  ability to rebind "t" in modes where I don't care about
+                ;;  jumping between pairs (like Org mode)
+
+                ;; In my head this "t" is for "toggle positon between pairs"
+                (general-define-key
+                 :states '(normal motion)
+                  "t" 'evilmi-jump-items)
+
+                (global-evil-matchit-mode t)))
 
 ;; TODO: It's creating errors. Disabled for now.
 (use-package org-trello
