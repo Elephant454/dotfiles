@@ -1730,6 +1730,8 @@ calculated based on my configuration."
 (use-package seethru
   :config (e454iel-main-menu "tT" 'seethru))
 
+(use-package dash)
+
 ;; My first elisp function!
 (defun kill-buffer-file-name ()
   "Kill the name of the current file to the clipboard."
