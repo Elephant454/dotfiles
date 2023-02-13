@@ -66,6 +66,12 @@ print-circle t
                               (eww-browse-url url)
                             (emms-play-url url))))
 
+                       (".*youtu.be/.*" .
+                        (lambda (url rest)
+                          (if current-prefix-arg
+                              (eww-browse-url url)
+                            (emms-play-url url))))
+
                        (".*v.redd.it/.*" .
                         (lambda (url rest)
                           (if current-prefix-arg
