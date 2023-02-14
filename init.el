@@ -3005,6 +3005,9 @@ Lisp function does not specify a special indentation."
       ;; go to room
       "g" 'ement-view-room)))
 
+(use-package llama
+  :straight (llama :host sourcehut :repo "tarsius/llama"))
+
 ;; Front-end for the Emacsmirror package database
 (use-package epkg
   :init
