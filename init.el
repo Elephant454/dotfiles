@@ -3195,6 +3195,8 @@ Lisp function does not specify a special indentation."
     ;;  mode line (including the display-time-mode and eyebrowse indicators).
     ;;  In the meantime, I've set it to be essentially a no-op.
     (defun vuiet-update-mode-line (&optional position) t)
+
+    (setq vuiet-youtube-dl-command "yt-dlp")
     ))
 
 ;; For MU* (MUD's, MUCK's, etc)
