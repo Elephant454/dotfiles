@@ -3634,5 +3634,25 @@ normal-state."
              :host nil
              :repo "https://codeberg.org/emacs-weirdware/discomfort"))
 
+(use-package threes
+  :straight (threes
+             :host github
+             :repo "xuchunyang/threes.el")
+  :general (e454iel-main-menu
+             "ag3" 'threes)
+  :general (:keymaps 'threes-mode-map
+            :states 'normal
+            "h" 'threes-left
+            "j" 'threes-down
+            "k" 'threes-up
+            "l" 'threes-right
+            "<left>" 'threes-left
+            "<down>" 'threes-down
+            "<up>" 'threes-up
+            "<right>" 'threes-right
+            "u" 'threes-undo
+            "r" (lambda() (interactive)
+                  (if (yes-or-no-p "Start a new game of Threes? ") (threes)))))
+
 (provide 'init)
 ;;; init.el ends here
