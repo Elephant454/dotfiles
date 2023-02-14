@@ -3156,6 +3156,19 @@ Lisp function does not specify a special indentation."
       (interactive)
       (concat (vuiet-playing-artist) " - " (vuiet-playing-track-name)))
 
+    (defun e454iel-vuiet-current-track-with-youtube-url ()
+      "Get the currently playing track from vuiet with an added YouTube URL."
+      (concat
+       (e454iel-vuiet-current-track)
+       " ("
+       (car (split-string (vuiet--youtube-link-at-position) "&t="))
+       ")"))
+
+    (defun e454iel-vuiet-kill-current-track-with-youtube-url ()
+      "Kill the currently playing track from vuiet with an added YouTube URL."
+      (interactive)
+      (kill-new (e454iel-vuiet-current-track-with-youtube-url)))
+
     ;; TODO: Should this use org-store-link instead of the kill ring?
     ;; TODO: Write this function with the simpler, user facing functions for
     ;;  looking up playing track name and artist
