@@ -2900,6 +2900,24 @@ Lisp function does not specify a special indentation."
   :straight (matrix-client :host github :repo "alphapapa/matrix-client.el"
                            :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
 
+;; TODO: Function for checking if a particular account has a session
+
+;; TODO: Function for checking if a particular account is currently syncing (or
+;;  maybe we can just force a sync every time we run-or-raise)
+;;
+;; TODO: Function for checking if Pantalaimon is running
+;;
+;; TODO: Function for taking only the necessary steps to connect (choosing to
+;;  start Pantalaimon only if necessary). This would replace the current
+;;  function for connecting.
+;;
+;; TODO: A "connect-or-raise" function that either opens the list of rooms,
+;;  syncs if we are not currently syncing, and connects to the server if we are
+;;  disconnected. This is ideal for a quick to use key-binding
+;;
+;; TODO: Add a dwim command for pressing RET. It will either open the link at
+;;  point, reply to the message at point, or create a new message if pressed in
+;;  an empty space
 (use-package ement
   :straight (ement :host github :repo "alphapapa/ement.el")
 
