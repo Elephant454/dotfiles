@@ -146,7 +146,9 @@ print-circle t
   ;; set all calls to use-package to use Straight as the package manager
   :config (progn
             (setq straight-use-package-by-default t)
-            (use-package use-package-ensure-system-package)))
+            ;; TODO: This seems to break on Emacs 29 for some reason?
+            ;;(use-package use-package-ensure-system-package)
+            ))
 
 ;; Make sure our keyring doesn't get out of date
 (use-package gnu-elpa-keyring-update)
@@ -260,6 +262,8 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
  (sweet-theme :defer)
  (tron-legacy-theme)
  (shanty-themes)
+ (ef-themes)
+ (weyland-yutani-theme)
 )
 
 ;; TODO: There has to be some sort of better way of doing this. 😅 The autoloads
@@ -1422,7 +1426,22 @@ unsorted."
                       (org-alert-disable)))
 
           ;;(use-package counsel-org-capture-string)
-          )
+
+          (use-package org-rainbow-tags
+            :straight (:host github :repo "KaratasFurkan/org-rainbow-tags")
+            :config
+            (progn
+              (add-hook 'org-mode-hook 'org-rainbow-tags-mode)
+
+              ;; TODO: Look into modifying this so this runs using a hook that
+              ;;  runs only when org is re-rendering the document. This might be
+              ;;  a hook, but it might also just be a function I'd have to
+              ;;  advise. There's some command along the lines of an
+              ;;  org-auto-fill for this purpose
+              (add-hook 'org-mode-hook
+                        (lambda ()
+                          (add-hook 'post-command-hook
+                                    'org-rainbow-tags--apply-overlays nil t))))))
 
   :config (progn
             (setq e454iel-documents-season "Fall")
@@ -1728,7 +1747,9 @@ calculated based on my configuration."
                   TeX-command-list)))
 
 (use-package seethru
-  :config (e454iel-main-menu "tT" 'seethru))
+  :config (e454iel-main-menu "tT" 'seethru)
+  ;; (set-frame-parameter (selected-frame) 'alpha-background 0.9)
+  )
 
 (use-package dash)
 
@@ -1870,6 +1891,8 @@ Lisp function does not specify a special indentation."
             (use-package erc-colorize
               :config (erc-colorize-mode t))
 
+            ;; TODO: This package seems to have been deprecated. Consider
+            ;;  removing it.
             (use-package erc-status-sidebar
               :disabled
               :config (e454iel-major-mode-menu
@@ -2482,6 +2505,7 @@ Lisp function does not specify a special indentation."
   :mode ("/PKGBUILD$" . pkgbuild-mode))
 
 (use-package spray
+  :straight (spray :host sourcehut :repo "iank/spray")
   :config (general-define-key
            :keymaps 'spray-mode-map
            :states 'normal
@@ -2562,7 +2586,12 @@ Lisp function does not specify a special indentation."
               "+" 'elfeed-search-tag-all
               "-" 'elfeed-search-untag-all)
 
-            (e454iel-main-menu "ar" 'bjm/elfeed-load-db-and-open)))
+            (e454iel-main-menu "ar" 'bjm/elfeed-load-db-and-open)
+
+            ;; This "unjams" elfeed-update if it runs for too long
+            ;;  https://reddit.com/r/emacs/comments/yjn76w/elfeed_bug/
+            (add-hook 'elfeed-update-init-hooks
+                      (lambda () (run-with-timer nil (* 60 5) #'elfeed-unjam)))))
 
 (use-package arch-packer
   :config (setq arch-packer-default-command "pacaur"))
@@ -2873,9 +2902,9 @@ Lisp function does not specify a special indentation."
 ;;  without obeying the 80 column rule
 (use-package visual-fill-column
   :disabled
-  ;; Setting this globally breaks ement-room-mode and any other mode that
-  ;; interally uses visual-line-mode
 
+  ;; Setting this globally breaks ement-room-mode and any other mode that
+  ;;  interally uses visual-line-mode (like ement)
   ;;:config (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
   )
 
@@ -2888,11 +2917,15 @@ Lisp function does not specify a special indentation."
 ;;  as a result of my using "adaptive-fill-mode"
 (use-package adaptive-wrap
   :disabled
-  ;; Setting this globally breaks ement-room-mode and any other mode that
-  ;; interally uses visual-line-mode
 
+  ;; Setting this globally breaks ement-room-mode and any other mode that
+  ;;  interally uses visual-line-mode (like ement)
   ;; :config (add-hook 'visual-line-mode-hook #'adaptive-wrap-prefix-mode)
-)
+  )
+
+;; What if visual-line-mode were way cooler? As in, it does what it normally
+;;  does, but wraps at the fill-column instead of the end of the window
+(use-package virtual-auto-fill)
 
 ;; Client for the matrix.org chat protocol
 (use-package matrix-client
@@ -2947,11 +2980,6 @@ Lisp function does not specify a special indentation."
     ;;  stay in insert state
     (add-hook 'ement-room-compose-hook #'evil-insert-state 1)
 
-    ;; TODO: This almost certainly isn't going to work as is, but making it work
-    ;;  correctly will be tricky. Currently I'm thinking that I ought to spawn a
-    ;;  timer, have that timer periodically check the "*pantalaimon*" buffer
-    ;;  until it contains the text "(Press CTRL+C to quit)" (signalling the
-    ;;  deamon is started and running), and then run ement-connect
     (start-process-shell-command  "pantalaimon"
                                   "*pantalaimon*"
                                   "pantalaimon")
@@ -3005,8 +3033,10 @@ Lisp function does not specify a special indentation."
       ;; go to room
       "g" 'ement-view-room)))
 
+;; Allows for short lambda expressions
 (use-package llama
-  :straight (llama :host sourcehut :repo "tarsius/llama"))
+  :straight (llama :host sourcehut
+                   :repo "tarsius/llama"))
 
 ;; Front-end for the Emacsmirror package database
 (use-package epkg
@@ -3456,7 +3486,6 @@ normal-state."
   ;; The "o" stands for "obfuscate"
   :general (e454iel-main-menu "mo" 'fsc/rearrange-region))
 
-
 (use-package altcaps)
 
 ;; TODO: Disabled for now because it breaks Emacs 29
@@ -3614,13 +3643,26 @@ normal-state."
   (e454iel-main-menu
     "mr" 'edit-indirect-region))
 
+;; Take a screenshot of a frame
 (use-package frameshot)
 
+;; attach a screenshot (selected using the mouse) to the current org header
 (use-package org-attach-screenshot)
 
 ;; Turn a YouTube video into a text file using YouTube's automatic caption
 ;;  generation
-(use-package youtube-sub-extractor)
+(use-package youtube-sub-extractor
+  :straight (youtube-sub-extractor
+             :host github
+             :repo "agzam/youtube-sub-extractor.el"))
+
+(use-package desktop-environment
+  :straight (desktop-environment
+             :host nil
+             :repo "https://gitlab.petton.fr/DamienCassou/desktop-environment")
+  :config
+  (progn
+    (desktop-environment-mode)))
 
 ;; https://emacsconf.org/2022/talks/dbus/
 (use-package debase
