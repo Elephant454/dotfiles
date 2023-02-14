@@ -3595,6 +3595,11 @@ normal-state."
 (use-package stem-reading-mode
   :general (e454iel-main-menu "ts" 'stem-reading-mode))
 
+;; TODO: This is unlikely to work with multiple devices on the network if I
+;;  don't set the port for the local server it depends on to a random value
+;;  within a safe range on Emacs' starting. Unless this server is literally only
+;;  spawned to make attaining OAUTH information easier on initial setup and it
+;;  isn't actually spawned again?
 (use-package smudge
   :config (progn
             (setq smudge-transport 'connect)))
