@@ -3456,6 +3456,9 @@ normal-state."
   ;; The "o" stands for "obfuscate"
   :general (e454iel-main-menu "mo" 'fsc/rearrange-region))
 
+
+(use-package altcaps)
+
 (use-package go
 
   ;; TODO: Reenable this after writing a better command to install on Guix. This
