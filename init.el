@@ -2984,19 +2984,26 @@ Lisp function does not specify a special indentation."
     (setq e454iel-pantalaimon-timer
           (run-with-timer 10 t #'e454iel-check-if-pantalaimon-started))
 
-  (general-define-key
-   :keymaps 'ement-room-mode-map
-   :states 'normal
-    "RET" 'ement-room-send-message
-    "S-RET" 'ement-room-send-reply
-    "r" 'ement-room-send-reply
-    "i" 'ement-room-send-image
-    "I" 'ement-room-send-file
-    "e" 'ement-room-edit-message
-    "E" 'ement-room-send-reaction
-    "o" 'ement-room-compose-message
-    ;; go to room
-    "g" 'ement-view-room)))
+    (defun e454iel-ement-primary-account-has-session-p ()
+      "True if the `e454iel-matrix-user-id' Matrix account currently has a session"
+      (if (--find
+           (eq (car it) e454iel-matrix-user-id)
+           ement-sessions)
+          t))
+
+    (general-define-key
+     :keymaps 'ement-room-mode-map
+     :states 'normal
+      "RET" 'ement-room-send-message
+      "S-RET" 'ement-room-send-reply
+      "r" 'ement-room-send-reply
+      "i" 'ement-room-send-image
+      "I" 'ement-room-send-file
+      "e" 'ement-room-edit-message
+      "E" 'ement-room-send-reaction
+      "o" 'ement-room-compose-message
+      ;; go to room
+      "g" 'ement-view-room)))
 
 ;; Front-end for the Emacsmirror package database
 (use-package epkg
