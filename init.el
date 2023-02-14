@@ -3668,5 +3668,8 @@ normal-state."
                (:exclude ".dir-locals.el" "*-tests.el"))))
 
 (use-package crdt)
+
+(use-package disk-usage)
+
 (provide 'init)
 ;;; init.el ends here
