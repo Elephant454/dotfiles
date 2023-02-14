@@ -2931,6 +2931,9 @@ Lisp function does not specify a special indentation."
   (progn
     (setq ement-initial-sync-timeout (* 60 10))
 
+    ;; Write session to data to file so I can skip the initial sync
+    (setq ement-save-sessions t)
+
     (add-hook 'ement-room-compose-hook #'ement-room-compose-org)
     ;; This is actually for turning auto-fill-mode *off*, because it's normally
     ;;  default for my org buffers
