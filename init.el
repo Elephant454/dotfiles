@@ -3654,5 +3654,18 @@ normal-state."
             "r" (lambda() (interactive)
                   (if (yes-or-no-p "Start a new game of Threes? ") (threes)))))
 
+;; Terminal emulator (for use inside Eshell and beyond)
+;; TODO: This isn't actually hooked into Eshell yet. Read the readme.
+(use-package eat
+  :straight
+  (eat :type git
+       :host codeberg
+       :repo "akib/emacs-eat"
+       :files ("*.el" ("term" "term/*.el") "*.texi"
+               "*.ti" ("terminfo/e" "terminfo/e/*")
+               ("terminfo/65" "terminfo/65/*")
+               ("integration" "integration/*")
+               (:exclude ".dir-locals.el" "*-tests.el"))))
+
 (provide 'init)
 ;;; init.el ends here
