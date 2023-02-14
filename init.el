@@ -3622,5 +3622,17 @@ normal-state."
 ;;  generation
 (use-package youtube-sub-extractor)
 
+;; https://emacsconf.org/2022/talks/dbus/
+(use-package debase
+  :straight (debase
+             :host nil
+             :repo "https://codeberg.org/emacs-weirdware/debase"))
+
+;; For managing disks, based on debase
+(use-package discomfort
+  :straight (discomfort
+             :host nil
+             :repo "https://codeberg.org/emacs-weirdware/discomfort"))
+
 (provide 'init)
 ;;; init.el ends here
