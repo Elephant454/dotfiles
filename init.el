@@ -3435,6 +3435,15 @@ normal-state."
 (use-package fireplace
   :general (e454iel-main-menu "agf" 'fireplace))
 
+;; A fun virtual winter wonderland
+(use-package snow
+  :config
+  (progn
+    (face-spec-set 'snow-flake-face
+                   '((t
+                      :family "Inconsolata"
+                      :height 90)))))
+
 (use-package sx
   ;; TODO: Set up keybindings by just copying the default keymap and applying it
   ;;  to evil normal state
