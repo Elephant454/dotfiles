@@ -3667,5 +3667,6 @@ normal-state."
                ("integration" "integration/*")
                (:exclude ".dir-locals.el" "*-tests.el"))))
 
+(use-package crdt)
 (provide 'init)
 ;;; init.el ends here
