@@ -2943,6 +2943,10 @@ Lisp function does not specify a special indentation."
     ;;(add-hook 'ement-room-compose-hook #'visual-fill-column-mode)
     ;;(add-hook 'ement-room-compose-hook #'adaptive-wrap-prefix-mode)
 
+    ;; Depth of 1 to make sure that this loads after Org Mode, ensuring we
+    ;;  stay in insert state
+    (add-hook 'ement-room-compose-hook #'evil-insert-state 1)
+
     ;; TODO: This almost certainly isn't going to work as is, but making it work
     ;;  correctly will be tricky. Currently I'm thinking that I ought to spawn a
     ;;  timer, have that timer periodically check the "*pantalaimon*" buffer
