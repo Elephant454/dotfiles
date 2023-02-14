@@ -2957,6 +2957,7 @@ Lisp function does not specify a special indentation."
                                   "pantalaimon")
 
     (defun e454iel-ement-connect-to-pantalaimon ()
+      (interactive)
       (ement-connect :uri-prefix "http://localhost:8009"
                      :user-id e454iel-matrix-user-id
                      :password e454iel-matrix-password))
