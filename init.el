@@ -3616,5 +3616,11 @@ normal-state."
           :keymaps 'rustic-mode
           "cr" 'cargo-process-run)))))
 
+;; For adjusting audio settings in PipeWire
+(use-package pipewire
+  :straight (pipewire-0 :type git
+                        :repo "https://git.zamazal.org/pdm/pipewire-0"
+                        :local-repo "pipewire-0"))
+
 (provide 'init)
 ;;; init.el ends here
