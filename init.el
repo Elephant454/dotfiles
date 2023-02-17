@@ -66,6 +66,7 @@ print-circle t
                               (eww-browse-url url)
                             (emms-play-url url))))
 
+                       ;; Videos for Reddit with EMMS
                        (".*v.redd.it/.*" .
                         (lambda (url rest)
                           (if current-prefix-arg
