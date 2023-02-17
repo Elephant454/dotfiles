@@ -3622,5 +3622,8 @@ normal-state."
                         :repo "https://git.zamazal.org/pdm/pipewire-0"
                         :local-repo "pipewire-0"))
 
+(use-package bluetooth
+  :general (e454iel-main-menu "tb" 'bluetooth-list-devices))
+
 (provide 'init)
 ;;; init.el ends here
