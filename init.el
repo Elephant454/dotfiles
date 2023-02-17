@@ -3524,14 +3524,14 @@ normal-state."
 
   :general
   (e454iel-main-menu
-    "=" (lambda () "" (interactive) (pulseaudio-control-set-volume "15%"))
-    "+" 'pulseaudio-control-increase-volume
-    "-" 'pulseaudio-control-decrease-volume
+    "=" (lambda () "" (interactive) (pulseaudio-control-set-sink-volume "15%"))
+    "+" 'pulseaudio-control-increase-sink-volume
+    "-" 'pulseaudio-control-decrease-sink-volume
 
     "v" '(:ignore t :which-key "Volume")
-    "vv" (lambda () "" (interactive) (pulseaudio-control-set-volume "15%"))
-    "vi" 'pulseaudio-control-increase-volume
-    "vd" 'pulseaudio-control-decrease-volume
+    "vv" (lambda () "" (interactive) (pulseaudio-control-set-sink-volume "15%"))
+    "vi" 'pulseaudio-control-increase-sink-volume
+    "vd" 'pulseaudio-control-decrease-sink-volume
     "vm" 'pulseaudio-control-toggle-current-sink-mute))
 
 (use-package reddigg)
