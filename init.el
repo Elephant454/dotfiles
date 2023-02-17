@@ -3535,6 +3535,7 @@ normal-state."
     "vm" 'pulseaudio-control-toggle-current-sink-mute))
 
 (use-package reddigg)
+
 ;; TODO: Temporarily broken
 ;;(use-package md4rd)
 
