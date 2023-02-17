@@ -82,6 +82,7 @@ print-circle t
                             (reddigg-view-comments
                              (cadr (split-string url "reddit.com"))))))
 
+                       ;; StackExchange in sx
                        (".*stackoverflow.com/questions/.*" .
                          (lambda (url rest) (sx-open-link url)))
 
