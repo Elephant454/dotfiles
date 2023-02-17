@@ -3581,5 +3581,16 @@ normal-state."
   (progn
     (desktop-environment-mode)))
 
+;; TODO: Look into the packages for flymake-easy, flymake-languagetool,
+;;  sideline-flymake, flycheck-tip, flymake-helper, flymake-proselint,
+;;  flymake-shellcheck
+
+(use-package flymake
+  :config
+  (progn
+    ;; TODO: Note that this package may be unstable and its behavior may not be
+    ;;  what I expect. I may have to fall back to flycheck if wonkiness occurs.
+    (use-package flymake-flycheck)))
+
 (provide 'init)
 ;;; init.el ends here
