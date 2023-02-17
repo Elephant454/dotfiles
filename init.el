@@ -3592,5 +3592,29 @@ normal-state."
     ;;  what I expect. I may have to fall back to flycheck if wonkiness occurs.
     (use-package flymake-flycheck)))
 
+;; Getting this working involves installing rustup and rust-analyzer from the
+;;  package manager. Then running these two commands:
+;; $ rustup default stable
+;; $ rustup component add rust-src rustfmt clippy rls rust-analysis
+
+;; TODO: Packages to check out for Rust:
+;;  cargo, cargo-mode, cargo-transient, flycheck-rust
+
+;; TODO: Check out https://robert.kra.hn/posts/rust-emacs-setup/
+(use-package rustic
+  :config
+  (progn
+    (setq rustic-lsp-client 'eglot)
+    (setq rustic-format-on-save nil)
+    ;; Prevent automatic syntax checking, which was causing lags and stutters.
+    ;;(setq eglot-send-changes-idle-time (* 60 60))
+
+    (use-package cargo
+      :config
+      (progn
+        (e454iel-major-mode-menu
+          :keymaps 'rustic-mode
+          "cr" 'cargo-process-run)))))
+
 (provide 'init)
 ;;; init.el ends here
