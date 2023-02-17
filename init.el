@@ -2069,15 +2069,20 @@ Lisp function does not specify a special indentation."
 ;; TODO: Maybe I should be using aspell instead, because I can set up spell
 ;;  checking for Camel Case words?
 ;;  http://blog.binchen.org/posts/what-s-the-best-spell-check-set-up-in-emacs.html
+
+;; TODO: This mess of add-hooks can definitely be cleaned up
 (use-package flyspell
   :init (progn
           (setq ispell-program-name "hunspell")
           ;;(setq ispell-dictionary "american")
           (setq ispell-dictionary "en_US")
           (use-package auto-dictionary)
+          (use-package flyspell-lazy)
           (add-hook 'text-mode-hook 'flyspell-mode)
           (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-          (add-hook 'prog-mode-hook 'auto-dictionary-mode))
+          (add-hook 'text-mode-hook 'auto-dictionary-mode)
+          (add-hook 'text-mode-hook 'flyspell-lazy-mode)
+          (add-hook 'prog-mode-hook 'flyspell-lazy-mode))
   :config
   (progn
     (use-package flyspell-correct
