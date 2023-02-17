@@ -66,6 +66,12 @@ print-circle t
                               (eww-browse-url url)
                             (emms-play-url url))))
 
+                       (".*youtu.be/.*" .
+                        (lambda (url rest)
+                          (if current-prefix-arg
+                              (eww-browse-url url)
+                            (emms-play-url url))))
+
                        ;; Videos for Reddit with EMMS
                        (".*v.redd.it/.*" .
                         (lambda (url rest)
@@ -283,7 +289,7 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
 ;;  the night variant
 (setq e454iel-theme-pairs '((soft-morning . omtose-softer)
                             (silkworm . foggy-night)
-                            (gruvbox-light-hard . gruvbox-dark-hard)
+                            (gruvbox-light-soft . gruvbox-dark-hard)
                             (kaolin-mono-light . kaolin-mono-dark)
                             (doom-one . doom-one)
                             (doom-fairy-floss . doom-laserwave)
@@ -371,7 +377,7 @@ without confirmation."
    e454iel-theme-pairs))
 
 ;; load default theme
-(e454iel-jump-to-theme 'kaolin-breeze)
+(e454iel-jump-to-theme 'gruvbox-light-soft)
 
 
 ;; fonts
@@ -537,18 +543,7 @@ This makes for easier reading of larger, denser bodies of text."
                 (setq evil-escape-unordered-key-sequence t)
                 (setq evil-escape-delay (if e454iel-phone-p 0.3 0.1))
                 (evil-escape-mode t)))
-            (use-package evil-matchit
-              :config
-              (progn
-                ;; TODO: This blocks use of "t" in Org-Mode. Maybe just bind the
-                ;;  command `evilmi-jump-items' instead of setting this
-                ;;  variable? The hope is that this will allow the command to be
-                ;;  available in the main evil normal state map but still be
-                ;;  allowed to be overwritten by other maps.
 
-                ;; In my head this "t" is for "toggle positon between pairs"
-                (setq evilmi-shortcut "t")
-                (global-evil-matchit-mode t)))
             (use-package fringe-helper
               :config (use-package evil-fringe-mark
                         :config (global-evil-fringe-mark-mode t)))
@@ -846,7 +841,13 @@ This makes for easier reading of larger, denser bodies of text."
 
             ;; This remembers our password for one hour
             (setq password-cache t)
-            (setq password-cache-expiry (* 60 60))))
+            (setq password-cache-expiry (* 60 60))
+
+            ;; TODO: How do I make sure the eshell/alias function is loaded at
+            ;;  init?
+            ;;(eshell/alias dired-by-size "dired *(.L0)")
+            ;;(eshell/alias "super-compress-dir" "tar -I \"xz -ze9\" -cf $1.tar.xz $1")
+            ))
 
 ;; give parenthesis matching colors based upon depth
 (use-package rainbow-delimiters
@@ -1505,7 +1506,7 @@ calculated based on my configuration."
 
             (setq org-capture-templates
                   `(("t" "TODO" entry
-                     (file ,(concat e454iel-documents-dir "/todo.org"))
+                     (file+headline ,(concat e454iel-documents-dir "/todo.org") "Unsorted")
                      "* TODO %a "
                      :empty-lines-before 1)
                     ("a" "ArticlesToRead" entry
@@ -1636,6 +1637,7 @@ calculated based on my configuration."
               "e" 'org-export-dispatch
               "E" 'org-edit-special
               "." 'org-time-stamp
+              ">" 'org-time-stamp-inactive
               "d" 'org-deadline
               "s" 'org-schedule
               "p" 'org-toggle-latex-fragment
@@ -1759,6 +1761,8 @@ calculated based on my configuration."
   :config (e454iel-main-menu "tT" 'seethru)
   ;; (set-frame-parameter (selected-frame) 'alpha-background 0.9)
   )
+
+(use-package dash)
 
 ;; My first elisp function!
 (defun kill-buffer-file-name ()
@@ -2456,7 +2460,12 @@ Lisp function does not specify a special indentation."
             ;;(emms-default-players)
             (add-to-list 'emms-player-list 'emms-player-mpv)
             (setq emms-source-file-default-directory "~/Music/")
-            (evil-collection-init 'emms))
+            (evil-collection-init 'emms)
+            (use-package emms-mode-line-cycle
+              :config (progn
+                        (emms-mode-line 1)
+                        (emms-playing-time 1)
+                        (emms-mode-line-cycle 1))))
   :general (e454iel-main-menu
              "ames" 'emms-streams
              "amef" 'emms-play-file
@@ -2539,6 +2548,19 @@ Lisp function does not specify a special indentation."
               :config (progn
                         (setq rmh-elfeed-org-files '("~/org/elfeed.org"))
                         (elfeed-org)))
+
+            ;; The volume of feeds I'm working with necessitates a *much*
+            ;;  more recent default view
+            ;;  https://github.com/skeeto/elfeed/issues/317#issuecomment-491430753
+            (setq elfeed-search-filter "@2-minutes-ago +unread")
+
+            ;; This prevents from Elfeed from choking the main thread
+            ;;  unnecessarily
+            ;;  https://github.com/skeeto/elfeed/pull/448
+            (if (eq flycheck-global-modes t)
+                (setq flycheck-global-modes '(not . (elfeed-search-mode)))
+                ;; Else
+                (add-to-list flycheck-global-modes '(not . (elfeed-search-mode))))
 
             ;; Taken from
             ;;  http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
@@ -2781,6 +2803,21 @@ Lisp function does not specify a special indentation."
                            (window-height . 0.3)))
             (evil-owl-mode)))
 
+(use-package evil-matchit
+              :config
+              (progn
+                ;; I'm using General to set "t" for jumping between pairs
+                ;;  instead of setting evilmi-shortcut in order to preserve the
+                ;;  ability to rebind "t" in modes where I don't care about
+                ;;  jumping between pairs (like Org mode)
+
+                ;; In my head this "t" is for "toggle positon between pairs"
+                (general-define-key
+                 :states '(normal motion)
+                  "t" 'evilmi-jump-items)
+
+                (global-evil-matchit-mode t)))
+
 ;; TODO: It's creating errors. Disabled for now.
 (use-package org-trello
   :disabled)
@@ -2912,6 +2949,24 @@ Lisp function does not specify a special indentation."
   :straight (matrix-client :host github :repo "alphapapa/matrix-client.el"
                            :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
 
+;; TODO: Function for checking if a particular account has a session
+
+;; TODO: Function for checking if a particular account is currently syncing (or
+;;  maybe we can just force a sync every time we run-or-raise)
+;;
+;; TODO: Function for checking if Pantalaimon is running
+;;
+;; TODO: Function for taking only the necessary steps to connect (choosing to
+;;  start Pantalaimon only if necessary). This would replace the current
+;;  function for connecting.
+;;
+;; TODO: A "connect-or-raise" function that either opens the list of rooms,
+;;  syncs if we are not currently syncing, and connects to the server if we are
+;;  disconnected. This is ideal for a quick to use key-binding
+;;
+;; TODO: Add a dwim command for pressing RET. It will either open the link at
+;;  point, reply to the message at point, or create a new message if pressed in
+;;  an empty space
 (use-package ement
   :straight (ement :host github :repo "alphapapa/ement.el")
 
@@ -2925,6 +2980,9 @@ Lisp function does not specify a special indentation."
   (progn
     (setq ement-initial-sync-timeout (* 60 10))
 
+    ;; Write session to data to file so I can skip the initial sync
+    (setq ement-save-sessions t)
+
     (add-hook 'ement-room-compose-hook #'ement-room-compose-org)
     ;; This is actually for turning auto-fill-mode *off*, because it's normally
     ;;  default for my org buffers
@@ -2933,6 +2991,10 @@ Lisp function does not specify a special indentation."
 
     ;;(add-hook 'ement-room-compose-hook #'visual-fill-column-mode)
     ;;(add-hook 'ement-room-compose-hook #'adaptive-wrap-prefix-mode)
+
+    ;; Depth of 1 to make sure that this loads after Org Mode, ensuring we
+    ;;  stay in insert state
+    (add-hook 'ement-room-compose-hook #'evil-insert-state 1)
 
     (start-process-shell-command  "pantalaimon"
                                   "*pantalaimon*"
@@ -2966,19 +3028,26 @@ Lisp function does not specify a special indentation."
     (setq e454iel-pantalaimon-timer
           (run-with-timer 10 t #'e454iel-check-if-pantalaimon-started))
 
-  (general-define-key
-   :keymaps 'ement-room-mode-map
-   :states 'normal
-    "RET" 'ement-room-send-message
-    "S-RET" 'ement-room-send-reply
-    "r" 'ement-room-send-reply
-    "i" 'ement-room-send-image
-    "I" 'ement-room-send-file
-    "e" 'ement-room-edit-message
-    "E" 'ement-room-send-reaction
-    "o" 'ement-room-compose-message
-    ;; go to room
-    "g" 'ement-view-room)))
+    (defun e454iel-ement-primary-account-has-session-p ()
+      "True if the `e454iel-matrix-user-id' Matrix account currently has a session"
+      (if (--find
+           (eq (car it) e454iel-matrix-user-id)
+           ement-sessions)
+          t))
+
+    (general-define-key
+     :keymaps 'ement-room-mode-map
+     :states 'normal
+      "RET" 'ement-room-send-message
+      "S-RET" 'ement-room-send-reply
+      "r" 'ement-room-send-reply
+      "i" 'ement-room-send-image
+      "I" 'ement-room-send-file
+      "e" 'ement-room-edit-message
+      "E" 'ement-room-send-reaction
+      "o" 'ement-room-compose-message
+      ;; go to room
+      "g" 'ement-view-room)))
 
 ;; Allows for short lambda expressions
 (use-package llama
@@ -3133,6 +3202,19 @@ Lisp function does not specify a special indentation."
       (interactive)
       (concat (vuiet-playing-artist) " - " (vuiet-playing-track-name)))
 
+    (defun e454iel-vuiet-current-track-with-youtube-url ()
+      "Get the currently playing track from vuiet with an added YouTube URL."
+      (concat
+       (e454iel-vuiet-current-track)
+       " ("
+       (car (split-string (vuiet--youtube-link-at-position) "&t="))
+       ")"))
+
+    (defun e454iel-vuiet-kill-current-track-with-youtube-url ()
+      "Kill the currently playing track from vuiet with an added YouTube URL."
+      (interactive)
+      (kill-new (e454iel-vuiet-current-track-with-youtube-url)))
+
     ;; TODO: Should this use org-store-link instead of the kill ring?
     ;; TODO: Write this function with the simpler, user facing functions for
     ;;  looking up playing track name and artist
@@ -3159,6 +3241,8 @@ Lisp function does not specify a special indentation."
     ;;  mode line (including the display-time-mode and eyebrowse indicators).
     ;;  In the meantime, I've set it to be essentially a no-op.
     (defun vuiet-update-mode-line (&optional position) t)
+
+    (setq vuiet-youtube-dl-command "yt-dlp")
     ))
 
 ;; For MU* (MUD's, MUCK's, etc)
@@ -3397,6 +3481,15 @@ normal-state."
 (use-package fireplace
   :general (e454iel-main-menu "agf" 'fireplace))
 
+;; A fun virtual winter wonderland
+(use-package snow
+  :config
+  (progn
+    (face-spec-set 'snow-flake-face
+                   '((t
+                      :family "Inconsolata"
+                      :height 90)))))
+
 (use-package sx
   ;; TODO: Set up keybindings by just copying the default keymap and applying it
   ;;  to evil normal state
@@ -3408,6 +3501,8 @@ normal-state."
   :straight (fsc :host github :repo "kuanyui/fsc.el")
   ;; The "o" stands for "obfuscate"
   :general (e454iel-main-menu "mo" 'fsc/rearrange-region))
+
+(use-package altcaps)
 
 ;; TODO: Disabled for now because it breaks Emacs 29
 (use-package go
@@ -3546,6 +3641,11 @@ normal-state."
 (use-package stem-reading-mode
   :general (e454iel-main-menu "ts" 'stem-reading-mode))
 
+;; TODO: This is unlikely to work with multiple devices on the network if I
+;;  don't set the port for the local server it depends on to a random value
+;;  within a safe range on Emacs' starting. Unless this server is literally only
+;;  spawned to make attaining OAUTH information easier on initial setup and it
+;;  isn't actually spawned again?
 (use-package smudge
   :config (progn
             (setq smudge-transport 'connect)))
@@ -3580,6 +3680,55 @@ normal-state."
   :config
   (progn
     (desktop-environment-mode)))
+
+;; https://emacsconf.org/2022/talks/dbus/
+(use-package debase
+  :straight (debase
+             :host nil
+             :repo "https://codeberg.org/emacs-weirdware/debase"))
+
+;; For managing disks, based on debase
+(use-package discomfort
+  :straight (discomfort
+             :host nil
+             :repo "https://codeberg.org/emacs-weirdware/discomfort"))
+
+(use-package threes
+  :straight (threes
+             :host github
+             :repo "xuchunyang/threes.el")
+  :general (e454iel-main-menu
+             "ag3" 'threes)
+  :general (:keymaps 'threes-mode-map
+            :states 'normal
+            "h" 'threes-left
+            "j" 'threes-down
+            "k" 'threes-up
+            "l" 'threes-right
+            "<left>" 'threes-left
+            "<down>" 'threes-down
+            "<up>" 'threes-up
+            "<right>" 'threes-right
+            "u" 'threes-undo
+            "r" (lambda() (interactive)
+                  (if (yes-or-no-p "Start a new game of Threes? ") (threes)))))
+
+;; Terminal emulator (for use inside Eshell and beyond)
+;; TODO: This isn't actually hooked into Eshell yet. Read the readme.
+(use-package eat
+  :straight
+  (eat :type git
+       :host codeberg
+       :repo "akib/emacs-eat"
+       :files ("*.el" ("term" "term/*.el") "*.texi"
+               "*.ti" ("terminfo/e" "terminfo/e/*")
+               ("terminfo/65" "terminfo/65/*")
+               ("integration" "integration/*")
+               (:exclude ".dir-locals.el" "*-tests.el"))))
+
+(use-package crdt)
+
+(use-package disk-usage)
 
 ;; TODO: Look into the packages for flymake-easy, flymake-languagetool,
 ;;  sideline-flymake, flycheck-tip, flymake-helper, flymake-proselint,
