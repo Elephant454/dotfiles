@@ -73,6 +73,15 @@ print-circle t
                               (eww-browse-url url)
                             (emms-play-url url))))
 
+                       ;; Reddit comment threads in reddigg
+                       (".*reddit.com/r/.*/comments/.*" .
+                        (lambda (url rest)
+                          (if current-prefix-arg
+                              (eww-browse-url url)
+
+                            (reddigg-view-comments
+                             (cadr (split-string url "reddit.com"))))))
+
                        (".*stackoverflow.com/questions/.*" .
                          (lambda (url rest) (sx-open-link url)))
 
