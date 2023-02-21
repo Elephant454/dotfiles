@@ -2605,9 +2605,15 @@ Lisp function does not specify a special indentation."
             (e454iel-main-menu "ar" 'bjm/elfeed-load-db-and-open)
 
             ;; This "unjams" elfeed-update if it runs for too long
-            ;;  https://reddit.com/r/emacs/comments/yjn76w/elfeed_bug/
-            (add-hook 'elfeed-update-init-hooks
-                      (lambda () (run-with-timer nil (* 60 5) #'elfeed-unjam)))))
+            ;;  https://reddit.com/r/emacs/comments/yjn76w/elfeed_bug/ Odds are
+            ;;  that I don't actually really want this, though. This will kill
+            ;;  long-running background jobs that may take a while to naturally
+            ;;  finish. I'm also not certain, but I think this causes freezes as
+            ;;  well, or something? A freshly created database doesn't seem to
+            ;;  like this for some reason.
+            ;;(add-hook 'elfeed-update-init-hooks (lambda ()
+            ;;  (run-with-timer nil (* 60 5) #'elfeed-unjam)))
+            ))
 
 (use-package arch-packer
   :config (setq arch-packer-default-command "pacaur"))
