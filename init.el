@@ -243,6 +243,15 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
      (append (listify beginning) (listify list) (listify end)))
    lists))
 
+;; TODO: This assumes `BODY' is a single expression. There is no implicit progn
+;;  functionality here.
+(defmacro singlet (varpair body)
+  "Single value let expression. Bind the second value of `VARPAIR'
+to the first value of `VARPAIR' and evaluate `body' with this
+value bound."
+  `(let ((,(car varpair) ,(cadr varpair)))
+     ,body))
+
 (defmacro use-package-list (&rest packages)
   "Run use-package on each of the `PACKAGES'."
   (cons 'progn (append-to-lists packages 'use-package)))
@@ -1549,11 +1558,11 @@ unsorted."
             :config
             (progn
               (require 'evil-org-agenda)
-              (evil-org-agenda-set-keys))
-            :general
-            (:keymaps 'org-agenda-mode-map
-             :states '(normal motion)
-             "<SPC>" 'e454iel-main-menu-prefix))
+              (evil-org-agenda-set-keys)
+              (general-define-key
+               :keymaps 'org-agenda-mode-map
+               :states '(normal motion)
+               "<SPC>" 'e454iel-main-menu-prefix)))
 
           (use-package org-pomodoro)
           (use-package org-bullets)
@@ -1590,7 +1599,14 @@ unsorted."
               (add-hook 'org-mode-hook
                         (lambda ()
                           (add-hook 'post-command-hook
-                                    'org-rainbow-tags--apply-overlays nil t))))))
+                                    'org-rainbow-tags--apply-overlays nil t)))))
+
+          ;; For conditional manipulating or blocking manipulation of todo state
+          (use-package org-edna
+            :config
+            (progn
+              ;;(setq org-edna-use-inheritance t)
+              (org-edna-mode))))
 
   :config (progn
             (setq e454iel-documents-season "Fall")
@@ -1775,7 +1791,9 @@ calculated based on my configuration."
               "e" 'org-export-dispatch
               "E" 'org-edit-special
               "." 'org-time-stamp
-              ">" 'org-time-stamp-inactive
+              ;; This inserts an inactive timestamp with the time in it (the
+              ;;  '(4) bit is running the command with a universal argument)
+              "/" (lambda () (interactive) (org-time-stamp-inactive '(4)))
               "d" 'org-deadline
               "s" 'org-schedule
               "p" 'org-toggle-latex-fragment
@@ -2695,7 +2713,7 @@ Lisp function does not specify a special indentation."
             ;; The volume of feeds I'm working with necessitates a *much*
             ;;  more recent default view
             ;;  https://github.com/skeeto/elfeed/issues/317#issuecomment-491430753
-            (setq elfeed-search-filter "@2-minutes-ago +unread")
+            (setq elfeed-search-filter "@1-minutes-ago +unread")
 
             ;; This prevents from Elfeed from choking the main thread
             ;;  unnecessarily
@@ -2715,6 +2733,17 @@ Lisp function does not specify a special indentation."
               (elfeed-db-load)
               (elfeed)
               (elfeed-search-update--force))
+
+            ;; If we don't check for this, opening a new elfeed instance
+            ;;  discards database changes rather than saving them
+            (defun e454iel-run-or-raise-elfeed ()
+              "If the elfeed buffer exists, switch to it. Otherwise, open a new elfeed session."
+              (interactive)
+              (let ((elfeed-buffer (get-buffer "*elfeed-search*")))
+                (if elfeed-buffer
+                    (switch-to-buffer elfeed-buffer)
+                  ;; else
+                  (bjm/elfeed-load-db-and-open))))
 
             ;; Taken from
             ;;  http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
@@ -2745,12 +2774,18 @@ Lisp function does not specify a special indentation."
               "+" 'elfeed-search-tag-all
               "-" 'elfeed-search-untag-all)
 
-            (e454iel-main-menu "ar" 'bjm/elfeed-load-db-and-open)
+            (e454iel-main-menu "ar" 'e454iel-run-or-raise-elfeed)
 
             ;; This "unjams" elfeed-update if it runs for too long
-            ;;  https://reddit.com/r/emacs/comments/yjn76w/elfeed_bug/
-            (add-hook 'elfeed-update-init-hooks
-                      (lambda () (run-with-timer nil (* 60 5) #'elfeed-unjam)))))
+            ;;  https://reddit.com/r/emacs/comments/yjn76w/elfeed_bug/ Odds are
+            ;;  that I don't actually really want this, though. This will kill
+            ;;  long-running background jobs that may take a while to naturally
+            ;;  finish. I'm also not certain, but I think this causes freezes as
+            ;;  well, or something? A freshly created database doesn't seem to
+            ;;  like this for some reason.
+            ;;(add-hook 'elfeed-update-init-hooks (lambda ()
+            ;;  (run-with-timer nil (* 60 5) #'elfeed-unjam)))
+            ))
 
 (use-package arch-packer
   :config (setq arch-packer-default-command "pacaur"))
@@ -3819,6 +3854,12 @@ normal-state."
              :host github
              :repo "agzam/youtube-sub-extractor.el"))
 
+;; For searching YouTube videos
+(use-package ytdious
+  :config
+  (progn
+    (setq ytdious-invidious-api-url "https://inv.riverside.rocks/")))
+
 (use-package desktop-environment
   :straight (desktop-environment
              :host nil
@@ -3919,6 +3960,8 @@ normal-state."
 
 (use-package bluetooth
   :general (e454iel-main-menu "tb" 'bluetooth-list-devices))
+
+(use-package mediawiki)
 
 (provide 'init)
 ;;; init.el ends here
