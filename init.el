@@ -2570,7 +2570,7 @@ Lisp function does not specify a special indentation."
             ;; The volume of feeds I'm working with necessitates a *much*
             ;;  more recent default view
             ;;  https://github.com/skeeto/elfeed/issues/317#issuecomment-491430753
-            (setq elfeed-search-filter "@2-minutes-ago +unread")
+            (setq elfeed-search-filter "@1-minutes-ago +unread")
 
             ;; This prevents from Elfeed from choking the main thread
             ;;  unnecessarily
