@@ -248,6 +248,7 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
  (sweet-theme :defer)
  (tron-legacy-theme)
  (shanty-themes)
+ (ef-themes)
 )
 
 ;; TODO: There has to be some sort of better way of doing this. 😅 The autoloads
@@ -1887,7 +1888,9 @@ calculated based on my configuration."
                   TeX-command-list)))
 
 (use-package seethru
-  :config (e454iel-main-menu "tT" 'seethru))
+  :config (e454iel-main-menu "tT" 'seethru)
+  ;;(set-frame-parameter (selected-frame) 'alpha-background 0.9)
+  )
 
 ;; My first elisp function!
 (defun kill-buffer-file-name ()
@@ -2582,6 +2585,15 @@ Lisp function does not specify a special indentation."
             ;;(emms-default-players)
             (add-to-list 'emms-player-list 'emms-player-mpv)
             (setq emms-source-file-default-directory "~/Music/")
+            ;; TODO: This is an utter mess, and can clearly be cleaned TODO:
+            ;; TODO: This seems to prohibit playing videos that aren't offered
+            ;;  at this low of a resolution, which isn't what I want
+            (if e454iel-phone-p
+                (progn
+                  (add-to-list 'emms-player-mpv-parameters
+                   "-ao=alsa")
+                  (add-to-list 'emms-player-mpv-parameters
+                   "--ytdl-format='[height<420]'")))
             (evil-collection-init 'emms))
   :general (e454iel-main-menu
              "ames" 'emms-streams
@@ -2636,6 +2648,7 @@ Lisp function does not specify a special indentation."
   :mode ("/PKGBUILD$" . pkgbuild-mode))
 
 (use-package spray
+  :disabled
   :straight (spray :host "https://git.sr.ht/~iank/spray")
   :config (general-define-key
            :keymaps 'spray-mode-map
@@ -3062,6 +3075,7 @@ Lisp function does not specify a special indentation."
                                   "pantalaimon")
 
     (defun e454iel-ement-connect-to-pantalaimon ()
+      (interactive)
       (ement-connect :uri-prefix "http://localhost:8009"
                      :user-id e454iel-matrix-user-id
                      :password e454iel-matrix-password))
@@ -3672,6 +3686,15 @@ normal-state."
   :general
   (e454iel-main-menu
     "mr" 'edit-indirect-region))
+
+(use-package pipewire
+  :straight (pipewire-0 :type git
+              :repo "https://git.zamazal.org/pdm/pipewire-0"
+              :local-repo "pipewire-0"))
+
+(use-package bluetooth
+  :general (e454iel-main-menu
+             "tb" 'bluetooth-list-devices))
 
 (provide 'init)
 ;;; init.el ends here
