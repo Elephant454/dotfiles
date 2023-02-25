@@ -243,6 +243,15 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
      (append (listify beginning) (listify list) (listify end)))
    lists))
 
+;; TODO: This assumes `BODY' is a single expression. There is no implicit progn
+;;  functionality here.
+(defmacro singlet (varpair body)
+  "Single value let expression. Bind the second value of `VARPAIR'
+to the first value of `VARPAIR' and evaluate `body' with this
+value bound."
+  `(let ((,(car varpair) ,(cadr varpair)))
+     ,body))
+
 (defmacro use-package-list (&rest packages)
   "Run use-package on each of the `PACKAGES'."
   (cons 'progn (append-to-lists packages 'use-package)))
