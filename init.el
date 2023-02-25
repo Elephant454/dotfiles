@@ -3708,6 +3708,12 @@ normal-state."
              :host github
              :repo "agzam/youtube-sub-extractor.el"))
 
+;; For searching YouTube videos
+(use-package ytdious
+  :config
+  (progn
+    (setq ytdious-invidious-api-url "https://inv.riverside.rocks/")))
+
 (use-package desktop-environment
   :straight (desktop-environment
              :host nil
