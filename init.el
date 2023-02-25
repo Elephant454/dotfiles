@@ -1653,7 +1653,9 @@ calculated based on my configuration."
               "e" 'org-export-dispatch
               "E" 'org-edit-special
               "." 'org-time-stamp
-              ">" 'org-time-stamp-inactive
+              ;; This inserts an inactive timestamp with the time in it (the
+              ;;  '(4) bit is running the command with a universal argument)
+              "/" (lambda () (interactive) (org-time-stamp-inactive '(4)))
               "d" 'org-deadline
               "s" 'org-schedule
               "p" 'org-toggle-latex-fragment
