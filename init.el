@@ -3815,5 +3815,7 @@ normal-state."
 (use-package bluetooth
   :general (e454iel-main-menu "tb" 'bluetooth-list-devices))
 
+(use-package mediawiki)
+
 (provide 'init)
 ;;; init.el ends here
