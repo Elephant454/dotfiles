@@ -789,7 +789,8 @@ This makes for easier reading of larger, denser bodies of text."
                 (add-to-list 'completion-at-point-functions #'cape-ispell)
                 ;;(add-to-list 'completion-at-point-functions #'cape-dict)
                 ;;(add-to-list 'completion-at-point-functions #'cape-line)
-                (add-to-list 'completion-at-point-functions #'cape-rfc1345)))
+                ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
+                ))
 
             ;; Allow Corfu to be used in the minibuffer
             (defun corfu-enable-always-in-minibuffer ()
