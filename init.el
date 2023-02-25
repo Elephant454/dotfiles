@@ -1706,7 +1706,9 @@ calculated based on my configuration."
                   TeX-command-list)))
 
 (use-package seethru
-  :config (e454iel-main-menu "tT" 'seethru))
+  :config (e454iel-main-menu "tT" 'seethru)
+  ;;(set-frame-parameter (selected-frame) 'alpha-background 0.9)
+  )
 
 ;; My first elisp function!
 (defun kill-buffer-file-name ()
