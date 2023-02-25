@@ -2591,6 +2591,17 @@ Lisp function does not specify a special indentation."
               (elfeed)
               (elfeed-search-update--force))
 
+            ;; If we don't check for this, opening a new elfeed instance
+            ;;  discards database changes rather than saving them
+            (defun e454iel-run-or-raise-elfeed ()
+              "If the elfeed buffer exists, switch to it. Otherwise, open a new elfeed session."
+              (interactive)
+              (let ((elfeed-buffer (get-buffer "*elfeed-search*")))
+                (if elfeed-buffer
+                    (switch-to-buffer elfeed-buffer)
+                  ;; else
+                  (bjm/elfeed-load-db-and-open))))
+
             ;; Taken from
             ;;  http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
             ;; write to disk when quiting
@@ -2620,7 +2631,7 @@ Lisp function does not specify a special indentation."
               "+" 'elfeed-search-tag-all
               "-" 'elfeed-search-untag-all)
 
-            (e454iel-main-menu "ar" 'bjm/elfeed-load-db-and-open)
+            (e454iel-main-menu "ar" 'e454iel-run-or-raise-elfeed)
 
             ;; This "unjams" elfeed-update if it runs for too long
             ;;  https://reddit.com/r/emacs/comments/yjn76w/elfeed_bug/ Odds are
