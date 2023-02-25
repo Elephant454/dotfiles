@@ -2398,6 +2398,15 @@ Lisp function does not specify a special indentation."
             ;;(emms-default-players)
             (add-to-list 'emms-player-list 'emms-player-mpv)
             (setq emms-source-file-default-directory "~/Music/")
+            ;; TODO: This is an utter mess, and can clearly be cleaned TODO:
+            ;; TODO: This seems to prohibit playing videos that aren't offered
+            ;;  at this low of a resolution, which isn't what I want
+            (if e454iel-phone-p
+                (progn
+                  (add-to-list 'emms-player-mpv-parameters
+                   "-ao=alsa")
+                  (add-to-list 'emms-player-mpv-parameters
+                   "--ytdl-format='[height<420]'")))
             (evil-collection-init 'emms))
   :general (e454iel-main-menu
              "ames" 'emms-streams
