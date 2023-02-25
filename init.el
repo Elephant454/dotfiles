@@ -3348,6 +3348,7 @@ normal-state."
   :general (e454iel-main-menu "mo" 'fsc/rearrange-region))
 
 (use-package go
+ :disabled
 
   ;; TODO: Reenable this after writing a better command to install on Guix. This
   ;;  likely will mean checking to see if the package is in the current profile
