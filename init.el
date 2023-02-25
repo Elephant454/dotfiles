@@ -1461,7 +1461,14 @@ unsorted."
               (add-hook 'org-mode-hook
                         (lambda ()
                           (add-hook 'post-command-hook
-                                    'org-rainbow-tags--apply-overlays nil t))))))
+                                    'org-rainbow-tags--apply-overlays nil t)))))
+
+          ;; For conditional manipulating or blocking manipulation of todo state
+          (use-package org-edna
+            :config
+            (progn
+              ;;(setq org-edna-use-inheritance t)
+              (org-edna-mode))))
 
   :config (progn
             (setq e454iel-documents-season "Fall")
