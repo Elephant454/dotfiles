@@ -2485,9 +2485,14 @@ Lisp function does not specify a special indentation."
             (if e454iel-phone-p
                 (progn
                   (add-to-list 'emms-player-mpv-parameters
-                   "-ao=alsa")
+                               "-ao=alsa")
                   (add-to-list 'emms-player-mpv-parameters
-                   "--ytdl-format='[height<420]'")))
+                               "--ytdl-format='[height<420]'")))
+
+            (add-to-list 'emms-player-mpv-parameters
+                         "--save-position-on-quit")
+            (add-to-list 'emms-player-mpv-parameters
+                         "--write-filename-in-watch-later-config")
 
             (evil-collection-init 'emms)
 
