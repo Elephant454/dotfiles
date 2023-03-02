@@ -3835,5 +3835,8 @@ normal-state."
 
 (use-package mediawiki)
 
+;; For diffing directories!
+(use-package ztree)
+
 (provide 'init)
 ;;; init.el ends here
