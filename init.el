@@ -1223,9 +1223,10 @@ _-_increase _=_decrease"
     (start-process-shell-command "dunst"
                                  nil
                                  "dunst")
-    (start-process-shell-command "compton"
+    ;; For transparency. This is a "compton" replacement
+    (start-process-shell-command "picom"
                                  nil
-                                 "compton")
+                                 "picom")
     (start-process-shell-command "xsettingsd"
                                  nil
                                  "xsettingsd")
