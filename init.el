@@ -3556,10 +3556,12 @@ normal-state."
 (use-package fsc
   :init (use-package makey)
   :straight (fsc :host github :repo "kuanyui/fsc.el")
-  ;; The "o" stands for "obfuscate"
-  :general (e454iel-main-menu "mo" 'fsc/rearrange-region))
+  ;; The "m" stands for "mangle" and the "o" stands for "obfuscate"
+  :general (e454iel-main-menu "mmo" 'fsc/rearrange-region))
 
-(use-package altcaps)
+(use-package altcaps
+  ;; The "m" stands for "mangle" and the "a" stands for "altcaps"
+  :general (e454iel-main-menu "mma"))
 
 ;; TODO: Disabled for now because it breaks Emacs 29
 (use-package go
