@@ -243,14 +243,17 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
      (append (listify beginning) (listify list) (listify end)))
    lists))
 
-;; TODO: This assumes `BODY' is a single expression. There is no implicit progn
-;;  functionality here.
-(defmacro singlet (varpair body)
-  "Single value let expression. Bind the second value of `VARPAIR'
-to the first value of `VARPAIR' and evaluate `body' with this
+(defmacro singlet (varpair &rest body)
+  "single value let expression. bind the second value of `varpair'
+to the first value of `varpair' and evaluate `body' with this
 value bound."
+
+  ;; This tells Emacs that I want it to indent by one space the same way that a
+  ;;  regular let statement does
+  (declare (indent 1))
+
   `(let ((,(car varpair) ,(cadr varpair)))
-     ,body))
+     ,@body))
 
 (defmacro use-package-list (&rest packages)
   "Run use-package on each of the `PACKAGES'."
