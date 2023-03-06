@@ -3592,7 +3592,12 @@ normal-state."
     :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
     :general (e454iel-main-menu "jw" 'ace-window))
 
-  :general (e454iel-main-menu "jc" 'avy-goto-char))
+  :general
+  (e454iel-main-menu
+    "jc" 'avy-goto-char
+    "jl" 'avy-goto-line
+    )
+  )
 
 (use-package scad-mode
   :config
