@@ -3747,7 +3747,48 @@ normal-state."
 (use-package ytdious
   :config
   (progn
-    (setq ytdious-invidious-api-url "https://inv.riverside.rocks/")))
+    (setq ytdious-invidious-api-url "https://inv.riverside.rocks/")
+
+  (defun e454iel-ytdious-get-current-video-url ()
+    (interactive
+     (kill-new (e454iel-ytdious-get-current-video-url)))
+
+    (let ((video-alist (ytdious-get-current-video)))
+      (format "https://www.youtube.com/watch?v=%s"
+              (cdr (assoc 'videoId video-alist)))))
+
+  (defun e454iel-ytdious-get-current-video-title-and-url ()
+    (interactive
+     (kill-new (e454iel-ytdious-get-current-video-title-and-url)))
+
+    (let ((video-alist (ytdious-get-current-video)))
+      (format "%s: https://www.youtube.com/watch?v=%s"
+              (cdr (assoc 'title video-alist))
+              (cdr (assoc 'videoId video-alist)))))
+
+  (defun e454iel-ytdious-org-kill-current-video ()
+   (interactive)
+   (kill-new
+    (let ((video-alist (ytdious-get-current-video)))
+      (format "[[%s - YouTube][https://www.youtube.com/watch?v=%s]]"
+              (cdr (assoc 'title video-alist))
+              (cdr (assoc 'videoId video-alist))))))
+
+  (general-define-key
+   :keymaps 'ytdious-mode-map
+   :states 'normal
+    "q" 'ytdious-quit
+    "<return>" 'ytdious-play
+    "S-<return>" 'ytdious-display-video-detail-popup
+    "o" 'ytdious-rotate-sort
+    "c" 'e454iel-ytdious-get-current-video-url
+    "C" 'e454iel-ytdious-org-kill-current-video
+    ">" 'ytdious-search-next-page
+    "<" 'ytdious-search-previous-page))
+
+  :general
+  (e454iel-main-menu
+    "aiy 'ytdious"))
 
 (use-package desktop-environment
   :straight (desktop-environment
