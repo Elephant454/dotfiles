@@ -123,6 +123,9 @@ print-circle t
 (tool-bar-mode 0)          ; remove the tool bar (New, Open, etc.)
 (global-auto-revert-mode)  ; auto-revert changes for any changes on disk
 
+;; Disable popping up the warning buffer while doing async native comp
+(custom-set-variables '(warning-suppress-types '((comp))))
+
 ;; Get rid of the titlebar CSD for Phosh
 (defun e454iel-remove-csd (frame)
     "Get rid of the Gnome titlebar on FRAME by toggling fullscreen on and off."
