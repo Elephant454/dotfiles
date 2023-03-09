@@ -3573,7 +3573,7 @@ normal-state."
 
 (use-package altcaps
   ;; The "m" stands for "mangle" and the "a" stands for "altcaps"
-  :general (e454iel-main-menu "mma"))
+  :general (e454iel-main-menu "mma" 'altcaps-dwim))
 
 ;; TODO: Disabled for now because it breaks Emacs 29
 (use-package go
