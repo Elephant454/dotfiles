@@ -3551,6 +3551,9 @@ normal-state."
 (use-package sx
   ;; TODO: Set up keybindings by just copying the default keymap and applying it
   ;;  to evil normal state
+  :general
+  (e454iel-main-menu
+    "ais" 'sx-search)
   )
 
 ;; Obfuscate text in ways that are still readable
