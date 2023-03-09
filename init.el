@@ -3796,7 +3796,7 @@ normal-state."
 
   :general
   (e454iel-main-menu
-    "aiy 'ytdious"))
+    "aiy" 'ytdious))
 
 (use-package desktop-environment
   :straight (desktop-environment
