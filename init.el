@@ -3697,7 +3697,9 @@ normal-state."
     "vd" 'pulseaudio-control-decrease-sink-volume
     "vm" 'pulseaudio-control-toggle-current-sink-mute))
 
-(use-package reddigg)
+(use-package reddigg
+  :general
+  (e454iel-main-menu "air" 'reddigg-view-sub))
 
 ;; TODO: Temporarily broken
 ;;(use-package md4rd)
