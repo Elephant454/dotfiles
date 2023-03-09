@@ -2170,7 +2170,7 @@ Lisp function does not specify a special indentation."
               "p" 'eww-buffer-show-previous)
             
             (e454iel-main-menu
-              "ai" 'eww)))
+              "aii" 'eww)))
 
 ;; Automatically resizes images to fit the window, because why not?
 (use-package image+
