@@ -692,6 +692,7 @@ This makes for easier reading of larger, denser bodies of text."
              (if (yes-or-no-p "Really restart Emacs? ") (restart-emacs)))
      
      "a" '(:ignore t :which-key "Applications")
+     "ai" '(:ignore t :which-key "Internet")
      "ap" 'epkg-list-packages
      "aP" (lambda() (interactive) (find-file
                                    (file-truename
