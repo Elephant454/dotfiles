@@ -243,6 +243,18 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
      (append (listify beginning) (listify list) (listify end)))
    lists))
 
+(defmacro singlet (varpair &rest body)
+  "single value let expression. bind the second value of `varpair'
+to the first value of `varpair' and evaluate `body' with this
+value bound."
+
+  ;; This tells Emacs that I want it to indent by one space the same way that a
+  ;;  regular let statement does
+  (declare (indent 1))
+
+  `(let ((,(car varpair) ,(cadr varpair)))
+     ,@body))
+
 (defmacro use-package-list (&rest packages)
   "Run use-package on each of the `PACKAGES'."
   (cons 'progn (append-to-lists packages 'use-package)))
@@ -680,6 +692,7 @@ This makes for easier reading of larger, denser bodies of text."
              (if (yes-or-no-p "Really restart Emacs? ") (restart-emacs)))
      
      "a" '(:ignore t :which-key "Applications")
+     "ai" '(:ignore t :which-key "Internet")
      "ap" 'epkg-list-packages
      "aP" (lambda() (interactive) (find-file
                                    (file-truename
@@ -1352,9 +1365,10 @@ _-_increase _=_decrease"
     (start-process-shell-command "dunst"
                                  nil
                                  "dunst")
-    (start-process-shell-command "compton"
+    ;; For transparency. This is a "compton" replacement
+    (start-process-shell-command "picom"
                                  nil
-                                 "compton")
+                                 "picom")
     (start-process-shell-command "xsettingsd"
                                  nil
                                  "xsettingsd")
@@ -1549,11 +1563,11 @@ unsorted."
             :config
             (progn
               (require 'evil-org-agenda)
-              (evil-org-agenda-set-keys))
-            :general
-            (:keymaps 'org-agenda-mode-map
-             :states '(normal motion)
-             "<SPC>" 'e454iel-main-menu-prefix))
+              (evil-org-agenda-set-keys)
+              (general-define-key
+               :keymaps 'org-agenda-mode-map
+               :states '(normal motion)
+               "<SPC>" 'e454iel-main-menu-prefix)))
 
           (use-package org-pomodoro)
           (use-package org-bullets)
@@ -1590,7 +1604,14 @@ unsorted."
               (add-hook 'org-mode-hook
                         (lambda ()
                           (add-hook 'post-command-hook
-                                    'org-rainbow-tags--apply-overlays nil t))))))
+                                    'org-rainbow-tags--apply-overlays nil t)))))
+
+          ;; For conditional manipulating or blocking manipulation of todo state
+          (use-package org-edna
+            :config
+            (progn
+              ;;(setq org-edna-use-inheritance t)
+              (org-edna-mode))))
 
   :config (progn
             (setq e454iel-documents-season "Fall")
@@ -1775,7 +1796,9 @@ calculated based on my configuration."
               "e" 'org-export-dispatch
               "E" 'org-edit-special
               "." 'org-time-stamp
-              ">" 'org-time-stamp-inactive
+              ;; This inserts an inactive timestamp with the time in it (the
+              ;;  '(4) bit is running the command with a universal argument)
+              "/" (lambda () (interactive) (org-time-stamp-inactive '(4)))
               "d" 'org-deadline
               "s" 'org-schedule
               "p" 'org-toggle-latex-fragment
@@ -2284,7 +2307,7 @@ Lisp function does not specify a special indentation."
               "p" 'eww-buffer-show-previous)
             
             (e454iel-main-menu
-              "ai" 'eww)))
+              "aii" 'eww)))
 
 ;; Automatically resizes images to fit the window, because why not?
 (use-package image+
@@ -2603,12 +2626,30 @@ Lisp function does not specify a special indentation."
             ;;(emms-default-players)
             (add-to-list 'emms-player-list 'emms-player-mpv)
             (setq emms-source-file-default-directory "~/Music/")
+
+            ;; TODO: This is an utter mess, and can clearly be cleaned TODO:
+            ;; TODO: This seems to prohibit playing videos that aren't offered
+            ;;  at this low of a resolution, which isn't what I want
+            (if e454iel-phone-p
+                (progn
+                  (add-to-list 'emms-player-mpv-parameters
+                               "-ao=alsa")
+                  (add-to-list 'emms-player-mpv-parameters
+                               "--ytdl-format='[height<420]'")))
+
+            (add-to-list 'emms-player-mpv-parameters
+                         "--save-position-on-quit")
+            (add-to-list 'emms-player-mpv-parameters
+                         "--write-filename-in-watch-later-config")
+
             (evil-collection-init 'emms)
+
             (use-package emms-mode-line-cycle
               :config (progn
                         (emms-mode-line 1)
                         (emms-playing-time 1)
                         (emms-mode-line-cycle 1))))
+
   :general (e454iel-main-menu
              "ames" 'emms-streams
              "amef" 'emms-play-file
@@ -2695,7 +2736,7 @@ Lisp function does not specify a special indentation."
             ;; The volume of feeds I'm working with necessitates a *much*
             ;;  more recent default view
             ;;  https://github.com/skeeto/elfeed/issues/317#issuecomment-491430753
-            (setq elfeed-search-filter "@2-minutes-ago +unread")
+            (setq elfeed-search-filter "@1-minutes-ago +unread")
 
             ;; This prevents from Elfeed from choking the main thread
             ;;  unnecessarily
@@ -2715,6 +2756,17 @@ Lisp function does not specify a special indentation."
               (elfeed-db-load)
               (elfeed)
               (elfeed-search-update--force))
+
+            ;; If we don't check for this, opening a new elfeed instance
+            ;;  discards database changes rather than saving them
+            (defun e454iel-run-or-raise-elfeed ()
+              "If the elfeed buffer exists, switch to it. Otherwise, open a new elfeed session."
+              (interactive)
+              (let ((elfeed-buffer (get-buffer "*elfeed-search*")))
+                (if elfeed-buffer
+                    (switch-to-buffer elfeed-buffer)
+                  ;; else
+                  (bjm/elfeed-load-db-and-open))))
 
             ;; Taken from
             ;;  http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
@@ -2745,12 +2797,18 @@ Lisp function does not specify a special indentation."
               "+" 'elfeed-search-tag-all
               "-" 'elfeed-search-untag-all)
 
-            (e454iel-main-menu "ar" 'bjm/elfeed-load-db-and-open)
+            (e454iel-main-menu "ar" 'e454iel-run-or-raise-elfeed)
 
             ;; This "unjams" elfeed-update if it runs for too long
-            ;;  https://reddit.com/r/emacs/comments/yjn76w/elfeed_bug/
-            (add-hook 'elfeed-update-init-hooks
-                      (lambda () (run-with-timer nil (* 60 5) #'elfeed-unjam)))))
+            ;;  https://reddit.com/r/emacs/comments/yjn76w/elfeed_bug/ Odds are
+            ;;  that I don't actually really want this, though. This will kill
+            ;;  long-running background jobs that may take a while to naturally
+            ;;  finish. I'm also not certain, but I think this causes freezes as
+            ;;  well, or something? A freshly created database doesn't seem to
+            ;;  like this for some reason.
+            ;;(add-hook 'elfeed-update-init-hooks (lambda ()
+            ;;  (run-with-timer nil (* 60 5) #'elfeed-unjam)))
+            ))
 
 (use-package arch-packer
   :config (setq arch-packer-default-command "pacaur"))
@@ -3639,16 +3697,21 @@ normal-state."
 (use-package sx
   ;; TODO: Set up keybindings by just copying the default keymap and applying it
   ;;  to evil normal state
+  :general
+  (e454iel-main-menu
+    "ais" 'sx-search)
   )
 
 ;; Obfuscate text in ways that are still readable
 (use-package fsc
   :init (use-package makey)
   :straight (fsc :host github :repo "kuanyui/fsc.el")
-  ;; The "o" stands for "obfuscate"
-  :general (e454iel-main-menu "mo" 'fsc/rearrange-region))
+  ;; The "m" stands for "mangle" and the "o" stands for "obfuscate"
+  :general (e454iel-main-menu "mmo" 'fsc/rearrange-region))
 
-(use-package altcaps)
+(use-package altcaps
+  ;; The "m" stands for "mangle" and the "a" stands for "altcaps"
+  :general (e454iel-main-menu "mma"))
 
 ;; TODO: Disabled for now because it breaks Emacs 29
 (use-package go
@@ -3679,7 +3742,12 @@ normal-state."
     :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
     :general (e454iel-main-menu "jw" 'ace-window))
 
-  :general (e454iel-main-menu "jc" 'avy-goto-char))
+  :general
+  (e454iel-main-menu
+    "jc" 'avy-goto-char
+    "jl" 'avy-goto-line
+    )
+  )
 
 (use-package scad-mode
   :config
@@ -3775,7 +3843,9 @@ normal-state."
     "vd" 'pulseaudio-control-decrease-sink-volume
     "vm" 'pulseaudio-control-toggle-current-sink-mute))
 
-(use-package reddigg)
+(use-package reddigg
+  :general
+  (e454iel-main-menu "air" 'reddigg-view-sub))
 
 ;; TODO: Temporarily broken
 ;;(use-package md4rd)
@@ -3818,6 +3888,53 @@ normal-state."
   :straight (youtube-sub-extractor
              :host github
              :repo "agzam/youtube-sub-extractor.el"))
+
+;; For searching YouTube videos
+(use-package ytdious
+  :config
+  (progn
+    (setq ytdious-invidious-api-url "https://inv.riverside.rocks/")
+
+  (defun e454iel-ytdious-get-current-video-url ()
+    (interactive
+     (kill-new (e454iel-ytdious-get-current-video-url)))
+
+    (let ((video-alist (ytdious-get-current-video)))
+      (format "https://www.youtube.com/watch?v=%s"
+              (cdr (assoc 'videoId video-alist)))))
+
+  (defun e454iel-ytdious-get-current-video-title-and-url ()
+    (interactive
+     (kill-new (e454iel-ytdious-get-current-video-title-and-url)))
+
+    (let ((video-alist (ytdious-get-current-video)))
+      (format "%s: https://www.youtube.com/watch?v=%s"
+              (cdr (assoc 'title video-alist))
+              (cdr (assoc 'videoId video-alist)))))
+
+  (defun e454iel-ytdious-org-kill-current-video ()
+   (interactive)
+   (kill-new
+    (let ((video-alist (ytdious-get-current-video)))
+      (format "[[%s - YouTube][https://www.youtube.com/watch?v=%s]]"
+              (cdr (assoc 'title video-alist))
+              (cdr (assoc 'videoId video-alist))))))
+
+  (general-define-key
+   :keymaps 'ytdious-mode-map
+   :states 'normal
+    "q" 'ytdious-quit
+    "<return>" 'ytdious-play
+    "S-<return>" 'ytdious-display-video-detail-popup
+    "o" 'ytdious-rotate-sort
+    "c" 'e454iel-ytdious-get-current-video-url
+    "C" 'e454iel-ytdious-org-kill-current-video
+    ">" 'ytdious-search-next-page
+    "<" 'ytdious-search-previous-page))
+
+  :general
+  (e454iel-main-menu
+    "aiy 'ytdious"))
 
 (use-package desktop-environment
   :straight (desktop-environment
@@ -3919,6 +4036,11 @@ normal-state."
 
 (use-package bluetooth
   :general (e454iel-main-menu "tb" 'bluetooth-list-devices))
+
+(use-package mediawiki)
+
+;; For diffing directories!
+(use-package ztree)
 
 (provide 'init)
 ;;; init.el ends here
