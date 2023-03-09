@@ -123,6 +123,9 @@ print-circle t
 (tool-bar-mode 0)          ; remove the tool bar (New, Open, etc.)
 (global-auto-revert-mode)  ; auto-revert changes for any changes on disk
 
+;; Disable popping up the warning buffer while doing async native comp
+(custom-set-variables '(warning-suppress-types '((comp))))
+
 ;; Get rid of the titlebar CSD for Phosh
 (defun e454iel-remove-csd (frame)
     "Get rid of the Gnome titlebar on FRAME by toggling fullscreen on and off."
@@ -1156,6 +1159,8 @@ _-_increase _=_decrease"
 ;;  nice with eyebrowse. See if I can apply that patch as advice in this file
 ;;  instead (or if that patch has been merged yet)
 (use-package exwm
+  :straight (exwm :host github :repo "ch11ng/exwm")
+
   :if (or
        (string= (system-name) "Desktop.Guix.Maddie")
        (string= (system-name) "Laptop-Manjaro-Maddie"))
@@ -3530,7 +3535,10 @@ normal-state."
     (general-define-key
      :keymaps 'helpful-mode-map
      :states 'normal 
-      "q" 'quit-window)))
+      "q" 'quit-window))
+
+  :general ([remap describe-function] 'helpful-callable
+            [remap describe-variable] 'helpful-variable))
 
 ;; With tweaking, this generates Emacs themes based on the current desktop background
 (use-package ewal
@@ -3711,7 +3719,7 @@ normal-state."
 
 (use-package altcaps
   ;; The "m" stands for "mangle" and the "a" stands for "altcaps"
-  :general (e454iel-main-menu "mma"))
+  :general (e454iel-main-menu "mma" 'altcaps-dwim))
 
 ;; TODO: Disabled for now because it breaks Emacs 29
 (use-package go
@@ -3934,7 +3942,7 @@ normal-state."
 
   :general
   (e454iel-main-menu
-    "aiy 'ytdious"))
+    "aiy" 'ytdious))
 
 (use-package desktop-environment
   :straight (desktop-environment
