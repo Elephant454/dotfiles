@@ -3389,7 +3389,10 @@ normal-state."
     (general-define-key
      :keymaps 'helpful-mode-map
      :states 'normal 
-      "q" 'quit-window)))
+      "q" 'quit-window))
+
+  :general ([remap describe-function] 'helpful-callable
+            [remap describe-variable] 'helpful-variable))
 
 ;; With tweaking, this generates Emacs themes based on the current desktop background
 (use-package ewal
