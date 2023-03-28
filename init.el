@@ -612,9 +612,8 @@ This makes for easier reading of larger, denser bodies of text."
      "bp" 'popwin:display-buffer          ; display a buffer using popwin
      ;; I might want to look into how immortal-scratch-buffer handles this
      "bs" '(lambda() (interactive) (switch-to-buffer "*scratch*"))
-     "bh" '(lambda() (interactive) (progn
-                                     (switch-to-buffer "*dashboard*")
-                                     (dashboard-refresh-buffer)))
+     "bh" 'previous-buffer
+     "bl" 'next-buffer
      ;; TODO: Make it so I can use space in ibuffer. There's no reason why I
      ;;  should be able to.
      "bi" 'ibuffer
@@ -1621,8 +1620,16 @@ unsorted."
   :config (progn
             (setq e454iel-documents-season "Fall")
 
-            (defvar e454iel-extra-org-agenda-files
-              '("~/org/birthdays.org" "~/org/derp.org" "~/org/holidays.org"))
+            (defvar e454iel-extra-org-agenda-files)
+            (setq e454iel-extra-org-agenda-files
+              '("~/org/birthdays.org" "~/org/derp.org" "~/org/holidays.org"
+                "~/org/ArticlesToRead.org"
+                "~/org/WikipediaArticles.org"
+                "~/org/3dPrintingProjects.org"
+                "~/org/fun.org"
+                "~/org/scp.org"
+                "~/org/cookbook.org"
+                "~/org/music.org"))
 
             (defvar e454iel-documents-org-agenda-file-pattern
               "\\(.*todo.org\\|.*events.org\\|.*schedule.org\\)$")
@@ -1667,6 +1674,9 @@ calculated based on my configuration."
                       ((org-agenda-tag-filter-preset '("-OtherAgenda")))))))
 
             (setq org-agenda-span 'day)
+
+            ;; Don't scatter around my buffers when opening up the agenda
+            (setq org-agenda-window-setup 'current-window)
 
             (setq org-capture-templates
                   `(("t" "TODO" entry
@@ -1772,8 +1782,10 @@ calculated based on my configuration."
              "oj" 'org-journal-new-entry
              "o C-c" 'org-capture
              "ok" 'org-capture
-             "oc" 'org-clock-in-last
-             "oC" 'org-clock-out
+             "oc" '(:ignore t :which-key "Clock")
+             "oci" 'org-clock-in-last
+             "oco" 'org-clock-out
+             "ocj" 'org-clock-goto
              "oy" 'org-store-link
              "op" 'org-insert-last-stored-link)
 
@@ -1808,8 +1820,10 @@ calculated based on my configuration."
               "s" 'org-schedule
               "p" 'org-toggle-latex-fragment
               "b" 'org-babel-execute-src-block
-              "c" 'org-clock-in
-              "C" 'org-clock-out)))
+              "c" '(:ignore t :which-key "Clock")
+              "ci" 'org-clock-in
+              "co" 'org-clock-out
+              "cj" 'org-clock-goto)))
 
 (use-package open-junk-file
   :config (progn
@@ -4049,6 +4063,24 @@ normal-state."
 
 ;; For diffing directories!
 (use-package ztree)
+
+;; TODO: Set the width and height size to be based on the number of characters.
+;;  This isn't characters at the moment, but some other sort of unit of size
+;; https://depp.brause.cc/shackle/
+(use-package shackle
+  :config (progn
+            (setq shackle-default-rule '(:same t))
+            (setq shackle-rules
+                  '((helpful-mode :same nil :align right :size 85)
+                    ("*Org Select*" :same nil :align right :size 85)
+                    ("CAPTURE.*.org" :regexp t :same nil :align right :size 85)
+                    (" *Agenda Commands*" :same nil :align right :size 85)
+                    (calendar-mode :same nil :align right :size 85)
+                    ("magit: .*" :regexp t :same nil :align right :size 85)
+                    ("*Backtrace*" :same nil :align bottom :size 30)
+                    ("*Ement compose: .*" :regexp t :align bottom :size 7)
+                    ))
+            ))
 
 (provide 'init)
 ;;; init.el ends here
