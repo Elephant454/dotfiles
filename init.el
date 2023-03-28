@@ -612,9 +612,8 @@ This makes for easier reading of larger, denser bodies of text."
      "bp" 'popwin:display-buffer          ; display a buffer using popwin
      ;; I might want to look into how immortal-scratch-buffer handles this
      "bs" '(lambda() (interactive) (switch-to-buffer "*scratch*"))
-     "bh" '(lambda() (interactive) (progn
-                                     (switch-to-buffer "*dashboard*")
-                                     (dashboard-refresh-buffer)))
+     "bh" 'previous-buffer
+     "bl" 'next-buffer
      ;; TODO: Make it so I can use space in ibuffer. There's no reason why I
      ;;  should be able to.
      "bi" 'ibuffer
