@@ -1537,6 +1537,9 @@ calculated based on my configuration."
 
             (setq org-agenda-span 'day)
 
+            ;; Don't scatter around my buffers when opening up the agenda
+            (setq org-agenda-window-setup 'current-window)
+
             (setq org-capture-templates
                   `(("t" "TODO" entry
                      (file+headline ,(concat e454iel-documents-dir "/todo.org") "Unsorted")
