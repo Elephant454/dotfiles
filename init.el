@@ -1644,8 +1644,10 @@ calculated based on my configuration."
              "oj" 'org-journal-new-entry
              "o C-c" 'org-capture
              "ok" 'org-capture
-             "oc" 'org-clock-in-last
-             "oC" 'org-clock-out
+             "oc" '(:ignore t :which-key "Clock")
+             "oci" 'org-clock-in-last
+             "oco" 'org-clock-out
+             "ocj" 'org-clock-goto
              "oy" 'org-store-link
              "op" 'org-insert-last-stored-link)
 
@@ -1680,8 +1682,10 @@ calculated based on my configuration."
               "s" 'org-schedule
               "p" 'org-toggle-latex-fragment
               "b" 'org-babel-execute-src-block
-              "c" 'org-clock-in
-              "C" 'org-clock-out)))
+              "c" '(:ignore t :which-key "Clock")
+              "ci" 'org-clock-in
+              "co" 'org-clock-out
+              "cj" 'org-clock-goto)))
 
 (use-package open-junk-file
   :config (progn
