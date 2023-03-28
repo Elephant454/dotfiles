@@ -1482,8 +1482,16 @@ unsorted."
   :config (progn
             (setq e454iel-documents-season "Fall")
 
-            (defvar e454iel-extra-org-agenda-files
-              '("~/org/birthdays.org" "~/org/derp.org" "~/org/holidays.org"))
+            (defvar e454iel-extra-org-agenda-files)
+            (setq e454iel-extra-org-agenda-files
+              '("~/org/birthdays.org" "~/org/derp.org" "~/org/holidays.org"
+                "~/org/ArticlesToRead.org"
+                "~/org/WikipediaArticles.org"
+                "~/org/3dPrintingProjects.org"
+                "~/org/fun.org"
+                "~/org/scp.org"
+                "~/org/cookbook.org"
+                "~/org/music.org"))
 
             (defvar e454iel-documents-org-agenda-file-pattern
               "\\(.*todo.org\\|.*events.org\\|.*schedule.org\\)$")
