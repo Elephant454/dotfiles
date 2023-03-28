@@ -3918,5 +3918,23 @@ normal-state."
 ;; For diffing directories!
 (use-package ztree)
 
+;; TODO: Set the width and height size to be based on the number of characters.
+;;  This isn't characters at the moment, but some other sort of unit of size
+;; https://depp.brause.cc/shackle/
+(use-package shackle
+  :config (progn
+            (setq shackle-default-rule '(:same t))
+            (setq shackle-rules
+                  '((helpful-mode :same nil :align right :size 85)
+                    ("*Org Select*" :same nil :align right :size 85)
+                    ("CAPTURE.*.org" :regexp t :same nil :align right :size 85)
+                    (" *Agenda Commands*" :same nil :align right :size 85)
+                    (calendar-mode :same nil :align right :size 85)
+                    ("magit: .*" :regexp t :same nil :align right :size 85)
+                    ("*Backtrace*" :same nil :align bottom :size 30)
+                    ("*Ement compose: .*" :regexp t :align bottom :size 7)
+                    ))
+            ))
+
 (provide 'init)
 ;;; init.el ends here
