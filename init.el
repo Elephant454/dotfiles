@@ -4080,6 +4080,7 @@ normal-state."
                     ("*Backtrace*" :same nil :align bottom :size 30)
                     ("*Ement compose: .*" :regexp t :align bottom :size 7)
                     ))
+            (shackle-mode)
             ))
 
 (provide 'init)
