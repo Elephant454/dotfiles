@@ -123,6 +123,9 @@ print-circle t
 (tool-bar-mode 0)          ; remove the tool bar (New, Open, etc.)
 (global-auto-revert-mode)  ; auto-revert changes for any changes on disk
 
+;; Disable popping up the warning buffer while doing async native comp
+(custom-set-variables '(warning-suppress-types '((comp))))
+
 ;; Get rid of the titlebar CSD for Phosh
 (defun e454iel-remove-csd (frame)
     "Get rid of the Gnome titlebar on FRAME by toggling fullscreen on and off."
@@ -243,14 +246,17 @@ Lists in `LISTS' that are not lists will be listified by `listify'."
      (append (listify beginning) (listify list) (listify end)))
    lists))
 
-;; TODO: This assumes `BODY' is a single expression. There is no implicit progn
-;;  functionality here.
-(defmacro singlet (varpair body)
-  "Single value let expression. Bind the second value of `VARPAIR'
-to the first value of `VARPAIR' and evaluate `body' with this
+(defmacro singlet (varpair &rest body)
+  "single value let expression. bind the second value of `varpair'
+to the first value of `varpair' and evaluate `body' with this
 value bound."
+
+  ;; This tells Emacs that I want it to indent by one space the same way that a
+  ;;  regular let statement does
+  (declare (indent 1))
+
   `(let ((,(car varpair) ,(cadr varpair)))
-     ,body))
+     ,@body))
 
 (defmacro use-package-list (&rest packages)
   "Run use-package on each of the `PACKAGES'."
@@ -606,9 +612,8 @@ This makes for easier reading of larger, denser bodies of text."
      "bp" 'popwin:display-buffer          ; display a buffer using popwin
      ;; I might want to look into how immortal-scratch-buffer handles this
      "bs" '(lambda() (interactive) (switch-to-buffer "*scratch*"))
-     "bh" '(lambda() (interactive) (progn
-                                     (switch-to-buffer "*dashboard*")
-                                     (dashboard-refresh-buffer)))
+     "bh" 'previous-buffer
+     "bl" 'next-buffer
      ;; TODO: Make it so I can use space in ibuffer. There's no reason why I
      ;;  should be able to.
      "bi" 'ibuffer
@@ -689,6 +694,7 @@ This makes for easier reading of larger, denser bodies of text."
              (if (yes-or-no-p "Really restart Emacs? ") (restart-emacs)))
      
      "a" '(:ignore t :which-key "Applications")
+     "ai" '(:ignore t :which-key "Internet")
      "ap" 'epkg-list-packages
      "aP" (lambda() (interactive) (find-file
                                    (file-truename
@@ -1014,6 +1020,8 @@ _-_increase _=_decrease"
 ;;  nice with eyebrowse. See if I can apply that patch as advice in this file
 ;;  instead (or if that patch has been merged yet)
 (use-package exwm
+  :straight (exwm :host github :repo "ch11ng/exwm")
+
   :if (or
        (string= (system-name) "Desktop.Guix.Maddie")
        (string= (system-name) "Laptop-Manjaro-Maddie"))
@@ -1223,9 +1231,10 @@ _-_increase _=_decrease"
     (start-process-shell-command "dunst"
                                  nil
                                  "dunst")
-    (start-process-shell-command "compton"
+    ;; For transparency. This is a "compton" replacement
+    (start-process-shell-command "picom"
                                  nil
-                                 "compton")
+                                 "picom")
     (start-process-shell-command "xsettingsd"
                                  nil
                                  "xsettingsd")
@@ -1473,8 +1482,16 @@ unsorted."
   :config (progn
             (setq e454iel-documents-season "Fall")
 
-            (defvar e454iel-extra-org-agenda-files
-              '("~/org/birthdays.org" "~/org/derp.org" "~/org/holidays.org"))
+            (defvar e454iel-extra-org-agenda-files)
+            (setq e454iel-extra-org-agenda-files
+              '("~/org/birthdays.org" "~/org/derp.org" "~/org/holidays.org"
+                "~/org/ArticlesToRead.org"
+                "~/org/WikipediaArticles.org"
+                "~/org/3dPrintingProjects.org"
+                "~/org/fun.org"
+                "~/org/scp.org"
+                "~/org/cookbook.org"
+                "~/org/music.org"))
 
             (defvar e454iel-documents-org-agenda-file-pattern
               "\\(.*todo.org\\|.*events.org\\|.*schedule.org\\)$")
@@ -1519,6 +1536,9 @@ calculated based on my configuration."
                       ((org-agenda-tag-filter-preset '("-OtherAgenda")))))))
 
             (setq org-agenda-span 'day)
+
+            ;; Don't scatter around my buffers when opening up the agenda
+            (setq org-agenda-window-setup 'current-window)
 
             (setq org-capture-templates
                   `(("t" "TODO" entry
@@ -1624,8 +1644,10 @@ calculated based on my configuration."
              "oj" 'org-journal-new-entry
              "o C-c" 'org-capture
              "ok" 'org-capture
-             "oc" 'org-clock-in-last
-             "oC" 'org-clock-out
+             "oc" '(:ignore t :which-key "Clock")
+             "oci" 'org-clock-in-last
+             "oco" 'org-clock-out
+             "ocj" 'org-clock-goto
              "oy" 'org-store-link
              "op" 'org-insert-last-stored-link)
 
@@ -1660,8 +1682,10 @@ calculated based on my configuration."
               "s" 'org-schedule
               "p" 'org-toggle-latex-fragment
               "b" 'org-babel-execute-src-block
-              "c" 'org-clock-in
-              "C" 'org-clock-out)))
+              "c" '(:ignore t :which-key "Clock")
+              "ci" 'org-clock-in
+              "co" 'org-clock-out
+              "cj" 'org-clock-goto)))
 
 (use-package open-junk-file
   :config (progn
@@ -2165,7 +2189,7 @@ Lisp function does not specify a special indentation."
               "p" 'eww-buffer-show-previous)
             
             (e454iel-main-menu
-              "ai" 'eww)))
+              "aii" 'eww)))
 
 ;; Automatically resizes images to fit the window, because why not?
 (use-package image+
@@ -2478,12 +2502,30 @@ Lisp function does not specify a special indentation."
             ;;(emms-default-players)
             (add-to-list 'emms-player-list 'emms-player-mpv)
             (setq emms-source-file-default-directory "~/Music/")
+
+            ;; TODO: This is an utter mess, and can clearly be cleaned TODO:
+            ;; TODO: This seems to prohibit playing videos that aren't offered
+            ;;  at this low of a resolution, which isn't what I want
+            (if e454iel-phone-p
+                (progn
+                  (add-to-list 'emms-player-mpv-parameters
+                               "-ao=alsa")
+                  (add-to-list 'emms-player-mpv-parameters
+                               "--ytdl-format='[height<420]'")))
+
+            (add-to-list 'emms-player-mpv-parameters
+                         "--save-position-on-quit")
+            (add-to-list 'emms-player-mpv-parameters
+                         "--write-filename-in-watch-later-config")
+
             (evil-collection-init 'emms)
+
             (use-package emms-mode-line-cycle
               :config (progn
                         (emms-mode-line 1)
                         (emms-playing-time 1)
                         (emms-mode-line-cycle 1))))
+
   :general (e454iel-main-menu
              "ames" 'emms-streams
              "amef" 'emms-play-file
@@ -3367,7 +3409,10 @@ normal-state."
     (general-define-key
      :keymaps 'helpful-mode-map
      :states 'normal 
-      "q" 'quit-window)))
+      "q" 'quit-window))
+
+  :general ([remap describe-function] 'helpful-callable
+            [remap describe-variable] 'helpful-variable))
 
 ;; With tweaking, this generates Emacs themes based on the current desktop background
 (use-package ewal
@@ -3534,16 +3579,21 @@ normal-state."
 (use-package sx
   ;; TODO: Set up keybindings by just copying the default keymap and applying it
   ;;  to evil normal state
+  :general
+  (e454iel-main-menu
+    "ais" 'sx-search)
   )
 
 ;; Obfuscate text in ways that are still readable
 (use-package fsc
   :init (use-package makey)
   :straight (fsc :host github :repo "kuanyui/fsc.el")
-  ;; The "o" stands for "obfuscate"
-  :general (e454iel-main-menu "mo" 'fsc/rearrange-region))
+  ;; The "m" stands for "mangle" and the "o" stands for "obfuscate"
+  :general (e454iel-main-menu "mmo" 'fsc/rearrange-region))
 
-(use-package altcaps)
+(use-package altcaps
+  ;; The "m" stands for "mangle" and the "a" stands for "altcaps"
+  :general (e454iel-main-menu "mma" 'altcaps-dwim))
 
 ;; TODO: Disabled for now because it breaks Emacs 29
 (use-package go
@@ -3574,7 +3624,12 @@ normal-state."
     :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
     :general (e454iel-main-menu "jw" 'ace-window))
 
-  :general (e454iel-main-menu "jc" 'avy-goto-char))
+  :general
+  (e454iel-main-menu
+    "jc" 'avy-goto-char
+    "jl" 'avy-goto-line
+    )
+  )
 
 (use-package scad-mode
   :config
@@ -3670,7 +3725,9 @@ normal-state."
     "vd" 'pulseaudio-control-decrease-sink-volume
     "vm" 'pulseaudio-control-toggle-current-sink-mute))
 
-(use-package reddigg)
+(use-package reddigg
+  :general
+  (e454iel-main-menu "air" 'reddigg-view-sub))
 
 ;; TODO: Temporarily broken
 ;;(use-package md4rd)
@@ -3718,7 +3775,48 @@ normal-state."
 (use-package ytdious
   :config
   (progn
-    (setq ytdious-invidious-api-url "https://inv.riverside.rocks/")))
+    (setq ytdious-invidious-api-url "https://inv.riverside.rocks/")
+
+  (defun e454iel-ytdious-get-current-video-url ()
+    (interactive
+     (kill-new (e454iel-ytdious-get-current-video-url)))
+
+    (let ((video-alist (ytdious-get-current-video)))
+      (format "https://www.youtube.com/watch?v=%s"
+              (cdr (assoc 'videoId video-alist)))))
+
+  (defun e454iel-ytdious-get-current-video-title-and-url ()
+    (interactive
+     (kill-new (e454iel-ytdious-get-current-video-title-and-url)))
+
+    (let ((video-alist (ytdious-get-current-video)))
+      (format "%s: https://www.youtube.com/watch?v=%s"
+              (cdr (assoc 'title video-alist))
+              (cdr (assoc 'videoId video-alist)))))
+
+  (defun e454iel-ytdious-org-kill-current-video ()
+   (interactive)
+   (kill-new
+    (let ((video-alist (ytdious-get-current-video)))
+      (format "[[%s - YouTube][https://www.youtube.com/watch?v=%s]]"
+              (cdr (assoc 'title video-alist))
+              (cdr (assoc 'videoId video-alist))))))
+
+  (general-define-key
+   :keymaps 'ytdious-mode-map
+   :states 'normal
+    "q" 'ytdious-quit
+    "<return>" 'ytdious-play
+    "S-<return>" 'ytdious-display-video-detail-popup
+    "o" 'ytdious-rotate-sort
+    "c" 'e454iel-ytdious-get-current-video-url
+    "C" 'e454iel-ytdious-org-kill-current-video
+    ">" 'ytdious-search-next-page
+    "<" 'ytdious-search-previous-page))
+
+  :general
+  (e454iel-main-menu
+    "aiy" 'ytdious))
 
 (use-package desktop-environment
   :straight (desktop-environment
@@ -3822,6 +3920,28 @@ normal-state."
   :general (e454iel-main-menu "tb" 'bluetooth-list-devices))
 
 (use-package mediawiki)
+
+;; For diffing directories!
+(use-package ztree)
+
+;; TODO: Set the width and height size to be based on the number of characters.
+;;  This isn't characters at the moment, but some other sort of unit of size
+;; https://depp.brause.cc/shackle/
+(use-package shackle
+  :config (progn
+            (setq shackle-default-rule '(:same t))
+            (setq shackle-rules
+                  '((helpful-mode :same nil :align right :size 85)
+                    ("*Org Select*" :same nil :align right :size 85)
+                    ("CAPTURE.*.org" :regexp t :same nil :align right :size 85)
+                    (" *Agenda Commands*" :same nil :align right :size 85)
+                    (calendar-mode :same nil :align right :size 85)
+                    ("magit: .*" :regexp t :same nil :align right :size 85)
+                    ("*Backtrace*" :same nil :align bottom :size 30)
+                    ("*Ement compose: .*" :regexp t :align bottom :size 7)
+                    ))
+            (shackle-mode)
+            ))
 
 (provide 'init)
 ;;; init.el ends here
