@@ -3191,6 +3191,12 @@ Lisp function does not specify a special indentation."
     ;; TODO: This is a temporary fix for vuiet while LastFM.el is getting
     ;;  updated to work with DickMao's version of request.el. Remove once
     ;;  LastFM.el is fixed
+
+    ;; TODO: This seems to either need the ~/.config/.lastfmrc file to exist as
+    ;;  described in the readme, or needs (lastfm-generate-session-key) to be
+    ;;  run before first use. If it's the former, it'd be nice to write a piece
+    ;;  of configuration to automatically create this file if it doesn't exist
+    ;;  using the values from my secret file
     (use-package lastfm
       :init
       (use-package request
