@@ -1471,7 +1471,7 @@ unsorted."
               (org-edna-mode))))
 
   :config (progn
-            (setq e454iel-documents-season "Fall")
+            (setq e454iel-documents-season "Spring")
 
             (defvar e454iel-extra-org-agenda-files
               '("~/org/birthdays.org" "~/org/derp.org" "~/org/holidays.org"))
@@ -1486,7 +1486,7 @@ on my configuration."
               (setq e454iel-documents-dir
                     (concat "~/Documents/"
                             ;;(int-to-string (nth 5 (decode-time))) ; the current year
-                            "2021"
+                            "2023"
                             "/"
                             e454iel-documents-season)))
 
