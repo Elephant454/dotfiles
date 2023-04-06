@@ -631,7 +631,7 @@ This makes for easier reading of larger, denser bodies of text."
      "fv" '(lambda() (interactive) (find-file
                                     (concat
                                      (file-truename e454iel-documents-dir)
-                                     "/Vaccine/StateVaccineRecord.png")))
+                                     "/vaccine/StateVaccineRecord.png")))
      "fb" '(:ignore t :which-key "Bookmark")
      "fbs" 'bookmark-set
      "fbj" 'bookmark-jump
@@ -1618,7 +1618,7 @@ unsorted."
               (org-edna-mode))))
 
   :config (progn
-            (setq e454iel-documents-season "Fall")
+            (setq e454iel-documents-season "Spring")
 
             (defvar e454iel-extra-org-agenda-files)
             (setq e454iel-extra-org-agenda-files
@@ -1641,7 +1641,7 @@ on my configuration."
               (setq e454iel-documents-dir
                     (concat "~/Documents/"
                             ;;(int-to-string (nth 5 (decode-time))) ; the current year
-                            "2021"
+                            "2023"
                             "/"
                             e454iel-documents-season)))
 
@@ -3394,10 +3394,10 @@ Lisp function does not specify a special indentation."
       :config
       (progn
         (load-library "mpv")
-        ;; TODO: For whatever reason, it needs mpd to be started once before use.
+        ;; TODO: For whatever reason, it needs mpv to be started once before use.
         ;;  This call isn't sufficient, but starting it in a shell with `shell'
         ;;  for some reason is
-        (start-process-shell-command "mpd" nil "mpd"))))
+        (start-process-shell-command "mpv" nil "mpv"))))
 
   :config
   (progn
