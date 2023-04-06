@@ -626,7 +626,7 @@ This makes for easier reading of larger, denser bodies of text."
      "fv" '(lambda() (interactive) (find-file
                                     (concat
                                      (file-truename e454iel-documents-dir)
-                                     "/Vaccine/StateVaccineRecord.png")))
+                                     "/vaccine/StateVaccineRecord.png")))
      "fb" '(:ignore t :which-key "Bookmark")
      "fbs" 'bookmark-set
      "fbj" 'bookmark-jump
