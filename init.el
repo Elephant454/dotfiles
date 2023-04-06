@@ -3213,10 +3213,10 @@ Lisp function does not specify a special indentation."
       :config
       (progn
         (load-library "mpv")
-        ;; TODO: For whatever reason, it needs mpd to be started once before use.
+        ;; TODO: For whatever reason, it needs mpv to be started once before use.
         ;;  This call isn't sufficient, but starting it in a shell with `shell'
         ;;  for some reason is
-        (start-process-shell-command "mpd" nil "mpd"))))
+        (start-process-shell-command "mpv" nil "mpv"))))
 
   :config
   (progn
