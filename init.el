@@ -1504,7 +1504,7 @@ on my configuration."
               (setq e454iel-documents-dir
                     (concat "~/Documents/"
                             ;;(int-to-string (nth 5 (decode-time))) ; the current year
-                            "2021"
+                            e454iel-documents-year
                             "/"
                             e454iel-documents-season)))
 
