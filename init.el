@@ -1480,7 +1480,8 @@ unsorted."
               (org-edna-mode))))
 
   :config (progn
-            (setq e454iel-documents-season "Fall")
+            (setq e454iel-documents-season "Spring")
+            (setq e454iel-documents-year "2023")
 
             (defvar e454iel-extra-org-agenda-files)
             (setq e454iel-extra-org-agenda-files
