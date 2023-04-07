@@ -1522,8 +1522,7 @@ calculated based on my configuration."
                          (directory-files-recursively
                           e454iel-documents-dir
                           e454iel-documents-org-agenda-file-pattern
-                          nil))
-                     org-agenda-files)))
+                          nil)))))
 
             (e454iel-set-org-agenda-files)
 
