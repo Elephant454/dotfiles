@@ -1619,6 +1619,7 @@ unsorted."
 
   :config (progn
             (setq e454iel-documents-season "Spring")
+            (setq e454iel-documents-year "2023")
 
             (defvar e454iel-extra-org-agenda-files)
             (setq e454iel-extra-org-agenda-files
@@ -1641,7 +1642,7 @@ on my configuration."
               (setq e454iel-documents-dir
                     (concat "~/Documents/"
                             ;;(int-to-string (nth 5 (decode-time))) ; the current year
-                            "2023"
+                            e454iel-documents-year
                             "/"
                             e454iel-documents-season)))
 
@@ -1659,8 +1660,7 @@ calculated based on my configuration."
                          (directory-files-recursively
                           e454iel-documents-dir
                           e454iel-documents-org-agenda-file-pattern
-                          nil))
-                     org-agenda-files)))
+                          nil)))))
 
             (e454iel-set-org-agenda-files)
 
