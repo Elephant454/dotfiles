@@ -3917,7 +3917,12 @@ normal-state."
                         :local-repo "pipewire-0"))
 
 (use-package bluetooth
-  :general (e454iel-main-menu "tb" 'bluetooth-list-devices))
+  :general (e454iel-main-menu "tb" 'bluetooth-list-devices)
+  :general (:keymaps 'bluetooth-mode-map
+            :states 'normal
+            "<return>" 'bluetooth-connect
+            "p" 'bluetooth-pair
+            "d" 'bluetooth-disconnect))
 
 (use-package mediawiki)
 
