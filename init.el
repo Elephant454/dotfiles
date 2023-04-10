@@ -1481,6 +1481,7 @@ unsorted."
 
   :config (progn
             (setq e454iel-documents-season "Spring")
+            (setq e454iel-documents-year "2023")
 
             (defvar e454iel-extra-org-agenda-files)
             (setq e454iel-extra-org-agenda-files
@@ -1503,7 +1504,7 @@ on my configuration."
               (setq e454iel-documents-dir
                     (concat "~/Documents/"
                             ;;(int-to-string (nth 5 (decode-time))) ; the current year
-                            "2023"
+                            e454iel-documents-year
                             "/"
                             e454iel-documents-season)))
 
@@ -1521,8 +1522,7 @@ calculated based on my configuration."
                          (directory-files-recursively
                           e454iel-documents-dir
                           e454iel-documents-org-agenda-file-pattern
-                          nil))
-                     org-agenda-files)))
+                          nil)))))
 
             (e454iel-set-org-agenda-files)
 
@@ -3988,6 +3988,44 @@ normal-state."
 
             (shackle-mode)
             ))
+
+;; TODO: See if I can use xwidgete's self-insert commands to have text insertion
+;;  work in insert mode
+(use-package xwidget
+  :straight (xwidget :type built-in)
+
+  :init
+  (progn
+    (use-package xwwp))
+
+  :config
+  (progn
+    (evil-collection-init 'xwidget)
+    (setq xwwp-search-prefix "https://duckduckgo.com/?q="))
+
+  :general
+  (e454iel-main-menu "aiI" 'xwwp)
+
+  :general
+  (:keymaps 'xwidget-webkit-mode-map
+   [remap xwidget-webkit-browse-url] 'xwwp
+   )
+
+  :general
+  (:keymaps 'xwidget-webkit-mode-map
+   :states 'normal
+   ;; Call xwwp with a universal argument, asking it to create a new xwidget
+   ;;  session and new buffer
+   "O" (lambda ()
+         (interactive)
+         (let ((current-prefix-arg 4))
+           (call-interactively 'xwwp)))
+
+   "d" 'evil-collection-xwidget-webkit-close-tab
+   "u" 'evil-collection-xwidget-webkit-restore-last-closed-tab
+   "c" 'xwidget-webkit-current-url
+   "f" 'xwwp-follow-link
+   ))
 
 (provide 'init)
 ;;; init.el ends here
