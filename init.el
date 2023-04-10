@@ -4089,5 +4089,43 @@ normal-state."
             (shackle-mode)
             ))
 
+;; TODO: See if I can use xwidgete's self-insert commands to have text insertion
+;;  work in insert mode
+(use-package xwidget
+  :straight (xwidget :type built-in)
+
+  :init
+  (progn
+    (use-package xwwp))
+
+  :config
+  (progn
+    (evil-collection-init 'xwidget)
+    (setq xwwp-search-prefix "https://duckduckgo.com/?q="))
+
+  :general
+  (e454iel-main-menu "aiI" 'xwwp)
+
+  :general
+  (:keymaps 'xwidget-webkit-mode-map
+   [remap xwidget-webkit-browse-url] 'xwwp
+   )
+
+  :general
+  (:keymaps 'xwidget-webkit-mode-map
+   :states 'normal
+   ;; Call xwwp with a universal argument, asking it to create a new xwidget
+   ;;  session and new buffer
+   "O" (lambda ()
+         (interactive)
+         (let ((current-prefix-arg 4))
+           (call-interactively 'xwwp)))
+
+   "d" 'evil-collection-xwidget-webkit-close-tab
+   "u" 'evil-collection-xwidget-webkit-restore-last-closed-tab
+   "c" 'xwidget-webkit-current-url
+   "f" 'xwwp-follow-link
+   ))
+
 (provide 'init)
 ;;; init.el ends here
