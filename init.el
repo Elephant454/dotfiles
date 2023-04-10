@@ -3935,16 +3935,57 @@ normal-state."
 (use-package shackle
   :config (progn
             (setq shackle-default-rule '(:same t))
+
+            (setq e454iel-shackle-primary-alignment 'right)
+            (setq e454iel-shackle-secondary-alignment 'bottom)
+            (setq e454iel-shackle-primary-size 85)
+            (setq e454iel-shackle-secondary-size 30)
+            (setq e454iel-shackle-chat-box-size 7)
+
+            (if e454iel-phone-p
+                (progn
+                  (setq e454iel-shackle-primary-alignment 'top)
+                  (setq e454iel-shackle-secondary-alignment 'bottom)
+                  (setq e454iel-shackle-primary-size 15)
+                  (setq e454iel-shackle-secondary-size 15)
+                  (setq e454iel-shackle-chat-box-size 7)))
+
             (setq shackle-rules
-                  '((helpful-mode :same nil :align right :size 85)
-                    ("*Org Select*" :same nil :align right :size 85)
-                    ("CAPTURE.*.org" :regexp t :same nil :align right :size 85)
-                    (" *Agenda Commands*" :same nil :align right :size 85)
-                    (calendar-mode :same nil :align right :size 85)
-                    ("magit: .*" :regexp t :same nil :align right :size 85)
-                    ("*Backtrace*" :same nil :align bottom :size 30)
-                    ("*Ement compose: .*" :regexp t :align bottom :size 7)
-                    ))
+                  `((helpful-mode :same nil
+                                  :align ,e454iel-shackle-primary-alignment
+                                  :size ,e454iel-shackle-primary-size)
+                    ("*Org Select*" :same nil
+                                    :align ,e454iel-shackle-primary-alignment
+                                    :size ,e454iel-shackle-primary-size)
+                    ("CAPTURE.*.org" :regexp t
+                                     :same nil
+                                     :align ,e454iel-shackle-primary-alignment
+                                     :size ,e454iel-shackle-primary-size)
+                    (" *Agenda Commands*" :same nil
+                                          :align ,e454iel-shackle-primary-alignment
+                                          :size ,e454iel-shackle-primary-size)
+                    (calendar-mode :same nil
+                                   :align ,e454iel-shackle-primary-alignment
+                                   :size ,e454iel-shackle-primary-size)
+                    ("magit: .*" :regexp t
+                                 :same nil
+                                 :align ,e454iel-shackle-primary-alignment
+                                 :size ,e454iel-shackle-primary-size)
+                    ("COMMIT_EDITMSG" :same nil
+                                      :align ,e454iel-shackle-secondary-alignment
+                                      :size ,e454iel-shackle-chat-box-size)
+                    ("magit-diff: .*" :regexp t
+                                      :same nil
+                                      :align ,e454iel-shackle-primary-alignment
+                                      :size ,e454iel-shackle-primary-size)
+                    ("*Backtrace*" :same nil
+                                   :align ,e454iel-shackle-secondary-alignment
+                                   :size ,e454iel-shackle-secondary-size)
+                    ("*Ement compose: .*" :regexp t
+                                          :same nil
+                                          :align ,e454iel-shackle-secondary-alignment
+                                          :size ,e454iel-shackle-chat-box-size)))
+
             (shackle-mode)
             ))
 
