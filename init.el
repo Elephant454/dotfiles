@@ -4060,7 +4060,23 @@ normal-state."
 (use-package pipewire
   :straight (pipewire-0 :type git
                         :repo "https://git.zamazal.org/pdm/pipewire-0"
-                        :local-repo "pipewire-0"))
+                        :local-repo "pipewire-0")
+  :config
+  (progn
+    (general-define-key
+     :keymaps 'pipewire-mode-map
+     :states 'normal
+     "+" 'pipewire-increase-volume-single
+     "_" 'pipewire-decrease-volume-single
+     "-" 'pipewire-decrease-volume
+     "=" 'pipewire-increase-volume
+     "P" 'pipewire-properties
+     "d" 'pipewire-set-default
+     "gr" 'revert-buffer
+     "m" 'pipewire-toggle-muted
+     "p" 'pipewire-set-profile
+     "q" 'quit-window
+     "v" 'pipewire-set-volume)))
 
 (use-package bluetooth
   :general (e454iel-main-menu "tb" 'bluetooth-list-devices)
