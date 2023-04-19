@@ -1580,9 +1580,6 @@ calculated based on my configuration."
             ;; The alsa-utils package must be installed so that aplay can run
             (setq org-clock-sound "~/.dotfiles/BellCounterA.wav")
 
-            ;; A quick keybinding for setting a tea timer
-            (e454iel-main-menu "at" 'org-timer-set-timer)
-
             (setf org-babel-load-languages
                   '((emacs-lisp . t)
                     (python . t)
@@ -4054,6 +4051,14 @@ normal-state."
    "c" 'xwidget-webkit-current-url
    "f" 'xwwp-follow-link
    ))
+
+;; Timers in Emacs
+(use-package tmr
+  :general (e454iel-main-menu
+             "at" 'tmr
+             "aT" 'tmr-tabulated-view)
+  :config (progn
+            (setq tmr-sound-file "~/.dotfiles/BellCounterA.wav")))
 
 (provide 'init)
 ;;; init.el ends here
