@@ -1648,6 +1648,10 @@ calculated based on my configuration."
              "oci" 'org-clock-in-last
              "oco" 'org-clock-out
              "ocj" 'org-clock-goto
+             "ocp" '(:ignore t :which-key "Pomodoro")
+             "ocpp" 'org-pomodoro
+             "ocpi" 'org-pomodoro
+             "ocpo" 'org-pomodoro-kill
              "oy" 'org-store-link
              "op" 'org-insert-last-stored-link)
 
@@ -1685,7 +1689,12 @@ calculated based on my configuration."
               "c" '(:ignore t :which-key "Clock")
               "ci" 'org-clock-in
               "co" 'org-clock-out
-              "cj" 'org-clock-goto)))
+              "cj" 'org-clock-goto
+              "cp" '(:ignore t :which-key "Pomodoro")
+              "cpp" 'org-pomodoro
+              "cpi" 'org-pomodoro
+              "cpo" 'org-pomodoro-kill
+              )))
 
 (use-package open-junk-file
   :config (progn
