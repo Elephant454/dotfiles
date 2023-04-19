@@ -4009,7 +4009,10 @@ normal-state."
                     ("*Ement compose: .*" :regexp t
                                           :same nil
                                           :align ,e454iel-shackle-secondary-alignment
-                                          :size ,e454iel-shackle-chat-box-size)))
+                                          :size ,e454iel-shackle-chat-box-size)
+                    (" *undo-tree*" :same nil
+                                   :align ,e454iel-shackle-primary-alignment
+                                   :size ,e454iel-shackle-primary-size)))
 
             (shackle-mode)
             ))
