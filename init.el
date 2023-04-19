@@ -1718,9 +1718,6 @@ calculated based on my configuration."
             ;; The alsa-utils package must be installed so that aplay can run
             (setq org-clock-sound "~/.dotfiles/BellCounterA.wav")
 
-            ;; A quick keybinding for setting a tea timer
-            (e454iel-main-menu "at" 'org-timer-set-timer)
-
             (setf org-babel-load-languages
                   '((emacs-lisp . t)
                     (python . t)
@@ -1786,6 +1783,10 @@ calculated based on my configuration."
              "oci" 'org-clock-in-last
              "oco" 'org-clock-out
              "ocj" 'org-clock-goto
+             "ocp" '(:ignore t :which-key "Pomodoro")
+             "ocpp" 'org-pomodoro
+             "ocpi" 'org-pomodoro
+             "ocpo" 'org-pomodoro-kill
              "oy" 'org-store-link
              "op" 'org-insert-last-stored-link)
 
@@ -1823,7 +1824,12 @@ calculated based on my configuration."
               "c" '(:ignore t :which-key "Clock")
               "ci" 'org-clock-in
               "co" 'org-clock-out
-              "cj" 'org-clock-goto)))
+              "cj" 'org-clock-goto
+              "cp" '(:ignore t :which-key "Pomodoro")
+              "cpp" 'org-pomodoro
+              "cpi" 'org-pomodoro
+              "cpo" 'org-pomodoro-kill
+              )))
 
 (use-package open-junk-file
   :config (progn
@@ -4060,7 +4066,23 @@ normal-state."
 (use-package pipewire
   :straight (pipewire-0 :type git
                         :repo "https://git.zamazal.org/pdm/pipewire-0"
-                        :local-repo "pipewire-0"))
+                        :local-repo "pipewire-0")
+  :config
+  (progn
+    (general-define-key
+     :keymaps 'pipewire-mode-map
+     :states 'normal
+     "+" 'pipewire-increase-volume-single
+     "_" 'pipewire-decrease-volume-single
+     "-" 'pipewire-decrease-volume
+     "=" 'pipewire-increase-volume
+     "P" 'pipewire-properties
+     "d" 'pipewire-set-default
+     "gr" 'revert-buffer
+     "m" 'pipewire-toggle-muted
+     "p" 'pipewire-set-profile
+     "q" 'quit-window
+     "v" 'pipewire-set-volume)))
 
 (use-package bluetooth
   :general (e454iel-main-menu "tb" 'bluetooth-list-devices)
@@ -4130,7 +4152,10 @@ normal-state."
                     ("*Ement compose: .*" :regexp t
                                           :same nil
                                           :align ,e454iel-shackle-secondary-alignment
-                                          :size ,e454iel-shackle-chat-box-size)))
+                                          :size ,e454iel-shackle-chat-box-size)
+                    (" *undo-tree*" :same nil
+                                   :align ,e454iel-shackle-primary-alignment
+                                   :size ,e454iel-shackle-primary-size)))
 
             (shackle-mode)
             ))
@@ -4172,6 +4197,14 @@ normal-state."
    "c" 'xwidget-webkit-current-url
    "f" 'xwwp-follow-link
    ))
+
+;; Timers in Emacs
+(use-package tmr
+  :general (e454iel-main-menu
+             "at" 'tmr
+             "aT" 'tmr-tabulated-view)
+  :config (progn
+            (setq tmr-sound-file "~/.dotfiles/BellCounterA.wav")))
 
 (provide 'init)
 ;;; init.el ends here
