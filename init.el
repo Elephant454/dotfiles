@@ -862,6 +862,7 @@ This makes for easier reading of larger, denser bodies of text."
             ;;  init?
             ;;(eshell/alias dired-by-size "dired *(.L0)")
             ;;(eshell/alias "super-compress-dir" "tar -I \"xz -ze9\" -cf $1.tar.xz $1")
+            ;;(eshell/alias sl "echo 🚋")
             ))
 
 ;; give parenthesis matching colors based upon depth
