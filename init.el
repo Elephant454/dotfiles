@@ -2654,21 +2654,24 @@ Lisp function does not specify a special indentation."
 
 (use-package spray
   :straight (spray :host sourcehut :repo "iank/spray")
-  :config (general-define-key
-           :keymaps 'spray-mode-map
-           :states 'normal
-            "p" 'spray-start/stop
-            "h" 'spray-backward-word
-            "l" 'spray-forward-word
-            "b" 'spray-backward-word
-            "w" 'spray-forward-word
-            "<left>" 'spray-backward-word
-            "<right>" 'spray-forward-word
-            "f" 'spray-faster
-            "s" 'spray-slower
-            "t" 'spray-time
-            "q" 'spray-quit
-            "<return>" 'spray-quit))
+  :config (progn
+            (general-define-key
+             :keymaps 'spray-mode-map
+             :states 'normal
+              "p" 'spray-start/stop
+              "h" 'spray-backward-word
+              "l" 'spray-forward-word
+              "b" 'spray-backward-word
+              "w" 'spray-forward-word
+              "<left>" 'spray-backward-word
+              "<right>" 'spray-forward-word
+              "f" 'spray-faster
+              "s" 'spray-slower
+              "t" 'spray-time
+              "q" 'spray-quit
+              "<return>" 'spray-quit)
+
+            (setq spray-wpm 340)))
 
 ;; Read https://github.com/skeeto/elfeed,
 ;;  https://github.com/remyhonig/elfeed-org, and
