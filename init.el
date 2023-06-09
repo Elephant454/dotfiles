@@ -1416,6 +1416,19 @@ unsorted."
   (dired (append (list directory-to-randomize)
                  (shuffle-list (directory-files directory-to-randomize nil nil t)))))
 
+(defun comma-separated-to-newline-separated (string)
+  "Create a new string with the contents of `STRING' being converted
+from comma separation to newline separation."
+  (string-join (split-string string ", ") "\n"))
+
+(defun comma-separated-to-newline-separated-region (begin end)
+  "Replace region, which contains a comma separated list, with a
+newline separated list."
+  (interactive "r")
+  (insert
+   (comma-separated-to-newline-separated
+    (delete-and-extract-region begin end))))
+
 ;; org things
 ;; TODO: look into org-dotemacs for organizing my init file using org
 ;; TODO: org mode confirm for capture is different than with-editor confirm for
