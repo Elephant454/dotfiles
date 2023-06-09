@@ -1411,6 +1411,11 @@ unsorted."
    (shuffle-vector
     (list-to-vector list-to-randomize))))
 
+(defun shuffle-directory-dired (directory-to-randomize)
+  "Open Dired with the files from `DIRECTORY-TO-RANDOMIZE' listed in a shuffled order."
+  (dired (append (list directory-to-randomize)
+                 (shuffle-list (directory-files directory-to-randomize nil nil t)))))
+
 ;; org things
 ;; TODO: look into org-dotemacs for organizing my init file using org
 ;; TODO: org mode confirm for capture is different than with-editor confirm for
