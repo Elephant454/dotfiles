@@ -1590,10 +1590,15 @@ calculated based on my configuration."
             (setq org-agenda-skip-deadline-if-done t)
             (setq org-agenda-skip-scheduled-if-done t)
             (setq org-agenda-skip-timestamp-if-done t)
+
             (setq org-capture-templates
                   `(("t" "TODO" entry
                      (file+headline ,(concat e454iel-documents-dir "/todo.org") "Unsorted")
                      "* TODO %a "
+                     :empty-lines-before 1)
+                    ("1" "TODO" entry
+                     (file+headline ,(concat e454iel-documents-dir "/oneOffToDo.org") "One Offs")
+                     "** TODO %?\n   SCHEDULED: %t"
                      :empty-lines-before 1)
                     ("a" "ArticlesToRead" entry
                      (file "~/org/ArticlesToRead.org")
