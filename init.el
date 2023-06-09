@@ -2600,6 +2600,7 @@ Lisp function does not specify a special indentation."
   :general (e454iel-main-menu
              "ames" 'emms-streams
              "amef" 'emms-play-file
+             "ameu" 'emms-play-url
              "amep" 'emms-pause
              ;; This is directionally left for Evil
              "ameh" 'emms-seek-backward))
