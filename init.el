@@ -2413,9 +2413,19 @@ Lisp function does not specify a special indentation."
 
 ;; used to center buffers in the middle of the screen
 (use-package olivetti
-  ;; TODO: Maybe I can make this similar to centered-window-mode by adding a
-  ;;  global mode that only applies when there's only one frame in the window
-  :general (e454iel-main-menu "tc" 'olivetti-mode))
+  :config
+  (progn
+    (setq olivetti-body-width 130)
+
+    (use-package auto-olivetti
+      :disabled
+      :straight (auto-olivetti :host sourcehut :repo "ashton314/auto-olivetti")
+      :config (progn
+                (setq auto-olivetti-enabled-modes '(text-mode prog-mode eww-mode))
+                (auto-olivetti-mode)))
+
+    (general-define-key
+     (e454iel-main-menu "tc" 'olivetti-mode))))
 
 ;; this still needs to be configured, particularly for the keybindings
 ;;(use-package pocket-api)
