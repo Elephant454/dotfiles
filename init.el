@@ -1528,7 +1528,7 @@ newline separated list."
                 "~/org/music.org"))
 
             (defvar e454iel-documents-org-agenda-file-pattern
-              "\\(.*todo.org\\|.*events.org\\|.*schedule.org\\)$")
+              "\\(.*todo.org\\|.*ToDo.org\\|.*events.org\\|.*schedule.org\\)$")
 
             (defun e454iel-set-documents-dir ()
               "Automatically set org-agenda-files with a value calculated based
