@@ -2771,6 +2771,7 @@ Lisp function does not specify a special indentation."
 (use-package xkcd)
 
 (use-package guix
+  :disabled
   ;; This is a temporary fix while I wait for this to be merged
   ;;:straight (guix :fork (:host gitlab :repo "john.soo/emacs-guix"))
   :config (progn
