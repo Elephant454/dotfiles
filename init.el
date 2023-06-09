@@ -1573,6 +1573,23 @@ calculated based on my configuration."
             ;; Don't scatter around my buffers when opening up the agenda
             (setq org-agenda-window-setup 'current-window)
 
+            ;; Don't clutter recurring scheduled items with visible-by-default
+            ;;  logging
+            (setq org-log-into-drawer t)
+
+            ;; Don't expand drawers when cycling, wait until I expand them
+            ;;  manually (to reduce clutter)
+            (add-to-list 'org-cycle-hook 'org-cycle-hide-drawers)
+
+            ;; This block of settings makes the behavior of marking items as
+            ;;  done largely uniform regardless of whether I am working with
+            ;;  recurring tasks or singularly occuring tasks
+            (setq org-agenda-log-mode-items '(closed state))
+            (setq org-agenda-start-with-log-mode t)
+            (setq org-log-done 'time)
+            (setq org-agenda-skip-deadline-if-done t)
+            (setq org-agenda-skip-scheduled-if-done t)
+            (setq org-agenda-skip-timestamp-if-done t)
             (setq org-capture-templates
                   `(("t" "TODO" entry
                      (file+headline ,(concat e454iel-documents-dir "/todo.org") "Unsorted")
