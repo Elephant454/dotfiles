@@ -1397,6 +1397,20 @@ unsorted."
   "Set the tail of the LIST as a reference to the head of the LIST."
   (nconc list list))
 
+(defun vector-to-list (vector)
+  "Convert `VECTOR' to a list."
+  (append vector nil))
+
+(defun list-to-vector (list)
+  "Convert `LIST' to a vector."
+  (apply #'vector list))
+
+(defun shuffle-list (list-to-randomize)
+  "Return a new list containing the contents of `LIST-TO-RANDOMIZE' in a shuffled order."
+  (vector-to-list
+   (shuffle-vector
+    (list-to-vector list-to-randomize))))
+
 ;; org things
 ;; TODO: look into org-dotemacs for organizing my init file using org
 ;; TODO: org mode confirm for capture is different than with-editor confirm for
