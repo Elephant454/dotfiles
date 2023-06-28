@@ -1516,7 +1516,12 @@ newline separated list."
             :config
             (progn
               ;;(setq org-edna-use-inheritance t)
-              (org-edna-mode))))
+              (org-edna-mode)))
+
+          ;; Org Modules to extend Org
+          ;;(add-to-list 'org-modules 'org-habit)
+
+          )
 
   :config (progn
             (setq e454iel-documents-season "Spring")
