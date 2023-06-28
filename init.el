@@ -1602,6 +1602,34 @@ calculated based on my configuration."
             (setq org-agenda-skip-scheduled-if-done t)
             (setq org-agenda-skip-timestamp-if-done t)
 
+            ;; This takes away the distracting TODO text that
+            ;;  org-agenda-log-mode displays for logging state change status for
+            ;;  recurring tasks. It makes it seem as though recurring tasks are
+            ;;  never actually done, which can be a bit demoralizing.
+            
+            ;; While I could comment this code line by line, I feel that it is best
+            ;;  understood by opening an agenda buffer with this code's hook removed, and
+            ;;  running it line by line with read-only-mode turned off
+            (defun e454iel-org-agenda-log-remove-state-todo-prefix ()
+              "Remove the \"TODO\" prefixing entries in the log view for state changes.
+               The remaining \"\(DONE\)\" text is given the usual
+               org-done face. The hope is to highlight the fact
+               that recurring tasks are done for today by
+               emphasizing the DONE part, removing the
+               distracting TODO part, yet still making clear
+               \(throught the use of parentheses\) that the
+               literal text of the buffer does not actually say
+               done."
+              (save-excursion
+                (goto-char (point-min))
+                (while (re-search-forward "State:.*(DONE) TODO" nil t)
+                  (delete-backward-char 5) ;; " TODO" = 5
+                  (add-text-properties (- (point) 6) (point) '(face org-done)) ;; "(DONE)" = 6
+                  (re-search-forward "   [ ^]")
+                  (dotimes (i 5) (insert " ")))))
+
+            (add-hook 'org-agenda-finalize-hook
+                      'e454iel-org-agenda-log-remove-state-todo-prefix)
             (setq org-capture-templates
                   `(("t" "TODO" entry
                      (file+headline ,(concat e454iel-documents-dir "/todo.org") "Unsorted")
