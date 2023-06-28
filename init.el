@@ -863,6 +863,12 @@ This makes for easier reading of larger, denser bodies of text."
             ;;(eshell/alias dired-by-size "dired *(.L0)")
             ;;(eshell/alias "super-compress-dir" "tar -I \"xz -ze9\" -cf $1.tar.xz $1")
             ;;(eshell/alias sl "echo 🚋")
+            ;; (eshell/alias "combine-image-and-audio"
+            ;;  "ffmpeg -loop 1 -i $2 -i $3 -shortest -c:v libx264 -c:a copy -tune stillimage $1.mp4")
+            ;; (eshell/alias "mount-storage"
+            ;;  "sudo mount $1 /mnt/storage/; find-file /sudo:root@localhost:/mnt/storage")
+            ;; (eshell/alias "unmount-storage"
+            ;;  "tramp-cleanup-connection (quote (tramp-file-name \"sudo\" \"root\" nil \"localhost\" nil nil nil)); sudo umount /mnt/storage/; sync")
             ))
 
 ;; give parenthesis matching colors based upon depth
