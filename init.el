@@ -4195,6 +4195,9 @@ normal-state."
    "u" 'evil-collection-xwidget-webkit-restore-last-closed-tab
    "c" 'xwidget-webkit-current-url
    "f" 'xwwp-follow-link
+   ;;"y" 'xwidget-webkit-copy-selection-as-kill
+   "<mouse-8>" 'wwidget-webkit-back
+   "<mouse-9>" 'wwidget-webkit-forward
    ))
 
 ;; Timers in Emacs
