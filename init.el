@@ -1630,6 +1630,42 @@ calculated based on my configuration."
 
             (add-hook 'org-agenda-finalize-hook
                       'e454iel-org-agenda-log-remove-state-todo-prefix)
+
+            ;; The following function and hook allow me to reset the time that a
+            ;;  recurring task is scheduled if it is a habit (it has "STYLE:
+            ;;  habit" as a property). This lets me decide that a daily
+            ;;  scheduled task may take place at a certain time today, but the
+            ;;  time portion of the schedule will be reset so as to not expect
+            ;;  me to do the task at the same time the following day. This gives
+            ;;  me the flexibility to easily re-schedule what time a task may
+            ;;  happen while still assuming that I want the task to happen every
+            ;;  day.
+            (defun e454iel-org-reset-habit-scheduled-time ()
+              "Remove the time (HH:MM) portion of the scheduled timestamp of tasks when marking as DONE if the property RESET_TIME_ON_DONE is non-nil."
+              (let ((entry-reset-time-on-done (org-entry-get (point) "RESET_TIME_ON_DONE"))
+                    (entry-state org-state)
+                    (entry-scheduled-timestamp (org-entry-get (point) "SCHEDULED"))
+                    (time-regex "[0-9]\\{2\\}:[0-9]\\{2\\}"))
+
+                (when (and (string= entry-state "DONE")
+                           entry-reset-time-on-done
+                           entry-scheduled-timestamp
+                           (string-match time-regex entry-scheduled-timestamp))
+                  (save-excursion
+                    (org-back-to-heading t)
+                    (progn
+                      (org-set-property
+                       "SCHEDULED"
+                       (replace-regexp-in-string time-regex
+                                                 ""
+                                                 entry-scheduled-timestamp))
+                      (message "Removed time from schedule for recurring habit."))))))
+
+            (add-hook 'org-after-todo-state-change-hook
+                      #'e454iel-org-reset-habit-scheduled-time)
+
+            (setq org-habit-graph-column 100)
+
             (setq org-capture-templates
                   `(("t" "TODO" entry
                      (file+headline ,(concat e454iel-documents-dir "/todo.org") "Unsorted")
