@@ -1000,6 +1000,12 @@ This makes for easier reading of larger, denser bodies of text."
             ;;(eshell/alias dired-by-size "dired *(.L0)")
             ;;(eshell/alias "super-compress-dir" "tar -I \"xz -ze9\" -cf $1.tar.xz $1")
             ;;(eshell/alias sl "echo 🚋")
+            ;; (eshell/alias "combine-image-and-audio"
+            ;;  "ffmpeg -loop 1 -i $2 -i $3 -shortest -c:v libx264 -c:a copy -tune stillimage $1.mp4")
+            ;; (eshell/alias "mount-storage"
+            ;;  "sudo mount $1 /mnt/storage/; find-file /sudo:root@localhost:/mnt/storage")
+            ;; (eshell/alias "unmount-storage"
+            ;;  "tramp-cleanup-connection (quote (tramp-file-name \"sudo\" \"root\" nil \"localhost\" nil nil nil)); sudo umount /mnt/storage/; sync")
             ))
 
 ;; give parenthesis matching colors based upon depth
@@ -1648,7 +1654,12 @@ newline separated list."
             :config
             (progn
               ;;(setq org-edna-use-inheritance t)
-              (org-edna-mode))))
+              (org-edna-mode)))
+
+          ;; Org Modules to extend Org
+          ;;(add-to-list 'org-modules 'org-habit)
+
+          )
 
   :config (progn
             (setq e454iel-documents-season "Spring")
@@ -1728,6 +1739,70 @@ calculated based on my configuration."
             (setq org-agenda-skip-deadline-if-done t)
             (setq org-agenda-skip-scheduled-if-done t)
             (setq org-agenda-skip-timestamp-if-done t)
+
+            ;; This takes away the distracting TODO text that
+            ;;  org-agenda-log-mode displays for logging state change status for
+            ;;  recurring tasks. It makes it seem as though recurring tasks are
+            ;;  never actually done, which can be a bit demoralizing.
+            
+            ;; While I could comment this code line by line, I feel that it is best
+            ;;  understood by opening an agenda buffer with this code's hook removed, and
+            ;;  running it line by line with read-only-mode turned off
+            (defun e454iel-org-agenda-log-remove-state-todo-prefix ()
+              "Remove the \"TODO\" prefixing entries in the log view for state changes.
+               The remaining \"\(DONE\)\" text is given the usual
+               org-done face. The hope is to highlight the fact
+               that recurring tasks are done for today by
+               emphasizing the DONE part, removing the
+               distracting TODO part, yet still making clear
+               \(throught the use of parentheses\) that the
+               literal text of the buffer does not actually say
+               done."
+              (save-excursion
+                (goto-char (point-min))
+                (while (re-search-forward "State:.*(DONE) TODO" nil t)
+                  (delete-backward-char 5) ;; " TODO" = 5
+                  (add-text-properties (- (point) 6) (point) '(face org-done)) ;; "(DONE)" = 6
+                  (re-search-forward "   [ ^]")
+                  (dotimes (i 5) (insert " ")))))
+
+            (add-hook 'org-agenda-finalize-hook
+                      'e454iel-org-agenda-log-remove-state-todo-prefix)
+
+            ;; The following function and hook allow me to reset the time that a
+            ;;  recurring task is scheduled if it is a habit (it has "STYLE:
+            ;;  habit" as a property). This lets me decide that a daily
+            ;;  scheduled task may take place at a certain time today, but the
+            ;;  time portion of the schedule will be reset so as to not expect
+            ;;  me to do the task at the same time the following day. This gives
+            ;;  me the flexibility to easily re-schedule what time a task may
+            ;;  happen while still assuming that I want the task to happen every
+            ;;  day.
+            (defun e454iel-org-reset-habit-scheduled-time ()
+              "Remove the time (HH:MM) portion of the scheduled timestamp of tasks when marking as DONE if the property RESET_TIME_ON_DONE is non-nil."
+              (let ((entry-reset-time-on-done (org-entry-get (point) "RESET_TIME_ON_DONE"))
+                    (entry-state org-state)
+                    (entry-scheduled-timestamp (org-entry-get (point) "SCHEDULED"))
+                    (time-regex "[0-9]\\{2\\}:[0-9]\\{2\\}"))
+
+                (when (and (string= entry-state "DONE")
+                           entry-reset-time-on-done
+                           entry-scheduled-timestamp
+                           (string-match time-regex entry-scheduled-timestamp))
+                  (save-excursion
+                    (org-back-to-heading t)
+                    (progn
+                      (org-set-property
+                       "SCHEDULED"
+                       (replace-regexp-in-string time-regex
+                                                 ""
+                                                 entry-scheduled-timestamp))
+                      (message "Removed time from schedule for recurring habit."))))))
+
+            (add-hook 'org-after-todo-state-change-hook
+                      #'e454iel-org-reset-habit-scheduled-time)
+
+            (setq org-habit-graph-column 100)
 
             (setq org-capture-templates
                   `(("t" "TODO" entry
@@ -4266,6 +4341,9 @@ normal-state."
    "u" 'evil-collection-xwidget-webkit-restore-last-closed-tab
    "c" 'xwidget-webkit-current-url
    "f" 'xwwp-follow-link
+   ;;"y" 'xwidget-webkit-copy-selection-as-kill
+   "<mouse-8>" 'wwidget-webkit-back
+   "<mouse-9>" 'wwidget-webkit-forward
    ))
 
 ;; Timers in Emacs
@@ -4275,6 +4353,12 @@ normal-state."
              "aT" 'tmr-tabulated-view)
   :config (progn
             (setq tmr-sound-file "~/.dotfiles/BellCounterA.wav")))
+
+(use-package mentor
+  :config
+  (progn
+    (setq mentor-rtorrent-download-directory "~/Downloads/torrent/"))
+  )
 
 (provide 'init)
 ;;; init.el ends here
