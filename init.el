@@ -4208,5 +4208,11 @@ normal-state."
   :config (progn
             (setq tmr-sound-file "~/.dotfiles/BellCounterA.wav")))
 
+(use-package mentor
+  :config
+  (progn
+    (setq mentor-rtorrent-download-directory "~/Downloads/torrent/"))
+  )
+
 (provide 'init)
 ;;; init.el ends here
