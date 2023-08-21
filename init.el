@@ -989,11 +989,18 @@ This makes for easier reading of larger, denser bodies of text."
             (use-package esh-module
               :straight (esh-module :type built-in))
 
+            (use-package nyan-prompt
+              :config (add-hook 'eshell-load-hook 'nyan-prompt-enable))
+
             (add-to-list 'eshell-modules-list 'eshell-tramp)
 
             ;; This remembers our password for one hour
             (setq password-cache t)
             (setq password-cache-expiry (* 60 60))
+
+            (defun eshell/emms-play-file (file)
+              "Make emms-play-file default to the default-directory in eshell."
+              (emms-play-file (concat default-directory file)))
 
             ;; TODO: How do I make sure the eshell/alias function is loaded at
             ;;  init?
@@ -1572,6 +1579,11 @@ newline separated list."
   (insert
    (comma-separated-to-newline-separated
     (delete-and-extract-region begin end))))
+
+(defun sus ()
+  "Return a 'sinhala letter kantaja naasikyaya', which bears visual similarity to a character from the video game 'Among Us'."
+  (interactive)
+  'ඞ)
 
 ;; org things
 ;; TODO: look into org-dotemacs for organizing my init file using org
@@ -3768,7 +3780,7 @@ normal-state."
 
   (setq e454iel-current-wallpaper-alist e454iel-wallpaper-alist-list)
 
-  (setq e454iel-preferred-ewal-theme 'ewal-spacemacs-classic)
+  (setq e454iel-preferred-ewal-theme 'ewal-doom-vibrant)
 
   (defun e454iel-cycle-wallpapers ()
     "Cycle through the list of wallpaper alists."
@@ -4072,7 +4084,7 @@ normal-state."
 (use-package ytdious
   :config
   (progn
-    (setq ytdious-invidious-api-url "https://inv.riverside.rocks/")
+    (setq ytdious-invidious-api-url "https://inv.tux.pizza")
 
   (defun e454iel-ytdious-get-current-video-url ()
     (interactive
@@ -4342,8 +4354,8 @@ normal-state."
    "c" 'xwidget-webkit-current-url
    "f" 'xwwp-follow-link
    ;;"y" 'xwidget-webkit-copy-selection-as-kill
-   "<mouse-8>" 'wwidget-webkit-back
-   "<mouse-9>" 'wwidget-webkit-forward
+   "<mouse-8>" 'xwidget-webkit-back
+   "<mouse-9>" 'xwidget-webkit-forward
    ))
 
 ;; Timers in Emacs
