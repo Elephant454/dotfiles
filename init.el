@@ -852,6 +852,9 @@ This makes for easier reading of larger, denser bodies of text."
             (use-package esh-module
               :straight (esh-module :type built-in))
 
+            (use-package nyan-prompt
+              :config (add-hook 'eshell-load-hook 'nyan-prompt-enable))
+
             (add-to-list 'eshell-modules-list 'eshell-tramp)
 
             ;; This remembers our password for one hour
