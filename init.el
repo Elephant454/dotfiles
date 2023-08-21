@@ -1442,6 +1442,11 @@ newline separated list."
    (comma-separated-to-newline-separated
     (delete-and-extract-region begin end))))
 
+(defun sus ()
+  "Return a 'sinhala letter kantaja naasikyaya', which bears visual similarity to a character from the video game 'Among Us'."
+  (interactive)
+  'ඞ)
+
 ;; org things
 ;; TODO: look into org-dotemacs for organizing my init file using org
 ;; TODO: org mode confirm for capture is different than with-editor confirm for
