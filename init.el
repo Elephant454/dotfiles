@@ -861,6 +861,10 @@ This makes for easier reading of larger, denser bodies of text."
             (setq password-cache t)
             (setq password-cache-expiry (* 60 60))
 
+            (defun eshell/emms-play-file (file)
+              "Make emms-play-file default to the default-directory in eshell."
+              (emms-play-file (concat default-directory file)))
+
             ;; TODO: How do I make sure the eshell/alias function is loaded at
             ;;  init?
             ;;(eshell/alias dired-by-size "dired *(.L0)")
