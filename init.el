@@ -3938,7 +3938,7 @@ normal-state."
 (use-package ytdious
   :config
   (progn
-    (setq ytdious-invidious-api-url "https://inv.riverside.rocks/")
+    (setq ytdious-invidious-api-url "https://inv.tux.pizza")
 
   (defun e454iel-ytdious-get-current-video-url ()
     (interactive
