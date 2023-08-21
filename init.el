@@ -4208,8 +4208,8 @@ normal-state."
    "c" 'xwidget-webkit-current-url
    "f" 'xwwp-follow-link
    ;;"y" 'xwidget-webkit-copy-selection-as-kill
-   "<mouse-8>" 'wwidget-webkit-back
-   "<mouse-9>" 'wwidget-webkit-forward
+   "<mouse-8>" 'xwidget-webkit-back
+   "<mouse-9>" 'xwidget-webkit-forward
    ))
 
 ;; Timers in Emacs
