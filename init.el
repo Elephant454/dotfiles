@@ -1678,6 +1678,41 @@ calculated based on my configuration."
 
             (setq org-habit-graph-column 100)
 
+            (defun e454iel-org-agenda-timestamp-minutes-up (minutes)
+              "Adjust the scheduled time of the Org Agenda entry at point by `MINUTES'"
+
+              (let* ((agenda-item-marker (org-agenda-get-any-marker)))
+                (save-excursion
+                  (with-current-buffer (marker-buffer agenda-item-marker)
+                    (goto-char agenda-item-marker)
+                    (org-back-to-heading t)
+                    (if (org-entry-get (point) "SCHEDULED")
+                        (progn
+                          (search-forward "SCHEDULED: ")
+                          (org-timestamp-change minutes 'minute))
+
+                      ;; else
+                      (message "No scheduled time for this entry."))))
+
+                (org-agenda-redo)))
+
+            (general-define-key
+             :keymaps 'org-agenda-mode-map
+             :states '(normal motion)
+
+              "S-<up>" (lambda ()
+                         (interactive)
+                         (e454iel-org-agenda-timestamp-minutes-up 5))
+              "S-<down>" (lambda ()
+                           (interactive)
+                           (e454iel-org-agenda-timestamp-minutes-up -5))
+              "S-C-<up>" (lambda ()
+                           (interactive)
+                           (e454iel-org-agenda-timestamp-minutes-up 1))
+              "S-C-<down>" (lambda ()
+                             (interactive)
+                             (e454iel-org-agenda-timestamp-minutes-up -1)))
+
             (setq org-capture-templates
                   `(("t" "TODO" entry
                      (file+headline ,(concat e454iel-documents-dir "/todo.org") "Unsorted")
