@@ -1816,6 +1816,27 @@ calculated based on my configuration."
 
             (setq org-habit-graph-column 100)
 
+            (general-define-key
+             :keymaps 'org-agenda-mode-map
+             :states '(normal motion)
+
+              "S-<up>" (lambda ()
+                         (interactive)
+                         (let ((org-time-stamp-rounding-minutes '(0 5)))
+                           (org-agenda-date-earlier-minutes -1)))
+              "S-<down>" (lambda ()
+                           (interactive)
+                           (let ((org-time-stamp-rounding-minutes '(0 5)))
+                             (org-agenda-date-earlier-minutes 1)))
+              "C-S-<up>" (lambda ()
+                           (interactive)
+                           (let ((org-time-stamp-rounding-minutes '(0 1)))
+                             (org-agenda-date-earlier-minutes -1)))
+              "C-S-<down>" (lambda ()
+                             (interactive)
+                             (let ((org-time-stamp-rounding-minutes '(0 1)))
+                               (org-agenda-date-earlier-minutes 1))))
+
             (setq org-capture-templates
                   `(("t" "TODO" entry
                      (file+headline ,(concat e454iel-documents-dir "/todo.org") "Unsorted")
