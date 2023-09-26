@@ -53,6 +53,7 @@ print-circle t
  ;; Grabbing XKCDs could be done more cleanly, probably 😅
  ;; TODO: It would be super great to be able to use this with md4rd and
  ;;  github-explorer
+ browse-url-secondary-browser-function #'browse-url-generic
  browse-url-generic-program "qutebrowser"
 
  browse-url-handlers '((".*xkcd.com/[0-9]*" .
@@ -1790,6 +1791,10 @@ calculated based on my configuration."
             ;;  me the flexibility to easily re-schedule what time a task may
             ;;  happen while still assuming that I want the task to happen every
             ;;  day.
+
+            ;; TODO: There's a bug in this that resets the repeater portion of
+            ;;  the timestamp if moved forward or backward using shift. The hook
+            ;;  is disabled for now as a result.
             (defun e454iel-org-reset-habit-scheduled-time ()
               "Remove the time (HH:MM) portion of the scheduled timestamp of tasks when marking as DONE if the property RESET_TIME_ON_DONE is non-nil."
               (let ((entry-reset-time-on-done (org-entry-get (point) "RESET_TIME_ON_DONE"))
@@ -1811,8 +1816,8 @@ calculated based on my configuration."
                                                  entry-scheduled-timestamp))
                       (message "Removed time from schedule for recurring habit."))))))
 
-            (add-hook 'org-after-todo-state-change-hook
-                      #'e454iel-org-reset-habit-scheduled-time)
+            ;;(add-hook 'org-after-todo-state-change-hook
+            ;;          #'e454iel-org-reset-habit-scheduled-time)
 
             (setq org-habit-graph-column 100)
 
@@ -2127,6 +2132,24 @@ calculated based on my configuration."
 (defun e454iel-kill-value (value)
   "Convert `VALUE' to a string and kill it to the clipboard."
   (kill-new (format "%s" value)))
+
+(defun e454iel-pretty-print-expression (expression)
+  "Pretty-print `EXPRESSION'.
+Create a new buffer, open it in `other-window', and run `pp-buffer'
+on it. This makes complex nested list structures very readable."
+
+  (let ((ppe-buffer (generate-new-buffer
+                     (concat "*pretty print expression: "
+                             (format "%s" expression)
+                             "*"))))
+
+    (with-current-buffer ppe-buffer
+      ;; I have to insert into the buffer, not just create a string
+      (insert (format "%s" (eval expression)))
+      (emacs-lisp-mode)
+      (pp-buffer))
+
+    (display-buffer ppe-buffer)))
 
 (use-package ediff
   :config (setq ediff-window-setup-function
