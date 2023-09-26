@@ -53,6 +53,7 @@ print-circle t
  ;; Grabbing XKCDs could be done more cleanly, probably 😅
  ;; TODO: It would be super great to be able to use this with md4rd and
  ;;  github-explorer
+ browse-url-secondary-browser-function #'browse-url-generic
  browse-url-generic-program "qutebrowser"
 
  browse-url-handlers '((".*xkcd.com/[0-9]*" .
