@@ -1995,6 +1995,24 @@ calculated based on my configuration."
   "Convert `VALUE' to a string and kill it to the clipboard."
   (kill-new (format "%s" value)))
 
+(defun e454iel-pretty-print-expression (expression)
+  "Pretty-print `EXPRESSION'.
+Create a new buffer, open it in `other-window', and run `pp-buffer'
+on it. This makes complex nested list structures very readable."
+
+  (let ((ppe-buffer (generate-new-buffer
+                     (concat "*pretty print expression: "
+                             (format "%s" expression)
+                             "*"))))
+
+    (with-current-buffer ppe-buffer
+      ;; I have to insert into the buffer, not just create a string
+      (insert (format "%s" (eval expression)))
+      (emacs-lisp-mode)
+      (pp-buffer))
+
+    (display-buffer ppe-buffer)))
+
 (use-package ediff
   :config (setq ediff-window-setup-function
   'ediff-setup-windows-plain)) ; makes it so that ediff uses one
