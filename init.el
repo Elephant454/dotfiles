@@ -53,6 +53,7 @@ print-circle t
  ;; Grabbing XKCDs could be done more cleanly, probably 😅
  ;; TODO: It would be super great to be able to use this with md4rd and
  ;;  github-explorer
+ browse-url-secondary-browser-function #'browse-url-generic
  browse-url-generic-program "qutebrowser"
 
  browse-url-handlers '((".*xkcd.com/[0-9]*" .
@@ -856,16 +857,30 @@ This makes for easier reading of larger, denser bodies of text."
             (use-package esh-module
               :straight (esh-module :type built-in))
 
+            (use-package nyan-prompt
+              :config (add-hook 'eshell-load-hook 'nyan-prompt-enable))
+
             (add-to-list 'eshell-modules-list 'eshell-tramp)
 
             ;; This remembers our password for one hour
             (setq password-cache t)
             (setq password-cache-expiry (* 60 60))
 
+            (defun eshell/emms-play-file (file)
+              "Make emms-play-file default to the default-directory in eshell."
+              (emms-play-file (concat default-directory file)))
+
             ;; TODO: How do I make sure the eshell/alias function is loaded at
             ;;  init?
             ;;(eshell/alias dired-by-size "dired *(.L0)")
             ;;(eshell/alias "super-compress-dir" "tar -I \"xz -ze9\" -cf $1.tar.xz $1")
+            ;;(eshell/alias sl "echo 🚋")
+            ;; (eshell/alias "combine-image-and-audio"
+            ;;  "ffmpeg -loop 1 -i $2 -i $3 -shortest -c:v libx264 -c:a copy -tune stillimage $1.mp4")
+            ;; (eshell/alias "mount-storage"
+            ;;  "sudo mount $1 /mnt/storage/; find-file /sudo:root@localhost:/mnt/storage")
+            ;; (eshell/alias "unmount-storage"
+            ;;  "tramp-cleanup-connection (quote (tramp-file-name \"sudo\" \"root\" nil \"localhost\" nil nil nil)); sudo umount /mnt/storage/; sync")
             ))
 
 ;; give parenthesis matching colors based upon depth
@@ -1401,6 +1416,43 @@ unsorted."
   "Set the tail of the LIST as a reference to the head of the LIST."
   (nconc list list))
 
+(defun vector-to-list (vector)
+  "Convert `VECTOR' to a list."
+  (append vector nil))
+
+(defun list-to-vector (list)
+  "Convert `LIST' to a vector."
+  (apply #'vector list))
+
+(defun shuffle-list (list-to-randomize)
+  "Return a new list containing the contents of `LIST-TO-RANDOMIZE' in a shuffled order."
+  (vector-to-list
+   (shuffle-vector
+    (list-to-vector list-to-randomize))))
+
+(defun shuffle-directory-dired (directory-to-randomize)
+  "Open Dired with the files from `DIRECTORY-TO-RANDOMIZE' listed in a shuffled order."
+  (dired (append (list directory-to-randomize)
+                 (shuffle-list (directory-files directory-to-randomize nil nil t)))))
+
+(defun comma-separated-to-newline-separated (string)
+  "Create a new string with the contents of `STRING' being converted
+from comma separation to newline separation."
+  (string-join (split-string string ", ") "\n"))
+
+(defun comma-separated-to-newline-separated-region (begin end)
+  "Replace region, which contains a comma separated list, with a
+newline separated list."
+  (interactive "r")
+  (insert
+   (comma-separated-to-newline-separated
+    (delete-and-extract-region begin end))))
+
+(defun sus ()
+  "Return a 'sinhala letter kantaja naasikyaya', which bears visual similarity to a character from the video game 'Among Us'."
+  (interactive)
+  'ඞ)
+
 ;; org things
 ;; TODO: look into org-dotemacs for organizing my init file using org
 ;; TODO: org mode confirm for capture is different than with-editor confirm for
@@ -1482,7 +1534,12 @@ unsorted."
             :config
             (progn
               ;;(setq org-edna-use-inheritance t)
-              (org-edna-mode))))
+              (org-edna-mode)))
+
+          ;; Org Modules to extend Org
+          ;;(add-to-list 'org-modules 'org-habit)
+
+          )
 
   :config (progn
             (setq e454iel-documents-season "Spring")
@@ -1500,7 +1557,7 @@ unsorted."
                 "~/org/music.org"))
 
             (defvar e454iel-documents-org-agenda-file-pattern
-              "\\(.*todo.org\\|.*events.org\\|.*schedule.org\\)$")
+              "\\(.*todo.org\\|.*ToDo.org\\|.*events.org\\|.*schedule.org\\)$")
 
             (defun e454iel-set-documents-dir ()
               "Automatically set org-agenda-files with a value calculated based
@@ -1545,10 +1602,121 @@ calculated based on my configuration."
             ;; Don't scatter around my buffers when opening up the agenda
             (setq org-agenda-window-setup 'current-window)
 
+            ;; Don't clutter recurring scheduled items with visible-by-default
+            ;;  logging
+            (setq org-log-into-drawer t)
+
+            ;; Don't expand drawers when cycling, wait until I expand them
+            ;;  manually (to reduce clutter)
+            (add-to-list 'org-cycle-hook 'org-cycle-hide-drawers)
+
+            ;; This block of settings makes the behavior of marking items as
+            ;;  done largely uniform regardless of whether I am working with
+            ;;  recurring tasks or singularly occuring tasks
+            (setq org-agenda-log-mode-items '(closed state))
+            (setq org-agenda-start-with-log-mode t)
+            (setq org-log-done 'time)
+            (setq org-agenda-skip-deadline-if-done t)
+            (setq org-agenda-skip-scheduled-if-done t)
+            (setq org-agenda-skip-timestamp-if-done t)
+
+            ;; This takes away the distracting TODO text that
+            ;;  org-agenda-log-mode displays for logging state change status for
+            ;;  recurring tasks. It makes it seem as though recurring tasks are
+            ;;  never actually done, which can be a bit demoralizing.
+            
+            ;; While I could comment this code line by line, I feel that it is best
+            ;;  understood by opening an agenda buffer with this code's hook removed, and
+            ;;  running it line by line with read-only-mode turned off
+            (defun e454iel-org-agenda-log-remove-state-todo-prefix ()
+              "Remove the \"TODO\" prefixing entries in the log view for state changes.
+               The remaining \"\(DONE\)\" text is given the usual
+               org-done face. The hope is to highlight the fact
+               that recurring tasks are done for today by
+               emphasizing the DONE part, removing the
+               distracting TODO part, yet still making clear
+               \(throught the use of parentheses\) that the
+               literal text of the buffer does not actually say
+               done."
+              (save-excursion
+                (goto-char (point-min))
+                (while (re-search-forward "State:.*(DONE) TODO" nil t)
+                  (delete-backward-char 5) ;; " TODO" = 5
+                  (add-text-properties (- (point) 6) (point) '(face org-done)) ;; "(DONE)" = 6
+                  (re-search-forward "   [ ^]")
+                  (dotimes (i 5) (insert " ")))))
+
+            (add-hook 'org-agenda-finalize-hook
+                      'e454iel-org-agenda-log-remove-state-todo-prefix)
+
+            ;; The following function and hook allow me to reset the time that a
+            ;;  recurring task is scheduled if it is a habit (it has "STYLE:
+            ;;  habit" as a property). This lets me decide that a daily
+            ;;  scheduled task may take place at a certain time today, but the
+            ;;  time portion of the schedule will be reset so as to not expect
+            ;;  me to do the task at the same time the following day. This gives
+            ;;  me the flexibility to easily re-schedule what time a task may
+            ;;  happen while still assuming that I want the task to happen every
+            ;;  day.
+
+            ;; TODO: There's a bug in this that resets the repeater portion of
+            ;;  the timestamp if moved forward or backward using shift. The hook
+            ;;  is disabled for now as a result.
+            (defun e454iel-org-reset-habit-scheduled-time ()
+              "Remove the time (HH:MM) portion of the scheduled timestamp of tasks when marking as DONE if the property RESET_TIME_ON_DONE is non-nil."
+              (let ((entry-reset-time-on-done (org-entry-get (point) "RESET_TIME_ON_DONE"))
+                    (entry-state org-state)
+                    (entry-scheduled-timestamp (org-entry-get (point) "SCHEDULED"))
+                    (time-regex "[0-9]\\{2\\}:[0-9]\\{2\\}"))
+
+                (when (and (string= entry-state "DONE")
+                           entry-reset-time-on-done
+                           entry-scheduled-timestamp
+                           (string-match time-regex entry-scheduled-timestamp))
+                  (save-excursion
+                    (org-back-to-heading t)
+                    (progn
+                      (org-set-property
+                       "SCHEDULED"
+                       (replace-regexp-in-string time-regex
+                                                 ""
+                                                 entry-scheduled-timestamp))
+                      (message "Removed time from schedule for recurring habit."))))))
+
+            ;;(add-hook 'org-after-todo-state-change-hook
+            ;;          #'e454iel-org-reset-habit-scheduled-time)
+
+            (setq org-habit-graph-column 100)
+
+            (general-define-key
+             :keymaps 'org-agenda-mode-map
+             :states '(normal motion)
+
+              "S-<up>" (lambda ()
+                         (interactive)
+                         (let ((org-time-stamp-rounding-minutes '(0 5)))
+                           (org-agenda-date-earlier-minutes -1)))
+              "S-<down>" (lambda ()
+                           (interactive)
+                           (let ((org-time-stamp-rounding-minutes '(0 5)))
+                             (org-agenda-date-earlier-minutes 1)))
+              "C-S-<up>" (lambda ()
+                           (interactive)
+                           (let ((org-time-stamp-rounding-minutes '(0 1)))
+                             (org-agenda-date-earlier-minutes -1)))
+              "C-S-<down>" (lambda ()
+                             (interactive)
+                             (let ((org-time-stamp-rounding-minutes '(0 1)))
+                               (org-agenda-date-earlier-minutes 1))))
+
             (setq org-capture-templates
                   `(("t" "TODO" entry
                      (file+headline ,(concat e454iel-documents-dir "/todo.org") "Unsorted")
                      "* TODO %a "
+                     :empty-lines-before 1)
+                    ("1" "TODO" entry
+                     (file+headline ,(concat e454iel-documents-dir "/oneOffToDo.org") "One Offs")
+                     "** TODO %?\n   SCHEDULED: %t"
                      :empty-lines-before 1)
                     ("a" "ArticlesToRead" entry
                      (file "~/org/ArticlesToRead.org")
@@ -1831,6 +1999,24 @@ calculated based on my configuration."
 (defun e454iel-kill-value (value)
   "Convert `VALUE' to a string and kill it to the clipboard."
   (kill-new (format "%s" value)))
+
+(defun e454iel-pretty-print-expression (expression)
+  "Pretty-print `EXPRESSION'.
+Create a new buffer, open it in `other-window', and run `pp-buffer'
+on it. This makes complex nested list structures very readable."
+
+  (let ((ppe-buffer (generate-new-buffer
+                     (concat "*pretty print expression: "
+                             (format "%s" expression)
+                             "*"))))
+
+    (with-current-buffer ppe-buffer
+      ;; I have to insert into the buffer, not just create a string
+      (insert (format "%s" (eval expression)))
+      (emacs-lisp-mode)
+      (pp-buffer))
+
+    (display-buffer ppe-buffer)))
 
 (use-package ediff
   :config (setq ediff-window-setup-function
@@ -2363,9 +2549,19 @@ Lisp function does not specify a special indentation."
 
 ;; used to center buffers in the middle of the screen
 (use-package olivetti
-  ;; TODO: Maybe I can make this similar to centered-window-mode by adding a
-  ;;  global mode that only applies when there's only one frame in the window
-  :general (e454iel-main-menu "tc" 'olivetti-mode))
+  :config
+  (progn
+    (setq olivetti-body-width 130)
+
+    (use-package auto-olivetti
+      :disabled
+      :straight (auto-olivetti :host sourcehut :repo "ashton314/auto-olivetti")
+      :config (progn
+                (setq auto-olivetti-enabled-modes '(text-mode prog-mode eww-mode))
+                (auto-olivetti-mode)))
+
+    (general-define-key
+     (e454iel-main-menu "tc" 'olivetti-mode))))
 
 ;; this still needs to be configured, particularly for the keybindings
 ;;(use-package pocket-api)
@@ -2540,6 +2736,7 @@ Lisp function does not specify a special indentation."
   :general (e454iel-main-menu
              "ames" 'emms-streams
              "amef" 'emms-play-file
+             "ameu" 'emms-play-url
              "amep" 'emms-pause
              ;; This is directionally left for Evil
              "ameh" 'emms-seek-backward))
@@ -2593,21 +2790,24 @@ Lisp function does not specify a special indentation."
 
 (use-package spray
   :straight (spray :host sourcehut :repo "iank/spray")
-  :config (general-define-key
-           :keymaps 'spray-mode-map
-           :states 'normal
-            "p" 'spray-start/stop
-            "h" 'spray-backward-word
-            "l" 'spray-forward-word
-            "b" 'spray-backward-word
-            "w" 'spray-forward-word
-            "<left>" 'spray-backward-word
-            "<right>" 'spray-forward-word
-            "f" 'spray-faster
-            "s" 'spray-slower
-            "t" 'spray-time
-            "q" 'spray-quit
-            "<return>" 'spray-quit))
+  :config (progn
+            (general-define-key
+             :keymaps 'spray-mode-map
+             :states 'normal
+              "p" 'spray-start/stop
+              "h" 'spray-backward-word
+              "l" 'spray-forward-word
+              "b" 'spray-backward-word
+              "w" 'spray-forward-word
+              "<left>" 'spray-backward-word
+              "<right>" 'spray-forward-word
+              "f" 'spray-faster
+              "s" 'spray-slower
+              "t" 'spray-time
+              "q" 'spray-quit
+              "<return>" 'spray-quit)
+
+            (setq spray-wpm 340)))
 
 ;; Read https://github.com/skeeto/elfeed,
 ;;  https://github.com/remyhonig/elfeed-org, and
@@ -2707,6 +2907,7 @@ Lisp function does not specify a special indentation."
 (use-package xkcd)
 
 (use-package guix
+  :disabled
   ;; This is a temporary fix while I wait for this to be merged
   ;;:straight (guix :fork (:host gitlab :repo "john.soo/emacs-guix"))
   :config (progn
@@ -3483,7 +3684,7 @@ normal-state."
 
   (setq e454iel-current-wallpaper-alist e454iel-wallpaper-alist-list)
 
-  (setq e454iel-preferred-ewal-theme 'ewal-spacemacs-classic)
+  (setq e454iel-preferred-ewal-theme 'ewal-doom-vibrant)
 
   (defun e454iel-cycle-wallpapers ()
     "Cycle through the list of wallpaper alists."
@@ -3787,7 +3988,7 @@ normal-state."
 (use-package ytdious
   :config
   (progn
-    (setq ytdious-invidious-api-url "https://inv.riverside.rocks/")
+    (setq ytdious-invidious-api-url "https://inv.tux.pizza")
 
   (defun e454iel-ytdious-get-current-video-url ()
     (interactive
@@ -4056,6 +4257,9 @@ normal-state."
    "u" 'evil-collection-xwidget-webkit-restore-last-closed-tab
    "c" 'xwidget-webkit-current-url
    "f" 'xwwp-follow-link
+   ;;"y" 'xwidget-webkit-copy-selection-as-kill
+   "<mouse-8>" 'xwidget-webkit-back
+   "<mouse-9>" 'xwidget-webkit-forward
    ))
 
 ;; Timers in Emacs
@@ -4065,6 +4269,12 @@ normal-state."
              "aT" 'tmr-tabulated-view)
   :config (progn
             (setq tmr-sound-file "~/.dotfiles/BellCounterA.wav")))
+
+(use-package mentor
+  :config
+  (progn
+    (setq mentor-rtorrent-download-directory "~/Downloads/torrent/"))
+  )
 
 (provide 'init)
 ;;; init.el ends here
