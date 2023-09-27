@@ -1043,14 +1043,15 @@ _-_increase _=_decrease"
     ;; TODO: How does this correspond to the actual workspace names? Despite the
     ;;  workspaces starting with being named "1" here, switching to workspace
     ;;  "0" still switches to the first workspace
-    (setq exwm-randr-workspace-output-plist
-          '(0 "DisplayPort-1"
-              1 "HDMI-A-0"
-              ;;2 "DisplayPort-1"
-              ;;3 "DisplayPort-1"
-              ;;4 "DisplayPort-1"
-              ;;5 "DisplayPort-1"
-              ))
+    (if e454iel-desktop-p
+        (setq exwm-randr-workspace-output-plist
+              '(0 "DisplayPort-1"
+                  1 "HDMI-A-0"
+                  ;;2 "DisplayPort-1"
+                  ;;3 "DisplayPort-1"
+                  ;;4 "DisplayPort-1"
+                  ;;5 "DisplayPort-1"
+                  )))
     (exwm-randr-enable)
 
     (setq exwm-workspace-show-all-buffers t)  
