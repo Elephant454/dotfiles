@@ -2877,7 +2877,8 @@ Lisp function does not specify a special indentation."
   :config (evil-collection-init 'vterm))
 
 ;; File uploads to 0x0.st!
-(use-package 0x0)
+(use-package 0x0
+  :straight (0x0 :host github :repo "emacsmirror/0x0"))
 
 ;; I'm kinda confused on what this is, but the screenshot makes it look cool
 ;;  and helpful? https://github.com/mamapanda/evil-owl
