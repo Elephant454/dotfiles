@@ -183,17 +183,20 @@ print-circle t
 (setq custom-file (concat user-emacs-directory "config/" "custom-file.el"))
 ;;(load "custom-file.el" t)
 
-;; Decide if this is a home computer
-(defvar e454iel-home-computer-p
+;; Describe a bunch of classes of devices I own
+(defvar e454iel-desktop-p
   (find (system-name)
-        (list "7752.Arch.Matthew"
-              "7752.Guix.Matthew"
+        (list
+         "7752.Arch.Matthew"
+         "7752.Guix.Matthew"
+         "Desktop.Guix.Maddie")
+        :test #'string-equal))
+
+(defvar e454iel-laptop-p
+  (find (system-name)
+        (list "Laptop-Manjaro-Maddie"
               "7548.Arch.Matthew"
-              "7548.Guix.Matthew"
-              "Desktop.Guix.Maddie"
-              "Laptop-Manjaro-Maddie"
-              "mobian"
-              "danctnix")
+              "7548.Guix.Matthew")
         :test #'string-equal))
 
 (defvar e454iel-phone-p
@@ -202,13 +205,14 @@ print-circle t
               "danctnix")
         :test #'string-equal))
 
-(defvar e454iel-laptop-p
-  (find (system-name)
-        (list "Laptop-Manjaro-Maddie")
-        :test #'string-equal))
-
 (defvar e454iel-portable-p
   (or e454iel-phone-p e454iel-laptop-p))
+
+;; Decide if this is a home computer
+(defvar e454iel-home-computer-p
+  (or e454iel-desktop-p
+      e454iel-laptop-p
+      e454iel-phone-p))
 
 ;; themes
 
