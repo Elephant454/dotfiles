@@ -877,6 +877,7 @@ This makes for easier reading of larger, denser bodies of text."
             ;;  "sudo mount $1 /mnt/storage/; find-file /sudo:root@localhost:/mnt/storage")
             ;; (eshell/alias "unmount-storage"
             ;;  "tramp-cleanup-connection (quote (tramp-file-name \"sudo\" \"root\" nil \"localhost\" nil nil nil)); sudo umount /mnt/storage/; sync")
+            ;; (eshell/alias "youtube-playlist-to-org" "yt-dlp $1 --get-filename -o \"* [[https://www.youtube.com/watch?v=%(id)s][%(title)s]] \"")
             ))
 
 ;; give parenthesis matching colors based upon depth
