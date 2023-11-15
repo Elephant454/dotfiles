@@ -1996,6 +1996,20 @@ calculated based on my configuration."
   "Convert `VALUE' to a string and kill it to the clipboard."
   (kill-new (format "%s" value)))
 
+(defun e454iel-insert-in-new-buffer
+    (contents-to-insert new-buffer-name &optional major-mode)
+  "Insert `CONTENTS-TO-INSERT' into a newly generated buffer of name `NEW-BUFFER-NAME'."
+
+  (let ((new-buffer (generate-new-buffer new-buffer-name)))
+
+    (with-current-buffer new-buffer
+      (insert (format "%s" contents-to-insert))
+      (funcall major-mode))
+
+    (display-buffer new-buffer)
+
+    new-buffer))
+
 (defun e454iel-pretty-print-expression (expression)
   "Pretty-print `EXPRESSION'.
 Create a new buffer, open it in `other-window', and run `pp-buffer'
