@@ -2768,7 +2768,8 @@ Lisp function does not specify a special indentation."
              "ameu" 'emms-play-url
              "amep" 'emms-pause
              ;; This is directionally left for Evil
-             "ameh" 'emms-seek-backward))
+             "ameh" 'emms-seek-backward
+             "amel" 'emms-seek-forward))
 
 (use-package python
   :commands (python-mode run-python)
