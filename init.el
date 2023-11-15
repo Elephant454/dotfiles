@@ -2719,7 +2719,6 @@ Lisp function does not specify a special indentation."
             (emms-all)
             ;;(emms-default-players)
             (add-to-list 'emms-player-list 'emms-player-mpv)
-            (setq emms-source-file-default-directory "~/Music/")
 
             ;; TODO: This is an utter mess, and can clearly be cleaned TODO:
             ;; TODO: This seems to prohibit playing videos that aren't offered
