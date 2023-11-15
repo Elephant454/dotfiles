@@ -2738,6 +2738,20 @@ Lisp function does not specify a special indentation."
             (add-to-list 'emms-player-mpv-parameters
                          "--write-filename-in-watch-later-config")
 
+            ;; Auto subtitles styled in the current Emacs theme settings
+            (add-to-list 'emms-player-mpv-parameters
+                         "--ytdl-raw-options=sub-langs=en.*,write-auto-subs=")
+
+            (add-to-list 'emms-player-mpv-parameters
+                         (concat "--sub-font='"
+                                 (format "%s" (font-get (face-attribute 'default :font) :family)) "'"))
+
+            (add-to-list 'emms-player-mpv-parameters
+                         (concat "--sub-border-color=" (face-background 'default)))
+
+            (add-to-list 'emms-player-mpv-parameters
+                         (concat "--sub-color=" (face-foreground 'default)))
+
             (evil-collection-init 'emms)
 
             (use-package emms-mode-line-cycle
