@@ -2758,7 +2758,9 @@ Lisp function does not specify a special indentation."
               :config (progn
                         (emms-mode-line 1)
                         (emms-playing-time 1)
-                        (emms-mode-line-cycle 1))))
+                        (emms-mode-line-cycle 1)
+                        (setq emms-mode-line-cycle-velocity 2)
+                        )))
 
   :general (e454iel-main-menu
              "ames" 'emms-streams
