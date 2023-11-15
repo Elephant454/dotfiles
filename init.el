@@ -2023,6 +2023,12 @@ on it. This makes complex nested list structures very readable."
                                     #'emacs-lisp-mode)
     (pp-buffer)))
 
+;; From
+;;  https://unix.stackexchange.com/questions/392069/in-emacs-how-to-force-switch-to-a-different-buffer-in-a-dedicated-window
+(defun e454iel-undedicate ()
+  "Remove the current window's dedication status from the current frame."
+  (set-window-dedicated-p (frame-selected-window) nil))
+
 (use-package ediff
   :config (setq ediff-window-setup-function
   'ediff-setup-windows-plain)) ; makes it so that ediff uses one
