@@ -2720,7 +2720,10 @@ Lisp function does not specify a special indentation."
             ;;(emms-default-players)
             (add-to-list 'emms-player-list 'emms-player-mpv)
 
-            ;; TODO: This is an utter mess, and can clearly be cleaned TODO:
+            ;; Allow song titles when streaming (given I'm using mpv)
+            (customize-set-variable 'emms-player-mpv-update-metadata t)
+
+            ;; TODO: This is an utter mess, and can clearly be cleaned
             ;; TODO: This seems to prohibit playing videos that aren't offered
             ;;  at this low of a resolution, which isn't what I want
             (if e454iel-phone-p
