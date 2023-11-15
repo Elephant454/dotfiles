@@ -2015,18 +2015,13 @@ calculated based on my configuration."
 Create a new buffer, open it in `other-window', and run `pp-buffer'
 on it. This makes complex nested list structures very readable."
 
-  (let ((ppe-buffer (generate-new-buffer
-                     (concat "*pretty print expression: "
-                             (format "%s" expression)
-                             "*"))))
-
-    (with-current-buffer ppe-buffer
-      ;; I have to insert into the buffer, not just create a string
-      (insert (format "%s" (eval expression)))
-      (emacs-lisp-mode)
-      (pp-buffer))
-
-    (display-buffer ppe-buffer)))
+  (with-current-buffer
+      (e454iel-insert-in-new-buffer (eval expression)
+                                    (concat "*pretty print expression: "
+                                            (format "%s" expression)
+                                            "*")
+                                    #'emacs-lisp-mode)
+    (pp-buffer)))
 
 (use-package ediff
   :config (setq ediff-window-setup-function
