@@ -2748,8 +2748,8 @@ Lisp function does not specify a special indentation."
                          "--ytdl-raw-options=sub-langs=en.*,write-auto-subs=")
 
             (add-to-list 'emms-player-mpv-parameters
-                         (concat "--sub-font='"
-                                 (format "%s" (font-get (face-attribute 'default :font) :family)) "'"))
+                         (concat "--sub-font="
+                                 (format "%s" (font-get (face-attribute 'default :font) :family))))
 
             (add-to-list 'emms-player-mpv-parameters
                          (concat "--sub-border-color=" (face-background 'default)))
