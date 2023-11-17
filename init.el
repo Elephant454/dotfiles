@@ -4457,5 +4457,7 @@ normal-state."
     (setq mentor-rtorrent-download-directory "~/Downloads/torrent/"))
   )
 
+(use-package hnreader)
+
 (provide 'init)
 ;;; init.el ends here
