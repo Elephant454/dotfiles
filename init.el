@@ -397,7 +397,7 @@ without confirmation."
    e454iel-theme-pairs))
 
 ;; load default theme
-(e454iel-jump-to-theme 'gruvbox-light-soft)
+(e454iel-jump-to-theme 'birds-of-paradise-plus)
 
 
 ;; fonts
@@ -1018,6 +1018,7 @@ This makes for easier reading of larger, denser bodies of text."
             ;;  "sudo mount $1 /mnt/storage/; find-file /sudo:root@localhost:/mnt/storage")
             ;; (eshell/alias "unmount-storage"
             ;;  "tramp-cleanup-connection (quote (tramp-file-name \"sudo\" \"root\" nil \"localhost\" nil nil nil)); sudo umount /mnt/storage/; sync")
+            ;; (eshell/alias "youtube-playlist-to-org" "yt-dlp $1 --get-filename -o \"* [[https://www.youtube.com/watch?v=%(id)s][%(title)s]] \"")
             ))
 
 ;; give parenthesis matching colors based upon depth
@@ -2138,23 +2139,38 @@ calculated based on my configuration."
   "Convert `VALUE' to a string and kill it to the clipboard."
   (kill-new (format "%s" value)))
 
+(defun e454iel-insert-in-new-buffer
+    (contents-to-insert new-buffer-name &optional major-mode)
+  "Insert `CONTENTS-TO-INSERT' into a newly generated buffer of name `NEW-BUFFER-NAME'."
+
+  (let ((new-buffer (generate-new-buffer new-buffer-name)))
+
+    (with-current-buffer new-buffer
+      (insert (format "%s" contents-to-insert))
+      (funcall major-mode))
+
+    (display-buffer new-buffer)
+
+    new-buffer))
+
 (defun e454iel-pretty-print-expression (expression)
   "Pretty-print `EXPRESSION'.
 Create a new buffer, open it in `other-window', and run `pp-buffer'
 on it. This makes complex nested list structures very readable."
 
-  (let ((ppe-buffer (generate-new-buffer
-                     (concat "*pretty print expression: "
-                             (format "%s" expression)
-                             "*"))))
+  (with-current-buffer
+      (e454iel-insert-in-new-buffer (eval expression)
+                                    (concat "*pretty print expression: "
+                                            (format "%s" expression)
+                                            "*")
+                                    #'emacs-lisp-mode)
+    (pp-buffer)))
 
-    (with-current-buffer ppe-buffer
-      ;; I have to insert into the buffer, not just create a string
-      (insert (format "%s" (eval expression)))
-      (emacs-lisp-mode)
-      (pp-buffer))
-
-    (display-buffer ppe-buffer)))
+;; From
+;;  https://unix.stackexchange.com/questions/392069/in-emacs-how-to-force-switch-to-a-different-buffer-in-a-dedicated-window
+(defun e454iel-undedicate ()
+  "Remove the current window's dedication status from the current frame."
+  (set-window-dedicated-p (frame-selected-window) nil))
 
 (use-package ediff
   :config (setq ediff-window-setup-function
@@ -2680,7 +2696,7 @@ Lisp function does not specify a special indentation."
             (setq display-time-interval 0.95)
             ;; TODO: Pi day, Pride month, December, Fall, Halloween, Thanksgiving week, Birthday
             ;; TODO: Maybe I could have the cake show every time it's the birthday of someone I know?
-            (setq e454iel-holiday-symbol "🌴🐚🍹")
+            (setq e454iel-holiday-symbol "🎃🕯️🦃🍂")
             (setq display-time-format (concat "%F %H:%M:%S %a " e454iel-holiday-symbol))
             (display-time-mode t)))
 
@@ -2851,9 +2867,11 @@ Lisp function does not specify a special indentation."
             (emms-all)
             ;;(emms-default-players)
             (add-to-list 'emms-player-list 'emms-player-mpv)
-            (setq emms-source-file-default-directory "~/Music/")
 
-            ;; TODO: This is an utter mess, and can clearly be cleaned TODO:
+            ;; Allow song titles when streaming (given I'm using mpv)
+            (customize-set-variable 'emms-player-mpv-update-metadata t)
+
+            ;; TODO: This is an utter mess, and can clearly be cleaned
             ;; TODO: This seems to prohibit playing videos that aren't offered
             ;;  at this low of a resolution, which isn't what I want
             (if e454iel-phone-p
@@ -2868,13 +2886,29 @@ Lisp function does not specify a special indentation."
             (add-to-list 'emms-player-mpv-parameters
                          "--write-filename-in-watch-later-config")
 
+            ;; Auto subtitles styled in the current Emacs theme settings
+            (add-to-list 'emms-player-mpv-parameters
+                         "--ytdl-raw-options=sub-langs=en.*,write-auto-subs=")
+
+            (add-to-list 'emms-player-mpv-parameters
+                         (concat "--sub-font="
+                                 (format "%s" (font-get (face-attribute 'default :font) :family))))
+
+            (add-to-list 'emms-player-mpv-parameters
+                         (concat "--sub-border-color=" (face-background 'default)))
+
+            (add-to-list 'emms-player-mpv-parameters
+                         (concat "--sub-color=" (face-foreground 'default)))
+
             (evil-collection-init 'emms)
 
             (use-package emms-mode-line-cycle
               :config (progn
                         (emms-mode-line 1)
                         (emms-playing-time 1)
-                        (emms-mode-line-cycle 1))))
+                        (emms-mode-line-cycle 1)
+                        (setq emms-mode-line-cycle-velocity 2)
+                        )))
 
   :general (e454iel-main-menu
              "ames" 'emms-streams
@@ -2882,7 +2916,8 @@ Lisp function does not specify a special indentation."
              "ameu" 'emms-play-url
              "amep" 'emms-pause
              ;; This is directionally left for Evil
-             "ameh" 'emms-seek-backward))
+             "ameh" 'emms-seek-backward
+             "amel" 'emms-seek-forward))
 
 (use-package python
   :commands (python-mode run-python)
@@ -4421,6 +4456,8 @@ normal-state."
   (progn
     (setq mentor-rtorrent-download-directory "~/Downloads/torrent/"))
   )
+
+(use-package hnreader)
 
 (provide 'init)
 ;;; init.el ends here
