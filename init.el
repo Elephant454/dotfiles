@@ -622,6 +622,7 @@ This makes for easier reading of larger, denser bodies of text."
      ;; TODO: Make it so I can use space in ibuffer. There's no reason why I
      ;;  should be able to.
      "bi" 'ibuffer
+     "br" 'rename-buffer
      
      ;; file commands
      "f" '(:ignore t :which-key "File")   ; label
