@@ -4070,8 +4070,8 @@ normal-state."
 
 (use-package desktop-environment
   :straight (desktop-environment
-             :host nil
-             :repo "https://gitlab.petton.fr/DamienCassou/desktop-environment")
+             :host github
+             :repo "DamienCassou/desktop-environment")
   :config
   (progn
     (desktop-environment-mode)))
