@@ -2594,8 +2594,8 @@ Lisp function does not specify a special indentation."
             "c" 'with-editor-finish
             "k" 'with-editor-cancel))
 
-;; I don't know what this is for entirely, but customize turned it on and it
-;;  looks interesting
+;; TODO: Turn back on midnight-hook using clean-buffer-list after I've
+;;  configured it a bit more
 (use-package midnight
   :demand
   :config (midnight-mode t))
