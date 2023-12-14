@@ -4318,5 +4318,13 @@ normal-state."
 
 (use-package hnreader)
 
+;; Have access to the path from inside Emacs' various non-eshell shell modes
+(use-package exec-path-from-shell
+  :config
+  (progn
+    (when (or (daemonp)
+              (memq window-system '(mac ns x)))
+      (exec-path-from-shell-initialize))))
+
 (provide 'init)
 ;;; init.el ends here
