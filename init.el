@@ -820,15 +820,18 @@ or after."
             ;; Enable auto completion
             (setq corfu-auto t)
             (setq corfu-auto-delay 0.2)
+
             ;; Quit at completion boundary
             (setq corfu-quit-at-boundary t)
             ;; Quit if there is no match
             (setq corfu-quit-no-match t)
+
             ;; Enable current candidate preview
             (setq corfu-preview-current 'insert)
 
             ;; Enable documentation in the echo area
             (setq corfu-echo-documentation t)
+
             ;; Use scroll margin
             (setq corfu-scroll-margin 5) 
 
