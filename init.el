@@ -2598,7 +2598,9 @@ Lisp function does not specify a special indentation."
 ;;  configured it a bit more
 (use-package midnight
   :demand
-  :config (midnight-mode t))
+  :config (progn
+            (remove-hook 'midnight-hook 'clean-buffer-list)
+            (midnight-mode t)))
 
 ;; Look more into this later. Does using fset like this break anything? On top
 ;;  of that, is this even necessary?
