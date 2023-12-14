@@ -787,8 +787,36 @@ This makes for easier reading of larger, denser bodies of text."
 
 (use-package corfu
   :config (progn
+            ;; Use Evil Collection's tab-n-go style
+            (custom-set-variables '(evil-collection-corfu-key-themes '(tab-n-go)))
+            (evil-collection-init 'corfu)
+
+            ;; adapted from
+            ;; https://emacs.stackexchange.com/questions/48238/how-to-run-whichever-function-is-bound-to-a-certain-key
+            (defun e454iel-eval-kbd-sequence (kbd-sequence)
+              "Run the command associated with the given key sequence.
+Effectively, have a robot press the key sequence on behalf of the
+user. This is especially useful for writing lambas for binds that
+do what a key normally does, plus something extra either before
+or after."
+              (interactive)
+              (let ((command (key-binding (kbd kbd-sequence))))
+                (when command
+                  (command-execute command))))
+
+            ;; Make the "n-go" work when pressing space or return in insert mode
+            ;;(general-define-key
+            ;; :keymaps 'corfu-map
+            ;; :states 'insert
+            ;;  "SPC" (lambda () (interactive) (corfu-complete) (e454iel-eval-kbd-sequence "SPC"))
+            ;;  "RET" (lambda () (interactive) (corfu-complete) (e454iel-eval-kbd-sequence "RET")))
+
             ;; Enable cycling for `corfu-next/previous'
-            (setq corfu-cycle t)
+            ;; (setq corfu-cycle t)
+
+            ;; Don't select an initial candidate
+            (setq corfu-preselect 'prompt)
+
             ;; Enable auto completion
             (setq corfu-auto t)
             (setq corfu-auto-delay 0.2)
@@ -796,23 +824,20 @@ This makes for easier reading of larger, denser bodies of text."
             (setq corfu-quit-at-boundary t)
             ;; Quit if there is no match
             (setq corfu-quit-no-match t)
-            ;; Disable current candidate preview
-            (setq corfu-preview-current t)
-            ;; Disable candidate preselection
-            (setq corfu-preselect-first t)
-            ;; Disable documentation in the echo area
+            ;; Enable current candidate preview
+            (setq corfu-preview-current 'insert)
+
+            ;; Enable documentation in the echo area
             (setq corfu-echo-documentation t)
             ;; Use scroll margin
             (setq corfu-scroll-margin 5) 
 
-            ;; Don't TAB cycle
+            ;; Don't TAB cycle (don't actually put entries into the buffer
+            ;;  without corfu's previewing and selection)
             (setq completion-cycle-threshold nil)
 
             ;; Enable indentation+completion using the TAB key.
             (setq tab-always-indent 'complete)
-
-            (setq evil-collection-corfu-maps 'magic-return)
-            (evil-collection-init 'corfu)
 
             (use-package cape
               :config
