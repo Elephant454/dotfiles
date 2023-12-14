@@ -1310,12 +1310,12 @@ _-_increase _=_decrease"
           (exwm-workspace-switch-create
            (third exwm-randr-workspace-output-plist))
 
-          (eyebrowse-switch-to-window-config-1)))
+          (tab-select 1)))
 
       (exwm-workspace-switch-create
        (first exwm-randr-workspace-output-plist))
 
-      (eyebrowse-switch-to-window-config-1))
+      (tab-select 1))
 
     (push
      (cons (kbd "<s-escape>") #'e454iel-jump-to-original-workspace)
@@ -2426,48 +2426,46 @@ Lisp function does not specify a special indentation."
   :config (popwin-mode 1))
 
 ;; workspaces
-;; This is another thing that I'm demanding that I shouldn't need to demand.
-;;  It's better than having errors pop up about the mode-line, though. I still
-;;  want to make my own mode-line for fun, though.
-(use-package eyebrowse
-  :demand
-  :config (progn
-            (setq eyebrowse-mode-line-style 'smart)
-            (eyebrowse-mode 1)
+(use-package tab-bar
+  :straight (tab-bar :type built-in)
+  :config
+  (progn
+    (general-define-key
+     :keymaps 'evil-window-map
+     "g" '(nil :which-key "Tabs (Groups)")
+     "gg" 'tab-switch
+     "gn" 'tab-new
+     "gr" 'tab-rename
+     "g0" (lambda () (interactive) (tab-select 0))
+     "g1" (lambda () (interactive) (tab-select 1))
+     "g2" (lambda () (interactive) (tab-select 2))
+     "g3" (lambda () (interactive) (tab-select 3))
+     "g4" (lambda () (interactive) (tab-select 4))
+     "g5" (lambda () (interactive) (tab-select 5))
+     "g6" (lambda () (interactive) (tab-select 6))
+     "g7" (lambda () (interactive) (tab-select 7))
+     "g8" (lambda () (interactive) (tab-select 8))
+     "g9" (lambda () (interactive) (tab-select 9))
 
-            (general-define-key
-             :keymaps 'evil-window-map
-              "g" '(nil :which-key "Groups")
-              "g0" 'eyebrowse-switch-to-window-config-0
-              "g1" 'eyebrowse-switch-to-window-config-1
-              "g2" 'eyebrowse-switch-to-window-config-2
-              "g3" 'eyebrowse-switch-to-window-config-3
-              "g4" 'eyebrowse-switch-to-window-config-4
-              "g5" 'eyebrowse-switch-to-window-config-5
-              "g6" 'eyebrowse-switch-to-window-config-6
-              "g7" 'eyebrowse-switch-to-window-config-7
-              "g8" 'eyebrowse-switch-to-window-config-8
-              "g9" 'eyebrowse-switch-to-window-config-9
-              
-              "gc" 'eyebrowse-close-window-config)
+     "gc" 'tab-close)
 
-            ;; Prevents an evil keybinding that overrides our switching
-            ;;  workspaces using Control 
-            (general-define-key
-             :keymaps 'evil-motion-state-map
-              "C-6" 'nil)
+    ;; Prevents an evil keybinding that overrides our switching
+    ;;  workspaces using Control
+    (general-define-key
+     :keymaps 'evil-motion-state-map
+      "C-6" 'nil)
 
-            (general-define-key
-              "C-0" 'eyebrowse-switch-to-window-config-0
-              "C-1" 'eyebrowse-switch-to-window-config-1
-              "C-2" 'eyebrowse-switch-to-window-config-2
-              "C-3" 'eyebrowse-switch-to-window-config-3
-              "C-4" 'eyebrowse-switch-to-window-config-4
-              "C-5" 'eyebrowse-switch-to-window-config-5
-              "C-6" 'eyebrowse-switch-to-window-config-6
-              "C-7" 'eyebrowse-switch-to-window-config-7
-              "C-8" 'eyebrowse-switch-to-window-config-8
-              "C-9" 'eyebrowse-switch-to-window-config-9)))
+    (general-define-key
+     "C-0" (lambda () (interactive) (tab-select 0))
+     "C-1" (lambda () (interactive) (tab-select 1))
+     "C-2" (lambda () (interactive) (tab-select 2))
+     "C-3" (lambda () (interactive) (tab-select 3))
+     "C-4" (lambda () (interactive) (tab-select 4))
+     "C-5" (lambda () (interactive) (tab-select 5))
+     "C-6" (lambda () (interactive) (tab-select 6))
+     "C-7" (lambda () (interactive) (tab-select 7))
+     "C-8" (lambda () (interactive) (tab-select 8))
+     "C-9" (lambda () (interactive) (tab-select 9)))))
 
 ;; improved list-packages manager
 ;; what is paradox-execute-asynchronously?
