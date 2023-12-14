@@ -4119,7 +4119,10 @@ normal-state."
                "*.ti" ("terminfo/e" "terminfo/e/*")
                ("terminfo/65" "terminfo/65/*")
                ("integration" "integration/*")
-               (:exclude ".dir-locals.el" "*-tests.el"))))
+               (:exclude ".dir-locals.el" "*-tests.el")))
+  :config
+  (progn
+    (add-hook 'eshell-mode-hook #'eat-eshell-mode)))
 
 (use-package crdt)
 
