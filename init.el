@@ -2599,7 +2599,8 @@ Lisp function does not specify a special indentation."
 (use-package midnight
   :demand
   :config (progn
-            (remove-hook 'midnight-hook 'clean-buffer-list)
+            (remove-hook 'midnight-hook #'clean-buffer-list)
+            (add-hook 'midnight-hook #'e454iel-set-org-agenda-files)
             (midnight-mode t)))
 
 ;; Look more into this later. Does using fset like this break anything? On top
