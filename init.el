@@ -2573,6 +2573,7 @@ Lisp function does not specify a special indentation."
   :straight (tab-bar :type built-in)
   :config
   (progn
+    (setq tab-bar-show nil)
     (general-define-key
      :keymaps 'evil-window-map
      "g" '(nil :which-key "Tabs (Groups)")
