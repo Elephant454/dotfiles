@@ -1733,7 +1733,7 @@ calculated based on my configuration."
                    org-agenda-custom-commands
 
                    ;;'(("m" tags "-other-agenda"))))
-                   '(("m" "My Agenda"
+                   '(("z" "My Agenda"
                       agenda ""
                       ((org-agenda-tag-filter-preset '("-OtherAgenda")))))))
 
