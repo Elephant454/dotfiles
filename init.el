@@ -4195,9 +4195,9 @@ normal-state."
    (interactive)
    (kill-new
     (let ((video-alist (ytdious-get-current-video)))
-      (format "[[%s - YouTube][https://www.youtube.com/watch?v=%s]]"
-              (cdr (assoc 'title video-alist))
-              (cdr (assoc 'videoId video-alist))))))
+      (format "[[https://www.youtube.com/watch?v=%s][%s - YouTube]] "
+              (cdr (assoc 'videoId video-alist))
+              (cdr (assoc 'title video-alist))))))
 
   (general-define-key
    :keymaps 'ytdious-mode-map
