@@ -2882,7 +2882,11 @@ Lisp function does not specify a special indentation."
                   (add-to-list 'emms-player-mpv-parameters
                                "-ao=alsa")
                   (add-to-list 'emms-player-mpv-parameters
-                               "--ytdl-format='[height<420]'")))
+                               "--ytdl-format=[height<420]")))
+
+            (if e454iel-laptop-p
+                (add-to-list 'emms-player-mpv-parameters
+                             "--ytdl-format=bestvideo[height<=720]+bestaudio"))
 
             (add-to-list 'emms-player-mpv-parameters
                          "--save-position-on-quit")
@@ -2902,6 +2906,11 @@ Lisp function does not specify a special indentation."
 
             (add-to-list 'emms-player-mpv-parameters
                          (concat "--sub-color=" (face-foreground 'default)))
+
+            ;;(if e454iel-laptop-p
+            ;;  (add-to-list 'emms-player-mpv-parameters "--ytdl-raw-options=S=res:720"))
+            ;;(if e454iel-phone-p
+            ;;  (add-to-list 'emms-player-mpv-parameters "--ytdl-raw-options=S=res:480"))
 
             (evil-collection-init 'emms)
 
