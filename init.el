@@ -141,26 +141,61 @@ print-circle t
 ;; Don't kill the whole line if I accidentally mash C-S
 (global-unset-key (kbd "<C-S-backspace>"))
 
-;; Install the Straight.el package manager from the bootstrap
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+;; Install the Elpaca package manager (using the install script)
+;; https://github.com/progfolio/elpaca
+(progn
+  (defvar elpaca-installer-version 0.6)
+  (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+  (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+  (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+  (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                                :ref nil
+                                :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+                                :build (:not elpaca--activate-package)))
+  (let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+         (build (expand-file-name "elpaca/" elpaca-builds-directory))
+         (order (cdr elpaca-order))
+         (default-directory repo))
+    (add-to-list 'load-path (if (file-exists-p build) build repo))
+    (unless (file-exists-p repo)
+      (make-directory repo t)
+      (when (< emacs-major-version 28) (require 'subr-x))
+      (condition-case-unless-debug err
+          (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                   ((zerop (call-process "git" nil buffer t "clone"
+                                         (plist-get order :repo) repo)))
+                   ((zerop (call-process "git" nil buffer t "checkout"
+                                         (or (plist-get order :ref) "--"))))
+                   (emacs (concat invocation-directory invocation-name))
+                   ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                         "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                   ((require 'elpaca))
+                   ((elpaca-generate-autoloads "elpaca" repo)))
+              (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+            (error "%s" (with-current-buffer buffer (buffer-string))))
+        ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+    (unless (require 'elpaca-autoloads nil t)
+      (require 'elpaca)
+      (elpaca-generate-autoloads "elpaca" repo)
+      (load "./elpaca-autoloads")))
+  (add-hook 'after-init-hook #'elpaca-process-queues)
+  (elpaca `(,@elpaca-order)))
 
-(straight-use-package 'use-package)
+;; Set up use-package support for elpaca
+(elpaca elpaca-use-package
+  ;; Enable :elpaca use-package keyword.
+  (elpaca-use-package-mode)
+  ;; Assume :elpaca t unless otherwise specified.
+  (setq elpaca-use-package-by-default t))
+
+(setq elpaca-verbosity 1)
+
+;; Block until current queue processed.
+(elpaca-wait)
 
 (use-package use-package
   ;; set all calls to use-package to use Straight as the package manager
   :config (progn
-            (setq straight-use-package-by-default t)
             ;; TODO: This seems to break on Emacs 29 for some reason?
             ;;(use-package use-package-ensure-system-package)
             ))
@@ -182,7 +217,7 @@ print-circle t
 
 ;; load custom-file (file where all options set by customize are stored)
 (setq custom-file (concat user-emacs-directory "config/" "custom-file.el"))
-;;(load "custom-file.el" t)
+;;(add-hook 'elpaca-after-init-hook (lambda () (load custom-file 'noerror)))
 
 ;; Describe a bunch of classes of devices I own
 (defvar e454iel-desktop-p
@@ -295,7 +330,8 @@ value bound."
  (shanty-themes)
  (ef-themes)
  (weyland-yutani-theme)
-)
+ )
+(elpaca-wait)
 
 ;; TODO: There has to be some sort of better way of doing this. 😅 The autoloads
 ;;  weren't generated right, so the only way to get the
@@ -542,7 +578,7 @@ This makes for easier reading of larger, denser bodies of text."
 
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
-  :demand
+  :demand t
 
   :init
   (progn
@@ -569,6 +605,7 @@ This makes for easier reading of larger, denser bodies of text."
                         :config (global-evil-fringe-mark-mode t)))
             ;; A collection of Evil keybindings for various packages
             (use-package evil-collection)))
+(elpaca-wait)
 
 (use-package general
   :demand t
@@ -713,6 +750,7 @@ This makes for easier reading of larger, denser bodies of text."
      "<left>" 'previous-buffer
      "<right>" 'next-buffer
      )))
+(elpaca-wait)
 
 ;; Completion framework and completion framework accessories
 ;; TODO: Do I want to use vertico instead? How do they compare? Is there a
@@ -892,6 +930,7 @@ This makes for easier reading of larger, denser bodies of text."
   :config (which-key-mode t))
 
 (use-package info
+  :elpaca nil
   :config (progn
             ;; TODO: Does this package still exist?
             ;;(use-package info-rename-buffer-mode
@@ -929,6 +968,7 @@ This makes for easier reading of larger, denser bodies of text."
     (setq inhibit-compacting-font-caches t)))
 
 (use-package ibuffer
+  :elpaca nil
   :config (progn
             (evil-collection-init 'ibuffer)
             (use-package all-the-icons-ibuffer
@@ -941,15 +981,15 @@ This makes for easier reading of larger, denser bodies of text."
               "<SPC>" 'e454iel-main-menu-prefix)))
 
 (use-package grep
+  :elpaca nil
   :config (general-define-key
            :states '(normal motion)
            :keymaps 'grep-mode-map
-            "<SPC>" 'e454iel-main-menu-prefix))
+           "<SPC>" 'e454iel-main-menu-prefix))
 
+(use-package dired-x :elpaca nil)
 (use-package dired
-  :straight (dired :type built-in)
-  :init (use-package dired-x
-          :straight (dired-x :type built-in))
+  :elpaca nil
   :config (progn
             ;; When we have two dired windows open, operations like "Copy" or
             ;;  "Rename" default to the directory of the other open window
@@ -968,15 +1008,17 @@ This makes for easier reading of larger, denser bodies of text."
                         (e454iel-main-menu
                           "fS" 'dired-sidebar-toggle-sidebar)))
             (use-package dired+
+              :elpaca (dired+ :host github :repo "emacsmirror/dired-plus")
               :config
               (progn
                 (setq diredp-image-preview-in-tooltip nil)))))
 
 (use-package debug
+  :elpaca nil
   :config (evil-collection-init 'debug))
 
 (use-package proced
-  :straight (proced :type built-in)
+  :elpaca nil
   :config (progn
             (evil-collection-init 'proced))
   :general (general-define-key
@@ -985,17 +1027,19 @@ This makes for easier reading of larger, denser bodies of text."
             "<SPC>" 'e454iel-main-menu-prefix))
 
 (use-package eshell
+  :elpaca nil
   :config (progn
             (evil-collection-init 'eshell)
 
             ;; For using tramp sudo
             (use-package em-tramp
-              :straight (em-tramp :type built-in))
+              :elpaca nil)
 
             (use-package esh-module
-              :straight (esh-module :type built-in))
+              :elpaca nil)
 
             (use-package nyan-prompt
+              :disabled
               :config (add-hook 'eshell-load-hook 'nyan-prompt-enable))
 
             (add-to-list 'eshell-modules-list 'eshell-tramp)
@@ -1090,8 +1134,7 @@ _-_increase _=_decrease"
             (use-package java-snippets)
             (yas-global-mode t)))
 
-(use-package eldoc
-  :straight (eldoc :source gnu-elpa-mirror))
+(use-package eldoc)
 
 ;; This does what it says on the tin. It provides a function for restarting
 ;;  emacs.
@@ -1111,7 +1154,7 @@ _-_increase _=_decrease"
             ;;(add-hook 'window-numbering-mode-hook 'window-numbering-clear-mode-line)
 ;;(window-numbering-mode 1))
 (use-package winum
-  :demand
+  :demand t
   :config (progn
             (winum-mode 1)
             (general-define-key
@@ -1149,6 +1192,7 @@ _-_increase _=_decrease"
               "M-7" 'winum-select-window-7
               "M-8" 'winum-select-window-8
               "M-9" 'winum-select-window-9)))
+(elpaca-wait)
 
 ;; Do some reading to set this up properly
 ;;  https://github.com/bmag/emacs-purpose/wiki/Usage
@@ -1179,17 +1223,18 @@ _-_increase _=_decrease"
 ;;  nice with eyebrowse. See if I can apply that patch as advice in this file
 ;;  instead (or if that patch has been merged yet)
 (use-package exwm
-  :straight (exwm :host github :repo "ch11ng/exwm")
+  :elpaca (exwm :host github :repo "ch11ng/exwm")
 
   :if (or
        (string= (system-name) "Desktop.Guix.Maddie")
        (string= (system-name) "Laptop-Manjaro-Maddie"))
   ;;:disabled
-  ;;:straight (exwm :type built-in)
   :config
   (progn
-    (use-package exwm-config :straight (exwm-config :type built-in))
-    (use-package exwm-randr :straight (exwm-config :type built-in))
+    (use-package exwm-config
+      :elpaca nil)
+    (use-package exwm-randr
+      :elpaca nil)
 
     ;; TODO: Set my workspaces, displays, and resolution/refresh rate (through
     ;;  external xrandr commands) based on the current computer (based on the
@@ -1613,12 +1658,12 @@ newline separated list."
 
   ;;:ensure-system-package alsa-utils
 
-  :straight (org :type built-in)
+  :elpaca nil
 
   ;; TODO: Why are all these supplementary packages in init instead of config?
   :init (progn
           (use-package ox-latex
-            :straight (ox-latex :type built-in))
+            :elpaca nil)
 
           (use-package evil-org
             :init (use-package evil-leader)
@@ -1654,7 +1699,6 @@ newline separated list."
           ;;(use-package counsel-org-capture-string)
 
           (use-package org-rainbow-tags
-            :straight (:host github :repo "KaratasFurkan/org-rainbow-tags")
             :config
             (progn
               (add-hook 'org-mode-hook 'org-rainbow-tags-mode)
@@ -1899,18 +1943,18 @@ calculated based on my configuration."
                     (shell . t)))
 
             (use-package ob-python
-              :straight (ob-python :type built-in))
+              :elpaca nil)
             (use-package ob-shell
-              :straight (ob-shell :type built-in))
+              :elpaca nil)
 
             ;; I probably want to start the emacs server with `(server-start)'
             ;;  before using this outside of Emacs. It /does/ have helpful
             ;;  functions even without the protocl registered with xdg, though
             (use-package org-protocol
-              :straight (org-protocol :type built-in))
+              :elpaca nil)
 
-            (use-package calfw
-              :config (use-package calfw-org))
+            (use-package calfw)
+            (use-package calfw-org)
 
             (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1)))
             ;;(add-hook 'org-mode-hook 'turn-on-stripe-table-mode)
@@ -2018,8 +2062,10 @@ calculated based on my configuration."
 (use-package pdf-tools
   :config (progn
 
-            (use-package pdf-view :straight (pdf-view :type built-in))
-            (use-package pdf-occur :straight (pdf-occur :type built-in))
+            (use-package pdf-view
+              :elpaca nil)
+            (use-package pdf-occur
+              :elpaca nil)
 
             (pdf-tools-install)
             ;; this automatically reloads the pdf when it changes (if I'm
@@ -2090,7 +2136,7 @@ calculated based on my configuration."
 ;; particular sounds interesting.
 (use-package tex
   :defer t
-  :straight (auctex)
+  :elpaca (auctex)
   :config (progn
             ;; autocompletion for latex related commands
             (use-package company-auctex
@@ -2174,13 +2220,14 @@ on it. This makes complex nested list structures very readable."
   (set-window-dedicated-p (frame-selected-window) nil))
 
 (use-package ediff
+  :elpaca nil
   :config (setq ediff-window-setup-function
   'ediff-setup-windows-plain)) ; makes it so that ediff uses one
                                ;  window instead of opening up a second
                                         ;  one
 
 (use-package elisp-mode
-  :straight (elisp-mode :type built-in)
+  :elpaca nil
   :init (progn
 
           ;; Here we redefine the lisp-indent-function in order to indent lists starting
@@ -2308,6 +2355,7 @@ Lisp function does not specify a special indentation."
             (e454iel-main-menu "aE" 'erc)))
 
 (use-package bubbles
+  :elpaca nil
   :config (progn
             (setq bubbles-game-theme 'medium)
             (general-define-key
@@ -2321,20 +2369,24 @@ Lisp function does not specify a special indentation."
             (e454iel-main-menu "agb" 'bubbles)))
 
 (use-package tetris
+  :elpaca nil
   :config
   (progn
     (evil-collection-init 'tetris))
   :general (e454iel-main-menu "agt" 'tetris))
 
 (use-package mines
+  :elpaca nil
   :config (e454iel-main-menu "agm" 'mines))
+
+;; TODO: Check if this dependency as installed by Emacs itself is up-to-date
+;;  enough for magit yet
+(use-package seq
+  :elpaca (seq :source "ELPA"))
 
 (use-package magit
   :config (progn
             (evil-collection-init 'magit)
-
-            (use-package magit-todos
-              :config (magit-todos-mode))
 
             (general-define-key
              :keymaps 'magit-mode-map
@@ -2350,10 +2402,18 @@ Lisp function does not specify a special indentation."
               "g" 'magit-status
               "G" 'magit-dispatch-popup)))
 
+;; TODO: This broke inexplicably when switching to Elpaca. I'll have
+;;  to reassess later how to get this working
+(use-package hl-todo)
+(elpaca-wait)
+(use-package magit-todos
+  :disabled
+  :config (magit-todos-mode))
+
 ;; Email!
 (use-package mu4e
   :disabled
-  :straight (mu4e :host github :repo "emacsmirror/mu4e"
+  :elpaca (mu4e :host github :repo "emacsmirror/mu4e"
                   :files (:defaults "mu4e/*.el"))
   :config (progn
             (evil-collection-init 'mu4e)
@@ -2412,8 +2472,7 @@ Lisp function does not specify a special indentation."
             ;; I'm certain that there is a better way to do this.
             (load (expand-file-name "~/quicklisp/slime-helper.el") t)
 
-            (use-package slime-company :demand)
-            (slime-setup '(slime-fancy slime-company))
+            (slime-setup '(slime-fancy))
 
             ;; https://stackoverflow.com/questions/22456086/how-to-run-common-lisp-code-with-slime-in-emacs-lisp
             ;; This is taken from pieces of the lispy package.
@@ -2447,9 +2506,15 @@ Lisp function does not specify a special indentation."
                          (eval error-info)))))
 
             (e454iel-main-menu
-             "as" 'e454iel-run-or-raise-stumpwm-repl)))
+              "as" 'e454iel-run-or-raise-stumpwm-repl)))
 
-(use-package stumpwm-mode)
+(use-package stumpwm-mode
+  :elpaca (stumpwm-mode :files "util/swm-emacs/*.el"
+                        :main "util/swm-emacs/stumpwm-mode.el"))
+
+(use-package slime-company
+  :config (slime-setup '(slime-company)))
+(elpaca-wait)
 
 ;; interface for ripgrep
 (use-package rg)
@@ -2470,6 +2535,7 @@ Lisp function does not specify a special indentation."
 
 ;; TODO: This mess of add-hooks can definitely be cleaned up
 (use-package flyspell
+  :elpaca nil
   :init (progn
           (setq ispell-program-name "hunspell")
           ;;(setq ispell-dictionary "american")
@@ -2495,6 +2561,7 @@ Lisp function does not specify a special indentation."
 ;; TODO: Middle mouse should open a page in a new buffer in the background
 ;; TODO: Would I prefer the evil-collection bindings over the ones I have here?
 (use-package eww
+  :elpaca nil
   :functions (eww-suggest-uris eww-current-url)
   :init (progn
           (use-package eww-lnum))
@@ -2549,7 +2616,7 @@ Lisp function does not specify a special indentation."
                  (imagex-global-sticky-mode)))
 
 (use-package image
-  :straight (image :type built-in)
+  :elpaca nil
   :config (general-define-key
            :keymaps 'image-mode-map
            :states 'normal
@@ -2570,7 +2637,7 @@ Lisp function does not specify a special indentation."
 
 ;; workspaces
 (use-package tab-bar
-  :straight (tab-bar :type built-in)
+  :elpaca nil
   :config
   (progn
     (setq tab-bar-show nil)
@@ -2634,7 +2701,7 @@ Lisp function does not specify a special indentation."
   :disabled
   :config
   (use-package spaceline-config
-    :straight (spaceline-config :type built-in)
+    :elpaca nil
     :config (spaceline-emacs-theme)))
 
 (use-package telephone-line
@@ -2691,6 +2758,7 @@ Lisp function does not specify a special indentation."
 ;;(use-package doremi-frm)
 
 (use-package time
+  :elpaca nil
   :config (progn
             (setq display-time-day-and-date t)
             (setq display-time-interval 0.95)
@@ -2701,6 +2769,7 @@ Lisp function does not specify a special indentation."
             (display-time-mode t)))
 
 (use-package battery
+  :elpaca nil
   :if e454iel-portable-p
   :config
   (progn
@@ -2714,7 +2783,7 @@ Lisp function does not specify a special indentation."
 
     (use-package auto-olivetti
       :disabled
-      :straight (auto-olivetti :host sourcehut :repo "ashton314/auto-olivetti")
+      :elpaca (auto-olivetti :host sourcehut :repo "ashton314/auto-olivetti")
       :config (progn
                 (setq auto-olivetti-enabled-modes '(text-mode prog-mode eww-mode))
                 (auto-olivetti-mode)))
@@ -2741,21 +2810,29 @@ Lisp function does not specify a special indentation."
 ;; TODO: Turn back on midnight-hook using clean-buffer-list after I've
 ;;  configured it a bit more
 (use-package midnight
-  :demand
+  :elpaca nil
+  :demand t
   :config (progn
             (remove-hook 'midnight-hook #'clean-buffer-list)
             (add-hook 'midnight-hook #'e454iel-set-org-agenda-files)
             (midnight-mode t)))
+(elpaca-wait)
 
-;; Look more into this later. Does using fset like this break anything? On top
-;;  of that, is this even necessary?
+
+;; TODO: Disabled for now because elpaca is hanging trying to install it. I
+;;  don't ever really use projectile anyways?
 (use-package projectile
+  :disabled
   :config (progn
             (setq projectile-enable-caching t)
             (use-package counsel-projectile
               :disabled
               :config (progn
                         (counsel-projectile-mode t)
+
+                        ;; TODO: Look more into this later. Does using fset like
+                        ;;  this break anything? On top of that, is this even
+                        ;;  necessary?
                         ;;(fset 'projectile-find-file
                               ;;'counsel-projectile-find-file)
                         ;;(fset 'projectile-find-dir
@@ -2769,7 +2846,7 @@ Lisp function does not specify a special indentation."
                         ))))
 
 (use-package comint
-  :straight (comint :type built-in)
+  :elpaca nil
   :config (general-define-key
            :states 'insert
             :keymaps 'comint-mode-map
@@ -2819,18 +2896,19 @@ Lisp function does not specify a special indentation."
 ;; term-manager, term-projectile
 
 (use-package tramp
-  :straight (tramp :type built-in)
+  :elpaca nil
   :config (progn
             ;; This prevents from tramp from hanging
-            (progn
-              (projectile-mode nil)
-              (add-hook 'find-file-hook
-                        (lambda ()
-                          (when (file-remote-p default-directory)
-                            (setq-local projectile-mode-line "Projectile"))))
+            ;; TODO: Reenable this if/when I reenable projectile
+            ;;(progn
+            ;;  (projectile-mode nil)
+            ;;  (add-hook 'find-file-hook
+            ;;            (lambda ()
+            ;;              (when (file-remote-p default-directory)
+            ;;                (setq-local projectile-mode-line "Projectile")))))
 
               ;; This fixes paths to allow using remote Guix machines with TRAMP
-              (push 'tramp-own-remote-path tramp-remote-path)))
+              (push 'tramp-own-remote-path tramp-remote-path))
 
   (use-package tramp-term))
 
@@ -2970,7 +3048,6 @@ Lisp function does not specify a special indentation."
   :mode ("/PKGBUILD$" . pkgbuild-mode))
 
 (use-package spray
-  :straight (spray :host sourcehut :repo "iank/spray")
   :config (progn
             (general-define-key
              :keymaps 'spray-mode-map
@@ -3109,7 +3186,7 @@ Lisp function does not specify a special indentation."
             ;;    (geiser-repl--set-this-buffer-project 'guix)))
 
             ;;(advice-add 'geiser-impl--set-buffer-implementation :after #'guix-geiser--set-project)
-  ))
+            ))
 
 (use-package geiser
   :config
@@ -3202,10 +3279,15 @@ Lisp function does not specify a special indentation."
   )
 
 (use-package password-store
+  ;; TODO: Reenable once I get some determination to get it working with Elpaca
+  :disabled
+  :elpaca (password-store :files ("contrib/emacs/password-store.el")
+            :main "password-store.el")
   :config (progn
             (use-package pass)
             (use-package password-generator)
-            (use-package ivy-pass)))
+            (use-package ivy-pass)
+            (use-package password-store-otp)))
 
 ;;(use-package hl-fill-column
 ;;  :config (global-hl-fill-column-mode t))
@@ -3230,7 +3312,9 @@ Lisp function does not specify a special indentation."
 (use-package lua-mode
   :config (use-package company-lua))
 
+;; TODO: Either re-enable or remove Mingus. I don't ever really use it anyways.
 (use-package mingus
+  :disabled
   :init (progn
           ;; These aren't working for some frustrating reason
           ;; https://emacs.stackexchange.com/questions/31244/how-can-i-disable-evil-in-help-mode
@@ -3258,12 +3342,11 @@ Lisp function does not specify a special indentation."
 
   ;;:ensure-system-package emacs-vterm
 
-  :straight (vterm :type built-in)
+  :elpaca nil
   :config (evil-collection-init 'vterm))
 
 ;; File uploads to 0x0.st!
-(use-package 0x0
-  :straight (0x0 :host github :repo "emacsmirror/0x0"))
+(use-package 0x0)
 
 ;; I'm kinda confused on what this is, but the screenshot makes it look cool
 ;;  and helpful? https://github.com/mamapanda/evil-owl
@@ -3311,6 +3394,10 @@ Lisp function does not specify a special indentation."
   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
   (setq sbt:program-options '("-Dsbt.supershell=false")))
 
+;; For treemacs
+(use-package pfuture
+  :elpaca (pfuture :host github :repo "Alexander-Miller/pfuture"))
+
 (use-package treemacs)
 
 ;; TODO: Figure out how to make this install the Python, Java, and C language
@@ -3320,10 +3407,6 @@ Lisp function does not specify a special indentation."
   ;; TODO: The fact that I have to do this manually means there's something
   ;;  wonky going on, perhaps in terms of the version of "project" I'm using
   :init (load-library "project"))
-
-;; This is needed for eglot, but is likely useful for all sorts of things
-(use-package project
-  :straight (project :source gnu-elpa-mirror))
 
 
 (use-package lsp-mode
@@ -3351,7 +3434,7 @@ Lisp function does not specify a special indentation."
                 ;; This hack is to get a file to load to make sure the function
                 ;; lsp-metals-treeview-enable is available when we need it
                 (use-package lsp-metals-treeview
-                  :straight (lsp-metals-treeview :type built-in)
+                  :elpaca nil
                   :config (progn
                             (lsp-metals-treeview-enable t)
                             (setq lsp-metals-treeview-show-when-views-received t))))
@@ -3420,8 +3503,9 @@ Lisp function does not specify a special indentation."
 ;; Client for the matrix.org chat protocol
 (use-package matrix-client
   :disabled
-  :straight (matrix-client :host github :repo "alphapapa/matrix-client.el"
-                           :files (:defaults "logo.png" "matrix-client-standalone.el.sh")))
+  :elpaca (matrix-client :host github :repo "alphapapa/matrix-client.el"
+                         :files (:defaults "logo.png" "matrix-client-standalone.el.sh"))
+  )
 
 ;; TODO: Function for checking if a particular account has a session
 
@@ -3442,7 +3526,7 @@ Lisp function does not specify a special indentation."
 ;;  point, reply to the message at point, or create a new message if pressed in
 ;;  an empty space
 (use-package ement
-  :straight (ement :host github :repo "alphapapa/ement.el")
+  :elpaca (ement :host github :repo "alphapapa/ement.el")
 
   ;; TODO: Reenable this after writing a better command to install on Guix. This
   ;;  likely will mean checking to see if the package is in the current profile
@@ -3524,12 +3608,12 @@ Lisp function does not specify a special indentation."
       "g" 'ement-view-room)))
 
 ;; Allows for short lambda expressions
-(use-package llama
-  :straight (llama :host sourcehut
-                   :repo "tarsius/llama"))
+(use-package llama)
 
 ;; Front-end for the Emacsmirror package database
 (use-package epkg
+  ;; I don't really need epkg if I have elpaca
+  :disabled
   :init
   (progn
     (use-package emacsql)
@@ -3586,12 +3670,11 @@ Lisp function does not specify a special indentation."
             (setq nov-variable-pitch (not nov-variable-pitch))
             (nov-render-document)))))
 
-(use-package bookmark+)
+(use-package bookmark+
+  :elpaca (bookmark+ :host github :repo "emacsmirror/bookmark-plus"))
 
 ;; Gopher client
-(use-package elpher
-  ;; Its home site is down for the moment, so we're using the emacsmirror
-  :straight (:host github :repo "emacsmirror/elpher"))
+(use-package elpher)
 
 ;; Nyan cat in the modeline
 (use-package nyan-mode
@@ -3639,7 +3722,8 @@ Lisp function does not specify a special indentation."
     (use-package lastfm
       :init
       (use-package request
-        :straight (:host github :repo "tkf/emacs-request")))
+        :elpaca (:host github :repo "tkf/emacs-request")
+        ))
 
     (use-package mpv
       :config
@@ -3790,8 +3874,13 @@ normal-state."
 ;;(use-package roguel-ike)
 
 (use-package bbdb
+  ;; TODO: Reenable this when I figure out how to get bbdb-site loaded with elpaca
+  :disabled
+  :elpaca (bbdb :files ("lisp/*.el" "lisp/*.el.in" :main "bbdb.el"))
   :config
   (progn
+    ;;(use-package bbdb-site
+    ;;  :elpaca (bbdb :main (concat user-emacs-directory "elpaca/repos/bbdb/lisp/bbdb-site.el.in")))
     (use-package bbdb-csv-import)))
 
 ;; Vastly more detailed help buffers
@@ -3938,7 +4027,7 @@ normal-state."
 (use-package decide)
 
 ;; Comprehensive and flexible tts engine based on speech-dispatcher
-(use-package speechd)
+(use-package speechd-el)
 
 ;; A way to quickly read aloud the current buffer and have the cursor follow
 (use-package greader
@@ -3983,8 +4072,8 @@ normal-state."
 
 ;; Obfuscate text in ways that are still readable
 (use-package fsc
+  :elpaca (fsc :host github :repo "kuanyui/fsc.el")
   :init (use-package makey)
-  :straight (fsc :host github :repo "kuanyui/fsc.el")
   ;; The "m" stands for "mangle" and the "o" stands for "obfuscate"
   :general (e454iel-main-menu "mmo" 'fsc/rearrange-region))
 
@@ -4073,7 +4162,7 @@ normal-state."
 
 (use-package webkit
   :disabled
-  :straight
+  :elpaca
   (webkit :type git :host github :repo "akirakyle/emacs-webkit"
           :branch "main"
           :files (:defaults "*.js" "*.css" "*.so")
@@ -4082,9 +4171,9 @@ normal-state."
   :config
   (progn
     (use-package webkit-ace
-      :straight (webkit-ace :type built-in))
+      :elpaca nil)
     (use-package webkit-dark
-      :straight (webkit-dark :type built-in))
+      :elpaca nil)
 
     ;; Open a new session instead of using the current one
     (setq webkit-browse-url-force-new t)
@@ -4092,7 +4181,7 @@ normal-state."
     (setq webkit-dark-mode t)
 
     (use-package evil-collection-webkit
-      :straight (evil-collection-webkit :type built-in)
+      :elpaca nil
       :config (evil-collection-xwidget-setup))))
 
 ;; Insert complex emoticons made from misused Unicode symbols and Japanese
@@ -4163,10 +4252,7 @@ normal-state."
 
 ;; Turn a YouTube video into a text file using YouTube's automatic caption
 ;;  generation
-(use-package youtube-sub-extractor
-  :straight (youtube-sub-extractor
-             :host github
-             :repo "agzam/youtube-sub-extractor.el"))
+(use-package youtube-sub-extractor)
 
 ;; For searching YouTube videos
 (use-package ytdious
@@ -4216,29 +4302,35 @@ normal-state."
     "aiy" 'ytdious))
 
 (use-package desktop-environment
-  :straight (desktop-environment
-             :host github
-             :repo "DamienCassou/desktop-environment")
+  ;;:straight (desktop-environment
+  ;;           :host github
+  ;;           :repo "DamienCassou/desktop-environment")
   :config
   (progn
     (desktop-environment-mode)))
 
 ;; https://emacsconf.org/2022/talks/dbus/
 (use-package debase
-  :straight (debase
-             :host nil
-             :repo "https://codeberg.org/emacs-weirdware/debase"))
+  ;; TODO: Unfortunately, this is disabled for how while I figure out how to get
+  ;;  it working on Elpaca
+  :disabled
+  :elpaca (debase
+           :host codeberg
+           :repo "emacs-weirdware/debase"))
+
+;; debase is a dependency of discomfort
+(elpaca-wait)
 
 ;; For managing disks, based on debase
 (use-package discomfort
-  :straight (discomfort
-             :host nil
-             :repo "https://codeberg.org/emacs-weirdware/discomfort"))
+  ;; TODO: Unfortunately, this is disabled for how while I figure out how to get
+  ;;  it working on Elpaca
+  :disabled
+  :elpaca (discomfort
+           :host codeberg
+           :repo "emacs-weirdware/discomfort"))
 
 (use-package threes
-  :straight (threes
-             :host github
-             :repo "xuchunyang/threes.el")
   :general (e454iel-main-menu
              "ag3" 'threes)
   :general (:keymaps 'threes-mode-map
@@ -4258,15 +4350,15 @@ normal-state."
 ;; Terminal emulator (for use inside Eshell and beyond)
 ;; TODO: This isn't actually hooked into Eshell yet. Read the readme.
 (use-package eat
-  :straight
-  (eat :type git
-       :host codeberg
-       :repo "akib/emacs-eat"
-       :files ("*.el" ("term" "term/*.el") "*.texi"
-               "*.ti" ("terminfo/e" "terminfo/e/*")
-               ("terminfo/65" "terminfo/65/*")
-               ("integration" "integration/*")
-               (:exclude ".dir-locals.el" "*-tests.el")))
+  ;;:elpaca
+  ;;(eat :type git
+  ;;     :host codeberg
+  ;;     :repo "akib/emacs-eat"
+  ;;     :files ("*.el" ("term" "term/*.el") "*.texi"
+  ;;             "*.ti" ("terminfo/e" "terminfo/e/*")
+  ;;             ("terminfo/65" "terminfo/65/*")
+  ;;             ("integration" "integration/*")
+  ;;             (:exclude ".dir-locals.el" "*-tests.el")))
   :config
   (progn
     (add-hook 'eshell-mode-hook #'eat-eshell-mode)))
@@ -4276,7 +4368,7 @@ normal-state."
 (use-package disk-usage)
 
 ;; TODO: Look into the packages for flymake-easy, flymake-languagetool,
-;;  sideline-flymake, flycheck-tip, flymake-helper, flymake-proselint,
+;;  sideline-flymake, flycheck-tip, flymake-er, flymake-proselint,
 ;;  flymake-shellcheck
 
 (use-package flymake
@@ -4312,9 +4404,6 @@ normal-state."
 
 ;; For adjusting audio settings in PipeWire
 (use-package pipewire
-  :straight (pipewire-0 :type git
-                        :repo "https://git.zamazal.org/pdm/pipewire-0"
-                        :local-repo "pipewire-0")
   :config
   (progn
     (general-define-key
@@ -4411,7 +4500,7 @@ normal-state."
 ;; TODO: See if I can use xwidgete's self-insert commands to have text insertion
 ;;  work in insert mode
 (use-package xwidget
-  :straight (xwidget :type built-in)
+  :elpaca nil
 
   :init
   (progn
@@ -4472,6 +4561,8 @@ normal-state."
     (when (or (daemonp)
               (memq window-system '(mac ns x)))
       (exec-path-from-shell-initialize))))
+
+(use-package chatgpt-shell)
 
 (provide 'init)
 ;;; init.el ends here
