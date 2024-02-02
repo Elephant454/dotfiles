@@ -168,6 +168,20 @@ print-circle t
 ;; Make sure our keyring doesn't get out of date
 (use-package gnu-elpa-keyring-update)
 
+;; Install the Garbage Collector Magic Hack and set some garbage collection
+;;  settings
+(use-package gcmh
+  :disabled
+  :config
+  (progn
+    ;; https://elmord.org/blog/?entry=20190913-emacs-gc
+    ;; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
+    (gcmh-mode 1)
+    ;; Set it to 8 gigabytes
+    (setq gcmh-high-cons-threshold (* 1024 1024 1024 8))
+    ;; Maybe Try 100 megabytes instead
+    ;;(setq gcmh-high-cons-threshold (* 1024 1024 100))
+    (setq garbage-collection-messages t)))
 
 ;; Create the "emacs-config" directory for storing miscellaneous Emacs
 ;;  configuration files
