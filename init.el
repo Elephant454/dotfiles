@@ -168,6 +168,20 @@ print-circle t
 ;; Make sure our keyring doesn't get out of date
 (use-package gnu-elpa-keyring-update)
 
+;; Install the Garbage Collector Magic Hack and set some garbage collection
+;;  settings
+(use-package gcmh
+  :disabled
+  :config
+  (progn
+    ;; https://elmord.org/blog/?entry=20190913-emacs-gc
+    ;; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
+    (gcmh-mode 1)
+    ;; Set it to 8 gigabytes
+    (setq gcmh-high-cons-threshold (* 1024 1024 1024 8))
+    ;; Maybe Try 100 megabytes instead
+    ;;(setq gcmh-high-cons-threshold (* 1024 1024 100))
+    (setq garbage-collection-messages t)))
 
 ;; Create the "emacs-config" directory for storing miscellaneous Emacs
 ;;  configuration files
@@ -397,7 +411,7 @@ without confirmation."
    e454iel-theme-pairs))
 
 ;; load default theme
-(e454iel-jump-to-theme 'birds-of-paradise-plus)
+(e454iel-jump-to-theme 'kaolin-blossom)
 
 
 ;; fonts
@@ -661,7 +675,7 @@ This makes for easier reading of larger, denser bodies of text."
      "si" 'ielm
      "sa" 'ansi-term
      "sp" 'run-python
-     "sg" 'run-geiser
+     "sg" 'geiser
      "sl" 'slime
      "sv" 'vterm
      
@@ -707,6 +721,8 @@ This makes for easier reading of larger, denser bodies of text."
                                     "~/.emacs.d/straight/repos/melpa/")))
      "ag" '(:ignore t :which-key "Games")
      "am" '(:ignore t :which-key "Music")
+     "ac" '(:ignore t :which-key "Chat")
+     "aci" '(:ignore t :which-key "IRC")
      
      "h" '(help-command :which-key "Help")
 
@@ -1933,6 +1949,10 @@ calculated based on my configuration."
             (setq org-src-fontify-natively t
                   org-list-allow-alphabetical t
                   org-image-actual-width 400
+                  org-startup-with-inline-images t
+                  org-cycle-inline-images-display t
+                  ;; Show everything except drawers
+                  org-startup-folded 'nofold
                   org-format-latex-options (plist-put org-format-latex-options :scale 2.0)
                   org-ellipsis " ⤵ "
                   org-adapt-indentation t
@@ -2169,8 +2189,9 @@ on it. This makes complex nested list structures very readable."
 
 ;; From
 ;;  https://unix.stackexchange.com/questions/392069/in-emacs-how-to-force-switch-to-a-different-buffer-in-a-dedicated-window
-(defun e454iel-undedicate ()
+(defun e454iel-undedicate-window ()
   "Remove the current window's dedication status from the current frame."
+  (interactive)
   (set-window-dedicated-p (frame-selected-window) nil))
 
 (use-package ediff
@@ -2305,7 +2326,8 @@ Lisp function does not specify a special indentation."
                         :major-modes 'erc-mode-map
                         "s" 'erc-status-sidebar-toggle))
 
-            (e454iel-main-menu "aE" 'erc)))
+            ;; Applications -> Chat -> IRC -> ERC
+            (e454iel-main-menu "acie" 'erc)))
 
 (use-package bubbles
   :config (progn
@@ -2550,13 +2572,56 @@ Lisp function does not specify a special indentation."
 
 (use-package image
   :straight (image :type built-in)
-  :config (general-define-key
-           :keymaps 'image-mode-map
-           :states 'normal
-            "n" 'image-next-file
-            "p" 'image-previous-file
-            )
-  )
+  :config
+  (progn
+    ;; TODO: Pywal is only seeming to set the background on the first usage of
+    ;;  the command per Emacs session. Why is that?
+    ;;(setq wallpaper-command "wal")
+    ;;(setq wallpaper-command-args '("-i" "%f"))
+
+    (setq wallpaper-command "feh")
+    (setq wallpaper-command-args '("--bg-fill" "%f"))
+
+    (general-define-key
+     :keymaps 'image-mode-map
+     :states 'normal
+      "n" 'image-next-file
+      "p" 'image-previous-file
+      "<mouse-1>" 'image-next-file
+      "<mouse-3>" 'image-previous-file
+      "<mouse-2>" 'image-transform-fit-to-width
+      "q" 'quit-window
+      "m" 'image-mode-mark-file
+      "u" 'image-mode-unmark-file
+      "c" 'image-mode-copy-file-name-as-kill
+      ;; Up, down, left, and right seem to be reversed for some reason
+      "h" 'image-scroll-right
+      "j" 'image-scroll-up
+      "k" 'image-scroll-down
+      "l" 'image-scroll-left
+      "gg" 'image-bob
+      "G" 'image-eob
+      "w" (lambda () (interactive) (if (y-or-n-p "Set image as wallpaper?") (image-mode-wallpaper-set)))
+      "W" 'image-transform-fit-to-width
+      "H" 'image-transform-fit-to-height
+      "B" 'image-transform-fit-both
+      "+" 'image-increase-size
+      "-" 'image-decrease-size
+      "r" 'image-transform-reset-to-initial
+      "aa" 'image-toggle-animation
+      "al" (lambda () (interactive) (setq image-animate-loop (not image-animate-loop))
+             (message
+              (concat "Looping animation "
+                      (if image-animate-loop "on"
+                        "off"))))
+      "af" 'image-next-frame
+      "ab" 'image-previous-frame
+      "a+" 'image-increase-speed
+      "a-" 'image-decrease-speed
+      "a=" 'image-reset-speed
+      "a_" 'image-reverse-speed)
+
+    ))
 
 (use-package iscroll
   :init
@@ -2696,7 +2761,7 @@ Lisp function does not specify a special indentation."
             (setq display-time-interval 0.95)
             ;; TODO: Pi day, Pride month, December, Fall, Halloween, Thanksgiving week, Birthday
             ;; TODO: Maybe I could have the cake show every time it's the birthday of someone I know?
-            (setq e454iel-holiday-symbol "🎃🕯️🦃🍂")
+            (setq e454iel-holiday-symbol "❤️🕯️🍫❤️")
             (setq display-time-format (concat "%F %H:%M:%S %a " e454iel-holiday-symbol))
             (display-time-mode t)))
 
@@ -3466,6 +3531,11 @@ Lisp function does not specify a special indentation."
     ;; Write session to data to file so I can skip the initial sync
     (setq ement-save-sessions t)
 
+    ;; Set up visual formatting for how messages are displayed
+    (setq ement-room-message-format-spec "[%t] %S:\n %B%r\n")
+    (setq ement-room-left-margin-width 0)
+    (setq ement-room-right-margin-width 0)
+
     (add-hook 'ement-room-compose-hook #'ement-room-compose-org)
     ;; This is actually for turning auto-fill-mode *off*, because it's normally
     ;;  default for my org buffers
@@ -3517,6 +3587,12 @@ Lisp function does not specify a special indentation."
            (eq (car it) e454iel-matrix-user-id)
            ement-sessions)
           t))
+
+    (e454iel-main-menu
+      ;; Applications -> Chat -> Ement
+      "ace" '(:ignore t :which-key "Ement")
+      "acee" 'ement-room-list
+      "acej" 'ement-view-room)
 
     (general-define-key
      :keymaps 'ement-room-mode-map
@@ -3979,7 +4055,7 @@ normal-state."
   (progn
     (face-spec-set 'snow-flake-face
                    '((t
-                      :family "Inconsolata"
+                      :family "DejaVu Sans Mono"
                       :height 90)))))
 
 (use-package sx
@@ -4481,6 +4557,8 @@ normal-state."
     (when (or (daemonp)
               (memq window-system '(mac ns x)))
       (exec-path-from-shell-initialize))))
+
+(use-package chatgpt-shell)
 
 (provide 'init)
 ;;; init.el ends here
