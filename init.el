@@ -4549,5 +4549,7 @@ normal-state."
               (memq window-system '(mac ns x)))
       (exec-path-from-shell-initialize))))
 
+(use-package chatgpt-shell)
+
 (provide 'init)
 ;;; init.el ends here
