@@ -675,7 +675,7 @@ This makes for easier reading of larger, denser bodies of text."
      "si" 'ielm
      "sa" 'ansi-term
      "sp" 'run-python
-     "sg" 'run-geiser
+     "sg" 'geiser
      "sl" 'slime
      "sv" 'vterm
      
