@@ -3993,7 +3993,7 @@ normal-state."
   (progn
     (face-spec-set 'snow-flake-face
                    '((t
-                      :family "Inconsolata"
+                      :family "DejaVu Sans Mono"
                       :height 90)))))
 
 (use-package sx
