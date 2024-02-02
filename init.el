@@ -1949,6 +1949,8 @@ calculated based on my configuration."
             (setq org-src-fontify-natively t
                   org-list-allow-alphabetical t
                   org-image-actual-width 400
+                  org-startup-with-inline-images t
+                  org-cycle-inline-images-display t
                   org-format-latex-options (plist-put org-format-latex-options :scale 2.0)
                   org-ellipsis " ⤵ "
                   org-adapt-indentation t
