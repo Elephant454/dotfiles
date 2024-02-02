@@ -1891,7 +1891,7 @@ calculated based on my configuration."
                     ))
 
             ;; The alsa-utils package must be installed so that aplay can run
-            (setq org-clock-sound "~/.dotfiles/BellCounterA.wav")
+            (setq org-clock-sound "~/.secretdotfiles/BellCounterA/BellCounterA.wav")
 
             (setf org-babel-load-languages
                   '((emacs-lisp . t)
@@ -4464,7 +4464,7 @@ normal-state."
              "at" 'tmr
              "aT" 'tmr-tabulated-view)
   :config (progn
-            (setq tmr-sound-file "~/.dotfiles/BellCounterA.wav")))
+            (setq tmr-sound-file "~/.secretdotfiles/BellCounterA/BellCounterA.wav")))
 
 (use-package mentor
   :config
