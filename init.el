@@ -721,6 +721,8 @@ This makes for easier reading of larger, denser bodies of text."
                                     "~/.emacs.d/straight/repos/melpa/")))
      "ag" '(:ignore t :which-key "Games")
      "am" '(:ignore t :which-key "Music")
+     "ac" '(:ignore t :which-key "Chat")
+     "aci" '(:ignore t :which-key "IRC")
      
      "h" '(help-command :which-key "Help")
 
@@ -2319,7 +2321,8 @@ Lisp function does not specify a special indentation."
                         :major-modes 'erc-mode-map
                         "s" 'erc-status-sidebar-toggle))
 
-            (e454iel-main-menu "aE" 'erc)))
+            ;; Applications -> Chat -> IRC -> ERC
+            (e454iel-main-menu "acie" 'erc)))
 
 (use-package bubbles
   :config (progn
@@ -3522,6 +3525,12 @@ Lisp function does not specify a special indentation."
            (eq (car it) e454iel-matrix-user-id)
            ement-sessions)
           t))
+
+    (e454iel-main-menu
+      ;; Applications -> Chat -> Ement
+      "ace" '(:ignore t :which-key "Ement")
+      "acee" 'ement-room-list
+      "acej" 'ement-view-room)
 
     (general-define-key
      :keymaps 'ement-room-mode-map
