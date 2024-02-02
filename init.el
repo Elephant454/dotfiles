@@ -3522,6 +3522,11 @@ Lisp function does not specify a special indentation."
     ;; Write session to data to file so I can skip the initial sync
     (setq ement-save-sessions t)
 
+    ;; Set up visual formatting for how messages are displayed
+    (setq ement-room-message-format-spec "[%t] %S:\n %B%r\n")
+    (setq ement-room-left-margin-width 0)
+    (setq ement-room-right-margin-width 0)
+
     (add-hook 'ement-room-compose-hook #'ement-room-compose-org)
     ;; This is actually for turning auto-fill-mode *off*, because it's normally
     ;;  default for my org buffers
