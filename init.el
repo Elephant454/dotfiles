@@ -1951,6 +1951,8 @@ calculated based on my configuration."
                   org-image-actual-width 400
                   org-startup-with-inline-images t
                   org-cycle-inline-images-display t
+                  ;; Show everything except drawers
+                  org-startup-folded 'nofold
                   org-format-latex-options (plist-put org-format-latex-options :scale 2.0)
                   org-ellipsis " ⤵ "
                   org-adapt-indentation t
