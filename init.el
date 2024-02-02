@@ -2572,13 +2572,56 @@ Lisp function does not specify a special indentation."
 
 (use-package image
   :straight (image :type built-in)
-  :config (general-define-key
-           :keymaps 'image-mode-map
-           :states 'normal
-            "n" 'image-next-file
-            "p" 'image-previous-file
-            )
-  )
+  :config
+  (progn
+    ;; TODO: Pywal is only seeming to set the background on the first usage of
+    ;;  the command per Emacs session. Why is that?
+    ;;(setq wallpaper-command "wal")
+    ;;(setq wallpaper-command-args '("-i" "%f"))
+
+    (setq wallpaper-command "feh")
+    (setq wallpaper-command-args '("--bg-fill" "%f"))
+
+    (general-define-key
+     :keymaps 'image-mode-map
+     :states 'normal
+      "n" 'image-next-file
+      "p" 'image-previous-file
+      "<mouse-1>" 'image-next-file
+      "<mouse-3>" 'image-previous-file
+      "<mouse-2>" 'image-transform-fit-to-width
+      "q" 'quit-window
+      "m" 'image-mode-mark-file
+      "u" 'image-mode-unmark-file
+      "c" 'image-mode-copy-file-name-as-kill
+      ;; Up, down, left, and right seem to be reversed for some reason
+      "h" 'image-scroll-right
+      "j" 'image-scroll-up
+      "k" 'image-scroll-down
+      "l" 'image-scroll-left
+      "gg" 'image-bob
+      "G" 'image-eob
+      "w" (lambda () (interactive) (if (y-or-n-p "Set image as wallpaper?") (image-mode-wallpaper-set)))
+      "W" 'image-transform-fit-to-width
+      "H" 'image-transform-fit-to-height
+      "B" 'image-transform-fit-both
+      "+" 'image-increase-size
+      "-" 'image-decrease-size
+      "r" 'image-transform-reset-to-initial
+      "aa" 'image-toggle-animation
+      "al" (lambda () (interactive) (setq image-animate-loop (not image-animate-loop))
+             (message
+              (concat "Looping animation "
+                      (if image-animate-loop "on"
+                        "off"))))
+      "af" 'image-next-frame
+      "ab" 'image-previous-frame
+      "a+" 'image-increase-speed
+      "a-" 'image-decrease-speed
+      "a=" 'image-reset-speed
+      "a_" 'image-reverse-speed)
+
+    ))
 
 (use-package iscroll
   :init
