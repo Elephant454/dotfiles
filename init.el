@@ -2185,8 +2185,9 @@ on it. This makes complex nested list structures very readable."
 
 ;; From
 ;;  https://unix.stackexchange.com/questions/392069/in-emacs-how-to-force-switch-to-a-different-buffer-in-a-dedicated-window
-(defun e454iel-undedicate ()
+(defun e454iel-undedicate-window ()
   "Remove the current window's dedication status from the current frame."
+  (interactive)
   (set-window-dedicated-p (frame-selected-window) nil))
 
 (use-package ediff
