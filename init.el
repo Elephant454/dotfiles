@@ -648,10 +648,6 @@ This makes for easier reading of larger, denser bodies of text."
      "fd" '(lambda() (interactive) (find-file
                                    (file-truename
                                     e454iel-documents-dir)))
-     "fv" '(lambda() (interactive) (find-file
-                                    (concat
-                                     (file-truename e454iel-documents-dir)
-                                     "/vaccine/StateVaccineRecord.png")))
      "fb" '(:ignore t :which-key "Bookmark")
      "fbs" 'bookmark-set
      "fbj" 'bookmark-jump
