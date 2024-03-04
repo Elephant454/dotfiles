@@ -3672,8 +3672,17 @@ Lisp function does not specify a special indentation."
   :config
   (progn
     ;;(use-package bookmark+)
+
     (setq bookmark-save-flag 1)
     (evil-collection-init 'bookmark)
+
+    (use-package tab-bookmark
+      :straight (tab-bookmark :host github :repo "minad/tab-bookmark")
+      :config
+      (progn
+        (e454iel-main-menu
+          "wgs" 'tab-bookmark-save)))
+
     (e454iel-main-menu
       "fb" '(:ignore t :which-key "Bookmark")
       "fbs" 'bookmark-set
