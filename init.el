@@ -3667,7 +3667,13 @@ Lisp function does not specify a special indentation."
             (setq nov-variable-pitch (not nov-variable-pitch))
             (nov-render-document)))))
 
-(use-package bookmark+)
+(use-package bookmark
+  :straight (bookmark :type built-in)
+  :config
+  (progn
+    ;;(use-package bookmark+)
+    (setq bookmark-save-flag 1)
+    (evil-collection-init 'bookmark)))
 
 ;; Gopher client
 (use-package elpher
