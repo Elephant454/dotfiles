@@ -1094,9 +1094,13 @@ _-_increase _=_decrease"
 ;; define yasnippet more formally here
 (use-package yasnippet
   :config (progn
+            (use-package yasnippet-snippets)
             (use-package yasnippet-classic-snippets)
             (use-package java-snippets)
-            (yas-global-mode t)))
+            (yas-global-mode t)
+
+            (add-to-list 'completion-at-point-functions
+                         (cape-company-to-capf #'company-yasnippet))))
 
 (use-package eldoc
   :straight (eldoc :source gnu-elpa-mirror))
