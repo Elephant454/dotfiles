@@ -4567,5 +4567,17 @@ normal-state."
 
 (use-package chatgpt-shell)
 
+(use-package wordel
+  :straight (wordel :host github :repo "progfolio/wordel" :files (:defaults "words"))
+  :config
+  (progn
+    (evil-make-intercept-map wordel-mode-map)
+    (evil-make-intercept-map wordel-select-mode-map)
+    (evil-set-initial-state  'wordel-mode 'insert)
+    (evil-set-initial-state  'wordel-select-mode 'insert)
+
+    (e454iel-main-menu "agw" 'wordel)))
+
+
 (provide 'init)
 ;;; init.el ends here
