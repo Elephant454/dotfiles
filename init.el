@@ -648,10 +648,6 @@ This makes for easier reading of larger, denser bodies of text."
      "fd" '(lambda() (interactive) (find-file
                                    (file-truename
                                     e454iel-documents-dir)))
-     "fb" '(:ignore t :which-key "Bookmark")
-     "fbs" 'bookmark-set
-     "fbj" 'bookmark-jump
-     "fbl" 'bookmark-bmenu-list
      "fy" 'kill-buffer-file-name
      "fs" 'save-buffer
 
@@ -3673,7 +3669,12 @@ Lisp function does not specify a special indentation."
   (progn
     ;;(use-package bookmark+)
     (setq bookmark-save-flag 1)
-    (evil-collection-init 'bookmark)))
+    (evil-collection-init 'bookmark)
+    (e454iel-main-menu
+      "fb" '(:ignore t :which-key "Bookmark")
+      "fbs" 'bookmark-set
+      "fbj" 'bookmark-jump
+      "fbl" 'bookmark-bmenu-list)))
 
 ;; Gopher client
 (use-package elpher
