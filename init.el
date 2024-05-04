@@ -1948,6 +1948,8 @@ calculated based on my configuration."
                     (python . t)
                     (shell . t)))
 
+            (setq org-babel-python-command "python3")
+
             (use-package ob-python
               :straight (ob-python :type built-in))
             (use-package ob-shell
