@@ -4544,7 +4544,12 @@ normal-state."
                                           :size ,e454iel-shackle-chat-box-size)
                     (" *undo-tree*" :same nil
                                    :align ,e454iel-shackle-primary-alignment
-                                   :size ,e454iel-shackle-primary-size)))
+                                   :size ,e454iel-shackle-primary-size)
+                    ;; TODO: This doesn't seem to work yet, but geez do I want it to
+                    (transient-mode :same nil
+                                    :align ,e454iel-shackle-primary-alignment
+                                    :size ,e454iel-shackle-primary-size)
+                    ))
 
             (shackle-mode)
             ))
