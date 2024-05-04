@@ -4640,6 +4640,13 @@ normal-state."
 
     (e454iel-main-menu "agw" 'wordel)))
 
+(use-package wc-mode
+  :config
+  (progn
+    (setq wc-modeline-format "WC[%w/%gw (%tw)]")
+    (setq wc-word-goal 750)
+    (add-to-list 'minions-prominent-modes 'wc-mode)))
+
 
 (provide 'init)
 ;;; init.el ends here
