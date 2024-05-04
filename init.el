@@ -4621,6 +4621,14 @@ normal-state."
 
 (use-package chatgpt-shell)
 
+(use-package gptel
+  :config
+  (progn
+    (setq gptel-prompt-prefix-alist '((markdown-mode . "# ")
+                                     (org-mode . "* ")
+                                     (text-mode . "# ")))
+    (setq gptel-default-mode #'org-mode)))
+
 (use-package wordel
   :straight (wordel :host github :repo "progfolio/wordel" :files (:defaults "words"))
   :config
