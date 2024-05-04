@@ -1812,9 +1812,13 @@ calculated based on my configuration."
             ;;  happen while still assuming that I want the task to happen every
             ;;  day.
 
-            ;; TODO: There's a bug in this that resets the repeater portion of
-            ;;  the timestamp if moved forward or backward using shift. The hook
-            ;;  is disabled for now as a result.
+            ;; TODO: At one point I felt as though there was a bug in this that
+            ;;  resets the repeater portion of the timestamp if moved forward or
+            ;;  backward using shift. I wrote a TODO as a result. Everything
+            ;;  seems to be totally fine when I tested that case just now. I'm
+            ;;  keeping this todo for now and reenabling the hook. If I stumble
+            ;;  upon a similar bug, I'll update this note. If I don't, I'm
+            ;;  removing the note.
             (defun e454iel-org-reset-habit-scheduled-time ()
               "Remove the time (HH:MM) portion of the scheduled timestamp of tasks when marking as DONE if the property RESET_TIME_ON_DONE is non-nil."
               (let ((entry-reset-time-on-done (org-entry-get (point) "RESET_TIME_ON_DONE"))
@@ -1836,8 +1840,8 @@ calculated based on my configuration."
                                                  entry-scheduled-timestamp))
                       (message "Removed time from schedule for recurring habit."))))))
 
-            ;;(add-hook 'org-after-todo-state-change-hook
-            ;;          #'e454iel-org-reset-habit-scheduled-time)
+            (add-hook 'org-after-todo-state-change-hook
+                      #'e454iel-org-reset-habit-scheduled-time)
 
             (setq org-habit-graph-column 100)
 
