@@ -1028,6 +1028,7 @@ This makes for easier reading of larger, denser bodies of text."
             ;; (eshell/alias "unmount-storage"
             ;;  "tramp-cleanup-connection (quote (tramp-file-name \"sudo\" \"root\" nil \"localhost\" nil nil nil)); sudo umount /mnt/storage/; sync")
             ;; (eshell/alias "youtube-playlist-to-org" "yt-dlp $1 --get-filename -o \"* [[https://www.youtube.com/watch?v=%(id)s][%(title)s]] \"")
+            ;; (eshell/alias "pdf-to-pngs" "convert -quality 100 -density 300 $1 %05d.png \"")
             ))
 
 ;; give parenthesis matching colors based upon depth
