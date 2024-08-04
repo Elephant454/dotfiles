@@ -217,17 +217,39 @@ print-circle t
 (defvar e454iel-phone-p
   (cl-find (system-name)
         (list "mobian"
-              "danctnix")
+              ;; TODO: This could either be a phone or a tablet, so a more
+              ;;  sophisticated check is needed
+              ;;"danctnix"
+              )
         :test #'string-equal))
 
+(defvar e454iel-tablet-p
+  (let* ((kernel-version-name (string-trim (shell-command-to-string "uname -r")))
+         (kernel-version-string-pieces (split-string kernel-version-name "-"))
+         (kernel-version-string-pieces-length (length kernel-version-string-pieces)))
+
+    (if (and
+         (> kernel-version-string-pieces-length 3)
+         (string= "pinetab2" (cadddr kernel-version-string-pieces)))
+
+        t
+      nil)))
+
+(defvar e454iel-touch-screen-p
+  (or e454iel-phone-p e454iel-tablet-p))
+
+(defvar e454iel-small-screen-p
+  (or e454iel-phone-p e454iel-tablet-p))
+
 (defvar e454iel-portable-p
-  (or e454iel-phone-p e454iel-laptop-p))
+  (or e454iel-phone-p e454iel-tablet-p e454iel-laptop-p))
 
 ;; Decide if this is a home computer
 (defvar e454iel-home-computer-p
   (or e454iel-desktop-p
       e454iel-laptop-p
-      e454iel-phone-p))
+      e454iel-phone-p
+      e454iel-tablet-p))
 
 ;; themes
 
@@ -426,7 +448,7 @@ without confirmation."
 (defvar e454iel-extra-line-spacing)
 
 (setq e454iel-default-line-spacing 4)
-(setq e454iel-extra-line-spacing (if e454iel-phone-p 12 24))
+(setq e454iel-extra-line-spacing (if e454iel-touch-screen-p 12 24))
 
 (setq-default line-spacing e454iel-default-line-spacing)
 
@@ -436,6 +458,7 @@ without confirmation."
 ;; TODO: Create docstrings for these
 (defvar e454iel-font-pairs)
 (defvar e454iel-phone-font-pairs)
+(defvar e454iel-tablet-font-pairs)
 (defvar e454iel-current-font-pairs)
 (defvar e454iel-font-scale)
 (defvar e454iel-use-dyslexic-font nil)
@@ -456,11 +479,17 @@ without confirmation."
                            ("Cozette" . 8)
                            ))
 (setq e454iel-phone-font-pairs
-      '(("Hermit" . 5)
-        ("Fantasque Sans Mono" . 6)
+      '(("Fantasque Sans Mono" . 6)
+        ("Hermit" . 5)
         ))
 (if e454iel-phone-p
     (setq e454iel-font-pairs e454iel-phone-font-pairs))
+(setq e454iel-tablet-font-pairs
+      '(("Fantasque Sans Mono" . 14)
+        ("Hermit" . 13)
+        ))
+(if e454iel-tablet-p
+    (setq e454iel-font-pairs e454iel-tablet-font-pairs))
       
 (setq e454iel-current-font-pairs e454iel-font-pairs)
 (setq e454iel-font-scale 0)
@@ -575,7 +604,7 @@ This makes for easier reading of larger, denser bodies of text."
               :config
               (progn
                 (setq evil-escape-unordered-key-sequence t)
-                (setq evil-escape-delay (if e454iel-phone-p 0.3 0.1))
+                (setq evil-escape-delay (if e454iel-touch-screen-p 0.3 0.1))
                 (evil-escape-mode t)))
 
             (use-package fringe-helper
@@ -3710,7 +3739,7 @@ Lisp function does not specify a special indentation."
 
 ;; Nyan cat in the modeline
 (use-package nyan-mode
-  :config (if (not e454iel-phone-p) (nyan-mode)))
+  :config (if (not e454iel-small-screen-p) (nyan-mode)))
 
 ;; Parrot in the modeline
 (use-package parrot
