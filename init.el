@@ -2508,7 +2508,16 @@ Lisp function does not specify a special indentation."
 (use-package rg)
 
 (use-package smooth-scrolling
+  :if (not e454iel-tablet-p)
   :config (smooth-scrolling-mode 1))
+
+(use-package touch-handler
+  :if e454iel-tablet-p
+  :straight (touch-handler :host github :repo "Naheel-Azawy/touch-handler.el")
+  :config
+  (progn
+   (pixel-scroll-mode)))
+
 
 ;; I might want to look into using this.
 ;;(use-package pandoc-mode)
