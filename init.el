@@ -1063,6 +1063,7 @@ This makes for easier reading of larger, denser bodies of text."
             ;; (eshell/alias "unmount-storage"
             ;;  "tramp-cleanup-connection (quote (tramp-file-name \"sudo\" \"root\" nil \"localhost\" nil nil nil)); sudo umount /mnt/storage/; sync")
             ;; (eshell/alias "youtube-playlist-to-org" "yt-dlp $1 --get-filename -o \"* [[https://www.youtube.com/watch?v=%(id)s][%(title)s]] \"")
+            ;; (eshell/alias "pdf-to-pngs" "convert -quality 100 -density 300 $1 %05d.png \"")
             ))
 
 ;; give parenthesis matching colors based upon depth
@@ -1846,9 +1847,13 @@ calculated based on my configuration."
             ;;  happen while still assuming that I want the task to happen every
             ;;  day.
 
-            ;; TODO: There's a bug in this that resets the repeater portion of
-            ;;  the timestamp if moved forward or backward using shift. The hook
-            ;;  is disabled for now as a result.
+            ;; TODO: At one point I felt as though there was a bug in this that
+            ;;  resets the repeater portion of the timestamp if moved forward or
+            ;;  backward using shift. I wrote a TODO as a result. Everything
+            ;;  seems to be totally fine when I tested that case just now. I'm
+            ;;  keeping this todo for now and reenabling the hook. If I stumble
+            ;;  upon a similar bug, I'll update this note. If I don't, I'm
+            ;;  removing the note.
             (defun e454iel-org-reset-habit-scheduled-time ()
               "Remove the time (HH:MM) portion of the scheduled timestamp of tasks when marking as DONE if the property RESET_TIME_ON_DONE is non-nil."
               (let ((entry-reset-time-on-done (org-entry-get (point) "RESET_TIME_ON_DONE"))
@@ -1870,8 +1875,8 @@ calculated based on my configuration."
                                                  entry-scheduled-timestamp))
                       (message "Removed time from schedule for recurring habit."))))))
 
-            ;;(add-hook 'org-after-todo-state-change-hook
-            ;;          #'e454iel-org-reset-habit-scheduled-time)
+            (add-hook 'org-after-todo-state-change-hook
+                      #'e454iel-org-reset-habit-scheduled-time)
 
             (setq org-habit-graph-column 100)
 
@@ -1882,19 +1887,52 @@ calculated based on my configuration."
               "S-<up>" (lambda ()
                          (interactive)
                          (let ((org-time-stamp-rounding-minutes '(0 5)))
-                           (org-agenda-date-earlier-minutes -1)))
+                           (org-agenda-date-earlier-minutes 1)))
               "S-<down>" (lambda ()
                            (interactive)
                            (let ((org-time-stamp-rounding-minutes '(0 5)))
-                             (org-agenda-date-earlier-minutes 1)))
+                             (org-agenda-date-earlier-minutes -1)))
               "C-S-<up>" (lambda ()
                            (interactive)
                            (let ((org-time-stamp-rounding-minutes '(0 1)))
-                             (org-agenda-date-earlier-minutes -1)))
+                             (org-agenda-date-earlier-minutes 1)))
               "C-S-<down>" (lambda ()
                              (interactive)
                              (let ((org-time-stamp-rounding-minutes '(0 1)))
-                               (org-agenda-date-earlier-minutes 1))))
+                               (org-agenda-date-earlier-minutes -1)))
+              "M-S-<up>" (lambda ()
+                           (interactive)
+                           (let ((org-time-stamp-rounding-minutes '(0 15)))
+                             (org-agenda-date-earlier-minutes 1)))
+              "M-S-<down>" (lambda ()
+                             (interactive)
+                             (let ((org-time-stamp-rounding-minutes '(0 15)))
+                               (org-agenda-date-earlier-minutes -1)))
+
+              "S-h" (lambda ()
+                      (interactive)
+                      (let ((org-time-stamp-rounding-minutes '(0 5)))
+                        (org-agenda-date-earlier-minutes 1)))
+              "S-j" (lambda ()
+                      (interactive)
+                      (let ((org-time-stamp-rounding-minutes '(0 5)))
+                        (org-agenda-date-earlier-minutes -1)))
+              "C-S-h" (lambda ()
+                        (interactive)
+                        (let ((org-time-stamp-rounding-minutes '(0 1)))
+                          (org-agenda-date-earlier-minutes 1)))
+              "C-S-j" (lambda ()
+                        (interactive)
+                        (let ((org-time-stamp-rounding-minutes '(0 1)))
+                          (org-agenda-date-earlier-minutes -1)))
+              "M-S-h" (lambda ()
+                        (interactive)
+                        (let ((org-time-stamp-rounding-minutes '(0 15)))
+                          (org-agenda-date-earlier-minutes 1)))
+              "M-S-j" (lambda ()
+                        (interactive)
+                        (let ((org-time-stamp-rounding-minutes '(0 15)))
+                          (org-agenda-date-earlier-minutes -1))))
 
             (setq org-capture-templates
                   `(("t" "TODO" entry
@@ -1944,6 +1982,8 @@ calculated based on my configuration."
                   '((emacs-lisp . t)
                     (python . t)
                     (shell . t)))
+
+            (setq org-babel-python-command "python3")
 
             (use-package ob-python
               :straight (ob-python :type built-in))
@@ -4586,7 +4626,12 @@ normal-state."
                                           :size ,e454iel-shackle-chat-box-size)
                     (" *undo-tree*" :same nil
                                    :align ,e454iel-shackle-primary-alignment
-                                   :size ,e454iel-shackle-primary-size)))
+                                   :size ,e454iel-shackle-primary-size)
+                    ;; TODO: This doesn't seem to work yet, but geez do I want it to
+                    (transient-mode :same nil
+                                    :align ,e454iel-shackle-primary-alignment
+                                    :size ,e454iel-shackle-primary-size)
+                    ))
 
             (shackle-mode)
             ))
@@ -4658,6 +4703,14 @@ normal-state."
 
 (use-package chatgpt-shell)
 
+(use-package gptel
+  :config
+  (progn
+    (setq gptel-prompt-prefix-alist '((markdown-mode . "# ")
+                                     (org-mode . "* ")
+                                     (text-mode . "# ")))
+    (setq gptel-default-mode #'org-mode)))
+
 (use-package wordel
   :straight (wordel :host github :repo "progfolio/wordel" :files (:defaults "words"))
   :config
@@ -4668,6 +4721,13 @@ normal-state."
     (evil-set-initial-state  'wordel-select-mode 'insert)
 
     (e454iel-main-menu "agw" 'wordel)))
+
+(use-package wc-mode
+  :config
+  (progn
+    (setq wc-modeline-format "WC[%w/%gw (%tw)]")
+    (setq wc-word-goal 750)
+    (add-to-list 'minions-prominent-modes 'wc-mode)))
 
 (provide 'init)
 ;;; init.el ends here
