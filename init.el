@@ -3633,6 +3633,7 @@ Lisp function does not specify a special indentation."
 
 ;; This page lists all the customizations: https://depp.brause.cc/nov.el/
 (use-package nov
+  :straight (nov :host github :repo "emacsmirror/nov")
   :mode (("\\.epub\\'" . nov-mode))
   :config
   (progn
