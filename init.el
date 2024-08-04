@@ -3642,12 +3642,16 @@ Lisp function does not specify a special indentation."
     ;;          (lambda ()
     ;;            (face-remap-add-relative
     ;;             'variable-pitch
-    ;;             :family "opendyslexic"
+    ;;             ;;:family "opendyslexic"
+    ;;             :family "Fantasque Sans Mono"
     ;;             :height 2.3)))
 
     (setq nov-variable-pitch nil)
 
-    (setq nov-text-width 80)
+    (setq e454iel-nov-extra-line-spacing 20)
+    (setq-local line-spacing e454iel-nov-extra-line-spacing)
+
+    (setq nov-text-width 78)
 
     (evil-set-initial-state 'nov-mode 'normal)
 
@@ -3671,6 +3675,10 @@ Lisp function does not specify a special indentation."
       "f" (lambda ()
             (interactive)
             (setq nov-variable-pitch (not nov-variable-pitch))
+            (if (not (eq line-spacing e454iel-nov-extra-line-spacing))
+                (setq-local line-spacing e454iel-nov-extra-line-spacing)
+                ;; else
+                (setq-local line-spacing e454iel-default-line-spacing))
             (nov-render-document)))))
 
 (use-package bookmark
