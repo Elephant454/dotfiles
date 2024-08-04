@@ -1226,7 +1226,7 @@ _-_increase _=_decrease"
 ;;  nice with eyebrowse. See if I can apply that patch as advice in this file
 ;;  instead (or if that patch has been merged yet)
 (use-package exwm
-  :straight (exwm :host github :repo "ch11ng/exwm")
+  :straight (exwm :host github :repo "emacs-exwm/exwm")
 
   :if (or
        (string= (system-name) "Desktop.Guix.Maddie")
