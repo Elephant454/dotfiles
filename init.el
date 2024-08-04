@@ -2668,7 +2668,47 @@ Lisp function does not specify a special indentation."
   :straight (tab-bar :type built-in)
   :config
   (progn
-    (setq tab-bar-show nil)
+    (tab-bar-mode)
+
+    (setq tab-bar-show 1)
+    (setq tab-bar-close-button-show nil)
+
+    (setq tab-bar-format
+          '(tab-bar-format-tabs
+            tab-bar-separator
+            tab-bar-align-right
+            tab-bar-format-global))
+
+    ;; New tabs inherit the current frame configuration
+    (setq tab-bar-new-tab-choice #'clone)
+    ;; New tabs come last
+    (setq tab-bar-new-tab-to 'rightmost)
+
+    (setq tab-bar-tab-hints t)
+
+    ;; tab-bar aware winner-mode!
+    (tab-bar-history-mode 1)
+    (setq tab-bar-history-limit 50)
+
+    ;; TODO: In theory this is able to replace the statement I have written
+    ;;  below to select the tab by picking C and a number, but something seems
+    ;;  to be conflicting
+
+    ;; Use C-1 through C-8 to select tabs
+    ;;(setq tab-bar-select-tab-modifiers '(control))
+
+    (general-define-key
+     "C-0" (lambda () (interactive) (tab-select 0))
+     "C-1" (lambda () (interactive) (tab-select 1))
+     "C-2" (lambda () (interactive) (tab-select 2))
+     "C-3" (lambda () (interactive) (tab-select 3))
+     "C-4" (lambda () (interactive) (tab-select 4))
+     "C-5" (lambda () (interactive) (tab-select 5))
+     "C-6" (lambda () (interactive) (tab-select 6))
+     "C-7" (lambda () (interactive) (tab-select 7))
+     "C-8" (lambda () (interactive) (tab-select 8))
+     "C-9" (lambda () (interactive) (tab-select 9)))))
+
     (general-define-key
      :keymaps 'evil-window-map
      "g" '(nil :which-key "Tabs (Groups)")
@@ -2694,17 +2734,9 @@ Lisp function does not specify a special indentation."
      :keymaps 'evil-motion-state-map
       "C-6" 'nil)
 
-    (general-define-key
-     "C-0" (lambda () (interactive) (tab-select 0))
-     "C-1" (lambda () (interactive) (tab-select 1))
-     "C-2" (lambda () (interactive) (tab-select 2))
-     "C-3" (lambda () (interactive) (tab-select 3))
-     "C-4" (lambda () (interactive) (tab-select 4))
-     "C-5" (lambda () (interactive) (tab-select 5))
-     "C-6" (lambda () (interactive) (tab-select 6))
-     "C-7" (lambda () (interactive) (tab-select 7))
-     "C-8" (lambda () (interactive) (tab-select 8))
-     "C-9" (lambda () (interactive) (tab-select 9)))))
+
+
+    ))
 
 ;; improved list-packages manager
 ;; what is paradox-execute-asynchronously?
