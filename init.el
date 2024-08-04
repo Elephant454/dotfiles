@@ -4669,6 +4669,5 @@ normal-state."
 
     (e454iel-main-menu "agw" 'wordel)))
 
-
 (provide 'init)
 ;;; init.el ends here
