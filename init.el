@@ -2708,7 +2708,7 @@ Lisp function does not specify a special indentation."
      "C-6" (lambda () (interactive) (tab-select 6))
      "C-7" (lambda () (interactive) (tab-select 7))
      "C-8" (lambda () (interactive) (tab-select 8))
-     "C-9" (lambda () (interactive) (tab-select 9)))))
+     "C-9" (lambda () (interactive) (tab-select 9)))
 
     (general-define-key
      :keymaps 'evil-window-map
@@ -2733,11 +2733,7 @@ Lisp function does not specify a special indentation."
     ;;  workspaces using Control
     (general-define-key
      :keymaps 'evil-motion-state-map
-      "C-6" 'nil)
-
-
-
-    ))
+      "C-6" 'nil)))
 
 ;; improved list-packages manager
 ;; what is paradox-execute-asynchronously?
