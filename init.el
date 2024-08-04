@@ -981,7 +981,12 @@ This makes for easier reading of larger, denser bodies of text."
                 (setq diredp-image-preview-in-tooltip nil)))))
 
 (use-package debug
+  :straight (debug :type built-in)
   :config (evil-collection-init 'debug))
+
+(use-package edebug
+  :straight (edebug :type built-in)
+  :config (evil-collection-init 'edebug))
 
 (use-package proced
   :straight (proced :type built-in)
