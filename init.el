@@ -5,7 +5,7 @@
 ;;; Code:
 
 ;; global variables
-(require 'cl)
+(require 'cl-lib)
 
 (setq
  inhibit-startup-screen t
@@ -200,7 +200,7 @@ print-circle t
 
 ;; Describe a bunch of classes of devices I own
 (defvar e454iel-desktop-p
-  (find (system-name)
+  (cl-find (system-name)
         (list
          "7752.Arch.Matthew"
          "7752.Guix.Matthew"
@@ -208,14 +208,14 @@ print-circle t
         :test #'string-equal))
 
 (defvar e454iel-laptop-p
-  (find (system-name)
+  (cl-find (system-name)
         (list "Laptop-Manjaro-Maddie"
               "7548.Arch.Matthew"
               "7548.Guix.Matthew")
         :test #'string-equal))
 
 (defvar e454iel-phone-p
-  (find (system-name)
+  (cl-find (system-name)
         (list "mobian"
               "danctnix")
         :test #'string-equal))
@@ -383,7 +383,7 @@ without confirmation."
 (defun e454iel-jump-to-theme (theme-to-jump-to)
 "Jump to `THEME-TO-JUMP-TO' in `e454iel-theme-pairs' and apply it."
   (let ((result
-         (member-if
+         (cl-member-if
           (lambda (theme-pair) nil nil
             (cond
              ((equal (car theme-pair) theme-to-jump-to)
@@ -538,7 +538,7 @@ This makes for easier reading of larger, denser bodies of text."
                  e454iel-font-pairs)))
 
   (let ((result
-         (member-if
+         (cl-member-if
           (lambda (font-pair) nil nil
             (equal (car font-pair) font-to-jump-to))
 
@@ -4014,7 +4014,7 @@ normal-state."
                    (mapcar 'cadar e454iel-wallpaper-alist-list))))
 
     (let ((result
-           (member-if
+           (cl-member-if
             (lambda (wallpaper) nil nil
               (equal (cadar wallpaper) wallpaper-to-jump-to))
 
