@@ -1735,7 +1735,7 @@ calculated based on my configuration."
               (interactive)
               (setf org-agenda-files
                     (append
-                     (remove-if-not #'file-exists-p
+                     (cl-remove-if-not #'file-exists-p
                                     e454iel-extra-org-agenda-files)
                      (if (file-directory-p e454iel-documents-dir)
                          (directory-files-recursively
