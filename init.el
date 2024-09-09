@@ -3879,6 +3879,25 @@ Lisp function does not specify a special indentation."
     (defun vuiet-update-mode-line (&optional position) t)
 
     (setq vuiet-youtube-dl-command "yt-dlp")
+
+    ;; How many artists to check are similar to this artist?
+    (setq vuiet-artist-similar-limit 100)
+
+    ;; How many tracks from a particular artist do you consider?
+    (setq vuiet-artist-tracks-limit 10000)
+
+    ;; How many top albums does an artist have?
+    (setq vuiet-artist-top-albums-limit 2000)
+
+    ;; Show top albums in the artist info buffer
+    (setq vuiet-artist-info-show-top-albums t)
+
+    ;; When doing a search for a tag, how many artists do we pull?
+    (setq vuiet-tag-artists-limit 100)
+
+    ;; How many of our loved tracks do we pull from shuffling from them?
+    ;; Tragically, this is the upper limit.
+    (setq vuiet-loved-tracks-limit 1000)
     ))
 
 ;; For MU* (MUD's, MUCK's, etc)
