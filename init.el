@@ -123,6 +123,7 @@ print-circle t
 (menu-bar-mode 0)          ; remove the menu bar (File, Edit, etc.)
 (tool-bar-mode 0)          ; remove the tool bar (New, Open, etc.)
 (global-auto-revert-mode)  ; auto-revert changes for any changes on disk
+(setq global-auto-revert-non-file-buffers t)
 
 ;; Disable popping up the warning buffer while doing async native comp
 (custom-set-variables '(warning-suppress-types '((comp))))
