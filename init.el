@@ -304,10 +304,10 @@ value bound."
  (srcery-theme :defer)
  (birds-of-paradise-plus-theme :defer)
  (warm-night-theme :defer)
- (tron-legacy-theme)
- (shanty-themes)
- (ef-themes)
- (weyland-yutani-theme)
+ (tron-legacy-theme :defer)
+ (shanty-themes :defer)
+ (ef-themes :defer)
+ (weyland-yutani-theme :defer)
 )
 
 ;; TODO: There has to be some sort of better way of doing this. 😅 The autoloads
