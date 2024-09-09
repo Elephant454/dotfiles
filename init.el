@@ -304,7 +304,6 @@ value bound."
  (srcery-theme :defer)
  (birds-of-paradise-plus-theme :defer)
  (warm-night-theme :defer)
- (sweet-theme :defer)
  (tron-legacy-theme)
  (shanty-themes)
  (ef-themes)
