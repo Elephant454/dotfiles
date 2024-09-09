@@ -5,7 +5,7 @@
 ;;; Code:
 
 ;; global variables
-(require 'cl)
+(require 'cl-lib)
 
 (setq
  inhibit-startup-screen t
@@ -201,7 +201,7 @@ print-circle t
 
 ;; Describe a bunch of classes of devices I own
 (defvar e454iel-desktop-p
-  (find (system-name)
+  (cl-find (system-name)
         (list
          "7752.Arch.Matthew"
          "7752.Guix.Matthew"
@@ -209,26 +209,48 @@ print-circle t
         :test #'string-equal))
 
 (defvar e454iel-laptop-p
-  (find (system-name)
+  (cl-find (system-name)
         (list "Laptop-Manjaro-Maddie"
               "7548.Arch.Matthew"
               "7548.Guix.Matthew")
         :test #'string-equal))
 
 (defvar e454iel-phone-p
-  (find (system-name)
+  (cl-find (system-name)
         (list "mobian"
-              "danctnix")
+              ;; TODO: This could either be a phone or a tablet, so a more
+              ;;  sophisticated check is needed
+              ;;"danctnix"
+              )
         :test #'string-equal))
 
+(defvar e454iel-tablet-p
+  (let* ((kernel-version-name (string-trim (shell-command-to-string "uname -r")))
+         (kernel-version-string-pieces (split-string kernel-version-name "-"))
+         (kernel-version-string-pieces-length (length kernel-version-string-pieces)))
+
+    (if (and
+         (> kernel-version-string-pieces-length 3)
+         (string= "pinetab2" (cadddr kernel-version-string-pieces)))
+
+        t
+      nil)))
+
+(defvar e454iel-touch-screen-p
+  (or e454iel-phone-p e454iel-tablet-p))
+
+(defvar e454iel-small-screen-p
+  (or e454iel-phone-p e454iel-tablet-p))
+
 (defvar e454iel-portable-p
-  (or e454iel-phone-p e454iel-laptop-p))
+  (or e454iel-phone-p e454iel-tablet-p e454iel-laptop-p))
 
 ;; Decide if this is a home computer
 (defvar e454iel-home-computer-p
   (or e454iel-desktop-p
       e454iel-laptop-p
-      e454iel-phone-p))
+      e454iel-phone-p
+      e454iel-tablet-p))
 
 ;; themes
 
@@ -384,7 +406,7 @@ without confirmation."
 (defun e454iel-jump-to-theme (theme-to-jump-to)
 "Jump to `THEME-TO-JUMP-TO' in `e454iel-theme-pairs' and apply it."
   (let ((result
-         (member-if
+         (cl-member-if
           (lambda (theme-pair) nil nil
             (cond
              ((equal (car theme-pair) theme-to-jump-to)
@@ -427,7 +449,7 @@ without confirmation."
 (defvar e454iel-extra-line-spacing)
 
 (setq e454iel-default-line-spacing 4)
-(setq e454iel-extra-line-spacing (if e454iel-phone-p 12 24))
+(setq e454iel-extra-line-spacing (if e454iel-touch-screen-p 12 24))
 
 (setq-default line-spacing e454iel-default-line-spacing)
 
@@ -437,6 +459,7 @@ without confirmation."
 ;; TODO: Create docstrings for these
 (defvar e454iel-font-pairs)
 (defvar e454iel-phone-font-pairs)
+(defvar e454iel-tablet-font-pairs)
 (defvar e454iel-current-font-pairs)
 (defvar e454iel-font-scale)
 (defvar e454iel-use-dyslexic-font nil)
@@ -457,11 +480,17 @@ without confirmation."
                            ("Cozette" . 8)
                            ))
 (setq e454iel-phone-font-pairs
-      '(("Hermit" . 5)
-        ("Fantasque Sans Mono" . 6)
+      '(("Fantasque Sans Mono" . 6)
+        ("Hermit" . 5)
         ))
 (if e454iel-phone-p
     (setq e454iel-font-pairs e454iel-phone-font-pairs))
+(setq e454iel-tablet-font-pairs
+      '(("Fantasque Sans Mono" . 14)
+        ("Hermit" . 13)
+        ))
+(if e454iel-tablet-p
+    (setq e454iel-font-pairs e454iel-tablet-font-pairs))
       
 (setq e454iel-current-font-pairs e454iel-font-pairs)
 (setq e454iel-font-scale 0)
@@ -539,7 +568,7 @@ This makes for easier reading of larger, denser bodies of text."
                  e454iel-font-pairs)))
 
   (let ((result
-         (member-if
+         (cl-member-if
           (lambda (font-pair) nil nil
             (equal (car font-pair) font-to-jump-to))
 
@@ -576,7 +605,7 @@ This makes for easier reading of larger, denser bodies of text."
               :config
               (progn
                 (setq evil-escape-unordered-key-sequence t)
-                (setq evil-escape-delay (if e454iel-phone-p 0.3 0.1))
+                (setq evil-escape-delay (if e454iel-touch-screen-p 0.3 0.1))
                 (evil-escape-mode t)))
 
             (use-package fringe-helper
@@ -985,7 +1014,12 @@ This makes for easier reading of larger, denser bodies of text."
                 (setq diredp-image-preview-in-tooltip nil)))))
 
 (use-package debug
+  :straight (debug :type built-in)
   :config (evil-collection-init 'debug))
+
+(use-package edebug
+  :straight (edebug :type built-in)
+  :config (evil-collection-init 'edebug))
 
 (use-package proced
   :straight (proced :type built-in)
@@ -1196,7 +1230,7 @@ _-_increase _=_decrease"
 ;;  nice with eyebrowse. See if I can apply that patch as advice in this file
 ;;  instead (or if that patch has been merged yet)
 (use-package exwm
-  :straight (exwm :host github :repo "ch11ng/exwm")
+  :straight (exwm :host github :repo "emacs-exwm/exwm")
 
   :if (or
        (string= (system-name) "Desktop.Guix.Maddie")
@@ -1736,7 +1770,7 @@ calculated based on my configuration."
               (interactive)
               (setf org-agenda-files
                     (append
-                     (remove-if-not #'file-exists-p
+                     (cl-remove-if-not #'file-exists-p
                                     e454iel-extra-org-agenda-files)
                      (if (file-directory-p e454iel-documents-dir)
                          (directory-files-recursively
@@ -2519,7 +2553,16 @@ Lisp function does not specify a special indentation."
 (use-package rg)
 
 (use-package smooth-scrolling
+  :if (not e454iel-tablet-p)
   :config (smooth-scrolling-mode 1))
+
+(use-package touch-handler
+  :if e454iel-tablet-p
+  :straight (touch-handler :host github :repo "Naheel-Azawy/touch-handler.el")
+  :config
+  (progn
+   (pixel-scroll-mode)))
+
 
 ;; I might want to look into using this.
 ;;(use-package pandoc-mode)
@@ -2689,7 +2732,47 @@ Lisp function does not specify a special indentation."
   :straight (tab-bar :type built-in)
   :config
   (progn
-    (setq tab-bar-show nil)
+    (tab-bar-mode)
+
+    (setq tab-bar-show 1)
+    (setq tab-bar-close-button-show nil)
+
+    (setq tab-bar-format
+          '(tab-bar-format-tabs
+            tab-bar-separator
+            tab-bar-align-right
+            tab-bar-format-global))
+
+    ;; New tabs inherit the current frame configuration
+    (setq tab-bar-new-tab-choice #'clone)
+    ;; New tabs come last
+    (setq tab-bar-new-tab-to 'rightmost)
+
+    (setq tab-bar-tab-hints t)
+
+    ;; tab-bar aware winner-mode!
+    (tab-bar-history-mode 1)
+    (setq tab-bar-history-limit 50)
+
+    ;; TODO: In theory this is able to replace the statement I have written
+    ;;  below to select the tab by picking C and a number, but something seems
+    ;;  to be conflicting
+
+    ;; Use C-1 through C-8 to select tabs
+    ;;(setq tab-bar-select-tab-modifiers '(control))
+
+    (general-define-key
+     "C-0" (lambda () (interactive) (tab-select 0))
+     "C-1" (lambda () (interactive) (tab-select 1))
+     "C-2" (lambda () (interactive) (tab-select 2))
+     "C-3" (lambda () (interactive) (tab-select 3))
+     "C-4" (lambda () (interactive) (tab-select 4))
+     "C-5" (lambda () (interactive) (tab-select 5))
+     "C-6" (lambda () (interactive) (tab-select 6))
+     "C-7" (lambda () (interactive) (tab-select 7))
+     "C-8" (lambda () (interactive) (tab-select 8))
+     "C-9" (lambda () (interactive) (tab-select 9)))
+
     (general-define-key
      :keymaps 'evil-window-map
      "g" '(nil :which-key "Tabs (Groups)")
@@ -2713,19 +2796,7 @@ Lisp function does not specify a special indentation."
     ;;  workspaces using Control
     (general-define-key
      :keymaps 'evil-motion-state-map
-      "C-6" 'nil)
-
-    (general-define-key
-     "C-0" (lambda () (interactive) (tab-select 0))
-     "C-1" (lambda () (interactive) (tab-select 1))
-     "C-2" (lambda () (interactive) (tab-select 2))
-     "C-3" (lambda () (interactive) (tab-select 3))
-     "C-4" (lambda () (interactive) (tab-select 4))
-     "C-5" (lambda () (interactive) (tab-select 5))
-     "C-6" (lambda () (interactive) (tab-select 6))
-     "C-7" (lambda () (interactive) (tab-select 7))
-     "C-8" (lambda () (interactive) (tab-select 8))
-     "C-9" (lambda () (interactive) (tab-select 9)))))
+      "C-6" 'nil)))
 
 ;; improved list-packages manager
 ;; what is paradox-execute-asynchronously?
@@ -2812,7 +2883,7 @@ Lisp function does not specify a special indentation."
             (setq display-time-interval 0.95)
             ;; TODO: Pi day, Pride month, December, Fall, Halloween, Thanksgiving week, Birthday
             ;; TODO: Maybe I could have the cake show every time it's the birthday of someone I know?
-            (setq e454iel-holiday-symbol "🍀🌈🌧️🪴")
+            (setq e454iel-holiday-symbol "🪴")
             (setq display-time-format (concat "%F %H:%M:%S %a " e454iel-holiday-symbol))
             (display-time-mode t)))
 
@@ -3684,6 +3755,7 @@ Lisp function does not specify a special indentation."
 
 ;; This page lists all the customizations: https://depp.brause.cc/nov.el/
 (use-package nov
+  :straight (nov :host github :repo "emacsmirror/nov")
   :mode (("\\.epub\\'" . nov-mode))
   :config
   (progn
@@ -3692,12 +3764,16 @@ Lisp function does not specify a special indentation."
     ;;          (lambda ()
     ;;            (face-remap-add-relative
     ;;             'variable-pitch
-    ;;             :family "opendyslexic"
+    ;;             ;;:family "opendyslexic"
+    ;;             :family "Fantasque Sans Mono"
     ;;             :height 2.3)))
 
     (setq nov-variable-pitch nil)
 
-    (setq nov-text-width 80)
+    (setq e454iel-nov-extra-line-spacing 20)
+    (setq-local line-spacing e454iel-nov-extra-line-spacing)
+
+    (setq nov-text-width 78)
 
     (evil-set-initial-state 'nov-mode 'normal)
 
@@ -3721,6 +3797,10 @@ Lisp function does not specify a special indentation."
       "f" (lambda ()
             (interactive)
             (setq nov-variable-pitch (not nov-variable-pitch))
+            (if (not (eq line-spacing e454iel-nov-extra-line-spacing))
+                (setq-local line-spacing e454iel-nov-extra-line-spacing)
+                ;; else
+                (setq-local line-spacing e454iel-default-line-spacing))
             (nov-render-document)))))
 
 (use-package bookmark
@@ -3752,7 +3832,7 @@ Lisp function does not specify a special indentation."
 
 ;; Nyan cat in the modeline
 (use-package nyan-mode
-  :config (if (not e454iel-phone-p) (nyan-mode)))
+  :config (if (not e454iel-small-screen-p) (nyan-mode)))
 
 ;; Parrot in the modeline
 (use-package parrot
@@ -4084,7 +4164,7 @@ normal-state."
                    (mapcar 'cadar e454iel-wallpaper-alist-list))))
 
     (let ((result
-           (member-if
+           (cl-member-if
             (lambda (wallpaper) nil nil
               (equal (cadar wallpaper) wallpaper-to-jump-to))
 
@@ -4523,6 +4603,7 @@ normal-state."
 ;;  This isn't characters at the moment, but some other sort of unit of size
 ;; https://depp.brause.cc/shackle/
 (use-package shackle
+  :straight (shackle :host github :repo "emacsmirror/shackle")
   :config (progn
             (setq shackle-default-rule '(:same t))
 
