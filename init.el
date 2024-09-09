@@ -2538,6 +2538,15 @@ Lisp function does not specify a special indentation."
           (setq ispell-program-name "hunspell")
           ;;(setq ispell-dictionary "american")
           (setq ispell-dictionary "en_US")
+          ;; TODO: This doesn't seem to be correctly set, as proposed customize
+          ;;  values for ispell-alternate-dictionary all seem to be directory
+          ;;  listings rather than file listings, and the suggested outputs
+          ;;  don't make perfect sense. The good thing for now is that with this
+          ;;  set as-is, we can prevent corfu from throwing a backtrace every
+          ;;  time I start typing
+          (if (string-search "Guix" (system-name))
+              (setq ispell-alternate-dictionary
+                    (file-truename "~/.guix-profile/share/hunspell/en_US.dic")))
           (use-package auto-dictionary)
           (use-package flyspell-lazy)
           (add-hook 'text-mode-hook 'flyspell-mode)
