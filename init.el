@@ -1263,7 +1263,8 @@ _-_increase _=_decrease"
                             (lambda ()
                               (interactive)
                               (exwm-workspace-switch-create ,i))))
-                        (number-sequence 0 1)))))
+                        (number-sequence 0 1))
+              ([pause] . keyboard-quit))))
     ;; Line-editing shortcuts
     ;;(unless (get 'exwm-input-simulation-keys 'saved-value)
     ;;  (setq exwm-input-simulation-keys
