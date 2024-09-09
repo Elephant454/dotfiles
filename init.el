@@ -705,6 +705,9 @@ This makes for easier reading of larger, denser bodies of text."
      "ta" 'auto-fill-mode
      "tr" '(lambda() (interactive)
              (if (yes-or-no-p "Really restart Emacs? ") (restart-emacs)))
+     "td" '(:ignore t :which-key "Debug")
+     "tde" 'toggle-debug-on-error
+     "tdq" 'toggle-debug-on-quit
      
      "a" '(:ignore t :which-key "Applications")
      "ai" '(:ignore t :which-key "Internet")
