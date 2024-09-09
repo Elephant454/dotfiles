@@ -4280,9 +4280,7 @@ normal-state."
 (use-package pulseaudio-control
   :config
   (progn
-    (setq pulseaudio-control-default-sink
-          (if (string-equal (system-name) "Desktop.Guix.Maddie")
-              51))
+    (pulseaudio-control-default-sink-mode)
     (setq pulseaudio-control-volume-step "1%"))
 
   :general
