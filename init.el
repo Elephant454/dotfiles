@@ -4680,6 +4680,5 @@ normal-state."
     (setq wc-word-goal 750)
     (add-to-list 'minions-prominent-modes 'wc-mode)))
 
-
 (provide 'init)
 ;;; init.el ends here
