@@ -2203,7 +2203,8 @@ calculated based on my configuration."
 
 (defun e454iel-insert-in-new-buffer
     (contents-to-insert new-buffer-name &optional major-mode)
-  "Insert `CONTENTS-TO-INSERT' into a newly generated buffer of name `NEW-BUFFER-NAME'."
+  "Insert `CONTENTS-TO-INSERT' into a new buffer called `NEW-BUFFER-NAME'.
+Use `MAJOR-MODE' as the major mode."
 
   (let ((new-buffer (generate-new-buffer new-buffer-name)))
 
