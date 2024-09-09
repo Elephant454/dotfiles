@@ -336,7 +336,8 @@ value bound."
                             (srcery . srcery)
                             (gotham . gotham)
                             (purple-haze . purple-haze)
-                            (kaolin-breeze . kaolin-blossom)))
+                            (kaolin-breeze . kaolin-blossom)
+                            (ef-summer . ef-rosa)))
 
 (setq e454iel-current-theme-pairs e454iel-theme-pairs)
 (setq e454iel-use-day-theme t)
