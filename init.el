@@ -2577,6 +2577,9 @@ Lisp function does not specify a special indentation."
                       (lambda()
                         (rename-buffer
                          (concat "*eww " (eww-current-url) "*"))))
+            (setq shr-max-image-proportion 0.7)
+            (setq shr-max-width 80)
+            (setq eww-use-browse-url ".*")
             (general-define-key
              :keymaps 'eww-mode-map
              :states 'normal
