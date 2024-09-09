@@ -2572,14 +2572,11 @@ Lisp function does not specify a special indentation."
   :init (progn
           (use-package eww-lnum))
   :config (progn
-            ;;(setq eww-search-prefix "https://www.google.com/search?q=")
-            (add-hook 'eww-after-render-hook
-                      (lambda()
-                        (rename-buffer
-                         (concat "*eww " (eww-current-url) "*"))))
             (setq shr-max-image-proportion 0.7)
             (setq shr-max-width 80)
             (setq eww-use-browse-url ".*")
+            (setq eww-auto-rename-buffer 'url)
+
             (general-define-key
              :keymaps 'eww-mode-map
              :states 'normal
