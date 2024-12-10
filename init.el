@@ -2954,6 +2954,8 @@ Like `tab-bar-move-tab', but moves in the opposite direction."
             ;; TODO: Maybe I could have the cake show every time it's the birthday of someone I know?
             (setq e454iel-holiday-symbol "🪴")
             (setq display-time-format (concat "%F %H:%M:%S %a " e454iel-holiday-symbol))
+            (setq display-time-mail-directory nil)
+            (setq display-time-default-load-average nil)
             (display-time-mode t)))
 
 (use-package battery
