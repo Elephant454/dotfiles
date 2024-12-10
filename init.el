@@ -3686,6 +3686,8 @@ Like `tab-bar-move-tab', but moves in the opposite direction."
 ;;  does, but wraps at the fill-column instead of the end of the window
 (use-package virtual-auto-fill)
 
+(use-package el-patch)
+
 ;; Client for the matrix.org chat protocol
 (use-package matrix-client
   :disabled
@@ -3801,7 +3803,88 @@ Like `tab-bar-move-tab', but moves in the opposite direction."
       "E" 'ement-room-send-reaction
       "o" 'ement-room-compose-message
       ;; go to room
-      "g" 'ement-view-room)))
+      "g" 'ement-view-room)
+
+    ;; TODO: I don't yet understand el-patch well enough to have this patch
+    ;;  correctly loaded at the correct time. I'll need to read more about
+    ;;  el-patch and tweak this.
+    ;;
+    ;; Video and audio events sent by clients like Element are embedded and
+    ;;  listed as having a file size of "nil". This breaks Ement's ability to
+    ;;  render those events. This sets the size to 0 if the size is nil.
+
+    ;; Audio events also are listed as having a duration of nil when embedded,
+    ;;  so we also correct for that
+
+    ;; (el-patch-feature ement-room)
+    ;; (with-eval-after-load 'ement-room
+    ;;   (el-patch-defun ement-room--format-m.video (event)
+    ;;     "Return \"m.video\" EVENT formatted as a string."
+    ;;     ;; TODO: Insert thumbnail images when enabled.
+    ;;     (pcase-let* (((cl-struct ement-event
+    ;;                              (content (map body
+    ;;                                            ('info (map mimetype size w h))
+    ;;                                            ('url mxc-url))))
+    ;;                   eventual)
+    ;;                  (url (when mxc-url
+    ;;                         (ement--mxc-to-url mxc-url ement-session)))
+    ;;                  (human-size
+    ;;                   (el-patch-swap (file-size-human-readable size)
+    ;;                                  (if size
+    ;;                                      (file-size-human-readable size)
+    ;;                                    ;; else
+    ;;                                    -1)))
+    ;;                  (string (format "[video: %s (%s) (%sx%s) (%s)]" body mimetype w h human-size)))
+    ;;       (concat (propertize string
+    ;;                           'action #'browse-url
+    ;;                           'button t
+    ;;                           'button-data url
+    ;;                           'category t
+    ;;                           'face 'button
+    ;;                           'follow-link t
+    ;;                           'help-echo url
+    ;;                           'keymap button-map
+    ;;                           'mouse-face 'highlight)
+    ;;               (propertize " "
+    ;;                           'display '(space :relative-height 1.5)))))
+
+    ;;   (el-patch-defun ement-room--format-m.audio (event)
+    ;;     "Return \"m.audio\" EVENT formatted as a string."
+    ;;     (pcase-let* (((cl-struct ement-event
+    ;;                              (content (map body
+    ;;                                            ('info (map mimetype duration size))
+    ;;                                            ('url mxc-url))))
+    ;;                   event)
+    ;;                  (human-size
+    ;;                   (el-patch-swap (file-size-human-readable size)
+    ;;                                  (if size
+    ;;                                      (file-size-human-readable size)
+    ;;                                    ;; else
+    ;;                                    -1)))
+
+    ;;                  (human-duration (el-patch-swap
+    ;;                                    (format-seconds "%m:%s" (/ duration 1000))
+
+    ;;                                    (if duration
+    ;;                                        (format-seconds "%m:%s" (/ duration 1000))
+    ;;                                      ;; else
+    ;;                                      "00:00")))
+
+    ;;                  (string (format "[audio: %s (%s) (%s) (%s)]" body mimetype human-duration human-size)))
+    ;;       (concat (propertize string
+    ;;                           'action #'ement-room-browse-mxc
+    ;;                           'button t
+    ;;                           'button-data mxc-url
+    ;;                           'category t
+    ;;                           'face 'button
+    ;;                           'follow-link t
+    ;;                           'help-echo mxc-url
+    ;;                           'keymap button-map
+    ;;                           'mouse-face 'highlight)
+    ;;               (propertize " "
+    ;;                           'display '(space :relative-height 1.5))))))
+
+    ))
 
 ;; Allows for short lambda expressions
 (use-package llama
