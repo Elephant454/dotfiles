@@ -1261,7 +1261,7 @@ _-_increase _=_decrease"
     ;;  workspaces starting with being named "1" here, switching to workspace
     ;;  "0" still switches to the first workspace
     (if e454iel-desktop-p
-        (setq exwm-randr-workspace-output-plist
+        (setq exwm-randr-workspace-monitor-plist
               '(0 "DisplayPort-1"
                   1 "HDMI-A-0"
                   ;;2 "DisplayPort-1"
@@ -1514,7 +1514,7 @@ _-_increase _=_decrease"
           (tab-select 1)))
 
       (exwm-workspace-switch-create
-       (first exwm-randr-workspace-output-plist))
+       (cl-first exwm-randr-workspace-monitor-plist))
 
       (tab-select 1))
 
