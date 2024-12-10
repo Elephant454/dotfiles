@@ -305,7 +305,10 @@ value bound."
 
 (use-package-list
  (soft-morning-theme :defer)
- (omtose-phellack-theme :defer)
+ (omtose-phellack-theme :defer
+                        :straight (omtose-phellack-theme
+                                   :host github
+                                   :repo "emacsorphanage/omtose-phellack-themes"))
  (color-theme-sanityinc-tomorrow :defer)
  (light-soap-theme :defer)
  (silkworm-theme :defer)
