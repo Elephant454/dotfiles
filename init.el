@@ -1073,6 +1073,11 @@ This makes for easier reading of larger, denser bodies of text."
             ;;  "tramp-cleanup-connection (quote (tramp-file-name \"sudo\" \"root\" nil \"localhost\" nil nil nil)); sudo umount /mnt/storage/; sync")
             ;; (eshell/alias "youtube-playlist-to-org" "yt-dlp $1 --get-filename -o \"* [[https://www.youtube.com/watch?v=%(id)s][%(title)s]] \"")
             ;; (eshell/alias "pdf-to-pngs" "convert -quality 100 -density 300 $1 %05d.png \"")
+            ;;(eshell/alias "guix-update-from-manifest" "guix package -L ~/Guix/e454-packages/ -m ~/Guix/packageManifest.scm")
+
+            ;; Connect using geiser-connect
+            ;;(eshell/alias "guix-repl-open" "INSIDE_EMACS=1 guix repl --listen=tcp:37146")
+
             ))
 
 ;; give parenthesis matching colors based upon depth
