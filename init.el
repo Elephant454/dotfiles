@@ -2751,7 +2751,7 @@ Lisp function does not specify a special indentation."
     (setq tab-bar-format
           '(tab-bar-format-tabs
             tab-bar-separator
-            tab-bar-align-right
+            tab-bar-format-align-right
             tab-bar-format-global))
 
     ;; New tabs inherit the current frame configuration
