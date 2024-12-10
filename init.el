@@ -2807,7 +2807,65 @@ Lisp function does not specify a special indentation."
     ;;  workspaces using Control
     (general-define-key
      :keymaps 'evil-motion-state-map
-      "C-6" 'nil)))
+      "C-6" 'nil))
+
+  ;; I want to not have wrapping around for only scrolling, and that
+  ;;  unfortuantely means defining dulicates of a lot of functions for now
+
+  ;; TODO: Could this be done using "advise" instead somehow? The problem is
+  ;;  that I need a separate copy of the function, not just an overwrite of the
+  ;;  original.
+
+  (defun tab-bar-switch-to-next-tab-no-wraparound (&optional arg)
+    "Switch to ARGth next tab without wrapping around.
+Interactively, ARG is the prefix numeric argument and defaults to 1."
+    (interactive "p")
+    (unless (integerp arg)
+      (setq arg 1))
+    (let* ((tabs (funcall tab-bar-tabs-function))
+           (from-index (or (tab-bar--current-tab-index tabs) 0))
+           (to-index (min (+ from-index arg) (length tabs))))
+      (tab-bar-select-tab (1+ to-index))))
+
+  (defun tab-bar-switch-to-prev-tab-no-wraparound (&optional arg)
+    "Switch to ARGth previous tab without wraparound.
+Interactively, ARG is the prefix numeric argument and defaults to 1."
+    (interactive "p")
+    (unless (integerp arg)
+      (setq arg 1))
+    (tab-bar-switch-to-next-tab-no-wraparound (- arg)))
+
+  (defun tab-bar-move-tab-no-wraparound (&optional arg)
+    "Move the current tab ARG positions to the right without wrapping around.
+Interactively, ARG is the prefix numeric argument and defaults to 1.
+If ARG is negative, move the current tab ARG positions to the left.
+Argument addressing is relative in contrast to `tab-bar-move-tab-to',
+where argument addressing is absolute."
+    (interactive "p")
+    (let* ((tabs (funcall tab-bar-tabs-function))
+           (from-index (or (tab-bar--current-tab-index tabs) 0))
+           (to-index (min (+ from-index arg) (length tabs))))
+      (tab-bar-move-tab-to (1+ to-index) (1+ from-index))))
+
+  (defun tab-bar-move-tab-backward-no-wraparound (&optional arg)
+    "Move the current tab ARG positions to the left without wraparound.
+Interactively, ARG is the prefix numeric argument and defaults to 1.
+Like `tab-bar-move-tab', but moves in the opposite direction."
+    (interactive "p")
+    (tab-bar-move-tab-no-wraparound (- (or arg 1))))
+
+
+  (general-define-key
+   :keymaps 'tab-bar-map
+    "<wheel-up>"      #'tab-bar-switch-to-prev-tab-no-wraparound
+    "<wheel-down>"    #'tab-bar-switch-to-next-tab-no-wraparound
+    "<wheel-left>"    #'tab-bar-switch-to-prev-tab-no-wraparound
+    "<wheel-right>"   #'tab-bar-switch-to-next-tab-no-wraparound
+
+    "S-<wheel-up>"    #'tab-bar-move-tab-backward-no-wraparound
+    "S-<wheel-down>"  #'tab-bar-move-tab-no-wraparound
+    "S-<wheel-left>"  #'tab-bar-move-tab-backward-no-wraparound
+    "S-<wheel-right>" #'tab-bar-move-tab-no-wraparound))
 
 ;; improved list-packages manager
 ;; what is paradox-execute-asynchronously?
