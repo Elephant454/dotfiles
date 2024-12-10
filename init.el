@@ -440,7 +440,7 @@ without confirmation."
    e454iel-theme-pairs))
 
 ;; load default theme
-(e454iel-jump-to-theme 'ef-rosa)
+(e454iel-jump-to-theme 'dracula)
 
 
 ;; fonts
