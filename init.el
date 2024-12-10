@@ -263,15 +263,14 @@ print-circle t
 (defvar e454iel-use-day-theme)
 (defvar e454iel-apply-to-stumpwm)
 
-;; disable the current Emacs 24 theme before enabling a new one. This
-;; is from
-;; http://stackoverflow.com/questions/9900232/changing-color-themes-emacs-24-order-matters/15595000#15595000
-;; http://emacs.stackexchange.com/questions/3112/how-to-reset-color-theme
-;;
-;; look more into mapping functions (mapcar, mapc, dolist, etc.)
-(defadvice load-theme 
-  (before theme-dont-propagate activate)
-  (mapc #'disable-theme custom-enabled-themes))
+;; Disable themes before loading new ones:
+;; https://old.reddit.com/r/emacs/comments/30b67j/how_can_you_reset_emacs_to_the_default_theme/cpqug8q/
+(defadvice load-theme (before disable-before-load)
+"Disable any loaded themes before enabling a new theme.
+This prevents overlapping themes; something I would rarely want."
+(dolist (theme custom-enabled-themes)
+  (disable-theme theme)))
+(ad-activate 'load-theme)
 
 ;; I should set up pairs of night themes and day themes. One keybinding cycles
 ;; between pairs and another keybinding switches between day and night.
