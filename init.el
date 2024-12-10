@@ -1414,13 +1414,13 @@ _-_increase _=_decrease"
                (ssh-agent-output-commands
                 (split-string ssh-agent-output ";"))
                (ssh-agent-auth-sock-set-command
-                (first ssh-agent-output-commands))
+                (cl-first ssh-agent-output-commands))
                (ssh-agent-auth-sock
-                (second (split-string ssh-agent-auth-sock-set-command "=")))
+                (cl-second (split-string ssh-agent-auth-sock-set-command "=")))
                (ssh-agent-pid-set-command
-                (string-trim-left (third ssh-agent-output-commands)))
+                (string-trim-left (cl-third ssh-agent-output-commands)))
                (ssh-agent-pid
-                (second (split-string ssh-agent-pid-set-command "="))))
+                (cl-second (split-string ssh-agent-pid-set-command "="))))
 
           (setenv "SSH_AUTH_SOCK" ssh-agent-auth-sock)
           (setenv "SSH_AGENT_PID" ssh-agent-pid)))
@@ -1509,7 +1509,7 @@ _-_increase _=_decrease"
       (if (> (length exwm-randr-workspace-monitor-plist) 2)
           (progn 
           (exwm-workspace-switch-create
-           (third exwm-randr-workspace-output-plist))
+           (cl-third exwm-randr-workspace-monitor-plist))
 
           (tab-select 1)))
 
