@@ -3355,6 +3355,7 @@ Like `tab-bar-move-tab', but moves in the opposite direction."
 (use-package xkcd)
 
 (use-package guix
+  :disabled
   :straight (guix :type built-in)
 
   ;; This is a temporary fix while I wait for this to be merged
