@@ -3893,11 +3893,13 @@ Like `tab-bar-move-tab', but moves in the opposite direction."
 
 ;; Front-end for the Emacsmirror package database
 (use-package epkg
+  :disabled
   :init
   (progn
-    (use-package emacsql)
-    (use-package emacsql-sqlite)
-    (use-package closql)))
+    ;;(use-package emacsql)
+    ;;(use-package emacsql-sqlite)
+    ;;(use-package closql)
+    ))
 
 (use-package phps-mode
     :after flycheck
