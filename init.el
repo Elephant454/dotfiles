@@ -1798,7 +1798,7 @@ calculated based on my configuration."
                    ;;'(("m" tags "-other-agenda"))))
                    '(("z" "My Agenda"
                       agenda ""
-                      ((org-agenda-tag-filter-preset '("-OtherAgenda")))))))
+                      ((org-agenda-tag-filter-preset '("-otherAgenda")))))))
 
             (setq org-agenda-span 'day)
 
