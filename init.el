@@ -333,6 +333,10 @@ value bound."
  (shanty-themes :defer)
  (ef-themes :defer)
  (weyland-yutani-theme :defer)
+ (monte-carlo-theme :defer
+                    :straight (monte-carlo-theme
+                               :host github
+                               :repo "MetroWind/monte-carlo-theme"))
 )
 
 ;; TODO: There has to be some sort of better way of doing this. 😅 The autoloads
