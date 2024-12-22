@@ -335,6 +335,10 @@ value bound."
  (shanty-themes)
  (ef-themes)
  (weyland-yutani-theme)
+ (monte-carlo-theme
+  :straight
+  (monte-carlo-theme :host github
+                     :repo "MetroWind/monte-carlo-theme"))
 )
 
 ;; TODO: There has to be some sort of better way of doing this. 😅 The autoloads
