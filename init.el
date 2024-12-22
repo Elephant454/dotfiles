@@ -2559,6 +2559,9 @@ Lisp function does not specify a special indentation."
   :if (not e454iel-tablet-p)
   :config (smooth-scrolling-mode 1))
 
+;; TODO: "(provide 'touch-handler)" must be added to the end of the cloned file
+;;  before it can be used as a package. Can I do this with advice, somehow? Can
+;;  I do this programmatically?
 (use-package touch-handler
   :if e454iel-tablet-p
   :straight (touch-handler :host github :repo "Naheel-Azawy/touch-handler.el")
