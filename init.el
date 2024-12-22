@@ -3727,7 +3727,7 @@ Lisp function does not specify a special indentation."
 
 ;; Allows for short lambda expressions
 (use-package llama
-  :straight (llama :host sourcehut
+  :straight (llama :host github
                    :repo "tarsius/llama"))
 
 ;; Front-end for the Emacsmirror package database
