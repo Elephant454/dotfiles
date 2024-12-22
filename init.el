@@ -4023,6 +4023,9 @@ normal-state."
 ;;(use-package roguel-ike)
 
 (use-package bbdb
+  ;; TODO: Re-enable this once the straight recipe seems to be working again.
+  ;;  It's broken for some reason, and I don't want to figure it out right now
+  :disabled
   :config
   (progn
     (use-package bbdb-csv-import)))
