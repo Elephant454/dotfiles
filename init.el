@@ -123,6 +123,7 @@ print-circle t
 (menu-bar-mode 0)          ; remove the menu bar (File, Edit, etc.)
 (tool-bar-mode 0)          ; remove the tool bar (New, Open, etc.)
 (global-auto-revert-mode)  ; auto-revert changes for any changes on disk
+(setq global-auto-revert-non-file-buffers t)
 
 ;; Disable popping up the warning buffer while doing async native comp
 (custom-set-variables '(warning-suppress-types '((comp))))
@@ -262,15 +263,14 @@ print-circle t
 (defvar e454iel-use-day-theme)
 (defvar e454iel-apply-to-stumpwm)
 
-;; disable the current Emacs 24 theme before enabling a new one. This
-;; is from
-;; http://stackoverflow.com/questions/9900232/changing-color-themes-emacs-24-order-matters/15595000#15595000
-;; http://emacs.stackexchange.com/questions/3112/how-to-reset-color-theme
-;;
-;; look more into mapping functions (mapcar, mapc, dolist, etc.)
-(defadvice load-theme 
-  (before theme-dont-propagate activate)
-  (mapc #'disable-theme custom-enabled-themes))
+;; Disable themes before loading new ones:
+;; https://old.reddit.com/r/emacs/comments/30b67j/how_can_you_reset_emacs_to_the_default_theme/cpqug8q/
+(defadvice load-theme (before disable-before-load)
+"Disable any loaded themes before enabling a new theme.
+This prevents overlapping themes; something I would rarely want."
+(dolist (theme custom-enabled-themes)
+  (disable-theme theme)))
+(ad-activate 'load-theme)
 
 ;; I should set up pairs of night themes and day themes. One keybinding cycles
 ;; between pairs and another keybinding switches between day and night.
@@ -330,16 +330,15 @@ value bound."
  (srcery-theme :defer)
  (birds-of-paradise-plus-theme :defer)
  (warm-night-theme :defer)
- (sweet-theme :defer)
- (tron-legacy-theme)
- (shanty-themes)
- (ef-themes)
- (weyland-yutani-theme)
+ (tron-legacy-theme :defer)
+ (shanty-themes :defer)
+ (ef-themes :defer)
+ (weyland-yutani-theme :defer)
  (monte-carlo-theme
+  :defer 
   :straight
-  (monte-carlo-theme :host github
-                     :repo "MetroWind/monte-carlo-theme"))
-)
+   (monte-carlo-theme :host github
+                      :repo "MetroWind/monte-carlo-theme")))
 
 ;; TODO: There has to be some sort of better way of doing this. 😅 The autoloads
 ;;  weren't generated right, so the only way to get the
@@ -358,8 +357,8 @@ value bound."
                             (doom-one . doom-one)
                             (doom-fairy-floss . doom-laserwave)
                             (doom-opera-light . doom-opera)
-                            (birds-of-paradise-plus . doom-dracula)
-                            (doom-dracula . purple-haze)
+                            (birds-of-paradise-plus . dracula)
+                            (dracula . purple-haze)
                             (material-light . material)
                             (sanityinc-tomorrow-day . sanityinc-tomorrow-eighties)
                             (apropospriate-light . apropospriate-dark)
@@ -442,7 +441,7 @@ without confirmation."
    e454iel-theme-pairs))
 
 ;; load default theme
-(e454iel-jump-to-theme 'ef-rosa)
+(e454iel-jump-to-theme 'dracula)
 
 
 ;; fonts
@@ -742,6 +741,9 @@ This makes for easier reading of larger, denser bodies of text."
      "ta" 'auto-fill-mode
      "tr" '(lambda() (interactive)
              (if (yes-or-no-p "Really restart Emacs? ") (restart-emacs)))
+     "td" '(:ignore t :which-key "Debug")
+     "tde" 'toggle-debug-on-error
+     "tdq" 'toggle-debug-on-quit
      
      "a" '(:ignore t :which-key "Applications")
      "ai" '(:ignore t :which-key "Internet")
@@ -1072,6 +1074,11 @@ This makes for easier reading of larger, denser bodies of text."
             ;;  "tramp-cleanup-connection (quote (tramp-file-name \"sudo\" \"root\" nil \"localhost\" nil nil nil)); sudo umount /mnt/storage/; sync")
             ;; (eshell/alias "youtube-playlist-to-org" "yt-dlp $1 --get-filename -o \"* [[https://www.youtube.com/watch?v=%(id)s][%(title)s]] \"")
             ;; (eshell/alias "pdf-to-pngs" "convert -quality 100 -density 300 $1 %05d.png \"")
+            ;;(eshell/alias "guix-update-from-manifest" "guix package -L ~/Guix/e454-packages/ -m ~/Guix/packageManifest.scm")
+
+            ;; Connect using geiser-connect
+            ;;(eshell/alias "guix-repl-open" "INSIDE_EMACS=1 guix repl --listen=tcp:37146")
+
             ))
 
 ;; give parenthesis matching colors based upon depth
@@ -1255,7 +1262,7 @@ _-_increase _=_decrease"
     ;;  workspaces starting with being named "1" here, switching to workspace
     ;;  "0" still switches to the first workspace
     (if e454iel-desktop-p
-        (setq exwm-randr-workspace-output-plist
+        (setq exwm-randr-workspace-monitor-plist
               '(0 "DisplayPort-1"
                   1 "HDMI-A-0"
                   ;;2 "DisplayPort-1"
@@ -1302,7 +1309,8 @@ _-_increase _=_decrease"
                             (lambda ()
                               (interactive)
                               (exwm-workspace-switch-create ,i))))
-                        (number-sequence 0 1)))))
+                        (number-sequence 0 1))
+              ([pause] . keyboard-quit))))
     ;; Line-editing shortcuts
     ;;(unless (get 'exwm-input-simulation-keys 'saved-value)
     ;;  (setq exwm-input-simulation-keys
@@ -1407,13 +1415,13 @@ _-_increase _=_decrease"
                (ssh-agent-output-commands
                 (split-string ssh-agent-output ";"))
                (ssh-agent-auth-sock-set-command
-                (first ssh-agent-output-commands))
+                (cl-first ssh-agent-output-commands))
                (ssh-agent-auth-sock
-                (second (split-string ssh-agent-auth-sock-set-command "=")))
+                (cl-second (split-string ssh-agent-auth-sock-set-command "=")))
                (ssh-agent-pid-set-command
-                (string-trim-left (third ssh-agent-output-commands)))
+                (string-trim-left (cl-third ssh-agent-output-commands)))
                (ssh-agent-pid
-                (second (split-string ssh-agent-pid-set-command "="))))
+                (cl-second (split-string ssh-agent-pid-set-command "="))))
 
           (setenv "SSH_AUTH_SOCK" ssh-agent-auth-sock)
           (setenv "SSH_AGENT_PID" ssh-agent-pid)))
@@ -1502,12 +1510,12 @@ _-_increase _=_decrease"
       (if (> (length exwm-randr-workspace-monitor-plist) 2)
           (progn 
           (exwm-workspace-switch-create
-           (third exwm-randr-workspace-output-plist))
+           (cl-third exwm-randr-workspace-monitor-plist))
 
           (tab-select 1)))
 
       (exwm-workspace-switch-create
-       (first exwm-randr-workspace-output-plist))
+       (cl-first exwm-randr-workspace-monitor-plist))
 
       (tab-select 1))
 
@@ -1791,7 +1799,7 @@ calculated based on my configuration."
                    ;;'(("m" tags "-other-agenda"))))
                    '(("z" "My Agenda"
                       agenda ""
-                      ((org-agenda-tag-filter-preset '("-OtherAgenda")))))))
+                      ((org-agenda-tag-filter-preset '("-otherAgenda")))))))
 
             (setq org-agenda-span 'day)
 
@@ -2241,7 +2249,8 @@ calculated based on my configuration."
 
 (defun e454iel-insert-in-new-buffer
     (contents-to-insert new-buffer-name &optional major-mode)
-  "Insert `CONTENTS-TO-INSERT' into a newly generated buffer of name `NEW-BUFFER-NAME'."
+  "Insert `CONTENTS-TO-INSERT' into a new buffer called `NEW-BUFFER-NAME'.
+Use `MAJOR-MODE' as the major mode."
 
   (let ((new-buffer (generate-new-buffer new-buffer-name)))
 
@@ -2587,6 +2596,15 @@ Lisp function does not specify a special indentation."
           (setq ispell-program-name "hunspell")
           ;;(setq ispell-dictionary "american")
           (setq ispell-dictionary "en_US")
+          ;; TODO: This doesn't seem to be correctly set, as proposed customize
+          ;;  values for ispell-alternate-dictionary all seem to be directory
+          ;;  listings rather than file listings, and the suggested outputs
+          ;;  don't make perfect sense. The good thing for now is that with this
+          ;;  set as-is, we can prevent corfu from throwing a backtrace every
+          ;;  time I start typing
+          (if (string-search "Guix" (system-name))
+              (setq ispell-alternate-dictionary
+                    (file-truename "~/.guix-profile/share/hunspell/en_US.dic")))
           (use-package auto-dictionary)
           (use-package flyspell-lazy)
           (add-hook 'text-mode-hook 'flyspell-mode)
@@ -2612,11 +2630,11 @@ Lisp function does not specify a special indentation."
   :init (progn
           (use-package eww-lnum))
   :config (progn
-            ;;(setq eww-search-prefix "https://www.google.com/search?q=")
-            (add-hook 'eww-after-render-hook
-                      (lambda()
-                        (rename-buffer
-                         (concat "*eww " (eww-current-url) "*"))))
+            (setq shr-max-image-proportion 0.7)
+            (setq shr-max-width 80)
+            (setq eww-use-browse-url ".*")
+            (setq eww-auto-rename-buffer 'url)
+
             (general-define-key
              :keymaps 'eww-mode-map
              :states 'normal
@@ -2737,7 +2755,7 @@ Lisp function does not specify a special indentation."
     (setq tab-bar-format
           '(tab-bar-format-tabs
             tab-bar-separator
-            tab-bar-align-right
+            tab-bar-format-align-right
             tab-bar-format-global))
 
     ;; New tabs inherit the current frame configuration
@@ -2793,7 +2811,65 @@ Lisp function does not specify a special indentation."
     ;;  workspaces using Control
     (general-define-key
      :keymaps 'evil-motion-state-map
-      "C-6" 'nil)))
+      "C-6" 'nil))
+
+  ;; I want to not have wrapping around for only scrolling, and that
+  ;;  unfortuantely means defining dulicates of a lot of functions for now
+
+  ;; TODO: Could this be done using "advise" instead somehow? The problem is
+  ;;  that I need a separate copy of the function, not just an overwrite of the
+  ;;  original.
+
+  (defun tab-bar-switch-to-next-tab-no-wraparound (&optional arg)
+    "Switch to ARGth next tab without wrapping around.
+Interactively, ARG is the prefix numeric argument and defaults to 1."
+    (interactive "p")
+    (unless (integerp arg)
+      (setq arg 1))
+    (let* ((tabs (funcall tab-bar-tabs-function))
+           (from-index (or (tab-bar--current-tab-index tabs) 0))
+           (to-index (min (+ from-index arg) (length tabs))))
+      (tab-bar-select-tab (1+ to-index))))
+
+  (defun tab-bar-switch-to-prev-tab-no-wraparound (&optional arg)
+    "Switch to ARGth previous tab without wraparound.
+Interactively, ARG is the prefix numeric argument and defaults to 1."
+    (interactive "p")
+    (unless (integerp arg)
+      (setq arg 1))
+    (tab-bar-switch-to-next-tab-no-wraparound (- arg)))
+
+  (defun tab-bar-move-tab-no-wraparound (&optional arg)
+    "Move the current tab ARG positions to the right without wrapping around.
+Interactively, ARG is the prefix numeric argument and defaults to 1.
+If ARG is negative, move the current tab ARG positions to the left.
+Argument addressing is relative in contrast to `tab-bar-move-tab-to',
+where argument addressing is absolute."
+    (interactive "p")
+    (let* ((tabs (funcall tab-bar-tabs-function))
+           (from-index (or (tab-bar--current-tab-index tabs) 0))
+           (to-index (min (+ from-index arg) (length tabs))))
+      (tab-bar-move-tab-to (1+ to-index) (1+ from-index))))
+
+  (defun tab-bar-move-tab-backward-no-wraparound (&optional arg)
+    "Move the current tab ARG positions to the left without wraparound.
+Interactively, ARG is the prefix numeric argument and defaults to 1.
+Like `tab-bar-move-tab', but moves in the opposite direction."
+    (interactive "p")
+    (tab-bar-move-tab-no-wraparound (- (or arg 1))))
+
+
+  (general-define-key
+   :keymaps 'tab-bar-map
+    "<wheel-up>"      #'tab-bar-switch-to-prev-tab-no-wraparound
+    "<wheel-down>"    #'tab-bar-switch-to-next-tab-no-wraparound
+    "<wheel-left>"    #'tab-bar-switch-to-prev-tab-no-wraparound
+    "<wheel-right>"   #'tab-bar-switch-to-next-tab-no-wraparound
+
+    "S-<wheel-up>"    #'tab-bar-move-tab-backward-no-wraparound
+    "S-<wheel-down>"  #'tab-bar-move-tab-no-wraparound
+    "S-<wheel-left>"  #'tab-bar-move-tab-backward-no-wraparound
+    "S-<wheel-right>" #'tab-bar-move-tab-no-wraparound))
 
 ;; improved list-packages manager
 ;; what is paradox-execute-asynchronously?
@@ -2882,6 +2958,8 @@ Lisp function does not specify a special indentation."
             ;; TODO: Maybe I could have the cake show every time it's the birthday of someone I know?
             (setq e454iel-holiday-symbol "🪴")
             (setq display-time-format (concat "%F %H:%M:%S %a " e454iel-holiday-symbol))
+            (setq display-time-mail-directory nil)
+            (setq display-time-default-load-average nil)
             (display-time-mode t)))
 
 (use-package battery
@@ -3282,6 +3360,8 @@ Lisp function does not specify a special indentation."
 
 (use-package guix
   :disabled
+  :straight (guix :type built-in)
+
   ;; This is a temporary fix while I wait for this to be merged
   ;;:straight (guix :fork (:host gitlab :repo "john.soo/emacs-guix"))
   :config (progn
@@ -3608,6 +3688,8 @@ Lisp function does not specify a special indentation."
 ;;  does, but wraps at the fill-column instead of the end of the window
 (use-package virtual-auto-fill)
 
+(use-package el-patch)
+
 ;; Client for the matrix.org chat protocol
 (use-package matrix-client
   :disabled
@@ -3723,7 +3805,88 @@ Lisp function does not specify a special indentation."
       "E" 'ement-room-send-reaction
       "o" 'ement-room-compose-message
       ;; go to room
-      "g" 'ement-view-room)))
+      "g" 'ement-view-room)
+
+    ;; TODO: I don't yet understand el-patch well enough to have this patch
+    ;;  correctly loaded at the correct time. I'll need to read more about
+    ;;  el-patch and tweak this.
+    ;;
+    ;; Video and audio events sent by clients like Element are embedded and
+    ;;  listed as having a file size of "nil". This breaks Ement's ability to
+    ;;  render those events. This sets the size to 0 if the size is nil.
+
+    ;; Audio events also are listed as having a duration of nil when embedded,
+    ;;  so we also correct for that
+
+    ;; (el-patch-feature ement-room)
+    ;; (with-eval-after-load 'ement-room
+    ;;   (el-patch-defun ement-room--format-m.video (event)
+    ;;     "Return \"m.video\" EVENT formatted as a string."
+    ;;     ;; TODO: Insert thumbnail images when enabled.
+    ;;     (pcase-let* (((cl-struct ement-event
+    ;;                              (content (map body
+    ;;                                            ('info (map mimetype size w h))
+    ;;                                            ('url mxc-url))))
+    ;;                   eventual)
+    ;;                  (url (when mxc-url
+    ;;                         (ement--mxc-to-url mxc-url ement-session)))
+    ;;                  (human-size
+    ;;                   (el-patch-swap (file-size-human-readable size)
+    ;;                                  (if size
+    ;;                                      (file-size-human-readable size)
+    ;;                                    ;; else
+    ;;                                    -1)))
+    ;;                  (string (format "[video: %s (%s) (%sx%s) (%s)]" body mimetype w h human-size)))
+    ;;       (concat (propertize string
+    ;;                           'action #'browse-url
+    ;;                           'button t
+    ;;                           'button-data url
+    ;;                           'category t
+    ;;                           'face 'button
+    ;;                           'follow-link t
+    ;;                           'help-echo url
+    ;;                           'keymap button-map
+    ;;                           'mouse-face 'highlight)
+    ;;               (propertize " "
+    ;;                           'display '(space :relative-height 1.5)))))
+
+    ;;   (el-patch-defun ement-room--format-m.audio (event)
+    ;;     "Return \"m.audio\" EVENT formatted as a string."
+    ;;     (pcase-let* (((cl-struct ement-event
+    ;;                              (content (map body
+    ;;                                            ('info (map mimetype duration size))
+    ;;                                            ('url mxc-url))))
+    ;;                   event)
+    ;;                  (human-size
+    ;;                   (el-patch-swap (file-size-human-readable size)
+    ;;                                  (if size
+    ;;                                      (file-size-human-readable size)
+    ;;                                    ;; else
+    ;;                                    -1)))
+
+    ;;                  (human-duration (el-patch-swap
+    ;;                                    (format-seconds "%m:%s" (/ duration 1000))
+
+    ;;                                    (if duration
+    ;;                                        (format-seconds "%m:%s" (/ duration 1000))
+    ;;                                      ;; else
+    ;;                                      "00:00")))
+
+    ;;                  (string (format "[audio: %s (%s) (%s) (%s)]" body mimetype human-duration human-size)))
+    ;;       (concat (propertize string
+    ;;                           'action #'ement-room-browse-mxc
+    ;;                           'button t
+    ;;                           'button-data mxc-url
+    ;;                           'category t
+    ;;                           'face 'button
+    ;;                           'follow-link t
+    ;;                           'help-echo mxc-url
+    ;;                           'keymap button-map
+    ;;                           'mouse-face 'highlight)
+    ;;               (propertize " "
+    ;;                           'display '(space :relative-height 1.5))))))
+
+    ))
 
 ;; Allows for short lambda expressions
 (use-package llama
@@ -3737,7 +3900,7 @@ Lisp function does not specify a special indentation."
   (progn
     ;;(use-package emacsql)
     ;;(use-package emacsql-sqlite)
-    ;;(use-package closql))
+    ;;(use-package closql)
     ))
 
 (use-package phps-mode
@@ -3956,6 +4119,25 @@ Lisp function does not specify a special indentation."
     (defun vuiet-update-mode-line (&optional position) t)
 
     (setq vuiet-youtube-dl-command "yt-dlp")
+
+    ;; How many artists to check are similar to this artist?
+    (setq vuiet-artist-similar-limit 100)
+
+    ;; How many tracks from a particular artist do you consider?
+    (setq vuiet-artist-tracks-limit 10000)
+
+    ;; How many top albums does an artist have?
+    (setq vuiet-artist-top-albums-limit 2000)
+
+    ;; Show top albums in the artist info buffer
+    (setq vuiet-artist-info-show-top-albums t)
+
+    ;; When doing a search for a tag, how many artists do we pull?
+    (setq vuiet-tag-artists-limit 100)
+
+    ;; How many of our loved tracks do we pull from shuffling from them?
+    ;; Tragically, this is the upper limit.
+    (setq vuiet-loved-tracks-limit 1000)
     ))
 
 ;; For MU* (MUD's, MUCK's, etc)
@@ -4341,9 +4523,7 @@ normal-state."
 (use-package pulseaudio-control
   :config
   (progn
-    (setq pulseaudio-control-default-sink
-          (if (string-equal (system-name) "Desktop.Guix.Maddie")
-              51))
+    (pulseaudio-control-default-sink-mode)
     (setq pulseaudio-control-volume-step "1%"))
 
   :general
