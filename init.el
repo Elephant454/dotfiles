@@ -2731,7 +2731,7 @@ Lisp function does not specify a special indentation."
   (progn
     (tab-bar-mode)
 
-    (setq tab-bar-show 1)
+    (setq tab-bar-show t)
     (setq tab-bar-close-button-show nil)
 
     (setq tab-bar-format
