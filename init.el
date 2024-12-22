@@ -4743,5 +4743,9 @@ normal-state."
     (setq wc-word-goal 750)
     (add-to-list 'minions-prominent-modes 'wc-mode)))
 
+(use-package denote)
+
+(use-package logos)
+
 (provide 'init)
 ;;; init.el ends here
