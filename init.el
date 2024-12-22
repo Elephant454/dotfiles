@@ -3732,11 +3732,13 @@ Lisp function does not specify a special indentation."
 
 ;; Front-end for the Emacsmirror package database
 (use-package epkg
+  :disabled
   :init
   (progn
-    (use-package emacsql)
-    (use-package emacsql-sqlite)
-    (use-package closql)))
+    ;;(use-package emacsql)
+    ;;(use-package emacsql-sqlite)
+    ;;(use-package closql))
+    ))
 
 (use-package phps-mode
     :after flycheck
