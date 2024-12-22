@@ -3510,9 +3510,7 @@ Lisp function does not specify a special indentation."
 ;;  servers if I'm on a home computer
 ;; This is for LSP
 (use-package eglot
-  ;; TODO: The fact that I have to do this manually means there's something
-  ;;  wonky going on, perhaps in terms of the version of "project" I'm using
-  :init (load-library "project"))
+  :straight (elgot :type built-in))
 
 ;; This is needed for eglot, but is likely useful for all sorts of things
 (use-package project
