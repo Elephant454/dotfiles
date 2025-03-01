@@ -4402,14 +4402,19 @@ normal-state."
 
     (print image)
 
-    (shell-command (concat "wal -i "
-                           image
-                           " --saturate "
-                           (format "%s" saturation)))
+    ;; (shell-command (concat "wal -i "
+    ;;                        image
+    ;;                        " --saturate "
+    ;;                        (format "%s" saturation)))
+
+    (wallpaper-set image)
 
     (load-theme e454iel-preferred-ewal-theme t)
     (ewal-evil-cursors-get-colors :apply t)
-    (seethru opacity)
+    ;;(seethru opacity)
+    (set-frame-parameter (selected-frame)
+                         'alpha-background
+                         (/ opacity 100.0))
 
     name))
 
