@@ -1887,6 +1887,19 @@ calculated based on my configuration."
             ;; Don't scatter around my buffers when opening up the agenda
             (setq org-agenda-window-setup 'current-window)
 
+            ;; Edit org source code blocks in other-window
+            (setq org-src-window-setup 'other-window)
+
+            ;; Functions for opening links, primarily customized to allow
+            ;;  opening file links in the same window
+            (setq org-link-frame-setup
+                  '((vm . vm-visit-folder-other-frame)
+                    (vm-imap . vm-visit-imap-folder-other-frame)
+                    (gnus . org-gnus-no-new-news)
+                    (file . find-file)
+                    (wl . wl-other-frame)))
+
+
             ;; Don't clutter recurring scheduled items with visible-by-default
             ;;  logging
             (setq org-log-into-drawer t)
