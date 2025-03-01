@@ -816,6 +816,8 @@ this function does not enable transparency."
      "tfd" 'e454iel-decrease-font-size
      "tft" 'e454iel-toggle-use-dyslexic-font
      "tl" 'e454iel-toggle-use-extra-line-spacing
+     ;; frame transparency
+     "tT" 'e454iel-toggle-frame-transparency
      ;; misc toggles
      "ta" 'auto-fill-mode
      "tr" '(lambda() (interactive)
