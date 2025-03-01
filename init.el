@@ -2697,6 +2697,25 @@ Lisp function does not specify a special indentation."
     (setq wallpaper-command "feh")
     (setq wallpaper-command-args '("--bg-fill" "%f"))
 
+    (defun e454iel-sway-wallpaper-set-function (file)
+      "Sets the wallpaper to `FILE' when running the Sway compositor."
+      (let ((new-wallpaper-file-name (concat
+                                     "/tmp/wallpaper"
+                                     (format-time-string "%s")
+                                     (file-name-extension file))))
+
+        (copy-file file new-wallpaper-file-name)
+        (shell-command (concat
+                        "swaymsg"
+                        " 'output * bg "
+                        "\""
+                        new-wallpaper-file-name
+                        "\""
+                        " fill'"))))
+
+    (if e454iel-tablet-p
+        (setq wallpaper-set-function #'e454iel-sway-wallpaper-set-function))
+
     (general-define-key
      :keymaps 'image-mode-map
      :states 'normal
