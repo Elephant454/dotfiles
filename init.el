@@ -1319,6 +1319,25 @@ _-_increase _=_decrease"
             ;; TODO: I need to write some sort of function for looking up an arbitrary song
             ))
 
+;; Start and set-up ssh-agent
+(defun e454iel-setup-ssh-agent ()
+  "Run shell commands and set environment variables necessary for setting up ssh-agent"
+  (let* ((ssh-agent-output
+          (shell-command-to-string "ssh-agent -s"))
+         (ssh-agent-output-commands
+          (split-string ssh-agent-output ";"))
+         (ssh-agent-auth-sock-set-command
+          (cl-first ssh-agent-output-commands))
+         (ssh-agent-auth-sock
+          (cl-second (split-string ssh-agent-auth-sock-set-command "=")))
+         (ssh-agent-pid-set-command
+          (string-trim-left (cl-third ssh-agent-output-commands)))
+         (ssh-agent-pid
+          (cl-second (split-string ssh-agent-pid-set-command "="))))
+
+    (setenv "SSH_AUTH_SOCK" ssh-agent-auth-sock)
+    (setenv "SSH_AGENT_PID" ssh-agent-pid)))
+
 ;; TODO: I applied patches to my local copy of EXWM in order to make it play
 ;;  nice with eyebrowse. See if I can apply that patch as advice in this file
 ;;  instead (or if that patch has been merged yet)
@@ -1487,27 +1506,6 @@ _-_increase _=_decrease"
                                   ":"
                                   (number-to-string calendar-longitude)
                                   " -t 6500:3000"))
-
-    ;; Start and set-up ssh-agent
-    (defun e454iel-setup-ssh-agent ()
-      "Run shell commands and set environment variables necessary for setting up ssh-agent"
-        (let* ((ssh-agent-output
-                (shell-command-to-string "ssh-agent -s"))
-               (ssh-agent-output-commands
-                (split-string ssh-agent-output ";"))
-               (ssh-agent-auth-sock-set-command
-                (cl-first ssh-agent-output-commands))
-               (ssh-agent-auth-sock
-                (cl-second (split-string ssh-agent-auth-sock-set-command "=")))
-               (ssh-agent-pid-set-command
-                (string-trim-left (cl-third ssh-agent-output-commands)))
-               (ssh-agent-pid
-                (cl-second (split-string ssh-agent-pid-set-command "="))))
-
-          (setenv "SSH_AUTH_SOCK" ssh-agent-auth-sock)
-          (setenv "SSH_AGENT_PID" ssh-agent-pid)))
-
-    (e454iel-setup-ssh-agent)
 
     (defun e454iel-rebuild-xelb ()
       "Do a clean rebuild of xelb (and exwm) in order to get it Straight, Guix, and native-comp to play nice after a Guix package update."
