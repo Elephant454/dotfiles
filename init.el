@@ -2306,11 +2306,6 @@ calculated based on my configuration."
 
                   TeX-command-list)))
 
-(use-package seethru
-  :config (e454iel-main-menu "tT" 'seethru)
-  ;; (set-frame-parameter (selected-frame) 'alpha-background 0.9)
-  )
-
 (use-package dash)
 
 ;; My first elisp function!
