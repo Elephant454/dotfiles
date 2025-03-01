@@ -407,6 +407,11 @@ without confirmation."
 
     theme-to-apply))
 
+(defun e454iel-monte-carlo-theme ()
+  "Apply the monte-carlo-theme by MetroWind, effectively generating a new theme."
+  (interactive)
+  (load-theme 'monte-carlo t))
+
 ;; This looks good. This should be the underlying way of changing it when you
 ;;  know an exact name, and then I should make an ivy interface for picking one
 ;;  conveniently
@@ -728,6 +733,7 @@ This makes for easier reading of larger, denser bodies of text."
      "tt" '(:ignore t :which-key "Themes")
      "tts" 'load-theme
      "ttn" 'e454iel-cycle-theme-pairs
+     "ttr" 'e454iel-monte-carlo-theme
      "ttt" 'e454iel-toggle-use-day-theme
      ;; fonts
      "tf" '(:ignore t :which-key "Fonts")
