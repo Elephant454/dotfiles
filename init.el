@@ -596,6 +596,79 @@ This makes for easier reading of larger, denser bodies of text."
 (message "Setting the font..."
          (e454iel-jump-to-font "Fantasque Sans Mono"))
 
+
+;; Frame transparency
+(defvar e454iel-frame-transparency-value 0.95
+  "Decimal from 0 to 1 representing how transparent to be when transparency is used.")
+
+(defvar e454iel-use-frame-transparency nil
+  "Should the frame be transparent?")
+
+(defun e454iel-enable-frame-transparency ()
+  "Turn on having the frame be transparent."
+  (interactive)
+  (setq e454iel-use-frame-transparency t)
+  (set-frame-parameter (selected-frame)
+                       'alpha-background
+                       e454iel-frame-transparency-value))
+
+(defun e454iel-disable-frame-transparency ()
+  "Turn off having the frame be transparent."
+  (interactive)
+  (setq e454iel-use-frame-transparency nil)
+  (set-frame-parameter (selected-frame)
+                       'alpha-background
+                       1.0))
+
+(defun e454iel-set-frame-transparency-value (&optional value)
+  "Either set the frame transparency value using `VALUE', or prompt for a value.
+This value will only be used when transparency is enabled, and
+this function does not enable transparency."
+  (interactive)
+
+  (if (not value)
+      (setq value
+            (string-to-number (read-string "Transparency value: "))))
+
+  ;; If the value is not a decimal, assume it's a percentage
+  (if (> value 1.0)
+      (setq value (/ value 100.0)))
+
+  (setq e454iel-frame-transparency-value value))
+
+(defun e454iel-set-frame-transparency-value-using-prefix-arg (arg)
+  "Using a passed `prefix-arg` (as `ARG'), set frame transparency value."
+  ;; The default non-numeric universal-argument is a value of a list containing
+  ;;  a single 4. If we get that, this means we want to set the value, but don't
+  ;;  know what to set it to yet. Call the function in order to prompt.
+  (if (and (listp arg)
+           (= (car arg) 4))
+      (e454iel-set-frame-transparency-value)
+
+    ;; Else, we have a non-default value. Interpret that value as a number, and
+    ;;  pass it to be set as a specific value
+    (e454iel-set-frame-transparency-value arg)))
+
+(defun e454iel-toggle-frame-transparency ()
+  "Toggle whether or not the current frame is transparent."
+  (interactive)
+
+  ;; If we get a universal-argument, set the value and then enable no matter
+  ;;  what. Otherwise, toggle.
+  (if current-prefix-arg
+      (progn
+        (e454iel-set-frame-transparency-value-using-prefix-arg
+         current-prefix-arg)
+        (e454iel-enable-frame-transparency))
+
+    ;; else
+    (progn
+      (if (not e454iel-use-frame-transparency)
+          (e454iel-enable-frame-transparency)
+        ;; else
+        (e454iel-disable-frame-transparency)))))
+
+
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
   :demand
