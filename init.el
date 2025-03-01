@@ -2861,7 +2861,9 @@ Lisp function does not specify a special indentation."
     (setq tab-bar-close-button-show nil)
 
     (setq tab-bar-format
-          '(tab-bar-format-tabs
+          '(
+            ;;tab-bar-format-tabs-groups
+            tab-bar-format-tabs
             tab-bar-separator
             tab-bar-format-align-right
             tab-bar-format-global))
