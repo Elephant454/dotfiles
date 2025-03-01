@@ -4771,6 +4771,7 @@ normal-state."
 ;;  This isn't characters at the moment, but some other sort of unit of size
 ;; https://depp.brause.cc/shackle/
 (use-package shackle
+  :disabled
   :straight (shackle :host github :repo "emacsmirror/shackle")
   :config (progn
             (setq shackle-default-rule '(:same t))
