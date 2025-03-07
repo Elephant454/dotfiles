@@ -1487,7 +1487,7 @@ _-_increase _=_decrease"
     (start-process-shell-command "shifts_toggle"
                                  nil
                                  "setxkbmap -option grp:shifts_toggle")
-    (start-process-shell-command "setxkbmap"
+    (start-process-shell-command "setxkbmap languages"
                                  nil
                                  "setxkbmap us,gr")
     (start-process-shell-command "map wacom tablet"
