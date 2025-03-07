@@ -320,10 +320,11 @@ value bound."
 
 (use-package-list
  (soft-morning-theme :defer)
- (omtose-phellack-theme :defer
-                        :straight (omtose-phellack-theme
-                                   :host github
-                                   :repo "emacsorphanage/omtose-phellack-themes"))
+ (omtose-phellack-theme
+  :defer
+  :straight (omtose-phellack-theme
+             :host github
+             :repo "emacsorphanage/omtose-phellack-themes"))
  (color-theme-sanityinc-tomorrow :defer)
  (light-soap-theme :defer)
  (silkworm-theme :defer)
@@ -348,11 +349,11 @@ value bound."
  (shanty-themes :defer)
  (ef-themes :defer)
  (weyland-yutani-theme :defer)
- (monte-carlo-theme :defer
-                    :straight (monte-carlo-theme
-                               :host github
-                               :repo "MetroWind/monte-carlo-theme"))
-)
+ (monte-carlo-theme
+  :defer 
+  :straight
+   (monte-carlo-theme :host github
+                      :repo "MetroWind/monte-carlo-theme")))
 
 ;; TODO: There has to be some sort of better way of doing this. 😅 The autoloads
 ;;  weren't generated right, so the only way to get the
@@ -420,6 +421,11 @@ without confirmation."
           (e454iel-eval-with-stumpwm "(stumpwm::apply-emacs-colors)"))
 
     theme-to-apply))
+
+(defun e454iel-monte-carlo-theme ()
+  "Apply the monte-carlo-theme by MetroWind, effectively generating a new theme."
+  (interactive)
+  (load-theme 'monte-carlo t))
 
 ;; This looks good. This should be the underlying way of changing it when you
 ;;  know an exact name, and then I should make an ivy interface for picking one
@@ -605,6 +611,79 @@ This makes for easier reading of larger, denser bodies of text."
 (message "Setting the font..."
          (e454iel-jump-to-font "Fantasque Sans Mono"))
 
+
+;; Frame transparency
+(defvar e454iel-frame-transparency-value 0.95
+  "Decimal from 0 to 1 representing how transparent to be when transparency is used.")
+
+(defvar e454iel-use-frame-transparency nil
+  "Should the frame be transparent?")
+
+(defun e454iel-enable-frame-transparency ()
+  "Turn on having the frame be transparent."
+  (interactive)
+  (setq e454iel-use-frame-transparency t)
+  (set-frame-parameter (selected-frame)
+                       'alpha-background
+                       e454iel-frame-transparency-value))
+
+(defun e454iel-disable-frame-transparency ()
+  "Turn off having the frame be transparent."
+  (interactive)
+  (setq e454iel-use-frame-transparency nil)
+  (set-frame-parameter (selected-frame)
+                       'alpha-background
+                       1.0))
+
+(defun e454iel-set-frame-transparency-value (&optional value)
+  "Either set the frame transparency value using `VALUE', or prompt for a value.
+This value will only be used when transparency is enabled, and
+this function does not enable transparency."
+  (interactive)
+
+  (if (not value)
+      (setq value
+            (string-to-number (read-string "Transparency value: "))))
+
+  ;; If the value is not a decimal, assume it's a percentage
+  (if (> value 1.0)
+      (setq value (/ value 100.0)))
+
+  (setq e454iel-frame-transparency-value value))
+
+(defun e454iel-set-frame-transparency-value-using-prefix-arg (arg)
+  "Using a passed `prefix-arg` (as `ARG'), set frame transparency value."
+  ;; The default non-numeric universal-argument is a value of a list containing
+  ;;  a single 4. If we get that, this means we want to set the value, but don't
+  ;;  know what to set it to yet. Call the function in order to prompt.
+  (if (and (listp arg)
+           (= (car arg) 4))
+      (e454iel-set-frame-transparency-value)
+
+    ;; Else, we have a non-default value. Interpret that value as a number, and
+    ;;  pass it to be set as a specific value
+    (e454iel-set-frame-transparency-value arg)))
+
+(defun e454iel-toggle-frame-transparency ()
+  "Toggle whether or not the current frame is transparent."
+  (interactive)
+
+  ;; If we get a universal-argument, set the value and then enable no matter
+  ;;  what. Otherwise, toggle.
+  (if current-prefix-arg
+      (progn
+        (e454iel-set-frame-transparency-value-using-prefix-arg
+         current-prefix-arg)
+        (e454iel-enable-frame-transparency))
+
+    ;; else
+    (progn
+      (if (not e454iel-use-frame-transparency)
+          (e454iel-enable-frame-transparency)
+        ;; else
+        (e454iel-disable-frame-transparency)))))
+
+
 ;; for all of the modal Vim keybinding goodness
 (use-package evil
   :demand
@@ -742,6 +821,7 @@ This makes for easier reading of larger, denser bodies of text."
      "tt" '(:ignore t :which-key "Themes")
      "tts" 'load-theme
      "ttn" 'e454iel-cycle-theme-pairs
+     "ttr" 'e454iel-monte-carlo-theme
      "ttt" 'e454iel-toggle-use-day-theme
      ;; fonts
      "tf" '(:ignore t :which-key "Fonts")
@@ -751,6 +831,8 @@ This makes for easier reading of larger, denser bodies of text."
      "tfd" 'e454iel-decrease-font-size
      "tft" 'e454iel-toggle-use-dyslexic-font
      "tl" 'e454iel-toggle-use-extra-line-spacing
+     ;; frame transparency
+     "tT" 'e454iel-toggle-frame-transparency
      ;; misc toggles
      "ta" 'auto-fill-mode
      "tr" '(lambda() (interactive)
@@ -1254,6 +1336,25 @@ _-_increase _=_decrease"
             ;; TODO: I need to write some sort of function for looking up an arbitrary song
             ))
 
+;; Start and set-up ssh-agent
+(defun e454iel-setup-ssh-agent ()
+  "Run shell commands and set environment variables necessary for setting up ssh-agent"
+  (let* ((ssh-agent-output
+          (shell-command-to-string "ssh-agent -s"))
+         (ssh-agent-output-commands
+          (split-string ssh-agent-output ";"))
+         (ssh-agent-auth-sock-set-command
+          (cl-first ssh-agent-output-commands))
+         (ssh-agent-auth-sock
+          (cl-second (split-string ssh-agent-auth-sock-set-command "=")))
+         (ssh-agent-pid-set-command
+          (string-trim-left (cl-third ssh-agent-output-commands)))
+         (ssh-agent-pid
+          (cl-second (split-string ssh-agent-pid-set-command "="))))
+
+    (setenv "SSH_AUTH_SOCK" ssh-agent-auth-sock)
+    (setenv "SSH_AGENT_PID" ssh-agent-pid)))
+
 ;; TODO: I applied patches to my local copy of EXWM in order to make it play
 ;;  nice with eyebrowse. See if I can apply that patch as advice in this file
 ;;  instead (or if that patch has been merged yet)
@@ -1422,27 +1523,6 @@ _-_increase _=_decrease"
                                   ":"
                                   (number-to-string calendar-longitude)
                                   " -t 6500:3000"))
-
-    ;; Start and set-up ssh-agent
-    (defun e454iel-setup-ssh-agent ()
-      "Run shell commands and set environment variables necessary for setting up ssh-agent"
-        (let* ((ssh-agent-output
-                (shell-command-to-string "ssh-agent -s"))
-               (ssh-agent-output-commands
-                (split-string ssh-agent-output ";"))
-               (ssh-agent-auth-sock-set-command
-                (cl-first ssh-agent-output-commands))
-               (ssh-agent-auth-sock
-                (cl-second (split-string ssh-agent-auth-sock-set-command "=")))
-               (ssh-agent-pid-set-command
-                (string-trim-left (cl-third ssh-agent-output-commands)))
-               (ssh-agent-pid
-                (cl-second (split-string ssh-agent-pid-set-command "="))))
-
-          (setenv "SSH_AUTH_SOCK" ssh-agent-auth-sock)
-          (setenv "SSH_AGENT_PID" ssh-agent-pid)))
-
-    (e454iel-setup-ssh-agent)
 
     (defun e454iel-rebuild-xelb ()
       "Do a clean rebuild of xelb (and exwm) in order to get it Straight, Guix, and native-comp to play nice after a Guix package update."
@@ -1837,6 +1917,19 @@ calculated based on my configuration."
 
             ;; Don't scatter around my buffers when opening up the agenda
             (setq org-agenda-window-setup 'current-window)
+
+            ;; Edit org source code blocks in other-window
+            (setq org-src-window-setup 'other-window)
+
+            ;; Functions for opening links, primarily customized to allow
+            ;;  opening file links in the same window
+            (setq org-link-frame-setup
+                  '((vm . vm-visit-folder-other-frame)
+                    (vm-imap . vm-visit-imap-folder-other-frame)
+                    (gnus . org-gnus-no-new-news)
+                    (file . find-file)
+                    (wl . wl-other-frame)))
+
 
             ;; Don't clutter recurring scheduled items with visible-by-default
             ;;  logging
@@ -2258,11 +2351,6 @@ calculated based on my configuration."
 
                   TeX-command-list)))
 
-(use-package seethru
-  :config (e454iel-main-menu "tT" 'seethru)
-  ;; (set-frame-parameter (selected-frame) 'alpha-background 0.9)
-  )
-
 (use-package dash)
 
 ;; My first elisp function!
@@ -2602,6 +2690,9 @@ Lisp function does not specify a special indentation."
   :if (not e454iel-tablet-p)
   :config (smooth-scrolling-mode 1))
 
+;; TODO: "(provide 'touch-handler)" must be added to the end of the cloned file
+;;  before it can be used as a package. Can I do this with advice, somehow? Can
+;;  I do this programmatically?
 (use-package touch-handler
   :if e454iel-tablet-p
   :straight (touch-handler :host github :repo "Naheel-Azawy/touch-handler.el")
@@ -2722,6 +2813,25 @@ Lisp function does not specify a special indentation."
     (setq wallpaper-command "feh")
     (setq wallpaper-command-args '("--bg-fill" "%f"))
 
+    (defun e454iel-sway-wallpaper-set-function (file)
+      "Sets the wallpaper to `FILE' when running the Sway compositor."
+      (let ((new-wallpaper-file-name (concat
+                                     "/tmp/wallpaper"
+                                     (format-time-string "%s")
+                                     (file-name-extension file))))
+
+        (copy-file file new-wallpaper-file-name)
+        (shell-command (concat
+                        "swaymsg"
+                        " 'output * bg "
+                        "\""
+                        new-wallpaper-file-name
+                        "\""
+                        " fill'"))))
+
+    (if e454iel-tablet-p
+        (setq wallpaper-set-function #'e454iel-sway-wallpaper-set-function))
+
     (general-define-key
      :keymaps 'image-mode-map
      :states 'normal
@@ -2784,7 +2894,9 @@ Lisp function does not specify a special indentation."
     (setq tab-bar-close-button-show nil)
 
     (setq tab-bar-format
-          '(tab-bar-format-tabs
+          '(
+            ;;tab-bar-format-tabs-groups
+            tab-bar-format-tabs
             tab-bar-separator
             tab-bar-format-align-right
             tab-bar-format-global))
@@ -3621,9 +3733,7 @@ Like `tab-bar-move-tab', but moves in the opposite direction."
 ;;  servers if I'm on a home computer
 ;; This is for LSP
 (use-package eglot
-  ;; TODO: The fact that I have to do this manually means there's something
-  ;;  wonky going on, perhaps in terms of the version of "project" I'm using
-  :init (load-library "project"))
+  :straight (elgot :type built-in))
 
 (use-package lsp-mode
   :disabled
@@ -4258,6 +4368,9 @@ normal-state."
 ;;(use-package roguel-ike)
 
 (use-package bbdb
+  ;; TODO: Re-enable this once the straight recipe seems to be working again.
+  ;;  It's broken for some reason, and I don't want to figure it out right now
+  :disabled
   :config
   (progn
     (use-package bbdb-csv-import)))
@@ -4357,14 +4470,19 @@ normal-state."
 
     (print image)
 
-    (shell-command (concat "wal -i "
-                           image
-                           " --saturate "
-                           (format "%s" saturation)))
+    ;; (shell-command (concat "wal -i "
+    ;;                        image
+    ;;                        " --saturate "
+    ;;                        (format "%s" saturation)))
+
+    (wallpaper-set image)
 
     (load-theme e454iel-preferred-ewal-theme t)
     (ewal-evil-cursors-get-colors :apply t)
-    (seethru opacity)
+    ;;(seethru opacity)
+    (set-frame-parameter (selected-frame)
+                         'alpha-background
+                         (/ opacity 100.0))
 
     name))
 
@@ -4815,6 +4933,7 @@ normal-state."
 ;;  This isn't characters at the moment, but some other sort of unit of size
 ;; https://depp.brause.cc/shackle/
 (use-package shackle
+  :disabled
   :straight (shackle :host github :repo "emacsmirror/shackle")
   :config (progn
             (setq shackle-default-rule '(:same t))
@@ -4979,6 +5098,10 @@ normal-state."
     (setq wc-modeline-format "WC[%w/%gw (%tw)]")
     (setq wc-word-goal 750)
     (add-to-list 'minions-prominent-modes 'wc-mode)))
+
+(use-package denote)
+
+(use-package logos)
 
 (use-package jabber
   :straight (jabber
