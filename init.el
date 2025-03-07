@@ -1285,7 +1285,9 @@ _-_increase _=_decrease"
                   ;;4 "DisplayPort-1"
                   ;;5 "DisplayPort-1"
                   )))
-    (exwm-randr-enable)
+
+    (exwm-randr-mode)
+    (exwm-randr-refresh)
 
     (setq exwm-workspace-show-all-buffers t)  
     (setq exwm-layout-show-all-buffers t)
