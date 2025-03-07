@@ -1078,9 +1078,9 @@ This makes for easier reading of larger, denser bodies of text."
 
             ;; TODO: How do I make sure the eshell/alias function is loaded at
             ;;  init?
-            ;;(eshell/alias dired-by-size "dired *(.L0)")
+            ;;(eshell/alias "dired-by-size" "dired *(.L0)")
             ;;(eshell/alias "super-compress-dir" "tar -I \"xz -ze9\" -cf $1.tar.xz $1")
-            ;;(eshell/alias sl "echo 🚋")
+            ;;(eshell/alias "sl" "echo 🚋")
             ;; (eshell/alias "combine-image-and-audio"
             ;;  "ffmpeg -loop 1 -i $2 -i $3 -shortest -c:v libx264 -c:a copy -tune stillimage $1.mp4")
             ;; (eshell/alias "mount-storage"
