@@ -4146,25 +4146,50 @@ Like `tab-bar-move-tab', but moves in the opposite direction."
 
     (setq vuiet-youtube-dl-command "yt-dlp")
 
-    ;; How many artists to check are similar to this artist?
-    (setq vuiet-artist-similar-limit 100)
-
-    ;; How many tracks from a particular artist do you consider?
-    (setq vuiet-artist-tracks-limit 10000)
-
-    ;; How many top albums does an artist have?
-    (setq vuiet-artist-top-albums-limit 2000)
+    ;; How many of our loved tracks do we pull from shuffling from them?
+    ;; Tragically, this is the upper limit.
+    (setq vuiet-loved-tracks-limit 1000)
 
     ;; Show top albums in the artist info buffer
     (setq vuiet-artist-info-show-top-albums t)
 
-    ;; When doing a search for a tag, how many artists do we pull?
-    (setq vuiet-tag-artists-limit 100)
+    (defun e454iel-vuiet-set-default-search ()
+      (interactive)
+      "Configure variables for Vuiet defaults for searching LastFM.
+ This decreases the liklihood of garbage in our search results, but is
+ also notably less complete."
 
-    ;; How many of our loved tracks do we pull from shuffling from them?
-    ;; Tragically, this is the upper limit.
-    (setq vuiet-loved-tracks-limit 1000)
-    ))
+      ;; How many artists to check are similar to this artist?
+      (setq vuiet-artist-similar-limit 15)
+
+      ;; How many tracks from a particular artist do you consider?
+      (setq vuiet-artist-tracks-limit 15)
+
+      ;; How many top albums does an artist have?
+      (setq vuiet-artist-top-albums-limit 10)
+
+      ;; When doing a search for a tag, how many artists do we pull?
+      (setq vuiet-tag-artists-limit 15))
+
+    (defun e454iel-vuiet-set-aggressive-search ()
+      (interactive)
+      "Configure variables for Vuiet to search LastFM aggressively.
+ This increases the liklihood of garbage in our search results, but is
+ also more complete."
+
+      ;; How many artists to check are similar to this artist?
+      (setq vuiet-artist-similar-limit 100)
+
+      ;; How many tracks from a particular artist do you consider?
+      (setq vuiet-artist-tracks-limit 10000)
+
+      ;; How many top albums does an artist have?
+      (setq vuiet-artist-top-albums-limit 2000)
+
+      ;; When doing a search for a tag, how many artists do we pull?
+      (setq vuiet-tag-artists-limit 100))
+
+    (e454iel-vuiet-set-aggressive-search)))
 
 ;; For MU* (MUD's, MUCK's, etc)
 (use-package mu
