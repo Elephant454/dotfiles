@@ -2155,6 +2155,7 @@ calculated based on my configuration."
 ;; This still needs fixing. Primarily, pressing "-" in normal mode doesn't zoom
 ;; out, and the cursor blinks around the page (which is annoying).
 (use-package pdf-tools
+  :straight (pdf-tools :source melpa)
   :config (progn
 
             (use-package pdf-view :straight (pdf-view :type built-in))
