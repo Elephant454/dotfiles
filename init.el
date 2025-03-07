@@ -1496,6 +1496,22 @@ _-_increase _=_decrease"
                                   "xinput map-to-output"
                                   " \"Wacom Intuos PT S 2 Pen Pen (0x5881c411)\""
                                   " \"DisplayPort-1\""))
+    (start-process-shell-command "set mouse sensitivity"
+                                 nil
+                                 (concat
+                                  "xinput set-prop"
+                                  " \"Razer Razer Naga\""
+                                  " \"libinput Accel Speed\""
+                                  " -0.75"
+                                  ))
+    (start-process-shell-command "set mouse sensitivity"
+                                 nil
+                                 (concat
+                                  "xinput set-prop"
+                                  " \"pointer:Logitech MX Ergo\""
+                                  " \"libinput Accel Speed\""
+                                  " -0.65"
+                                  ))
     (start-process-shell-command "xrandr"
                                  nil
                                  (concat
