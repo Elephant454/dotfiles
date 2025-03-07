@@ -4971,5 +4971,13 @@ normal-state."
     (setq wc-word-goal 750)
     (add-to-list 'minions-prominent-modes 'wc-mode)))
 
+(use-package jabber
+  :straight (jabber
+             :host codeberg
+             :repo "emacs-jabber/emacs-jabber"
+             :branch "production"
+             :lisp-dir "lisp"
+              :doc "README.org"))
+
 (provide 'init)
 ;;; init.el ends here
