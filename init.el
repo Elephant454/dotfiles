@@ -166,6 +166,21 @@ print-circle t
             ;;(use-package use-package-ensure-system-package)
             ))
 
+(use-package straight
+  :config
+  (progn
+    ;; As described in
+    ;;  https://github.com/radian-software/straight.el/issues/1146, project and
+    ;;  xref are doing something funky in regards to their being loaded due to
+    ;;  their built-in status. This little block is needed as a workaround to
+    ;;  get eglot to install correctly when using straight. Using Elpaca may fix
+    ;;  this?
+    (push 'project straight-built-in-pseudo-packages)
+    (push 'xref straight-built-in-pseudo-packages)))
+
+(use-package project :straight (project :type built-in))
+(use-package xref :straight (xref :type built-in))
+
 ;; Make sure our keyring doesn't get out of date
 (use-package gnu-elpa-keyring-update)
 
