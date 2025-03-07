@@ -3916,7 +3916,7 @@ Like `tab-bar-move-tab', but moves in the opposite direction."
 
 ;; Allows for short lambda expressions
 (use-package llama
-  :straight (llama :host sourcehut
+  :straight (llama :host github
                    :repo "tarsius/llama"))
 
 ;; Front-end for the Emacsmirror package database
