@@ -3623,11 +3623,6 @@ Like `tab-bar-move-tab', but moves in the opposite direction."
   ;;  wonky going on, perhaps in terms of the version of "project" I'm using
   :init (load-library "project"))
 
-;; This is needed for eglot, but is likely useful for all sorts of things
-(use-package project
-  :straight (project :source gnu-elpa-mirror))
-
-
 (use-package lsp-mode
   :disabled
   :hook
