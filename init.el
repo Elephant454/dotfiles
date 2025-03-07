@@ -619,18 +619,30 @@ This makes for easier reading of larger, denser bodies of text."
 (defvar e454iel-use-frame-transparency nil
   "Should the frame be transparent?")
 
+(defvar e454iel-frame-transparency-method
+  (if e454iel-desktop-p
+      'alpha
+      'alpha-background)
+  "How should the frame be made transparent?
+Should the whole frame be made transparent, or only the
+background (leaving the text opaque)? This value should be one of either
+`alpha' or `alpha-background'.")
+
 (defun e454iel-enable-frame-transparency ()
   "Turn on having the frame be transparent."
   (interactive)
   (setq e454iel-use-frame-transparency t)
   (set-frame-parameter (selected-frame)
-                       'alpha-background
+                       e454iel-frame-transparency-method
                        e454iel-frame-transparency-value))
 
 (defun e454iel-disable-frame-transparency ()
   "Turn off having the frame be transparent."
   (interactive)
   (setq e454iel-use-frame-transparency nil)
+  (set-frame-parameter (selected-frame)
+                       'alpha
+                       1.0)
   (set-frame-parameter (selected-frame)
                        'alpha-background
                        1.0))
