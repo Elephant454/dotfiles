@@ -1267,7 +1267,6 @@ _-_increase _=_decrease"
   ;;:straight (exwm :type built-in)
   :config
   (progn
-    (use-package exwm-config :straight (exwm-config :type built-in))
     (use-package exwm-randr :straight (exwm-config :type built-in))
 
     ;; TODO: Set my workspaces, displays, and resolution/refresh rate (through
@@ -1409,7 +1408,6 @@ _-_increase _=_decrease"
     ;; Enable EXWM
     (exwm-enable)
     ;; Other configurations
-    (exwm-config-misc)
 
     ;; Some launches I usually do with my window manager
     (start-process-shell-command "syncthing"
