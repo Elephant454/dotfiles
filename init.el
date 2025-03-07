@@ -678,7 +678,7 @@ This makes for easier reading of larger, denser bodies of text."
      ;; buffer commands
      "b" '(:ignore t :which-key "Buffer") ; label
      "bb" 'switch-to-buffer               ; switch buffers
-     "bd" 'kill-this-buffer               ; delete current buffer
+     "bd" 'kill-current-buffer            ; delete current buffer
      "bp" 'popwin:display-buffer          ; display a buffer using popwin
      ;; I might want to look into how immortal-scratch-buffer handles this
      "bs" '(lambda() (interactive) (switch-to-buffer "*scratch*"))
