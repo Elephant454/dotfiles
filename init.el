@@ -1474,7 +1474,7 @@ _-_increase _=_decrease"
     ;; For transparency. This is a "compton" replacement
     (start-process-shell-command "picom"
                                  nil
-                                 "picom")
+                                 "picom --backend xrender")
     (start-process-shell-command "xsettingsd"
                                  nil
                                  "xsettingsd")
