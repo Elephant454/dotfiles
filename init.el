@@ -2473,6 +2473,7 @@ Lisp function does not specify a special indentation."
   :config (e454iel-main-menu "agm" 'mines))
 
 (use-package magit
+  :straight (magit :source melpa)
   :config (progn
             (evil-collection-init 'magit)
 
@@ -4946,7 +4947,14 @@ normal-state."
 
 (use-package chatgpt-shell)
 
+(use-package transient
+  :straight (transient :source melpa)
+  :config
+  (progn
+    (setq transient-save-history nil)))
+
 (use-package gptel
+  :straight (gptel :source melpa)
   :config
   (progn
     (setq gptel-prompt-prefix-alist '((markdown-mode . "# ")
