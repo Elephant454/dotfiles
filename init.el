@@ -1030,6 +1030,7 @@ This makes for easier reading of larger, denser bodies of text."
                         (e454iel-main-menu
                           "fS" 'dired-sidebar-toggle-sidebar)))
             (use-package dired+
+              :disabled
               :config
               (progn
                 (setq diredp-image-preview-in-tooltip nil)))))
