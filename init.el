@@ -2946,9 +2946,6 @@ Lisp function does not specify a special indentation."
     (general-define-key
      :keymaps 'evil-window-map
      "g" '(nil :which-key "Tabs (Groups)")
-     "gg" 'tab-switch
-     "gn" 'tab-new
-     "gr" 'tab-rename
      "g0" (lambda () (interactive) (tab-select 0))
      "g1" (lambda () (interactive) (tab-select 1))
      "g2" (lambda () (interactive) (tab-select 2))
@@ -2960,7 +2957,12 @@ Lisp function does not specify a special indentation."
      "g8" (lambda () (interactive) (tab-select 8))
      "g9" (lambda () (interactive) (tab-select 9))
 
-     "gc" 'tab-close)
+     "gg" 'tab-switch
+     "gr" 'tab-rename
+     "gN" 'tab-new
+     "gc" 'tab-close
+     "gn" 'tab-next
+     "gp" 'tab-previous)
 
     ;; Prevents an evil keybinding that overrides our switching
     ;;  workspaces using Control
