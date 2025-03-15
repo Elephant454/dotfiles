@@ -5125,5 +5125,11 @@ normal-state."
              :lisp-dir "lisp"
               :doc "README.org"))
 
+(use-package novice
+  :straight (novice :type built-in)
+  :config
+  (progn
+    (put 'narrow-to-region 'disabled nil)))
+
 (provide 'init)
 ;;; init.el ends here
